@@ -4,6 +4,7 @@ node_modules
 .npm-cache
 .agents
 .codex
+.netlify
 .ms-playwright
 dist
 coverage
