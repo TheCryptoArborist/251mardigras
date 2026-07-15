@@ -1,0 +1,166 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Source {
+  id                   Int        @id @default(autoincrement())
+  name                 String
+  url                  String     @unique
+  sourceType           String     @map("source_type")
+  active               Boolean    @default(true)
+  checkIntervalMinutes Int        @default(360) @map("check_interval_minutes")
+  lastCheckedAt        DateTime?  @map("last_checked_at")
+  lastSuccessAt        DateTime?  @map("last_success_at")
+  lastError            String?    @map("last_error")
+  createdAt            DateTime   @default(now()) @map("created_at")
+  updatedAt            DateTime   @updatedAt @map("updated_at")
+  snapshots            Snapshot[]
+  changes              Change[]
+
+  @@map("sources")
+}
+
+model Snapshot {
+  id            Int      @id @default(autoincrement())
+  sourceId      Int      @map("source_id")
+  source        Source   @relation(fields: [sourceId], references: [id], onDelete: Cascade)
+  checkedAt     DateTime @default(now()) @map("checked_at")
+  statusCode    Int?     @map("status_code")
+  contentHash   String   @map("content_hash")
+  normalizedText String  @map("normalized_text")
+  rawHtmlOrJson String?  @map("raw_html_or_json")
+
+  @@index([sourceId, checkedAt])
+  @@map("snapshots")
+}
+
+model Change {
+  id           Int      @id @default(autoincrement())
+  sourceId     Int      @map("source_id")
+  source       Source   @relation(fields: [sourceId], references: [id], onDelete: Cascade)
+  detectedAt   DateTime @default(now()) @map("detected_at")
+  changeType   String   @map("change_type")
+  severity     String
+  summary      String
+  oldValue     String?  @map("old_value")
+  newValue     String?  @map("new_value")
+  diffText     String?  @map("diff_text")
+  acknowledged Boolean  @default(false)
+
+  @@index([sourceId, detectedAt])
+  @@index([severity, acknowledged])
+  @@map("changes")
+}
+
+model Resource {
+  id          Int       @id @default(autoincrement())
+  title       String
+  url         String
+  category    String
+  description String?
+  source      String
+  sourceUrl   String    @map("source_url")
+  lastSeenAt  DateTime? @map("last_seen_at")
+  active      Boolean   @default(true)
+  sortOrder   Int       @default(0) @map("sort_order")
+
+  @@index([category, sortOrder])
+  @@map("resources")
+}
+
+model ResourceSnapshot {
+  id            Int      @id @default(autoincrement())
+  sourceUrl     String   @map("source_url")
+  checkedAt     DateTime @default(now()) @map("checked_at")
+  rawText       String   @map("raw_text")
+  contentHash   String   @map("content_hash")
+  extractedJson String?  @map("extracted_json")
+
+  @@index([sourceUrl, checkedAt])
+  @@map("resource_snapshots")
+}
+
+model WeatherSnapshot {
+  id                         Int      @id @default(autoincrement())
+  checkedAt                  DateTime @default(now()) @map("checked_at")
+  latitude                   Float
+  longitude                  Float
+  source                     String
+  temperature                Float?
+  windSpeed                  String?  @map("wind_speed")
+  windGust                   String?  @map("wind_gust")
+  windDirection              String?  @map("wind_direction")
+  precipitationProbability   Int?     @map("precipitation_probability")
+  shortForecast              String?  @map("short_forecast")
+  detailedForecast           String?  @map("detailed_forecast")
+  rawJson                    String?  @map("raw_json")
+  contentHash                String   @map("content_hash")
+
+  @@index([checkedAt])
+  @@map("weather_snapshots")
+}
+
+model WeatherAlert {
+  id          Int       @id @default(autoincrement())
+  alertId     String    @unique @map("alert_id")
+  event       String
+  severity    String?
+  urgency     String?
+  certainty   String?
+  headline    String?
+  description String?
+  instruction String?
+  areaDesc    String?   @map("area_desc")
+  effective   DateTime?
+  expires     DateTime?
+  ends        DateTime?
+  source      String
+  rawJson     String?   @map("raw_json")
+  firstSeenAt DateTime  @default(now()) @map("first_seen_at")
+  lastSeenAt  DateTime  @default(now()) @map("last_seen_at")
+  active      Boolean   @default(true)
+
+  @@index([active, event])
+  @@map("weather_alerts")
+}
+
+model WeatherRiskScore {
+  id                       Int      @id @default(autoincrement())
+  paradeId                 Int?     @map("parade_id")
+  parade                   Parade?  @relation(fields: [paradeId], references: [id], onDelete: SetNull)
+  calculatedAt             DateTime @default(now()) @map("calculated_at")
+  riskLevel                String   @map("risk_level")
+  riskScore                Int      @map("risk_score")
+  rainScore                Int      @map("rain_score")
+  lightningScore           Int      @map("lightning_score")
+  windScore                Int      @map("wind_score")
+  heatScore                Int      @map("heat_score")
+  coldScore                Int      @map("cold_score")
+  floodScore               Int      @map("flood_score")
+  summary                  String
+  recommendedPublicMessage String   @map("recommended_public_message")
+
+  @@index([paradeId, calculatedAt])
+  @@map("weather_risk_scores")
+}
+
+model Parade {
+  id            Int                @id @default(autoincrement())
+  name          String
+  date          String
+  startTime     String?            @map("start_time")
+  routeName     String?            @map("route_name")
+  routeUrl      String?            @map("route_url")
+  sourceUrl     String             @map("source_url")
+  status        String
+  lastUpdatedAt DateTime?          @map("last_updated_at")
+  riskScores    WeatherRiskScore[]
+
+  @@index([date, startTime])
+  @@map("parades")
+}
