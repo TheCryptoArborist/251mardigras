@@ -9,6 +9,7 @@
     "postinstall": "prisma generate",
     "db:migrate": "prisma migrate dev --name init",
     "db:seed": "tsx prisma/seed.ts",
+    "inspect:linktree": "tsx scripts/inspect-linktree.ts",
     "check:sources": "tsx src/jobs/check-sources.ts",
     "check:weather": "tsx src/jobs/check-weather.ts"
   },
