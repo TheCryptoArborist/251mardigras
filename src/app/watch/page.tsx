@@ -2,7 +2,7 @@ import Link from "next/link";
 import { ArrowRight, ExternalLink, PlayCircle, ShieldCheck, Video } from "lucide-react";
 import { LiveStreamEmbed } from "@/components/LiveStreamEmbed";
 import { SectionHeader } from "@/components/SectionHeader";
-import { LINKTREE_URL, YOUTUBE_CHANNEL_URL, YOUTUBE_SUPPORTER_URL } from "@/lib/seed-data";
+import { YOUTUBE_CHANNEL_URL, YOUTUBE_SUPPORTER_URL } from "@/lib/seed-data";
 
 const watchLinks = [
   {
@@ -27,11 +27,11 @@ const watchLinks = [
     external: false
   },
   {
-    title: "Use the quick-link directory",
-    description: "Open the original Linktree when you need the fastest mobile list of social, food, access, gear, and video links.",
-    href: LINKTREE_URL,
-    action: "Open Linktree",
-    external: true
+    title: "Find visitor links",
+    description: "Use the website resource directory for social, food, access, gear, transportation, and video links without bouncing through a separate quick-link page.",
+    href: "/resources#all-resources",
+    action: "Open directory",
+    external: false
   }
 ];
 
@@ -97,7 +97,7 @@ export default function WatchPage() {
         <section>
           <SectionHeader
             title="Find the Coverage"
-            description="Fast paths for live video, previous coverage, channel support, and the original quick-link directory."
+            description="Fast paths for live video, previous coverage, channel support, and the website resource directory."
           />
           <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
             {watchLinks.map((item) => (
