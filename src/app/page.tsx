@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, CalendarDays, Car, Video } from "lucide-react";
+import { ArrowRight, CalendarDays, Car, ShieldCheck, Video } from "lucide-react";
 import { AlertCard } from "@/components/AlertCard";
 import { DataFreshnessPanel } from "@/components/DataFreshnessPanel";
 import { EmptyState } from "@/components/EmptyState";
@@ -31,6 +31,29 @@ export default async function HomePage() {
   const publicAlerts = changes.length > 0 ? changes : [noAlertState];
   const routeSources = sources.filter((source) => /route|parking|mardi gras|police/i.test(source.name)).slice(0, 4);
   const previewResources = resources.slice(0, 6);
+  const hubActions = [
+    {
+      icon: <Video className="h-5 w-5" aria-hidden="true" />,
+      title: "Watch live coverage",
+      body: "Open the live player, YouTube channel, supporter link, and previous parade-season coverage from one page.",
+      href: "/watch",
+      action: "Open Watch Live"
+    },
+    {
+      icon: <Car className="h-5 w-5" aria-hidden="true" />,
+      title: "Plan your day downtown",
+      body: "Find parking, transportation, mobility-friendly access, food, gear, and visitor-planning resources.",
+      href: "/resources",
+      action: "Browse Resources"
+    },
+    {
+      icon: <ShieldCheck className="h-5 w-5" aria-hidden="true" />,
+      title: "Verify official information",
+      body: "Use the tracker and official-source reminders before relying on schedule, route, closure, safety, or weather decisions.",
+      href: "/admin",
+      action: "View Source Status"
+    }
+  ];
 
   return (
     <div>
@@ -38,14 +61,17 @@ export default async function HomePage() {
         <div className="mx-auto grid max-w-7xl gap-8 px-4 py-8 sm:px-6 lg:grid-cols-[1.1fr_0.9fr] lg:px-8 lg:py-10">
           <div>
             <h1 className="max-w-3xl text-4xl font-black tracking-normal text-parade-ink sm:text-5xl">
-              Mobile Mardi Gras Tracker
+              Mobile Mardi Gras Information Hub
             </h1>
             <p className="mt-4 max-w-2xl text-lg leading-8 text-parade-muted">
-              Unofficial dashboard for public Mardi Gras updates, parade-day source checks, weather risk, live coverage, parking, towing, and curated resources.
+              Unofficial central hub for Mobile Mardi Gras livestreams, public-source checks, weather risk, parking, towing, visitor resources, and previous parade-season coverage.
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
-              <Link href="/admin" className="inline-flex items-center gap-2 rounded bg-parade-purple px-5 py-3 text-sm font-bold text-white hover:bg-parade-purpleDark">
-                View source status <ArrowRight className="h-4 w-4" aria-hidden="true" />
+              <Link href="/watch" className="inline-flex items-center gap-2 rounded bg-parade-purple px-5 py-3 text-sm font-bold text-white hover:bg-parade-purpleDark">
+                Watch live coverage <ArrowRight className="h-4 w-4" aria-hidden="true" />
+              </Link>
+              <Link href="/resources" className="inline-flex items-center gap-2 rounded border border-parade-line bg-white px-5 py-3 text-sm font-bold text-parade-purple hover:bg-parade-purpleSoft">
+                Browse visitor resources
               </Link>
               <Link href="/weather" className="inline-flex items-center gap-2 rounded border border-parade-line bg-white px-5 py-3 text-sm font-bold text-parade-purple hover:bg-parade-purpleSoft">
                 Check weather risk
@@ -62,6 +88,18 @@ export default async function HomePage() {
       </section>
 
       <div className="mx-auto max-w-7xl space-y-10 px-4 py-8 sm:px-6 lg:px-8">
+        <section>
+          <SectionHeader
+            title="Start Here"
+            description="The website is evolving from a quick-link list into a fuller visitor hub. These are the main paths most people need first."
+          />
+          <div className="grid gap-4 md:grid-cols-3">
+            {hubActions.map((item) => (
+              <HubAction key={item.title} {...item} />
+            ))}
+          </div>
+        </section>
+
         <section>
           <SectionHeader
             title="High Priority Alerts"
@@ -158,6 +196,31 @@ export default async function HomePage() {
         </section>
       </div>
     </div>
+  );
+}
+
+function HubAction({
+  icon,
+  title,
+  body,
+  href,
+  action
+}: {
+  icon: React.ReactNode;
+  title: string;
+  body: string;
+  href: string;
+  action: string;
+}) {
+  return (
+    <article className="min-w-0 rounded border border-parade-line bg-white p-5 shadow-civic">
+      <div className="grid h-10 w-10 place-items-center rounded bg-parade-goldSoft text-parade-gold">{icon}</div>
+      <h2 className="mt-4 text-xl font-black text-parade-ink">{title}</h2>
+      <p className="mt-2 text-sm leading-6 text-parade-muted">{body}</p>
+      <Link href={href} className="mt-4 inline-flex items-center gap-2 text-sm font-bold text-parade-purple hover:underline">
+        {action} <ArrowRight className="h-4 w-4" aria-hidden="true" />
+      </Link>
+    </article>
   );
 }
 
