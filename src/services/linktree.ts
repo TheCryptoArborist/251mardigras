@@ -72,7 +72,7 @@ export function normalizeLinkTitle(title: string) {
 function tokenizeLinkTitle(title: string) {
   return normalizeLinkTitle(title)
     .split(" ")
-    .filter((token) => token.length > 1 && !STOP_WORDS.has(token));
+    .filter((token) => (token.length > 1 || token === "x") && !STOP_WORDS.has(token));
 }
 
 function compactLinkTitle(title: string) {
@@ -168,9 +168,12 @@ function normalizeExternalUrl(value: string) {
     const url = new URL(trimmed);
 
     if (url.hostname.endsWith("linktr.ee")) {
-      const embeddedUrl = url.searchParams.get("url") ?? url.searchParams.get("u");
-      if (embeddedUrl && /^https?:\/\//i.test(embeddedUrl)) {
-        return new URL(embeddedUrl).toString();
+      const rawEmbeddedUrl = url.searchParams.get("url") ?? url.searchParams.get("u");
+      if (rawEmbeddedUrl) {
+        const decodedEmbeddedUrl = decodeURIComponent(rawEmbeddedUrl);
+        if (/^https?:\/\//i.test(decodedEmbeddedUrl)) {
+          return new URL(decodedEmbeddedUrl).toString();
+        }
       }
 
       return null;
