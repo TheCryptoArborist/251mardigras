@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, CalendarDays, Car, ShieldCheck, Video } from "lucide-react";
+import { ArrowRight, CalendarDays, Car, Share2, ShieldCheck, Video } from "lucide-react";
 import { AlertCard } from "@/components/AlertCard";
 import { DataFreshnessPanel } from "@/components/DataFreshnessPanel";
 import { EmptyState } from "@/components/EmptyState";
@@ -40,6 +40,13 @@ export default async function HomePage() {
       action: "Open Watch Live"
     },
     {
+      icon: <Share2 className="h-5 w-5" aria-hidden="true" />,
+      title: "Open quick links",
+      body: "Use the mobile-first links page for direct access to livestreams, social channels, parking, food, gear, and past coverage.",
+      href: "/links",
+      action: "Open Quick Links"
+    },
+    {
       icon: <Car className="h-5 w-5" aria-hidden="true" />,
       title: "Plan your day downtown",
       body: "Find parking, transportation, mobility-friendly access, food, gear, and visitor-planning resources.",
@@ -64,11 +71,14 @@ export default async function HomePage() {
               Mobile Mardi Gras Information Hub
             </h1>
             <p className="mt-4 max-w-2xl text-lg leading-8 text-parade-muted">
-              Unofficial central hub for Mobile Mardi Gras livestreams, public-source checks, weather risk, parking, towing, visitor resources, and previous parade-season coverage.
+              Unofficial central hub for Mobile Mardi Gras livestreams, direct visitor links, public-source checks, weather risk, parking, towing, and previous parade-season coverage.
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
               <Link href="/watch" className="inline-flex items-center gap-2 rounded bg-parade-purple px-5 py-3 text-sm font-bold text-white hover:bg-parade-purpleDark">
                 Watch live coverage <ArrowRight className="h-4 w-4" aria-hidden="true" />
+              </Link>
+              <Link href="/links" className="inline-flex items-center gap-2 rounded border border-parade-line bg-white px-5 py-3 text-sm font-bold text-parade-purple hover:bg-parade-purpleSoft">
+                Open quick links
               </Link>
               <Link href="/resources" className="inline-flex items-center gap-2 rounded border border-parade-line bg-white px-5 py-3 text-sm font-bold text-parade-purple hover:bg-parade-purpleSoft">
                 Browse visitor resources
@@ -93,7 +103,7 @@ export default async function HomePage() {
             title="Start Here"
             description="The website is evolving from a quick-link list into a fuller visitor hub. These are the main paths most people need first."
           />
-          <div className="grid gap-4 md:grid-cols-3">
+          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
             {hubActions.map((item) => (
               <HubAction key={item.title} {...item} />
             ))}
