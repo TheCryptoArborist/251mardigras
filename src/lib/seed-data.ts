@@ -1,3 +1,9 @@
+export const SITE_URL = "https://251mardigras.netlify.app";
+export const RESOURCE_DIRECTORY_URL = `${SITE_URL}/resources`;
+export const RESOURCE_DIRECTORY_SOURCE = "Mardi Gras - Mobile, AL Resource Directory";
+
+// Legacy import source only. Public resource clicks should resolve to direct destinations,
+// not bounce visitors from this site to Linktree and then to another destination.
 export const LINKTREE_URL = "https://linktr.ee/Mardi_Gras_MobileAL";
 
 export const YOUTUBE_CHANNEL_URL = "https://www.youtube.com/@MobileMardiGras";
@@ -9,16 +15,17 @@ export const MOBILITY_ACCESS_FORM_URL =
   "https://docs.google.com/forms/d/e/1FAIpQLSftgyJN88i7T51O6aSrA3cVfsQyhxywi3ehE_DJxpYTt1D2VQ/viewform";
 
 export const linktreeProfile = {
-  title: "Mardi Gras - Mobile, AL",
-  tagline: "Experience Mardi Gras from Mobile, Alabama, where it all began in 1703.",
-  sourceUrl: LINKTREE_URL,
-  joined: "July 2024"
+  title: "Mardi Gras - Mobile, AL Resource Directory",
+  tagline:
+    "Direct visitor links for live coverage, social channels, parking, access support, food, gear, throws, and previous parade seasons.",
+  sourceUrl: RESOURCE_DIRECTORY_URL,
+  joined: "2024 link inventory"
 };
 
 export const linktreeCategoryHighlights = [
   {
     title: "Social media and contact",
-    detail: "YouTube, Facebook, Instagram, X, TikTok, email, phone, and Snapchat are listed from the public Linktree profile."
+    detail: "YouTube, Facebook, Instagram, X, TikTok, email, phone, and Snapchat destinations maintained as direct resource links."
   },
   {
     title: "Downtown transportation",
@@ -26,11 +33,11 @@ export const linktreeCategoryHighlights = [
   },
   {
     title: "Mobility-friendly access",
-    detail: "The Linktree links to a third-party SNASY registration form for mobility-friendly parade access support."
+    detail: "A third-party SNASY registration form is linked for mobility-friendly parade access support."
   },
   {
     title: "Food and drink",
-    detail: "The Linktree lists downtown food, coffee, bakery, brewery, barbecue, and dessert stops for parade visitors."
+    detail: "Downtown food, coffee, bakery, brewery, barbecue, and dessert stops are grouped for parade visitors."
   },
   {
     title: "Gear, throws, and past seasons",
@@ -148,7 +155,7 @@ export type ResourceSeed = {
   sortOrder: number;
 };
 
-const linktreeResource = (
+const directoryResource = (
   title: string,
   category: string,
   description: string,
@@ -159,36 +166,36 @@ const linktreeResource = (
   url,
   category,
   description,
-  source: "Mardi Gras Mobile Linktree",
-  sourceUrl: LINKTREE_URL,
+  source: RESOURCE_DIRECTORY_SOURCE,
+  sourceUrl: RESOURCE_DIRECTORY_URL,
   sortOrder
 });
 
 export const resourceSeeds: ResourceSeed[] = [
-  linktreeResource("YouTube", "Social Media", "Mobile Mardi Gras video channel listed on the public Linktree profile.", 1, YOUTUBE_CHANNEL_URL),
-  linktreeResource("Facebook", "Social Media", "Facebook account listed on the Linktree profile. Open Linktree for the current destination.", 2),
-  linktreeResource("Instagram", "Social Media", "Instagram account listed on the Linktree profile. Open Linktree for the current destination.", 3),
-  linktreeResource("X", "Social Media", "X account listed on the Linktree profile. Open Linktree for the current destination.", 4),
-  linktreeResource("TikTok", "Social Media", "TikTok account listed on the Linktree profile. Open Linktree for the current destination.", 5),
-  linktreeResource("Email", "Social Media", "Email/contact option listed on the Linktree profile.", 6),
-  linktreeResource("Phone", "Social Media", "Phone/contact option listed on the Linktree profile.", 7),
-  linktreeResource("Snapchat", "Social Media", "Snapchat account listed on the Linktree profile.", 8),
-  linktreeResource("YouTube channel", "Live Coverage / Channel Support", "Live, short-form, and previous Mobile Mardi Gras video coverage.", 1, YOUTUBE_CHANNEL_URL),
-  linktreeResource("Current livestream", "Live Coverage / Channel Support", "Dashboard embed uses the public Mobile Mardi Gras YouTube channel when a livestream is active.", 2, YOUTUBE_CHANNEL_URL),
-  linktreeResource("Become a Channel Supporter", "Live Coverage / Channel Support", "YouTube channel membership link listed from the Linktree profile.", 3, YOUTUBE_SUPPORTER_URL),
-  linktreeResource("Previous parade playlists", "Live Coverage / Channel Support", "Prior parade-season playlists and channel archive resources.", 4, YOUTUBE_CHANNEL_URL),
-  linktreeResource("ParkWhiz Google Play link", "Downtown Transportation", "Parking app link listed by Linktree for downtown transportation planning.", 1),
-  linktreeResource("ParkWhiz Apple App Store link", "Downtown Transportation", "Parking app link listed by Linktree for downtown transportation planning.", 2),
-  linktreeResource("Mardi Gras 2026 Parking Guide Mobile, Alabama", "Downtown Transportation", "Parking guide link listed by Linktree. Verify parking, towing, and traffic rules with official sources.", 3),
-  linktreeResource("Downtown Parking Map", "Downtown Transportation", "Downtown parking map link listed by Linktree. Verify closures and towing rules before travel.", 4),
-  linktreeResource(
+  directoryResource("YouTube", "Social Media", "Mobile Mardi Gras video channel for live coverage, shorts, replays, and previous season videos.", 1, YOUTUBE_CHANNEL_URL),
+  directoryResource("Facebook", "Social Media", "Mobile Mardi Gras Facebook destination imported from the public quick-link inventory.", 2),
+  directoryResource("Instagram", "Social Media", "Mobile Mardi Gras Instagram destination imported from the public quick-link inventory.", 3),
+  directoryResource("X", "Social Media", "Mobile Mardi Gras X destination imported from the public quick-link inventory.", 4),
+  directoryResource("TikTok", "Social Media", "Mobile Mardi Gras TikTok destination imported from the public quick-link inventory.", 5),
+  directoryResource("Email", "Social Media", "Contact email destination imported from the public quick-link inventory.", 6),
+  directoryResource("Phone", "Social Media", "Phone/contact destination imported from the public quick-link inventory.", 7),
+  directoryResource("Snapchat", "Social Media", "Snapchat destination imported from the public quick-link inventory.", 8),
+  directoryResource("YouTube channel", "Live Coverage / Channel Support", "Live, short-form, and previous Mobile Mardi Gras video coverage.", 1, YOUTUBE_CHANNEL_URL),
+  directoryResource("Current livestream", "Live Coverage / Channel Support", "Public Mobile Mardi Gras YouTube channel used by the live coverage player when a livestream is active.", 2, YOUTUBE_CHANNEL_URL),
+  directoryResource("Become a Channel Supporter", "Live Coverage / Channel Support", "YouTube channel membership link for viewers who want to support coverage.", 3, YOUTUBE_SUPPORTER_URL),
+  directoryResource("Previous parade playlists", "Live Coverage / Channel Support", "Prior parade-season playlists and channel archive resources.", 4, YOUTUBE_CHANNEL_URL),
+  directoryResource("ParkWhiz Google Play link", "Downtown Transportation", "Parking app link for downtown transportation planning.", 1),
+  directoryResource("ParkWhiz Apple App Store link", "Downtown Transportation", "Parking app link for downtown transportation planning.", 2),
+  directoryResource("Mardi Gras 2026 Parking Guide Mobile, Alabama", "Downtown Transportation", "Parking guide resource. Verify parking, towing, and traffic rules with official sources.", 3),
+  directoryResource("Downtown Parking Map", "Downtown Transportation", "Downtown parking map resource. Verify closures and towing rules before travel.", 4),
+  directoryResource(
     "City of Mobile Parking and Transportation Guide",
     "Downtown Transportation",
     "Official City page should be verified before travel.",
     5,
     "https://www.cityofmobile.gov/mardi-gras-parade-parking/"
   ),
-  linktreeResource(
+  directoryResource(
     "Need Mobility-Friendly Mardi Gras Access? Click Here",
     "Mobility-Friendly Access",
     "Third-party SNASY registration form for mobility-friendly parade access support. This does not verify the official parade schedule.",
@@ -215,13 +222,13 @@ export const resourceSeeds: ResourceSeed[] = [
     "Pop's Midtown",
     "Lemon T's"
   ].map((title, index) =>
-    linktreeResource(title, "Food and Drink", "Food or drink stop listed in the Linktree directory. Confirm hours, reservations, and parade-day access with the venue.", index + 1)
+    directoryResource(title, "Food and Drink", "Food or drink stop in the visitor directory. Confirm hours, reservations, and parade-day access with the venue.", index + 1)
   ),
-  linktreeResource("Port City Throws", "Mardi Gras Gear / Throws", "Mardi Gras throws and gear resource listed on Linktree.", 1),
-  linktreeResource("Additional gear or throws links", "Mardi Gras Gear / Throws", "Additional throws or gear resources can be followed through the live Linktree profile.", 2),
-  linktreeResource("Mardi Gras 2025 Playlist", "Previous Parade Seasons", "Previous parade season playlist from the Mobile Mardi Gras video archive.", 1, YOUTUBE_CHANNEL_URL),
-  linktreeResource("Mardi Gras 2024 Playlist", "Previous Parade Seasons", "Previous parade season playlist from the Mobile Mardi Gras video archive.", 2, YOUTUBE_CHANNEL_URL),
-  linktreeResource("Mardi Gras 2023 Playlist", "Previous Parade Seasons", "Previous parade season playlist from the Mobile Mardi Gras video archive.", 3, YOUTUBE_CHANNEL_URL)
+  directoryResource("Port City Throws", "Mardi Gras Gear / Throws", "Mardi Gras throws and gear resource.", 1),
+  directoryResource("Additional gear or throws links", "Mardi Gras Gear / Throws", "Additional throws or gear resource imported from the public quick-link inventory.", 2),
+  directoryResource("Mardi Gras 2025 Playlist", "Previous Parade Seasons", "Previous parade season playlist from the Mobile Mardi Gras video archive.", 1, YOUTUBE_CHANNEL_URL),
+  directoryResource("Mardi Gras 2024 Playlist", "Previous Parade Seasons", "Previous parade season playlist from the Mobile Mardi Gras video archive.", 2, YOUTUBE_CHANNEL_URL),
+  directoryResource("Mardi Gras 2023 Playlist", "Previous Parade Seasons", "Previous parade season playlist from the Mobile Mardi Gras video archive.", 3, YOUTUBE_CHANNEL_URL)
 ];
 
 export const publicDisclaimers = [
