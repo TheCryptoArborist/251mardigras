@@ -181,7 +181,7 @@ export default async function HomePage() {
         <section>
           <SectionHeader
             title="Mardi Gras Resources"
-            description="Curated third-party directory items seeded from the Mobile Mardi Gras Linktree categories."
+            description="Curated visitor directory items maintained as direct destination links on this website."
             action={
               <Link href="/resources" className="inline-flex items-center gap-2 text-sm font-bold text-parade-purple hover:underline">
                 View all resources <ArrowRight className="h-4 w-4" aria-hidden="true" />
