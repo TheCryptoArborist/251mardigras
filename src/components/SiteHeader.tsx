@@ -3,10 +3,12 @@ import { ExternalLink, RefreshCw } from "lucide-react";
 
 const navItems = [
   { href: "/", label: "Dashboard" },
+  { href: "/watch", label: "Watch" },
+  { href: "/links", label: "Links" },
+  { href: "/resources", label: "Resources" },
   { href: "/schedule", label: "Schedule" },
   { href: "/weather", label: "Weather" },
   { href: "/routes", label: "Routes" },
-  { href: "/resources", label: "Resources" },
   { href: "/admin", label: "Admin" }
 ];
 

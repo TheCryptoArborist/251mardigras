@@ -1,5 +1,5 @@
 import { prisma } from "./prisma";
-import { officialSources, resourceSeeds } from "./seed-data";
+import { LINKTREE_URL, officialSources, resourceSeeds } from "./seed-data";
 
 export type PublicChange = {
   id: string;
@@ -125,18 +125,20 @@ export async function getResources(): Promise<ResourceItem[]> {
       }));
     }
   } catch {
-    // Fall back to curated seed data.
+    // Fall back to curated seed data when the database has not been migrated yet.
   }
 
-  return resourceSeeds.map((resource, index) => ({
-    id: `seed-${index}`,
-    title: resource.title,
-    url: resource.url,
-    category: resource.category,
-    description: resource.description,
-    source: resource.source,
-    sourceUrl: resource.sourceUrl
-  }));
+  return resourceSeeds
+    .filter((resource) => resource.url !== LINKTREE_URL)
+    .map((resource, index) => ({
+      id: `seed-${index}`,
+      title: resource.title,
+      url: resource.url,
+      category: resource.category,
+      description: resource.description,
+      source: resource.source,
+      sourceUrl: resource.sourceUrl
+    }));
 }
 
 export async function getParades(): Promise<ParadeItem[]> {
@@ -193,4 +195,3 @@ function labelForChangeType(changeType: string) {
 
   return labels[changeType] ?? "PUBLIC SAFETY UPDATE";
 }
-

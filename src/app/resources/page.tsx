@@ -13,7 +13,7 @@ import { ResourceCard } from "@/components/ResourceCard";
 import { SectionHeader } from "@/components/SectionHeader";
 import { getResources, type ResourceItem } from "@/lib/data-access";
 import { groupBy } from "@/lib/format";
-import { LINKTREE_URL, linktreeCategoryHighlights, linktreeProfile } from "@/lib/seed-data";
+import { linktreeCategoryHighlights, linktreeProfile } from "@/lib/seed-data";
 
 export const dynamic = "force-dynamic";
 
@@ -28,12 +28,12 @@ const categoryOrder = [
 ];
 
 const categoryDescriptions: Record<string, string> = {
-  "Social Media": "Public Linktree contact and social channels. Open Linktree for the current destination when a direct social URL is not stored locally.",
-  "Live Coverage / Channel Support": "YouTube livestream, archive, and channel-support links from the public Linktree profile.",
+  "Social Media": "Direct public contact and social channel destinations maintained in the website resource directory.",
+  "Live Coverage / Channel Support": "YouTube livestream, archive, and channel-support links for Mobile Mardi Gras coverage.",
   "Downtown Transportation": "Parking app, downtown parking, and City parking resources. Verify traffic, towing, and closures with official sources before travel.",
   "Mobility-Friendly Access": "Third-party access-support resources. These are convenience links and do not replace official parade or public-safety guidance.",
-  "Food and Drink": "Downtown food and drink stops listed by the Linktree profile. Hours and parade-day access can change quickly.",
-  "Mardi Gras Gear / Throws": "Throws, gear, and shopping resources collected from the Linktree profile.",
+  "Food and Drink": "Downtown food and drink stops for parade visitors. Hours and parade-day access can change quickly.",
+  "Mardi Gras Gear / Throws": "Throws, gear, and shopping resources collected for visitor planning.",
   "Previous Parade Seasons": "Past parade-season video resources and playlists from the Mobile Mardi Gras channel."
 };
 
@@ -91,11 +91,11 @@ export default async function ResourcesPage() {
               Mobile Mardi Gras Resource Guide
             </h1>
             <p className="mt-4 max-w-2xl text-lg leading-8 text-parade-muted">
-              A cleaner public layout for the information gathered in the Mardi Gras Mobile Linktree: live coverage, social channels, parking, access support, food, gear, and past parade seasons.
+              A direct-link visitor directory for Mobile Mardi Gras live coverage, social channels, parking, access support, food, gear, and past parade seasons. The goal is to send visitors straight to the resource they need.
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
-              <a href={LINKTREE_URL} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded bg-parade-purple px-5 py-3 text-sm font-bold text-white hover:bg-parade-purpleDark">
-                Open original Linktree <ExternalLink className="h-4 w-4" aria-hidden="true" />
+              <a href="/watch" className="inline-flex items-center gap-2 rounded bg-parade-purple px-5 py-3 text-sm font-bold text-white hover:bg-parade-purpleDark">
+                Watch live coverage
               </a>
               <a href="#all-resources" className="inline-flex items-center gap-2 rounded border border-parade-line bg-white px-5 py-3 text-sm font-bold text-parade-purple hover:bg-parade-purpleSoft">
                 Browse all resources
@@ -103,13 +103,13 @@ export default async function ResourcesPage() {
             </div>
           </div>
           <div className="rounded border border-parade-line bg-parade-purpleSoft p-5">
-            <p className="text-sm font-bold uppercase text-parade-muted">Linktree profile</p>
+            <p className="text-sm font-bold uppercase text-parade-muted">Resource directory</p>
             <h2 className="mt-1 text-2xl font-black text-parade-ink">{linktreeProfile.title}</h2>
             <p className="mt-3 text-sm leading-6 text-parade-muted">{linktreeProfile.tagline}</p>
             <div className="mt-5 grid gap-3 sm:grid-cols-3">
-              <ProfileMetric label="Resource links" value={String(resources.length)} />
+              <ProfileMetric label="Direct links" value={String(resources.length)} />
               <ProfileMetric label="Guide sections" value={String(totalCategoryCount)} />
-              <ProfileMetric label="Joined Linktree" value={linktreeProfile.joined} />
+              <ProfileMetric label="Built from" value={linktreeProfile.joined} />
             </div>
           </div>
         </div>
@@ -119,7 +119,7 @@ export default async function ResourcesPage() {
         <section>
           <SectionHeader
             title="Start Here"
-            description="Highest-use links pulled forward from the Linktree inventory. These are convenience links, not official parade or public-safety decisions."
+            description="Highest-use direct links pulled forward from the resource inventory. These are convenience links, not official parade or public-safety decisions."
           />
           <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
             {primaryResources.map((resource) => (
@@ -131,7 +131,7 @@ export default async function ResourcesPage() {
         <section>
           <SectionHeader
             title="Plan By Need"
-            description="The Linktree content reorganized around what visitors are usually trying to do."
+            description="Resource links reorganized around what visitors are usually trying to do."
           />
           <div className="grid gap-4 lg:grid-cols-3">
             {planningLanes.map((lane) => (
@@ -151,7 +151,7 @@ export default async function ResourcesPage() {
             <div>
               <h2 className="text-lg font-black text-amber-950">Official-source reminder</h2>
               <p className="mt-2 text-sm leading-6 text-amber-950">
-                Linktree resources are useful for planning and discovery, but parade schedules, routes, parking rules, towing, road closures, weather impacts, and emergency decisions should still be verified through official City, public-safety, and National Weather Service sources.
+                Visitor resources are useful for planning and discovery, but parade schedules, routes, parking rules, towing, road closures, weather impacts, and emergency decisions should still be verified through official City, public-safety, and National Weather Service sources.
               </p>
             </div>
           </div>
@@ -159,8 +159,8 @@ export default async function ResourcesPage() {
 
         <section>
           <SectionHeader
-            title="What The Linktree Covers"
-            description="A quick map of the content collected in the original Linktree."
+            title="What The Directory Covers"
+            description="A quick map of the resource categories maintained on the website."
           />
           <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-5">
             {linktreeCategoryHighlights.map((item) => (
@@ -175,7 +175,7 @@ export default async function ResourcesPage() {
         <section id="all-resources">
           <SectionHeader
             title="Full Resource Directory"
-            description="Complete Linktree inventory, grouped into practical sections for easier scanning."
+            description="Complete direct-link inventory, grouped into practical sections for easier scanning."
           />
           <div className="space-y-8">
             {categoryOrder.map((category) => {
