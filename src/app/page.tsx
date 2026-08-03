@@ -33,7 +33,7 @@ export default async function HomePage() {
       icon: <Utensils className="h-5 w-5" aria-hidden="true" />,
       title: "Food and Drink",
       body: "Navigate to downtown restaurants, coffee, bakeries, breweries, and dessert stops.",
-      href: "/resources#food-and-drink-navigator",
+      href: "/food-drink",
       action: "Find Food Nearby",
       external: false
     },
@@ -41,7 +41,7 @@ export default async function HomePage() {
       icon: <Car className="h-5 w-5" aria-hidden="true" />,
       title: "Parking and Access",
       body: "Find parking, transportation, and mobility-friendly access resources.",
-      href: "/links/parking-access",
+      href: "/parking-access",
       action: "Plan Access",
       external: false
     },
@@ -57,7 +57,7 @@ export default async function HomePage() {
       icon: <ShoppingBag className="h-5 w-5" aria-hidden="true" />,
       title: "Mardi Gras Gear",
       body: "Find throws, shirts, drink holders, and Mobile Mardi Gras gear from selected local resources.",
-      href: "/links/gear-throws",
+      href: "/mardi-gras-gear",
       action: "Shop Gear",
       external: false
     }
