@@ -16,7 +16,7 @@ export function SiteHeader() {
     <header className="sticky top-0 z-30 border-b border-white/10 bg-parade-purpleDark text-white shadow-lg shadow-purple-950/10">
       <div className="mx-auto flex max-w-7xl flex-col gap-3 px-4 py-4 sm:px-6 lg:px-8 xl:flex-row xl:items-center xl:justify-between">
         <Link href="/" className="flex min-w-0 items-center gap-3">
-          <span className="grid h-12 w-12 shrink-0 place-items-center overflow-hidden rounded bg-white p-1 shadow-sm">
+          <span className="flex h-12 w-12 shrink-0 items-center justify-center overflow-visible">
             <Image src={SITE_LOGO_PATH} alt={SITE_LOGO_ALT} width={48} height={48} className="h-full w-full object-contain" priority />
           </span>
           <span className="min-w-0">
