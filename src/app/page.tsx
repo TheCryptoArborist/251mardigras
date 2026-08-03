@@ -41,7 +41,7 @@ export default async function HomePage() {
       icon: <Car className="h-5 w-5" aria-hidden="true" />,
       title: "Parking and Access",
       body: "Find parking, transportation, and mobility-friendly access resources.",
-      href: "/resources",
+      href: "/links/parking-access",
       action: "Plan Access",
       external: false
     },
