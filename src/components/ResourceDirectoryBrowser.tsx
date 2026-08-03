@@ -6,6 +6,8 @@ import {
   Archive,
   Car,
   ExternalLink,
+  MapPin,
+  Navigation,
   PlayCircle,
   Search,
   Share2,
@@ -16,13 +18,14 @@ import {
 import type { ResourceItem } from "@/lib/data-access";
 
 const ALL_CATEGORIES = "All";
+const FOOD_AND_DRINK_CATEGORY = "Food and Drink";
 
 const categoryOrder = [
   "Social Media",
   "Live Coverage / Channel Support",
   "Downtown Transportation",
   "Mobility-Friendly Access",
-  "Food and Drink",
+  FOOD_AND_DRINK_CATEGORY,
   "Mardi Gras Gear / Throws",
   "Previous Parade Seasons"
 ];
@@ -50,6 +53,11 @@ const categoryIcons: Record<string, React.ReactNode> = {
 export function ResourceDirectoryBrowser({ resources }: { resources: ResourceItem[] }) {
   const [query, setQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState(ALL_CATEGORIES);
+  const [selectedFoodResourceId, setSelectedFoodResourceId] = useState("");
+
+  const foodAndDrinkResources = useMemo(() => {
+    return resources.filter((resource) => resource.category === FOOD_AND_DRINK_CATEGORY);
+  }, [resources]);
 
   const availableCategories = useMemo(() => {
     const presentCategories = new Set(resources.map((resource) => resource.category));
@@ -107,13 +115,21 @@ export function ResourceDirectoryBrowser({ resources }: { resources: ResourceIte
 
   return (
     <div className="space-y-6">
+      {foodAndDrinkResources.length > 0 ? (
+        <FoodAndDrinkNavigator
+          resources={foodAndDrinkResources}
+          selectedResourceId={selectedFoodResourceId}
+          onSelect={setSelectedFoodResourceId}
+        />
+      ) : null}
+
       <div className="rounded border border-parade-line bg-white p-5 shadow-civic">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
           <div>
             <p className="text-sm font-bold uppercase tracking-wide text-parade-purple">Find what you need</p>
-            <h2 className="mt-1 text-2xl font-black text-parade-ink">Search the Resource Directory</h2>
+            <h2 className="mt-1 text-2xl font-black text-parade-ink">Search the Full Directory</h2>
             <p className="mt-2 max-w-3xl text-sm leading-6 text-parade-muted">
-              Search by resource name, category, or visitor need. Use the category buttons to narrow the directory without losing the official-source reminders.
+              Use search for the full visitor directory. Food and drink links are also pulled forward above because they are often needed while walking or driving downtown.
             </p>
           </div>
           <div className="text-sm font-bold text-parade-muted">
@@ -179,6 +195,110 @@ export function ResourceDirectoryBrowser({ resources }: { resources: ResourceIte
         />
       ))}
     </div>
+  );
+}
+
+function FoodAndDrinkNavigator({
+  resources,
+  selectedResourceId,
+  onSelect
+}: {
+  resources: ResourceItem[];
+  selectedResourceId: string;
+  onSelect: (resourceId: string) => void;
+}) {
+  const selectedResource = resources.find((resource) => resource.id === selectedResourceId) ?? null;
+
+  return (
+    <section className="rounded border border-parade-line bg-white p-5 shadow-civic" id="food-and-drink-navigator">
+      <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+        <div className="min-w-0">
+          <div className="flex items-center gap-3">
+            <div className="grid h-11 w-11 shrink-0 place-items-center rounded bg-parade-goldSoft text-parade-gold">
+              <Utensils className="h-6 w-6" aria-hidden="true" />
+            </div>
+            <div>
+              <p className="text-sm font-bold uppercase tracking-wide text-parade-purple">Food and drink navigator</p>
+              <h2 className="text-2xl font-black text-parade-ink">Find a downtown stop fast</h2>
+            </div>
+          </div>
+          <p className="mt-3 max-w-3xl text-sm leading-6 text-parade-muted">
+            Pick a restaurant, coffee shop, bakery, brewery, or dessert stop and open its direct map or website link. This is designed for people already walking downtown or driving in during Mardi Gras.
+          </p>
+        </div>
+        <span className="inline-flex shrink-0 items-center gap-2 rounded border border-parade-line px-3 py-1 text-xs font-bold uppercase text-parade-muted">
+          <MapPin className="h-4 w-4" aria-hidden="true" />
+          {resources.length} stops
+        </span>
+      </div>
+
+      <div className="mt-5 grid gap-3 lg:grid-cols-[1fr_auto]">
+        <label className="block min-w-0">
+          <span className="mb-2 block text-xs font-bold uppercase text-parade-muted">Choose a food or drink stop</span>
+          <select
+            value={selectedResourceId}
+            onChange={(event) => onSelect(event.target.value)}
+            className="w-full rounded border border-parade-line bg-white px-3 py-3 text-sm font-bold text-parade-ink outline-none transition focus:border-parade-purple focus:ring-2 focus:ring-parade-purpleSoft"
+          >
+            <option value="">Select a restaurant, bakery, coffee shop, brewery, or dessert stop...</option>
+            {resources.map((resource) => (
+              <option key={resource.id} value={resource.id}>
+                {resource.title}
+              </option>
+            ))}
+          </select>
+        </label>
+
+        {selectedResource ? (
+          <a
+            href={selectedResource.url}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex items-center justify-center gap-2 rounded bg-parade-purple px-5 py-3 text-sm font-bold text-white hover:bg-parade-purpleDark lg:self-end"
+          >
+            Navigate to {selectedResource.title}
+            <Navigation className="h-4 w-4" aria-hidden="true" />
+          </a>
+        ) : (
+          <button
+            type="button"
+            disabled
+            className="inline-flex cursor-not-allowed items-center justify-center gap-2 rounded border border-parade-line px-5 py-3 text-sm font-bold text-parade-muted opacity-70 lg:self-end"
+          >
+            Select a stop first
+            <Navigation className="h-4 w-4" aria-hidden="true" />
+          </button>
+        )}
+      </div>
+
+      <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        {resources.map((resource) => (
+          <RestaurantQuickLink key={resource.id} resource={resource} />
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function RestaurantQuickLink({ resource }: { resource: ResourceItem }) {
+  return (
+    <a
+      href={resource.url}
+      target="_blank"
+      rel="noreferrer"
+      className="flex min-w-0 items-center gap-3 rounded border border-parade-line bg-white p-3 text-left transition hover:bg-parade-purpleSoft hover:shadow-civic"
+    >
+      <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-parade-purple text-sm font-black text-white" aria-hidden="true">
+        {initialsFor(resource.title)}
+      </span>
+      <span className="min-w-0 flex-1">
+        <span className="block truncate text-sm font-black text-parade-ink">{resource.title}</span>
+        <span className="mt-1 flex items-center gap-1 text-xs font-bold uppercase text-parade-purple">
+          Open / navigate
+          <ExternalLink className="h-3.5 w-3.5" aria-hidden="true" />
+        </span>
+      </span>
+    </a>
   );
 }
 
@@ -268,4 +388,13 @@ function normalizeSearch(value: string) {
     .replace(/[^a-z0-9]+/g, " ")
     .replace(/\s+/g, " ")
     .trim();
+}
+
+function initialsFor(title: string) {
+  const words = normalizeSearch(title)
+    .split(" ")
+    .filter(Boolean)
+    .slice(0, 2);
+
+  return words.map((word) => word[0]?.toUpperCase()).join("") || "MG";
 }
