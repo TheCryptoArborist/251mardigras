@@ -6,6 +6,7 @@ import {
   MapPinned,
   PlayCircle,
   Share2,
+  ShieldCheck,
   ShoppingBag,
   Utensils
 } from "lucide-react";
@@ -13,7 +14,7 @@ import { ResourceCard } from "@/components/ResourceCard";
 import { SectionHeader } from "@/components/SectionHeader";
 import { getResources, type ResourceItem } from "@/lib/data-access";
 import { groupBy } from "@/lib/format";
-import { linktreeCategoryHighlights, linktreeProfile } from "@/lib/seed-data";
+import { linktreeCategoryHighlights, linktreeProfile, resourceCurationPrinciples } from "@/lib/seed-data";
 
 export const dynamic = "force-dynamic";
 
@@ -28,12 +29,12 @@ const categoryOrder = [
 ];
 
 const categoryDescriptions: Record<string, string> = {
-  "Social Media": "Direct public contact and social channel destinations maintained in the website resource directory.",
+  "Social Media": "Direct public social channel destinations maintained in the website resource directory.",
   "Live Coverage / Channel Support": "YouTube livestream, archive, and channel-support links for Mobile Mardi Gras coverage.",
   "Downtown Transportation": "Parking app, downtown parking, and City parking resources. Verify traffic, towing, and closures with official sources before travel.",
   "Mobility-Friendly Access": "Third-party access-support resources. These are convenience links and do not replace official parade or public-safety guidance.",
   "Food and Drink": "Downtown food and drink stops for parade visitors. Hours and parade-day access can change quickly.",
-  "Mardi Gras Gear / Throws": "Throws, gear, and shopping resources collected for visitor planning.",
+  "Mardi Gras Gear / Throws": "Throws, gear, and shopping resources selected for visitor planning.",
   "Previous Parade Seasons": "Past parade-season video resources and playlists from the Mobile Mardi Gras channel."
 };
 
@@ -59,7 +60,7 @@ const primaryResourceTitles = [
 const planningLanes = [
   {
     title: "Watch and follow",
-    description: "Use these links for live video, the public channel archive, and current social/contact destinations.",
+    description: "Use these links for live video, the public channel archive, and current social destinations.",
     categories: ["Social Media", "Live Coverage / Channel Support"]
   },
   {
@@ -153,6 +154,26 @@ export default async function ResourcesPage() {
               <p className="mt-2 text-sm leading-6 text-amber-950">
                 Visitor resources are useful for planning and discovery, but parade schedules, routes, parking rules, towing, road closures, weather impacts, and emergency decisions should still be verified through official City, public-safety, and National Weather Service sources.
               </p>
+            </div>
+          </div>
+        </section>
+
+        <section className="rounded border border-parade-line bg-white p-5 shadow-civic">
+          <div className="flex items-start gap-3">
+            <ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-parade-purple" aria-hidden="true" />
+            <div>
+              <h2 className="text-lg font-black text-parade-ink">Curated directory, not a raw link dump</h2>
+              <p className="mt-2 text-sm leading-6 text-parade-muted">
+                The website keeps a legacy cache of imported quick links, but only selected resources are published here. The public directory should stay focused on Mobile Mardi Gras visitors instead of displaying every imported discount, affiliate, or unrelated offer.
+              </p>
+              <ul className="mt-4 space-y-2 text-sm leading-6 text-parade-muted">
+                {resourceCurationPrinciples.map((principle) => (
+                  <li key={principle} className="flex gap-2">
+                    <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-parade-purple" aria-hidden="true" />
+                    <span>{principle}</span>
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
         </section>
