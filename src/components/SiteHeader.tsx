@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { SITE_BRAND_NAME, SITE_LOGO_ALT, SITE_LOGO_PATH } from "@/lib/brand";
 
 const navItems = [
   { href: "/", label: "Home" },
@@ -13,12 +14,12 @@ export function SiteHeader() {
   return (
     <header className="sticky top-0 z-30 border-b border-white/10 bg-parade-purpleDark text-white shadow-lg shadow-purple-950/10">
       <div className="mx-auto flex max-w-7xl flex-col gap-3 px-4 py-4 sm:px-6 lg:px-8 xl:flex-row xl:items-center xl:justify-between">
-        <Link href="/" className="flex items-center gap-3">
-          <span className="grid h-10 w-10 place-items-center rounded bg-parade-gold text-lg font-black text-parade-purpleDark">
-            MG
+        <Link href="/" className="flex min-w-0 items-center gap-3">
+          <span className="grid h-12 w-12 shrink-0 place-items-center overflow-hidden rounded bg-white p-1 shadow-sm">
+            <img src={SITE_LOGO_PATH} alt={SITE_LOGO_ALT} className="h-full w-full object-contain" />
           </span>
-          <span>
-            <span className="block text-lg font-black leading-tight">Mardi Gras - Mobile, AL</span>
+          <span className="min-w-0">
+            <span className="block text-lg font-black leading-tight">{SITE_BRAND_NAME}</span>
             <span className="block text-xs font-medium text-purple-100">Parade coverage, food, parking, weather, and gear</span>
           </span>
         </Link>
