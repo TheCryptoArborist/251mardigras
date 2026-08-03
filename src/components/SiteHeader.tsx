@@ -4,8 +4,10 @@ import { ExternalLink, RefreshCw } from "lucide-react";
 const navItems = [
   { href: "/", label: "Home" },
   { href: "/watch", label: "Watch" },
-  { href: "/links", label: "Quick Links" },
-  { href: "/resources", label: "Resources" }
+  { href: "/resources#food-and-drink-navigator", label: "Food & Drink" },
+  { href: "/links/parking-access", label: "Parking & Access" },
+  { href: "/weather", label: "Weather" },
+  { href: "/links/gear-throws", label: "Mardi Gras Gear" }
 ];
 
 export function SiteHeader() {
@@ -18,7 +20,7 @@ export function SiteHeader() {
           </span>
           <span>
             <span className="block text-lg font-black leading-tight">Mardi Gras - Mobile, AL</span>
-            <span className="block text-xs font-medium text-purple-100">Livestreams, quick links, food, and visitor planning</span>
+            <span className="block text-xs font-medium text-purple-100">Parade coverage and visitor planning</span>
           </span>
         </Link>
 
