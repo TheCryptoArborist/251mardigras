@@ -22,10 +22,17 @@ export const linktreeProfile = {
   joined: "2024 link inventory"
 };
 
+export const resourceCurationPrinciples = [
+  "Public resources are selected for Mobile Mardi Gras livestream discovery, downtown visitor planning, access support, food and drink, gear, throws, or previous parade coverage.",
+  "Legacy imported links are reviewed before publication; general discount, affiliate, or non-Mardi Gras offers are not automatically displayed in the public directory.",
+  "Contact methods should be handled by a dedicated website contact/submission path instead of being mixed into the visitor resource directory.",
+  "Visitor resources are convenience links. Parade schedules, routes, closures, parking rules, towing, public-safety decisions, and weather impacts still require official-source verification."
+];
+
 export const linktreeCategoryHighlights = [
   {
-    title: "Social media and contact",
-    detail: "YouTube, Facebook, Instagram, X, TikTok, email, phone, and Snapchat destinations maintained as direct resource links."
+    title: "Social media",
+    detail: "YouTube, Facebook, Instagram, X, TikTok, and Snapchat destinations are maintained as direct resource links."
   },
   {
     title: "Downtown transportation",
@@ -173,13 +180,11 @@ const directoryResource = (
 
 export const resourceSeeds: ResourceSeed[] = [
   directoryResource("YouTube", "Social Media", "Mobile Mardi Gras video channel for live coverage, shorts, replays, and previous season videos.", 1, YOUTUBE_CHANNEL_URL),
-  directoryResource("Facebook", "Social Media", "Mobile Mardi Gras Facebook destination imported from the public quick-link inventory.", 2),
-  directoryResource("Instagram", "Social Media", "Mobile Mardi Gras Instagram destination imported from the public quick-link inventory.", 3),
-  directoryResource("X", "Social Media", "Mobile Mardi Gras X destination imported from the public quick-link inventory.", 4),
-  directoryResource("TikTok", "Social Media", "Mobile Mardi Gras TikTok destination imported from the public quick-link inventory.", 5),
-  directoryResource("Email", "Social Media", "Contact email destination imported from the public quick-link inventory.", 6),
-  directoryResource("Phone", "Social Media", "Phone/contact destination imported from the public quick-link inventory.", 7),
-  directoryResource("Snapchat", "Social Media", "Snapchat destination imported from the public quick-link inventory.", 8),
+  directoryResource("Facebook", "Social Media", "Mobile Mardi Gras Facebook destination maintained as a direct social link.", 2),
+  directoryResource("Instagram", "Social Media", "Mobile Mardi Gras Instagram destination maintained as a direct social link.", 3),
+  directoryResource("X", "Social Media", "Mobile Mardi Gras X destination maintained as a direct social link.", 4),
+  directoryResource("TikTok", "Social Media", "Mobile Mardi Gras TikTok destination maintained as a direct social link.", 5),
+  directoryResource("Snapchat", "Social Media", "Snapchat destination maintained as a direct social link.", 6),
   directoryResource("YouTube channel", "Live Coverage / Channel Support", "Live, short-form, and previous Mobile Mardi Gras video coverage.", 1, YOUTUBE_CHANNEL_URL),
   directoryResource("Current livestream", "Live Coverage / Channel Support", "Public Mobile Mardi Gras YouTube channel used by the live coverage player when a livestream is active.", 2, YOUTUBE_CHANNEL_URL),
   directoryResource("Become a Channel Supporter", "Live Coverage / Channel Support", "YouTube channel membership link for viewers who want to support coverage.", 3, YOUTUBE_SUPPORTER_URL),
@@ -225,10 +230,9 @@ export const resourceSeeds: ResourceSeed[] = [
     directoryResource(title, "Food and Drink", "Food or drink stop in the visitor directory. Confirm hours, reservations, and parade-day access with the venue.", index + 1)
   ),
   directoryResource("Port City Throws", "Mardi Gras Gear / Throws", "Mardi Gras throws and gear resource.", 1),
-  directoryResource("Additional gear or throws links", "Mardi Gras Gear / Throws", "Additional throws or gear resource imported from the public quick-link inventory.", 2),
-  directoryResource("Mardi Gras 2025 Playlist", "Previous Parade Seasons", "Previous parade season playlist from the Mobile Mardi Gras video archive.", 1, YOUTUBE_CHANNEL_URL),
-  directoryResource("Mardi Gras 2024 Playlist", "Previous Parade Seasons", "Previous parade season playlist from the Mobile Mardi Gras video archive.", 2, YOUTUBE_CHANNEL_URL),
-  directoryResource("Mardi Gras 2023 Playlist", "Previous Parade Seasons", "Previous parade season playlist from the Mobile Mardi Gras video archive.", 3, YOUTUBE_CHANNEL_URL)
+  directoryResource("Mardi Gras 2025 Playlist", "Previous Parade Seasons", "Previous parade season playlist from the Mobile Mardi Gras video archive.", 1),
+  directoryResource("Mardi Gras 2024 Playlist", "Previous Parade Seasons", "Previous parade season playlist from the Mobile Mardi Gras video archive.", 2),
+  directoryResource("Mardi Gras 2023 Playlist", "Previous Parade Seasons", "Previous parade season playlist from the Mobile Mardi Gras video archive.", 3)
 ];
 
 export const publicDisclaimers = [
