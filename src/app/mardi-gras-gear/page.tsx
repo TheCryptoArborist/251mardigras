@@ -1,0 +1,21 @@
+import { CategoryResourcePage } from "@/components/CategoryResourcePage";
+import { getResources } from "@/lib/data-access";
+
+export const dynamic = "force-dynamic";
+
+export default async function MardiGrasGearPage() {
+  const resources = (await getResources()).filter((resource) => resource.category === "Mardi Gras Gear / Throws");
+
+  return (
+    <CategoryResourcePage
+      eyebrow="Throws, gear, and shopping"
+      title="Mardi Gras Gear"
+      description="Selected Mardi Gras gear, throws, drink holders, and Mobile Mardi Gras shopping resources. This section should stay focused on useful Mardi Gras visitor resources, not unrelated deals."
+      resources={resources}
+      primaryHref="/resources"
+      primaryAction="Open full resource guide"
+      resourceActionLabel="Open shop"
+      officialReminder="Shopping links are visitor convenience resources. Product availability, pricing, hours, and fulfillment are controlled by each vendor."
+    />
+  );
+}
