@@ -1,9 +1,8 @@
 import Link from "next/link";
 import {
-  Accessibility,
-  Archive,
   ArrowRight,
   Car,
+  CloudSun,
   ExternalLink,
   MapPinned,
   PlayCircle,
@@ -11,76 +10,76 @@ import {
   ShoppingBag,
   Utensils
 } from "lucide-react";
-import { SectionHeader } from "@/components/SectionHeader";
-import { getResources, type ResourceItem } from "@/lib/data-access";
-import { groupBy } from "@/lib/format";
+import { getResources } from "@/lib/data-access";
 
 export const dynamic = "force-dynamic";
 
-const categoryOrder = [
-  "Live Coverage / Channel Support",
-  "Social Media",
-  "Mobility-Friendly Access",
-  "Downtown Transportation",
-  "Food and Drink",
-  "Mardi Gras Gear / Throws",
-  "Previous Parade Seasons"
+const quickLinkGroups = [
+  {
+    title: "Parade Coverage",
+    description: "Live coverage, YouTube channel, supporter link, and parade replays.",
+    href: "/links/parade-coverage",
+    categories: ["Live Coverage / Channel Support", "Previous Parade Seasons"],
+    icon: <PlayCircle className="h-5 w-5" aria-hidden="true" />,
+    action: "Open coverage links"
+  },
+  {
+    title: "Food and Drink",
+    description: "Downtown restaurants, coffee, bakeries, breweries, dessert stops, and map links.",
+    href: "/links/food-drink",
+    categories: ["Food and Drink"],
+    icon: <Utensils className="h-5 w-5" aria-hidden="true" />,
+    action: "Find a downtown stop"
+  },
+  {
+    title: "Parking and Access",
+    description: "Parking, transportation, downtown access, and mobility-friendly planning resources.",
+    href: "/links/parking-access",
+    categories: ["Downtown Transportation", "Mobility-Friendly Access"],
+    icon: <Car className="h-5 w-5" aria-hidden="true" />,
+    action: "Plan your arrival"
+  },
+  {
+    title: "Weather",
+    description: "Weather-risk page for planning before and during parade coverage.",
+    href: "/weather",
+    categories: [],
+    icon: <CloudSun className="h-5 w-5" aria-hidden="true" />,
+    action: "Check weather"
+  },
+  {
+    title: "Social Channels",
+    description: "Follow Mardi Gras - Mobile, AL on YouTube, Facebook, Instagram, TikTok, X, and Snapchat.",
+    href: "/links/social-channels",
+    categories: ["Social Media"],
+    icon: <Share2 className="h-5 w-5" aria-hidden="true" />,
+    action: "Follow the channels"
+  },
+  {
+    title: "Gear and Throws",
+    description: "Mardi Gras gear, throws, and shopping resources selected for visitor planning.",
+    href: "/links/gear-throws",
+    categories: ["Mardi Gras Gear / Throws"],
+    icon: <ShoppingBag className="h-5 w-5" aria-hidden="true" />,
+    action: "Shop Mardi Gras"
+  }
 ];
-
-const priorityTitles = [
-  "Current livestream",
-  "YouTube channel",
-  "Become a Channel Supporter",
-  "Facebook",
-  "Instagram",
-  "TikTok",
-  "X",
-  "Need Mobility-Friendly Mardi Gras Access? Click Here",
-  "City of Mobile Parking and Transportation Guide",
-  "Downtown Parking Map",
-  "Port City Throws",
-  "Mardi Gras 2025 Playlist"
-];
-
-const categoryDescriptions: Record<string, string> = {
-  "Live Coverage / Channel Support": "Livestream, YouTube channel, supporter link, and video archive resources.",
-  "Social Media": "Direct social channel destinations for Mardi Gras - Mobile, AL.",
-  "Mobility-Friendly Access": "Access-support resources. Verify parade schedules and public-safety guidance with official sources.",
-  "Downtown Transportation": "Parking, transportation, and downtown access planning links.",
-  "Food and Drink": "Downtown food and drink stops that visitors commonly look for during parade season.",
-  "Mardi Gras Gear / Throws": "Throws, gear, and Mardi Gras shopping resources.",
-  "Previous Parade Seasons": "Prior-year Mobile Mardi Gras coverage and playlists."
-};
-
-const categoryIcons: Record<string, React.ReactNode> = {
-  "Live Coverage / Channel Support": <PlayCircle className="h-5 w-5" aria-hidden="true" />,
-  "Social Media": <Share2 className="h-5 w-5" aria-hidden="true" />,
-  "Mobility-Friendly Access": <Accessibility className="h-5 w-5" aria-hidden="true" />,
-  "Downtown Transportation": <Car className="h-5 w-5" aria-hidden="true" />,
-  "Food and Drink": <Utensils className="h-5 w-5" aria-hidden="true" />,
-  "Mardi Gras Gear / Throws": <ShoppingBag className="h-5 w-5" aria-hidden="true" />,
-  "Previous Parade Seasons": <Archive className="h-5 w-5" aria-hidden="true" />
-};
 
 export default async function LinksPage() {
   const resources = await getResources();
-  const grouped = groupBy(resources, (resource) => resource.category);
-  const priorityResources = priorityTitles
-    .map((title) => resources.find((resource) => resource.title === title))
-    .filter((resource): resource is ResourceItem => Boolean(resource));
 
   return (
     <div>
       <section className="border-b border-parade-line bg-white">
-        <div className="mx-auto max-w-3xl px-4 py-8 text-center sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-4xl px-4 py-8 text-center sm:px-6 lg:px-8">
           <p className="text-sm font-bold uppercase tracking-wide text-parade-purple">Mobile quick links</p>
           <h1 className="mt-2 text-4xl font-black tracking-normal text-parade-ink sm:text-5xl">
-            Mardi Gras - Mobile, AL
+            Choose what you need.
           </h1>
           <p className="mx-auto mt-4 max-w-2xl text-base leading-7 text-parade-muted sm:text-lg">
-            Direct links for livestreams, social channels, parking, mobility-friendly access, food, gear, and previous Mobile Mardi Gras coverage.
+            This page replaces the old Linktree-style list with separated paths for parade coverage, food, parking, access, weather, social channels, and gear.
           </p>
-          <div className="mt-6 grid gap-3 sm:grid-cols-2">
+          <div className="mt-6 flex flex-wrap justify-center gap-3">
             <Link href="/watch" className="inline-flex items-center justify-center gap-2 rounded bg-parade-purple px-5 py-3 text-sm font-bold text-white hover:bg-parade-purpleDark">
               Watch Live <ArrowRight className="h-4 w-4" aria-hidden="true" />
             </Link>
@@ -91,15 +90,19 @@ export default async function LinksPage() {
         </div>
       </section>
 
-      <div className="mx-auto max-w-3xl space-y-8 px-4 py-8 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-5xl space-y-8 px-4 py-8 sm:px-6 lg:px-8">
         <section>
-          <SectionHeader
-            title="Start Here"
-            description="The fastest links for people arriving from social media, QR codes, or shared posts."
-          />
-          <div className="space-y-3">
-            {priorityResources.map((resource) => (
-              <QuickLink key={resource.id} resource={resource} featured />
+          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+            {quickLinkGroups.map((group) => (
+              <QuickLinkGroupCard
+                key={group.title}
+                title={group.title}
+                description={group.description}
+                href={group.href}
+                icon={group.icon}
+                action={group.action}
+                count={countResourcesForCategories(resources, group.categories)}
+              />
             ))}
           </div>
         </section>
@@ -110,28 +113,9 @@ export default async function LinksPage() {
             <div>
               <h2 className="text-lg font-black text-amber-950">Unofficial-source reminder</h2>
               <p className="mt-2 text-sm leading-6 text-amber-950">
-                This page is a visitor convenience directory. Parade schedules, routes, cancellations, road closures, parking rules, towing, public-safety instructions, and weather impacts should be verified through official City, public-safety, parade organization, and National Weather Service sources.
+                This is a visitor convenience directory. Parade schedules, routes, cancellations, road closures, parking rules, towing, public-safety instructions, and weather impacts should be verified through official City, public-safety, parade organization, and National Weather Service sources.
               </p>
             </div>
-          </div>
-        </section>
-
-        <section>
-          <SectionHeader
-            title="Browse By Need"
-            description="Direct destination links grouped for quick mobile scanning."
-          />
-          <div className="space-y-5">
-            {categoryOrder.map((category) => {
-              const items = grouped[category] ?? [];
-              if (items.length === 0) {
-                return null;
-              }
-
-              return (
-                <QuickCategory key={category} category={category} resources={items} />
-              );
-            })}
           </div>
         </section>
       </div>
@@ -139,40 +123,47 @@ export default async function LinksPage() {
   );
 }
 
-function QuickCategory({ category, resources }: { category: string; resources: ResourceItem[] }) {
+function QuickLinkGroupCard({
+  title,
+  description,
+  href,
+  icon,
+  action,
+  count
+}: {
+  title: string;
+  description: string;
+  href: string;
+  icon: React.ReactNode;
+  action: string;
+  count: number;
+}) {
   return (
-    <section className="min-w-0 rounded border border-parade-line bg-white p-4 shadow-civic">
-      <div className="mb-3 flex items-start gap-3">
-        <div className="grid h-10 w-10 shrink-0 place-items-center rounded bg-parade-purpleSoft text-parade-purple">
-          {categoryIcons[category] ?? <ExternalLink className="h-5 w-5" aria-hidden="true" />}
+    <Link href={href} className="flex h-full min-w-0 flex-col rounded border border-parade-line bg-white p-5 shadow-civic transition hover:-translate-y-0.5 hover:bg-parade-purpleSoft">
+      <div className="flex items-start justify-between gap-3">
+        <div className="grid h-11 w-11 shrink-0 place-items-center rounded bg-parade-goldSoft text-parade-gold">
+          {icon}
         </div>
-        <div className="min-w-0">
-          <h2 className="text-lg font-black text-parade-ink">{category}</h2>
-          <p className="mt-1 text-sm leading-6 text-parade-muted">{categoryDescriptions[category]}</p>
-        </div>
+        {count > 0 ? (
+          <span className="rounded border border-parade-line bg-white px-2 py-1 text-xs font-bold uppercase text-parade-muted">
+            {count} links
+          </span>
+        ) : null}
       </div>
-      <div className="space-y-2">
-        {resources.map((resource) => (
-          <QuickLink key={resource.id} resource={resource} />
-        ))}
-      </div>
-    </section>
+      <h2 className="mt-4 text-xl font-black text-parade-ink">{title}</h2>
+      <p className="mt-2 flex-1 text-sm leading-6 text-parade-muted">{description}</p>
+      <span className="mt-4 inline-flex items-center gap-2 text-sm font-bold text-parade-purple">
+        {action}
+        {href.startsWith("/") ? <ArrowRight className="h-4 w-4" aria-hidden="true" /> : <ExternalLink className="h-4 w-4" aria-hidden="true" />}
+      </span>
+    </Link>
   );
 }
 
-function QuickLink({ resource, featured = false }: { resource: ResourceItem; featured?: boolean }) {
-  return (
-    <a
-      href={resource.url}
-      target="_blank"
-      rel="noreferrer"
-      className={`flex min-w-0 items-center justify-between gap-3 rounded border border-parade-line bg-white px-4 py-3 text-left text-sm font-bold text-parade-ink transition hover:bg-parade-purpleSoft ${featured ? "shadow-civic" : ""}`}
-    >
-      <span className="min-w-0">
-        <span className="block truncate">{resource.title}</span>
-        {featured ? <span className="mt-1 block truncate text-xs font-semibold uppercase text-parade-muted">{resource.category}</span> : null}
-      </span>
-      <ExternalLink className="h-4 w-4 shrink-0 text-parade-purple" aria-hidden="true" />
-    </a>
-  );
+function countResourcesForCategories(resources: Awaited<ReturnType<typeof getResources>>, categories: string[]) {
+  if (categories.length === 0) {
+    return 0;
+  }
+
+  return resources.filter((resource) => categories.includes(resource.category)).length;
 }

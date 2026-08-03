@@ -10,7 +10,7 @@ import {
   ShoppingBag,
   Utensils
 } from "lucide-react";
-import { ResourceCard } from "@/components/ResourceCard";
+import { ResourceDirectoryBrowser } from "@/components/ResourceDirectoryBrowser";
 import { SectionHeader } from "@/components/SectionHeader";
 import { getResources, type ResourceItem } from "@/lib/data-access";
 import { groupBy } from "@/lib/format";
@@ -27,16 +27,6 @@ const categoryOrder = [
   "Mardi Gras Gear / Throws",
   "Previous Parade Seasons"
 ];
-
-const categoryDescriptions: Record<string, string> = {
-  "Social Media": "Direct public social channel destinations maintained in the website resource directory.",
-  "Live Coverage / Channel Support": "YouTube livestream, archive, and channel-support links for Mobile Mardi Gras coverage.",
-  "Downtown Transportation": "Parking app, downtown parking, and City parking resources. Verify traffic, towing, and closures with official sources before travel.",
-  "Mobility-Friendly Access": "Third-party access-support resources. These are convenience links and do not replace official parade or public-safety guidance.",
-  "Food and Drink": "Downtown food and drink stops for parade visitors. Hours and parade-day access can change quickly.",
-  "Mardi Gras Gear / Throws": "Throws, gear, and shopping resources selected for visitor planning.",
-  "Previous Parade Seasons": "Past parade-season video resources and playlists from the Mobile Mardi Gras channel."
-};
 
 const categoryIcons: Record<string, React.ReactNode> = {
   "Social Media": <Share2 className="h-5 w-5" aria-hidden="true" />,
@@ -198,23 +188,7 @@ export default async function ResourcesPage() {
             title="Full Resource Directory"
             description="Complete direct-link inventory, grouped into practical sections for easier scanning."
           />
-          <div className="space-y-8">
-            {categoryOrder.map((category) => {
-              const items = grouped[category] ?? [];
-              if (items.length === 0) {
-                return null;
-              }
-
-              return (
-                <ResourceCategorySection
-                  key={category}
-                  category={category}
-                  description={categoryDescriptions[category]}
-                  resources={items}
-                />
-              );
-            })}
-          </div>
+          <ResourceDirectoryBrowser resources={resources} />
         </section>
       </div>
     </div>
@@ -276,59 +250,5 @@ function PlanningLane({ title, description, resources }: { title: string; descri
         ))}
       </div>
     </article>
-  );
-}
-
-function ResourceCategorySection({
-  category,
-  description,
-  resources
-}: {
-  category: string;
-  description: string;
-  resources: ResourceItem[];
-}) {
-  const compactList = resources.length > 9;
-
-  return (
-    <section className="min-w-0 rounded border border-parade-line bg-white p-5 shadow-civic">
-      <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-        <div className="flex items-start gap-3">
-          <div className="grid h-10 w-10 shrink-0 place-items-center rounded bg-parade-purpleSoft text-parade-purple">
-            {categoryIcons[category] ?? <ExternalLink className="h-5 w-5" aria-hidden="true" />}
-          </div>
-          <div>
-            <h2 className="text-2xl font-black text-parade-ink">{category}</h2>
-            <p className="mt-1 max-w-3xl text-sm leading-6 text-parade-muted">{description}</p>
-          </div>
-        </div>
-        <span className="inline-flex items-center rounded border border-parade-line px-3 py-1 text-xs font-bold uppercase text-parade-muted">
-          {resources.length} links
-        </span>
-      </div>
-
-      {compactList ? (
-        <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
-          {resources.map((resource) => (
-            <a
-              key={resource.id}
-              href={resource.url}
-              target="_blank"
-              rel="noreferrer"
-              className="flex min-w-0 items-center justify-between gap-3 rounded border border-parade-line px-3 py-2 text-sm font-semibold text-parade-ink hover:bg-parade-purpleSoft"
-            >
-              <span className="min-w-0 truncate">{resource.title}</span>
-              <ExternalLink className="h-4 w-4 shrink-0 text-parade-purple" aria-hidden="true" />
-            </a>
-          ))}
-        </div>
-      ) : (
-        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-          {resources.map((resource) => (
-            <ResourceCard key={resource.id} resource={resource} />
-          ))}
-        </div>
-      )}
-    </section>
   );
 }

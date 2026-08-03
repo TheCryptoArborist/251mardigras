@@ -1,207 +1,120 @@
 import Link from "next/link";
-import { ArrowRight, CalendarDays, Car, Share2, ShieldCheck, Video } from "lucide-react";
-import { AlertCard } from "@/components/AlertCard";
-import { DataFreshnessPanel } from "@/components/DataFreshnessPanel";
-import { EmptyState } from "@/components/EmptyState";
+import { Archive, ArrowRight, Car, CloudSun, ExternalLink, PlayCircle, ShieldCheck, ShoppingBag, Utensils } from "lucide-react";
 import { LiveStreamEmbed } from "@/components/LiveStreamEmbed";
-import { ResourceCard } from "@/components/ResourceCard";
-import { SectionHeader } from "@/components/SectionHeader";
-import { SourceStatusCard } from "@/components/SourceStatusCard";
-import { StatusPill } from "@/components/StatusPill";
-import { WeatherRiskCard } from "@/components/WeatherRiskCard";
-import { getParades, getPublicChanges, getResources, getSourceStatuses, type PublicChange } from "@/lib/data-access";
-import { getWeatherPreview } from "@/services/weather";
+import { getResources } from "@/lib/data-access";
+import { YOUTUBE_CHANNEL_URL, YOUTUBE_SUPPORTER_URL } from "@/lib/seed-data";
 
 export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
-  const [changes, sources, resources, parades, weatherResult] = await Promise.all([
-    getPublicChanges(),
-    getSourceStatuses(),
-    getResources(),
-    getParades(),
-    getWeatherPreview()
-      .then((weather) => ({ weather, error: null }))
-      .catch((error) => ({
-        weather: null,
-        error: error instanceof Error ? error.message : "Weather refresh failed"
-      }))
-  ]);
+  const resources = await getResources();
+  const latestReplay =
+    resources.find((resource) => resource.title === "Mardi Gras 2025 Playlist") ??
+    resources.find((resource) => resource.category === "Previous Parade Seasons");
 
-  const publicAlerts = changes.length > 0 ? changes : [noAlertState];
-  const routeSources = sources.filter((source) => /route|parking|mardi gras|police/i.test(source.name)).slice(0, 4);
-  const previewResources = resources.slice(0, 6);
-  const hubActions = [
+  const primaryActions = [
     {
-      icon: <Video className="h-5 w-5" aria-hidden="true" />,
-      title: "Watch live coverage",
-      body: "Open the live player, YouTube channel, supporter link, and previous parade-season coverage from one page.",
+      icon: <PlayCircle className="h-5 w-5" aria-hidden="true" />,
+      title: "Watch Live Coverage",
+      body: "Start with the live parade coverage hub and current player.",
       href: "/watch",
-      action: "Open Watch Live"
+      action: "Open Watch Live",
+      external: false
     },
     {
-      icon: <Share2 className="h-5 w-5" aria-hidden="true" />,
-      title: "Open quick links",
-      body: "Use the mobile-first links page for direct access to livestreams, social channels, parking, food, gear, and past coverage.",
-      href: "/links",
-      action: "Open Quick Links"
+      icon: <Archive className="h-5 w-5" aria-hidden="true" />,
+      title: "Watch Parade Replays",
+      body: "Catch up on previous Mobile Mardi Gras parade coverage.",
+      href: latestReplay?.url ?? "/watch",
+      action: "Open Replays",
+      external: Boolean(latestReplay)
+    },
+    {
+      icon: <Utensils className="h-5 w-5" aria-hidden="true" />,
+      title: "Food and Drink",
+      body: "Navigate to downtown restaurants, coffee, bakeries, breweries, and dessert stops.",
+      href: "/food-drink",
+      action: "Find Food Nearby",
+      external: false
     },
     {
       icon: <Car className="h-5 w-5" aria-hidden="true" />,
-      title: "Plan your day downtown",
-      body: "Find parking, transportation, mobility-friendly access, food, gear, and visitor-planning resources.",
-      href: "/resources",
-      action: "Browse Resources"
+      title: "Parking and Access",
+      body: "Find parking, transportation, and mobility-friendly access resources.",
+      href: "/parking-access",
+      action: "Plan Access",
+      external: false
     },
     {
-      icon: <ShieldCheck className="h-5 w-5" aria-hidden="true" />,
-      title: "Verify official information",
-      body: "Use the tracker and official-source reminders before relying on schedule, route, closure, safety, or weather decisions.",
-      href: "/admin",
-      action: "View Source Status"
+      icon: <CloudSun className="h-5 w-5" aria-hidden="true" />,
+      title: "Weather",
+      body: "Use the weather page as a planning tool between official updates.",
+      href: "/weather",
+      action: "Check Weather",
+      external: false
+    },
+    {
+      icon: <ShoppingBag className="h-5 w-5" aria-hidden="true" />,
+      title: "Mardi Gras Gear",
+      body: "Find throws, shirts, drink holders, and Mobile Mardi Gras gear from selected local resources.",
+      href: "/mardi-gras-gear",
+      action: "Shop Gear",
+      external: false
     }
   ];
 
   return (
     <div>
-      <section className="bg-white">
-        <div className="mx-auto grid max-w-7xl gap-8 px-4 py-8 sm:px-6 lg:grid-cols-[1.1fr_0.9fr] lg:px-8 lg:py-10">
-          <div>
-            <h1 className="max-w-3xl text-4xl font-black tracking-normal text-parade-ink sm:text-5xl">
-              Mobile Mardi Gras Information Hub
-            </h1>
-            <p className="mt-4 max-w-2xl text-lg leading-8 text-parade-muted">
-              Unofficial central hub for Mobile Mardi Gras livestreams, direct visitor links, public-source checks, weather risk, parking, towing, and previous parade-season coverage.
-            </p>
-            <div className="mt-6 flex flex-wrap gap-3">
-              <Link href="/watch" className="inline-flex items-center gap-2 rounded bg-parade-purple px-5 py-3 text-sm font-bold text-white hover:bg-parade-purpleDark">
-                Watch live coverage <ArrowRight className="h-4 w-4" aria-hidden="true" />
-              </Link>
-              <Link href="/links" className="inline-flex items-center gap-2 rounded border border-parade-line bg-white px-5 py-3 text-sm font-bold text-parade-purple hover:bg-parade-purpleSoft">
-                Open quick links
-              </Link>
-              <Link href="/resources" className="inline-flex items-center gap-2 rounded border border-parade-line bg-white px-5 py-3 text-sm font-bold text-parade-purple hover:bg-parade-purpleSoft">
-                Browse visitor resources
-              </Link>
-              <Link href="/weather" className="inline-flex items-center gap-2 rounded border border-parade-line bg-white px-5 py-3 text-sm font-bold text-parade-purple hover:bg-parade-purpleSoft">
-                Check weather risk
-              </Link>
-            </div>
+      <section className="border-b border-parade-line bg-white">
+        <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 lg:py-12">
+          <p className="text-sm font-bold uppercase tracking-wide text-parade-purple">Mobile Mardi Gras parade coverage</p>
+          <h1 className="mt-2 max-w-4xl text-4xl font-black tracking-normal text-parade-ink sm:text-5xl">
+            Watch the parades. Find the links. Plan the day.
+          </h1>
+          <p className="mt-4 max-w-3xl text-lg leading-8 text-parade-muted">
+            The main purpose of this site is Mobile Mardi Gras parade coverage. Food and drink, parking and access, weather, and Mardi Gras gear are organized as support tools for visitors before, during, and between live coverage.
+          </p>
+          <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {primaryActions.map((action) => (
+              <PrimaryActionCard key={action.title} {...action} />
+            ))}
           </div>
-          <DataFreshnessPanel
-            sources={sources}
-            alertCount={changes.length}
-            paradeCount={parades.length}
-            weatherCheckedAt={weatherResult.weather?.checkedAt}
-          />
         </div>
       </section>
 
       <div className="mx-auto max-w-7xl space-y-10 px-4 py-8 sm:px-6 lg:px-8">
-        <section>
-          <SectionHeader
-            title="Start Here"
-            description="The website is evolving from a quick-link list into a fuller visitor hub. These are the main paths most people need first."
-          />
-          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-            {hubActions.map((item) => (
-              <HubAction key={item.title} {...item} />
-            ))}
-          </div>
-        </section>
-
-        <section>
-          <SectionHeader
-            title="High Priority Alerts"
-            description="Meaningful official-source changes appear here after the checker compares stored snapshots."
-          />
-          <div className="grid gap-4 lg:grid-cols-2">
-            {publicAlerts.map((alert) => (
-              <AlertCard key={alert.id} alert={alert} />
-            ))}
-          </div>
-        </section>
-
-        <div className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
+        <section className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
           <LiveStreamEmbed />
-          <WeatherRiskCard weather={weatherResult.weather} error={weatherResult.error} />
-        </div>
-
-        <section>
-          <SectionHeader title="Today's Parade Schedule" description="Phase 1 does not invent parade times. Official schedule parsing is reserved for Phase 2." />
-          {parades.length === 0 ? (
-            <EmptyState
-              title="No verified parade schedule loaded yet"
-              message="Run source checks and add official schedule parsing before publishing parade-specific times."
-            />
-          ) : (
-            <div className="grid gap-4 md:grid-cols-2">
-              {parades.map((parade) => (
-                <article key={parade.id} className="rounded border border-parade-line bg-white p-4">
-                  <div className="flex items-start gap-3">
-                    <CalendarDays className="h-5 w-5 text-parade-purple" aria-hidden="true" />
-                    <div>
-                      <h3 className="font-bold text-parade-ink">{parade.name}</h3>
-                      <p className="text-sm text-parade-muted">
-                        {parade.date} {parade.startTime ? `at ${parade.startTime}` : ""}
-                      </p>
-                      <StatusPill tone="gold">{parade.status}</StatusPill>
-                    </div>
-                  </div>
-                </article>
-              ))}
+          <article className="rounded border border-parade-line bg-white p-5 shadow-civic">
+            <div className="flex items-start gap-3">
+              <div className="grid h-10 w-10 shrink-0 place-items-center rounded bg-parade-goldSoft text-parade-gold">
+                <PlayCircle className="h-5 w-5" aria-hidden="true" />
+              </div>
+              <div>
+                <h2 className="text-xl font-black text-parade-ink">Parade Coverage Hub</h2>
+                <p className="mt-2 text-sm leading-6 text-parade-muted">
+                  Start here for live parade coverage, the YouTube channel, replays, and channel support. This is the core of the website.
+                </p>
+              </div>
             </div>
-          )}
+            <div className="mt-5 space-y-3">
+              <CoverageAction href="/watch" label="Open live coverage page" />
+              <CoverageAction href={YOUTUBE_CHANNEL_URL} label="Open YouTube channel" external />
+              {latestReplay ? <CoverageAction href={latestReplay.url} label="Watch latest parade replay" external /> : null}
+              <CoverageAction href={YOUTUBE_SUPPORTER_URL} label="Become a channel supporter" external />
+            </div>
+          </article>
         </section>
 
-        <section>
-          <SectionHeader
-            title="Route and Road Closure Updates"
-            description="Official route, parking, public-safety, and traffic sources monitored by the Phase 1 checker."
-            action={
-              <Link href="/routes" className="inline-flex items-center gap-2 text-sm font-bold text-parade-purple hover:underline">
-                View routes and traffic <ArrowRight className="h-4 w-4" aria-hidden="true" />
-              </Link>
-            }
-          />
-          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-            {routeSources.map((source) => (
-              <SourceStatusCard key={source.id} source={source} />
-            ))}
-          </div>
-        </section>
-
-        <section className="grid gap-6 lg:grid-cols-2">
-          <InfoPanel
-            icon={<Car className="h-5 w-5" aria-hidden="true" />}
-            title="Parking and Towing Information"
-            body="Parking, transportation, and towing changes are treated as high priority because they affect downtown access and parade-day decisions."
-            href="/routes"
-            action="Review parking sources"
-          />
-          <InfoPanel
-            icon={<Video className="h-5 w-5" aria-hidden="true" />}
-            title="Previous Parade Videos"
-            body="Previous season playlists are listed under resources. Phase 3 can add searchable video archives."
-            href="/resources"
-            action="Open video resources"
-          />
-        </section>
-
-        <section>
-          <SectionHeader
-            title="Mardi Gras Resources"
-            description="Curated visitor directory items maintained as direct destination links on this website."
-            action={
-              <Link href="/resources" className="inline-flex items-center gap-2 text-sm font-bold text-parade-purple hover:underline">
-                View all resources <ArrowRight className="h-4 w-4" aria-hidden="true" />
-              </Link>
-            }
-          />
-          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-            {previewResources.map((resource) => (
-              <ResourceCard key={resource.id} resource={resource} />
-            ))}
+        <section className="rounded border border-amber-200 bg-parade-goldSoft p-5">
+          <div className="flex items-start gap-3">
+            <ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-amber-800" aria-hidden="true" />
+            <div>
+              <h2 className="text-lg font-black text-amber-950">Official-source reminder</h2>
+              <p className="mt-2 text-sm leading-6 text-amber-950">
+                This is an unofficial visitor resource and coverage hub. Parade schedules, routes, cancellations, road closures, parking rules, towing, public-safety instructions, and weather impacts should be verified through official City, public-safety, parade organization, and National Weather Service sources.
+              </p>
+            </div>
           </div>
         </section>
       </div>
@@ -209,67 +122,69 @@ export default async function HomePage() {
   );
 }
 
-function HubAction({
+function PrimaryActionCard({
   icon,
   title,
   body,
   href,
-  action
+  action,
+  external
 }: {
   icon: React.ReactNode;
   title: string;
   body: string;
   href: string;
   action: string;
+  external: boolean;
 }) {
-  return (
-    <article className="min-w-0 rounded border border-parade-line bg-white p-5 shadow-civic">
+  const className = "flex h-full min-w-0 flex-col rounded border border-parade-line bg-white p-4 text-left shadow-civic transition hover:-translate-y-0.5 hover:bg-parade-purpleSoft";
+  const content = (
+    <>
       <div className="grid h-10 w-10 place-items-center rounded bg-parade-goldSoft text-parade-gold">{icon}</div>
-      <h2 className="mt-4 text-xl font-black text-parade-ink">{title}</h2>
-      <p className="mt-2 text-sm leading-6 text-parade-muted">{body}</p>
-      <Link href={href} className="mt-4 inline-flex items-center gap-2 text-sm font-bold text-parade-purple hover:underline">
-        {action} <ArrowRight className="h-4 w-4" aria-hidden="true" />
-      </Link>
-    </article>
+      <h2 className="mt-4 text-lg font-black text-parade-ink">{title}</h2>
+      <p className="mt-2 flex-1 text-sm leading-6 text-parade-muted">{body}</p>
+      <span className="mt-4 inline-flex items-center gap-2 text-sm font-bold text-parade-purple">
+        {action}
+        {external ? <ExternalLink className="h-4 w-4" aria-hidden="true" /> : <ArrowRight className="h-4 w-4" aria-hidden="true" />}
+      </span>
+    </>
   );
-}
 
-function InfoPanel({
-  icon,
-  title,
-  body,
-  href,
-  action
-}: {
-  icon: React.ReactNode;
-  title: string;
-  body: string;
-  href: string;
-  action: string;
-}) {
+  if (external) {
+    return (
+      <a href={href} target="_blank" rel="noreferrer" className={className}>
+        {content}
+      </a>
+    );
+  }
+
   return (
-    <article className="rounded border border-parade-line bg-white p-5 shadow-civic">
-      <div className="flex items-start gap-3">
-        <div className="grid h-10 w-10 place-items-center rounded bg-parade-goldSoft text-parade-gold">{icon}</div>
-        <div>
-          <h2 className="text-xl font-bold text-parade-ink">{title}</h2>
-          <p className="mt-2 text-sm leading-6 text-parade-muted">{body}</p>
-          <Link href={href} className="mt-4 inline-flex items-center gap-2 text-sm font-bold text-parade-purple hover:underline">
-            {action} <ArrowRight className="h-4 w-4" aria-hidden="true" />
-          </Link>
-        </div>
-      </div>
-    </article>
+    <Link href={href} className={className}>
+      {content}
+    </Link>
   );
 }
 
-const noAlertState: PublicChange = {
-  id: "no-alerts",
-  label: "PUBLIC SAFETY UPDATE",
-  severity: "info",
-  title: "No high-priority official changes stored yet",
-  summary:
-    "The tracker is ready, but no stored source comparison has produced a public alert. Run the source checker after migrating and seeding SQLite.",
-  source: "Mobile Mardi Gras Tracker",
-  detectedAt: undefined
-};
+function CoverageAction({ href, label, external = false }: { href: string; label: string; external?: boolean }) {
+  const className = "flex min-w-0 items-center justify-between gap-3 rounded border border-parade-line px-4 py-3 text-sm font-bold text-parade-ink hover:bg-parade-purpleSoft";
+  const content = (
+    <>
+      <span className="min-w-0 truncate">{label}</span>
+      {external ? <ExternalLink className="h-4 w-4 shrink-0 text-parade-purple" aria-hidden="true" /> : <ArrowRight className="h-4 w-4 shrink-0 text-parade-purple" aria-hidden="true" />}
+    </>
+  );
+
+  if (external) {
+    return (
+      <a href={href} target="_blank" rel="noreferrer" className={className}>
+        {content}
+      </a>
+    );
+  }
+
+  return (
+    <Link href={href} className={className}>
+      {content}
+    </Link>
+  );
+}
