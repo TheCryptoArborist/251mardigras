@@ -3,10 +3,10 @@ import Link from "next/link";
 const navItems = [
   { href: "/", label: "Home" },
   { href: "/watch", label: "Watch" },
-  { href: "/resources#food-and-drink-navigator", label: "Food & Drink" },
-  { href: "/links/parking-access", label: "Parking & Access" },
+  { href: "/food-drink", label: "Food & Drink" },
+  { href: "/parking-access", label: "Parking & Access" },
   { href: "/weather", label: "Weather" },
-  { href: "/links/gear-throws", label: "Mardi Gras Gear" }
+  { href: "/mardi-gras-gear", label: "Mardi Gras Gear" }
 ];
 
 export function SiteHeader() {
