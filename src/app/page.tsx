@@ -1,7 +1,9 @@
+import Image from "next/image";
 import Link from "next/link";
 import { Archive, ArrowRight, Car, CloudSun, ExternalLink, PlayCircle, ShieldCheck, ShoppingBag, Utensils } from "lucide-react";
 import { LiveStreamEmbed } from "@/components/LiveStreamEmbed";
 import { getResources } from "@/lib/data-access";
+import { SITE_LOGO_ALT, SITE_LOGO_PATH } from "@/lib/brand";
 import { YOUTUBE_CHANNEL_URL, YOUTUBE_SUPPORTER_URL } from "@/lib/seed-data";
 
 export const dynamic = "force-dynamic";
@@ -66,18 +68,27 @@ export default async function HomePage() {
   return (
     <div>
       <section className="border-b border-parade-line bg-white">
-        <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 lg:py-12">
-          <p className="text-sm font-bold uppercase tracking-wide text-parade-purple">Mobile Mardi Gras parade coverage</p>
-          <h1 className="mt-2 max-w-4xl text-4xl font-black tracking-normal text-parade-ink sm:text-5xl">
-            Watch the parades. Find the links. Plan the day.
-          </h1>
-          <p className="mt-4 max-w-3xl text-lg leading-8 text-parade-muted">
-            The main purpose of this site is Mobile Mardi Gras parade coverage. Food and drink, parking and access, weather, and Mardi Gras gear are organized as support tools for visitors before, during, and between live coverage.
-          </p>
-          <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {primaryActions.map((action) => (
-              <PrimaryActionCard key={action.title} {...action} />
-            ))}
+        <div className="mx-auto grid max-w-7xl gap-8 px-4 py-8 sm:px-6 lg:grid-cols-[1fr_0.38fr] lg:items-center lg:px-8 lg:py-12">
+          <div>
+            <p className="text-sm font-bold uppercase tracking-wide text-parade-purple">Mobile Mardi Gras parade coverage</p>
+            <h1 className="mt-2 max-w-4xl text-4xl font-black tracking-normal text-parade-ink sm:text-5xl">
+              Watch the parades. Find the links. Plan the day.
+            </h1>
+            <p className="mt-4 max-w-3xl text-lg leading-8 text-parade-muted">
+              The main purpose of this site is Mobile Mardi Gras parade coverage. Food and drink, parking and access, weather, and Mardi Gras gear are organized as support tools for visitors before, during, and between live coverage.
+            </p>
+          </div>
+
+          <div className="hidden justify-self-center sm:block">
+            <Image src={SITE_LOGO_PATH} alt={SITE_LOGO_ALT} width={192} height={192} className="h-40 w-40 object-contain lg:h-48 lg:w-48" priority />
+          </div>
+
+          <div className="lg:col-span-2">
+            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              {primaryActions.map((action) => (
+                <PrimaryActionCard key={action.title} {...action} />
+              ))}
+            </div>
           </div>
         </div>
       </section>
