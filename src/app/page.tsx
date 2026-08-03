@@ -11,7 +11,7 @@ export const dynamic = "force-dynamic";
 export default async function HomePage() {
   const resources = await getResources();
   const latestReplay =
-    resources.find((resource) => resource.title === "Mardi Gras 2025 Playlist") ??
+    resources.find((resource) => resource.title === "Mardi Gras 2026 Playlist") ??
     resources.find((resource) => resource.category === "Previous Parade Seasons");
 
   const primaryActions = [
