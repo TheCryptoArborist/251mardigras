@@ -2,14 +2,10 @@ import Link from "next/link";
 import { ExternalLink, RefreshCw } from "lucide-react";
 
 const navItems = [
-  { href: "/", label: "Dashboard" },
+  { href: "/", label: "Home" },
   { href: "/watch", label: "Watch" },
-  { href: "/links", label: "Links" },
-  { href: "/resources", label: "Resources" },
-  { href: "/schedule", label: "Schedule" },
-  { href: "/weather", label: "Weather" },
-  { href: "/routes", label: "Routes" },
-  { href: "/admin", label: "Admin" }
+  { href: "/links", label: "Quick Links" },
+  { href: "/resources", label: "Resources" }
 ];
 
 export function SiteHeader() {
@@ -21,8 +17,8 @@ export function SiteHeader() {
             MG
           </span>
           <span>
-            <span className="block text-lg font-black leading-tight">Mobile Mardi Gras Tracker</span>
-            <span className="block text-xs font-medium text-purple-100">Unofficial public source monitor</span>
+            <span className="block text-lg font-black leading-tight">Mardi Gras - Mobile, AL</span>
+            <span className="block text-xs font-medium text-purple-100">Livestreams, quick links, food, and visitor planning</span>
           </span>
         </Link>
 
@@ -45,7 +41,7 @@ export function SiteHeader() {
           className="inline-flex items-center justify-center gap-2 rounded border border-white/20 bg-white px-4 py-2 text-sm font-bold text-parade-purpleDark shadow-sm transition hover:bg-parade-goldSoft focus:outline-none focus:ring-2 focus:ring-parade-gold"
         >
           <RefreshCw className="h-4 w-4" aria-hidden="true" />
-          Check Official Sources
+          Official Sources
           <ExternalLink className="h-4 w-4" aria-hidden="true" />
         </a>
       </div>
