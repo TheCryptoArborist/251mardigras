@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { SITE_BRAND_NAME, SITE_LOGO_ALT, SITE_LOGO_PATH } from "@/lib/brand";
 
@@ -16,7 +17,7 @@ export function SiteHeader() {
       <div className="mx-auto flex max-w-7xl flex-col gap-3 px-4 py-4 sm:px-6 lg:px-8 xl:flex-row xl:items-center xl:justify-between">
         <Link href="/" className="flex min-w-0 items-center gap-3">
           <span className="grid h-12 w-12 shrink-0 place-items-center overflow-hidden rounded bg-white p-1 shadow-sm">
-            <img src={SITE_LOGO_PATH} alt={SITE_LOGO_ALT} className="h-full w-full object-contain" />
+            <Image src={SITE_LOGO_PATH} alt={SITE_LOGO_ALT} width={48} height={48} className="h-full w-full object-contain" priority />
           </span>
           <span className="min-w-0">
             <span className="block text-lg font-black leading-tight">{SITE_BRAND_NAME}</span>
