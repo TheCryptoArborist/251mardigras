@@ -79,7 +79,7 @@ export default async function HomePage() {
             </p>
           </div>
 
-          <div className="hidden justify-self-center rounded border border-parade-line bg-white p-4 shadow-civic sm:block">
+          <div className="hidden justify-self-center sm:block">
             <Image src={SITE_LOGO_PATH} alt={SITE_LOGO_ALT} width={192} height={192} className="h-40 w-40 object-contain lg:h-48 lg:w-48" priority />
           </div>
 
