@@ -2,18 +2,12 @@ import Image from "next/image";
 import Link from "next/link";
 import { Archive, ArrowRight, Car, CloudSun, ExternalLink, PlayCircle, ShieldCheck, ShoppingBag, Utensils } from "lucide-react";
 import { LiveStreamEmbed } from "@/components/LiveStreamEmbed";
-import { getResources } from "@/lib/data-access";
 import { SITE_LOGO_ALT, SITE_LOGO_PATH } from "@/lib/brand";
 import { YOUTUBE_CHANNEL_URL, YOUTUBE_SUPPORTER_URL } from "@/lib/seed-data";
 
 export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
-  const resources = await getResources();
-  const latestReplay =
-    resources.find((resource) => resource.title === "Mardi Gras 2025 Playlist") ??
-    resources.find((resource) => resource.category === "Previous Parade Seasons");
-
   const primaryActions = [
     {
       icon: <PlayCircle className="h-5 w-5" aria-hidden="true" />,
@@ -26,10 +20,10 @@ export default async function HomePage() {
     {
       icon: <Archive className="h-5 w-5" aria-hidden="true" />,
       title: "Watch Parade Replays",
-      body: "Catch up on previous Mobile Mardi Gras parade coverage.",
-      href: latestReplay?.url ?? "/watch",
-      action: "Open Replays",
-      external: Boolean(latestReplay)
+      body: "Choose a previous Mobile Mardi Gras parade season: 2026, 2025, 2024, or 2023.",
+      href: "/replays",
+      action: "Choose a Year",
+      external: false
     },
     {
       icon: <Utensils className="h-5 w-5" aria-hidden="true" />,
@@ -111,7 +105,7 @@ export default async function HomePage() {
             <div className="mt-5 space-y-3">
               <CoverageAction href="/watch" label="Open live coverage page" />
               <CoverageAction href={YOUTUBE_CHANNEL_URL} label="Open YouTube channel" external />
-              {latestReplay ? <CoverageAction href={latestReplay.url} label="Watch latest parade replay" external /> : null}
+              <CoverageAction href="/replays" label="Choose replay season" />
               <CoverageAction href={YOUTUBE_SUPPORTER_URL} label="Become a channel supporter" external />
             </div>
           </article>
