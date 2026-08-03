@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { Archive, ArrowRight, Car, CloudSun, ExternalLink, PlayCircle, ShieldCheck, ShoppingBag, Utensils } from "lucide-react";
 import { LiveStreamEmbed } from "@/components/LiveStreamEmbed";
@@ -79,7 +80,7 @@ export default async function HomePage() {
           </div>
 
           <div className="hidden justify-self-center rounded border border-parade-line bg-white p-4 shadow-civic sm:block">
-            <img src={SITE_LOGO_PATH} alt={SITE_LOGO_ALT} className="h-40 w-40 object-contain lg:h-48 lg:w-48" />
+            <Image src={SITE_LOGO_PATH} alt={SITE_LOGO_ALT} width={192} height={192} className="h-40 w-40 object-contain lg:h-48 lg:w-48" priority />
           </div>
 
           <div className="lg:col-span-2">
