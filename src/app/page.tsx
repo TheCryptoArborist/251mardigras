@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Archive, ArrowRight, Car, CloudSun, ExternalLink, PlayCircle, Share2, ShieldCheck, Utensils } from "lucide-react";
+import { Archive, ArrowRight, Car, CloudSun, ExternalLink, PlayCircle, ShieldCheck, ShoppingBag, Utensils } from "lucide-react";
 import { LiveStreamEmbed } from "@/components/LiveStreamEmbed";
 import { getResources } from "@/lib/data-access";
 import { YOUTUBE_CHANNEL_URL, YOUTUBE_SUPPORTER_URL } from "@/lib/seed-data";
@@ -30,14 +30,6 @@ export default async function HomePage() {
       external: Boolean(latestReplay)
     },
     {
-      icon: <Share2 className="h-5 w-5" aria-hidden="true" />,
-      title: "Open Quick Links",
-      body: "Use the mobile-first page built to replace Linktree.",
-      href: "/links",
-      action: "Open Quick Links",
-      external: false
-    },
-    {
       icon: <Utensils className="h-5 w-5" aria-hidden="true" />,
       title: "Food and Drink",
       body: "Navigate to downtown restaurants, coffee, bakeries, breweries, and dessert stops.",
@@ -60,6 +52,14 @@ export default async function HomePage() {
       href: "/weather",
       action: "Check Weather",
       external: false
+    },
+    {
+      icon: <ShoppingBag className="h-5 w-5" aria-hidden="true" />,
+      title: "Mardi Gras Gear",
+      body: "Find throws, shirts, drink holders, and Mobile Mardi Gras gear from selected local resources.",
+      href: "/links/gear-throws",
+      action: "Shop Gear",
+      external: false
     }
   ];
 
@@ -72,7 +72,7 @@ export default async function HomePage() {
             Watch the parades. Find the links. Plan the day.
           </h1>
           <p className="mt-4 max-w-3xl text-lg leading-8 text-parade-muted">
-            The main purpose of this site is Mobile Mardi Gras parade coverage. The quick links, food and drink navigator, parking and access tools, and weather page help visitors before, during, and between live coverage.
+            The main purpose of this site is Mobile Mardi Gras parade coverage. Food and drink, parking and access, weather, and Mardi Gras gear are organized as support tools for visitors before, during, and between live coverage.
           </p>
           <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {primaryActions.map((action) => (
