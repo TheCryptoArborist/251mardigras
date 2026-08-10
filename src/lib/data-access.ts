@@ -187,9 +187,19 @@ function mergeResourceItems(databaseResources: ResourceItemWithSort[]): Resource
     merged.set(resourceKey(resource.title), resource);
   });
 
-  return [...merged.values()]
-    .sort(compareResources)
-    .map(({ sortOrder: _sortOrder, ...resource }) => resource);
+  return [...merged.values()].sort(compareResources).map(toResourceItem);
+}
+
+function toResourceItem(resource: ResourceItemWithSort): ResourceItem {
+  return {
+    id: resource.id,
+    title: resource.title,
+    url: resource.url,
+    category: resource.category,
+    description: resource.description,
+    source: resource.source,
+    sourceUrl: resource.sourceUrl
+  };
 }
 
 function seedResourceItems(): ResourceItemWithSort[] {
