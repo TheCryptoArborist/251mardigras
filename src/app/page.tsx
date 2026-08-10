@@ -187,69 +187,69 @@ const actionCardStyles: Record<
 > = {
   live: {
     label: "Live coverage",
-    card: "border-parade-gold/70 bg-gradient-to-br from-parade-purpleDark via-parade-purple to-parade-purpleDeep text-white shadow-glow",
-    badge: "bg-parade-gold text-parade-purpleDark ring-parade-goldBright/60 shadow-glow",
+    card: "border-parade-gold/80 bg-gradient-to-br from-parade-purpleDeep via-parade-purple to-parade-purpleDark text-white shadow-glow",
+    badge: "bg-parade-gold text-parade-purpleDark ring-parade-goldBright/70 shadow-glow",
     title: "text-white",
     body: "text-purple-100",
-    labelClass: "border-parade-gold/40 bg-white/10 text-parade-goldBright",
+    labelClass: "border-parade-gold/45 bg-white/10 text-parade-goldBright",
     action: "bg-parade-gold text-parade-purpleDark shadow-glow group-hover:bg-parade-goldBright",
-    glow: "bg-parade-gold/25",
-    sparkle: "border-white/15"
+    glow: "bg-parade-gold/30",
+    sparkle: "border-white/20"
   },
   replays: {
     label: "Replay archive",
-    card: "border-parade-gold/70 bg-gradient-to-br from-parade-cream via-white to-parade-goldSoft shadow-glow",
-    badge: "bg-parade-purple text-parade-goldBright ring-parade-gold/40 shadow-civic",
+    card: "border-parade-gold/80 bg-gradient-to-br from-[#ffd95d] via-parade-goldSoft to-[#d8c4ff] shadow-glow",
+    badge: "bg-parade-purple text-parade-goldBright ring-parade-gold/50 shadow-civic",
     title: "text-parade-purpleDark",
-    body: "text-parade-muted",
-    labelClass: "border-parade-gold/40 bg-parade-goldSoft text-parade-purple",
+    body: "text-parade-ink/80",
+    labelClass: "border-parade-purple/20 bg-white/70 text-parade-purple",
     action: "bg-parade-purple text-white shadow-civic group-hover:bg-parade-purpleDark",
-    glow: "bg-parade-gold/30",
-    sparkle: "border-parade-purple/10"
+    glow: "bg-parade-purple/20",
+    sparkle: "border-parade-purple/20"
   },
   food: {
     label: "Downtown stops",
-    card: "border-parade-gold/35 bg-gradient-to-br from-parade-cream via-white to-parade-purpleMist",
-    badge: "bg-parade-goldSoft text-parade-purple ring-parade-gold/40 shadow-sm",
-    title: "text-parade-ink",
-    body: "text-parade-muted",
-    labelClass: "border-parade-gold/30 bg-parade-goldSoft text-parade-purple",
+    card: "border-parade-gold/60 bg-gradient-to-br from-[#ffeaa6] via-parade-goldSoft to-[#efdfff] shadow-card hover:shadow-glow",
+    badge: "bg-parade-purple text-parade-goldBright ring-parade-gold/45 shadow-civic",
+    title: "text-parade-purpleDark",
+    body: "text-parade-ink/75",
+    labelClass: "border-parade-gold/40 bg-white/75 text-parade-purple",
     action: "bg-parade-purple text-white shadow-sm group-hover:bg-parade-purpleDark",
-    glow: "bg-parade-gold/18",
-    sparkle: "border-parade-gold/20"
+    glow: "bg-parade-gold/30",
+    sparkle: "border-parade-gold/30"
   },
   parking: {
     label: "Access planning",
-    card: "border-parade-purple/20 bg-gradient-to-br from-white via-parade-purpleMist to-parade-purpleSoft",
-    badge: "bg-parade-purple text-parade-goldBright ring-parade-gold/35 shadow-sm",
-    title: "text-parade-ink",
-    body: "text-parade-muted",
-    labelClass: "border-parade-purple/15 bg-white/70 text-parade-purple",
+    card: "border-parade-purple/35 bg-gradient-to-br from-[#d7c1ff] via-parade-purpleSoft to-[#fff0b8] shadow-card hover:shadow-glow",
+    badge: "bg-parade-gold text-parade-purpleDark ring-parade-purple/25 shadow-civic",
+    title: "text-parade-purpleDark",
+    body: "text-parade-ink/75",
+    labelClass: "border-parade-purple/20 bg-white/75 text-parade-purple",
     action: "bg-parade-gold text-parade-purpleDark shadow-sm group-hover:bg-parade-goldBright",
-    glow: "bg-parade-purple/10",
-    sparkle: "border-parade-purple/15"
+    glow: "bg-parade-purple/20",
+    sparkle: "border-parade-purple/20"
   },
   weather: {
     label: "Planning tool",
-    card: "border-parade-line bg-gradient-to-br from-white via-parade-purpleMist to-parade-cream",
-    badge: "bg-white text-parade-purple ring-parade-gold/45 shadow-sm",
-    title: "text-parade-ink",
-    body: "text-parade-muted",
-    labelClass: "border-parade-line bg-white/75 text-parade-purple",
+    card: "border-parade-purple/30 bg-gradient-to-br from-[#e8ddff] via-[#fff5cf] to-[#d9c5ff] shadow-card hover:shadow-glow",
+    badge: "bg-parade-purpleDark text-parade-goldBright ring-parade-gold/50 shadow-civic",
+    title: "text-parade-purpleDark",
+    body: "text-parade-ink/75",
+    labelClass: "border-parade-purple/20 bg-white/75 text-parade-purple",
     action: "bg-parade-purple text-white shadow-sm group-hover:bg-parade-purpleDark",
-    glow: "bg-parade-gold/16",
-    sparkle: "border-parade-gold/20"
+    glow: "bg-parade-gold/25",
+    sparkle: "border-parade-gold/30"
   },
   gear: {
     label: "Throws & gear",
-    card: "border-parade-gold/45 bg-gradient-to-br from-parade-goldSoft via-white to-parade-cream",
-    badge: "bg-parade-purpleDark text-parade-goldBright ring-parade-gold/40 shadow-civic",
+    card: "border-parade-gold/70 bg-gradient-to-br from-[#ffdc73] via-parade-goldSoft to-[#e7d3ff] shadow-card hover:shadow-glow",
+    badge: "bg-parade-purpleDark text-parade-goldBright ring-parade-gold/50 shadow-civic",
     title: "text-parade-purpleDark",
-    body: "text-parade-muted",
-    labelClass: "border-parade-gold/35 bg-white/70 text-parade-purple",
+    body: "text-parade-ink/75",
+    labelClass: "border-parade-gold/45 bg-white/75 text-parade-purple",
     action: "bg-parade-gold text-parade-purpleDark shadow-sm group-hover:bg-parade-goldBright",
-    glow: "bg-parade-gold/25",
-    sparkle: "border-parade-purple/10"
+    glow: "bg-parade-purple/18",
+    sparkle: "border-parade-purple/20"
   }
 };
 
@@ -271,14 +271,14 @@ function PrimaryActionCard({
     <>
       <span className={`pointer-events-none absolute right-[-2.25rem] top-[-2.25rem] h-28 w-28 rounded-full blur-2xl ${styles.glow}`} aria-hidden="true" />
       <span className={`pointer-events-none absolute bottom-4 right-4 h-12 w-12 rotate-45 rounded-xl border ${styles.sparkle}`} aria-hidden="true" />
-      <span className={`pointer-events-none absolute bottom-7 right-11 h-2 w-2 rounded-full ${variant === "live" ? "bg-parade-goldBright/60" : "bg-parade-gold/35"}`} aria-hidden="true" />
-      <span className={`pointer-events-none absolute right-7 top-8 h-1.5 w-1.5 rounded-full ${variant === "live" ? "bg-white/50" : "bg-parade-purple/20"}`} aria-hidden="true" />
+      <span className={`pointer-events-none absolute bottom-7 right-11 h-2 w-2 rounded-full ${variant === "live" ? "bg-parade-goldBright/60" : "bg-parade-gold/45"}`} aria-hidden="true" />
+      <span className={`pointer-events-none absolute right-7 top-8 h-1.5 w-1.5 rounded-full ${variant === "live" ? "bg-white/50" : "bg-parade-purple/25"}`} aria-hidden="true" />
       <span className="relative z-10 flex h-full min-w-0 flex-col">
         <span className="flex items-center justify-between gap-3">
           <span className={`inline-flex rounded-full border px-3 py-1 text-[0.65rem] font-black uppercase tracking-wide ${styles.labelClass}`}>
             {styles.label}
           </span>
-          {featured ? <span className="rounded-full bg-parade-gold/20 px-2.5 py-1 text-[0.65rem] font-black uppercase tracking-wide text-parade-goldBright">Featured</span> : null}
+          {featured ? <span className="rounded-full bg-parade-gold/25 px-2.5 py-1 text-[0.65rem] font-black uppercase tracking-wide text-parade-purpleDark">Featured</span> : null}
         </span>
         <span className={`mt-4 grid h-12 w-12 place-items-center rounded-2xl ring-1 ${styles.badge}`}>{icon}</span>
         <h2 className={`mt-4 text-lg font-black ${styles.title}`}>{title}</h2>
