@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useMemo, useState } from "react";
 import { ExternalLink, Navigation, Search, X } from "lucide-react";
 import type { ResourceItem } from "@/lib/data-access";
@@ -14,6 +15,31 @@ const stopFilters = [
 
 type StopFilterId = (typeof stopFilters)[number]["id"];
 
+const foodStopLogoFiles = [
+  ["The Outsider", "the-outsider.png"],
+  ["Greer's Saint Louis Market", "greers-saint-louis-market.png"],
+  ["ellenJAY Bakery", "ellenjay-bakery.png"],
+  ["Bake My Day", "bake-my-day.png"],
+  ["Guncles Gluten Free", "guncles-gluten-free.png"],
+  ["Big Bad Breakfast", "big-bad-breakfast.png"],
+  ["Serda's Coffee Co.", "serdas-coffee-co.png"],
+  ["Knuckle Bones Elixir Co.", "knuckle-bones-elixir-co.png"],
+  ["Great Day Latte", "great-day-latte.png"],
+  ["Moe's Original BBQ", "moes-original-bbq.png"],
+  ["Cammie's Old Dutch Ice Cream Shoppe", "cammies-old-dutch-ice-cream-shoppe.png"],
+  ["LODA Bier Garten", "loda-bier-garten.png"],
+  ["POST", "post.png"],
+  ["Braided River Brewing Company", "braided-river-brewing-company.png"],
+  ["Joe Cain Cafe", "joe-cain-cafe.png"],
+  ["Bob's Downtown Restaurant", "bobs-downtown-restaurant.png"],
+  ["Pop's Midtown", "pops-midtown.png"],
+  ["Lemon T's", "lemon-ts.png"]
+] as const;
+
+const foodStopLogoPaths = Object.fromEntries(
+  foodStopLogoFiles.map(([title, fileName]) => [normalizeSearch(title), `/images/food-stops/${fileName}`])
+) as Record<string, string>;
+
 export function FoodStopSelector({ resources }: { resources: ResourceItem[] }) {
   const [selectedResourceId, setSelectedResourceId] = useState("");
   const [query, setQuery] = useState("");
@@ -25,7 +51,7 @@ export function FoodStopSelector({ resources }: { resources: ResourceItem[] }) {
 
     return resources.filter((resource) => {
       const matchesQuery = normalizedQuery
-        ? normalizeSearch(`${resource.title} ${resource.description}`).includes(normalizedQuery)
+        ? normalizeSearch(`${resource.title} ${resource.description} ${labelForStop(resource.title)}`).includes(normalizedQuery)
         : true;
       const matchesType = activeFilter === "all" || stopTypeFor(resource.title) === activeFilter;
 
@@ -184,9 +210,7 @@ function FoodStopCard({ resource }: { resource: ResourceItem }) {
       rel="noreferrer"
       className="group flex min-w-0 items-center gap-3 rounded border border-parade-line bg-white p-3 text-left transition hover:-translate-y-0.5 hover:bg-parade-purpleSoft hover:shadow-civic"
     >
-      <span className="grid h-12 w-12 shrink-0 place-items-center rounded-full border border-parade-gold/40 bg-parade-goldSoft text-sm font-black text-parade-purple" aria-hidden="true">
-        {initialsFor(resource.title)}
-      </span>
+      <FoodStopLogo title={resource.title} />
       <span className="min-w-0 flex-1">
         <span className="block truncate text-sm font-black text-parade-ink">{resource.title}</span>
         <span className="mt-1 block text-xs font-bold uppercase text-parade-muted">{labelForStop(resource.title)}</span>
@@ -197,6 +221,40 @@ function FoodStopCard({ resource }: { resource: ResourceItem }) {
       </span>
     </a>
   );
+}
+
+function FoodStopLogo({ title }: { title: string }) {
+  const [logoFailed, setLogoFailed] = useState(false);
+  const logoPath = logoPathFor(title);
+
+  if (!logoPath || logoFailed) {
+    return <InitialsBadge title={title} />;
+  }
+
+  return (
+    <span className="grid h-12 w-12 shrink-0 place-items-center overflow-hidden rounded-lg border border-parade-line bg-white p-1.5 shadow-sm" aria-hidden="true">
+      <Image
+        src={logoPath}
+        alt={`${title} logo`}
+        width={48}
+        height={48}
+        className="h-full w-full object-contain"
+        onError={() => setLogoFailed(true)}
+      />
+    </span>
+  );
+}
+
+function InitialsBadge({ title }: { title: string }) {
+  return (
+    <span className="grid h-12 w-12 shrink-0 place-items-center rounded-lg border border-parade-gold/40 bg-parade-goldSoft text-sm font-black text-parade-purple" aria-hidden="true">
+      {initialsFor(title)}
+    </span>
+  );
+}
+
+function logoPathFor(title: string) {
+  return foodStopLogoPaths[normalizeSearch(title)] ?? null;
 }
 
 function stopTypeFor(title: string): Exclude<StopFilterId, "all"> {
