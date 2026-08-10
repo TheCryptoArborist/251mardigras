@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import type { ReactNode } from "react";
 import { Archive, ArrowRight, Car, CloudSun, ExternalLink, PlayCircle, ShieldCheck, ShoppingBag, Utensils } from "lucide-react";
 import { CountdownTimer } from "@/components/CountdownTimer";
 import { LiveStreamEmbed } from "@/components/LiveStreamEmbed";
@@ -8,8 +9,21 @@ import { YOUTUBE_CHANNEL_URL, YOUTUBE_SUPPORTER_URL } from "@/lib/seed-data";
 
 export const dynamic = "force-dynamic";
 
+type PrimaryActionVariant = "live" | "replays" | "food" | "parking" | "weather" | "gear";
+
+type PrimaryAction = {
+  icon: ReactNode;
+  title: string;
+  body: string;
+  href: string;
+  action: string;
+  external: boolean;
+  featured: boolean;
+  variant: PrimaryActionVariant;
+};
+
 export default async function HomePage() {
-  const primaryActions = [
+  const primaryActions: PrimaryAction[] = [
     {
       icon: <PlayCircle className="h-5 w-5" aria-hidden="true" />,
       title: "Watch Live Coverage",
@@ -17,7 +31,8 @@ export default async function HomePage() {
       href: "/watch",
       action: "Open Watch Live",
       external: false,
-      featured: true
+      featured: true,
+      variant: "live"
     },
     {
       icon: <Archive className="h-5 w-5" aria-hidden="true" />,
@@ -26,7 +41,8 @@ export default async function HomePage() {
       href: "/replays",
       action: "Choose a Year",
       external: false,
-      featured: true
+      featured: true,
+      variant: "replays"
     },
     {
       icon: <Utensils className="h-5 w-5" aria-hidden="true" />,
@@ -35,7 +51,8 @@ export default async function HomePage() {
       href: "/food-drink",
       action: "Find Food Nearby",
       external: false,
-      featured: false
+      featured: false,
+      variant: "food"
     },
     {
       icon: <Car className="h-5 w-5" aria-hidden="true" />,
@@ -44,7 +61,8 @@ export default async function HomePage() {
       href: "/parking-access",
       action: "Plan Access",
       external: false,
-      featured: false
+      featured: false,
+      variant: "parking"
     },
     {
       icon: <CloudSun className="h-5 w-5" aria-hidden="true" />,
@@ -53,7 +71,8 @@ export default async function HomePage() {
       href: "/weather",
       action: "Check Weather",
       external: false,
-      featured: false
+      featured: false,
+      variant: "weather"
     },
     {
       icon: <ShoppingBag className="h-5 w-5" aria-hidden="true" />,
@@ -62,7 +81,8 @@ export default async function HomePage() {
       href: "/mardi-gras-gear",
       action: "Shop Gear",
       external: false,
-      featured: false
+      featured: false,
+      variant: "gear"
     }
   ];
 
@@ -151,6 +171,88 @@ export default async function HomePage() {
   );
 }
 
+const actionCardStyles: Record<
+  PrimaryActionVariant,
+  {
+    label: string;
+    card: string;
+    badge: string;
+    title: string;
+    body: string;
+    labelClass: string;
+    action: string;
+    glow: string;
+    sparkle: string;
+  }
+> = {
+  live: {
+    label: "Live coverage",
+    card: "border-parade-gold/70 bg-gradient-to-br from-parade-purpleDark via-parade-purple to-parade-purpleDeep text-white shadow-glow",
+    badge: "bg-parade-gold text-parade-purpleDark ring-parade-goldBright/60 shadow-glow",
+    title: "text-white",
+    body: "text-purple-100",
+    labelClass: "border-parade-gold/40 bg-white/10 text-parade-goldBright",
+    action: "bg-parade-gold text-parade-purpleDark shadow-glow group-hover:bg-parade-goldBright",
+    glow: "bg-parade-gold/25",
+    sparkle: "border-white/15"
+  },
+  replays: {
+    label: "Replay archive",
+    card: "border-parade-gold/70 bg-gradient-to-br from-parade-cream via-white to-parade-goldSoft shadow-glow",
+    badge: "bg-parade-purple text-parade-goldBright ring-parade-gold/40 shadow-civic",
+    title: "text-parade-purpleDark",
+    body: "text-parade-muted",
+    labelClass: "border-parade-gold/40 bg-parade-goldSoft text-parade-purple",
+    action: "bg-parade-purple text-white shadow-civic group-hover:bg-parade-purpleDark",
+    glow: "bg-parade-gold/30",
+    sparkle: "border-parade-purple/10"
+  },
+  food: {
+    label: "Downtown stops",
+    card: "border-parade-gold/35 bg-gradient-to-br from-parade-cream via-white to-parade-purpleMist",
+    badge: "bg-parade-goldSoft text-parade-purple ring-parade-gold/40 shadow-sm",
+    title: "text-parade-ink",
+    body: "text-parade-muted",
+    labelClass: "border-parade-gold/30 bg-parade-goldSoft text-parade-purple",
+    action: "bg-parade-purple text-white shadow-sm group-hover:bg-parade-purpleDark",
+    glow: "bg-parade-gold/18",
+    sparkle: "border-parade-gold/20"
+  },
+  parking: {
+    label: "Access planning",
+    card: "border-parade-purple/20 bg-gradient-to-br from-white via-parade-purpleMist to-parade-purpleSoft",
+    badge: "bg-parade-purple text-parade-goldBright ring-parade-gold/35 shadow-sm",
+    title: "text-parade-ink",
+    body: "text-parade-muted",
+    labelClass: "border-parade-purple/15 bg-white/70 text-parade-purple",
+    action: "bg-parade-gold text-parade-purpleDark shadow-sm group-hover:bg-parade-goldBright",
+    glow: "bg-parade-purple/10",
+    sparkle: "border-parade-purple/15"
+  },
+  weather: {
+    label: "Planning tool",
+    card: "border-parade-line bg-gradient-to-br from-white via-parade-purpleMist to-parade-cream",
+    badge: "bg-white text-parade-purple ring-parade-gold/45 shadow-sm",
+    title: "text-parade-ink",
+    body: "text-parade-muted",
+    labelClass: "border-parade-line bg-white/75 text-parade-purple",
+    action: "bg-parade-purple text-white shadow-sm group-hover:bg-parade-purpleDark",
+    glow: "bg-parade-gold/16",
+    sparkle: "border-parade-gold/20"
+  },
+  gear: {
+    label: "Throws & gear",
+    card: "border-parade-gold/45 bg-gradient-to-br from-parade-goldSoft via-white to-parade-cream",
+    badge: "bg-parade-purpleDark text-parade-goldBright ring-parade-gold/40 shadow-civic",
+    title: "text-parade-purpleDark",
+    body: "text-parade-muted",
+    labelClass: "border-parade-gold/35 bg-white/70 text-parade-purple",
+    action: "bg-parade-gold text-parade-purpleDark shadow-sm group-hover:bg-parade-goldBright",
+    glow: "bg-parade-gold/25",
+    sparkle: "border-parade-purple/10"
+  }
+};
+
 function PrimaryActionCard({
   icon,
   title,
@@ -158,29 +260,33 @@ function PrimaryActionCard({
   href,
   action,
   external,
-  featured
-}: {
-  icon: React.ReactNode;
-  title: string;
-  body: string;
-  href: string;
-  action: string;
-  external: boolean;
-  featured: boolean;
-}) {
-  const className = `group flex h-full min-w-0 flex-col rounded-2xl border p-4 text-left shadow-card transition hover:-translate-y-1 ${
-    featured
-      ? "border-parade-gold/50 bg-gradient-to-br from-white to-parade-goldSoft"
-      : "border-parade-line bg-white hover:bg-parade-purpleMist"
+  featured,
+  variant
+}: PrimaryAction) {
+  const styles = actionCardStyles[variant];
+  const className = `group relative flex h-full min-w-0 overflow-hidden rounded-[1.6rem] border p-5 text-left transition duration-200 hover:-translate-y-1 ${styles.card} ${
+    featured ? "shadow-glow" : "shadow-card hover:shadow-glow"
   }`;
   const content = (
     <>
-      <div className="grid h-11 w-11 place-items-center rounded-2xl bg-parade-goldSoft text-parade-gold ring-1 ring-parade-gold/30">{icon}</div>
-      <h2 className="mt-4 text-lg font-black text-parade-ink">{title}</h2>
-      <p className="mt-2 flex-1 text-sm leading-6 text-parade-muted">{body}</p>
-      <span className="mt-4 inline-flex items-center gap-2 text-sm font-black text-parade-purple group-hover:underline">
-        {action}
-        {external ? <ExternalLink className="h-4 w-4" aria-hidden="true" /> : <ArrowRight className="h-4 w-4" aria-hidden="true" />}
+      <span className={`pointer-events-none absolute right-[-2.25rem] top-[-2.25rem] h-28 w-28 rounded-full blur-2xl ${styles.glow}`} aria-hidden="true" />
+      <span className={`pointer-events-none absolute bottom-4 right-4 h-12 w-12 rotate-45 rounded-xl border ${styles.sparkle}`} aria-hidden="true" />
+      <span className={`pointer-events-none absolute bottom-7 right-11 h-2 w-2 rounded-full ${variant === "live" ? "bg-parade-goldBright/60" : "bg-parade-gold/35"}`} aria-hidden="true" />
+      <span className={`pointer-events-none absolute right-7 top-8 h-1.5 w-1.5 rounded-full ${variant === "live" ? "bg-white/50" : "bg-parade-purple/20"}`} aria-hidden="true" />
+      <span className="relative z-10 flex h-full min-w-0 flex-col">
+        <span className="flex items-center justify-between gap-3">
+          <span className={`inline-flex rounded-full border px-3 py-1 text-[0.65rem] font-black uppercase tracking-wide ${styles.labelClass}`}>
+            {styles.label}
+          </span>
+          {featured ? <span className="rounded-full bg-parade-gold/20 px-2.5 py-1 text-[0.65rem] font-black uppercase tracking-wide text-parade-goldBright">Featured</span> : null}
+        </span>
+        <span className={`mt-4 grid h-12 w-12 place-items-center rounded-2xl ring-1 ${styles.badge}`}>{icon}</span>
+        <h2 className={`mt-4 text-lg font-black ${styles.title}`}>{title}</h2>
+        <p className={`mt-2 flex-1 text-sm leading-6 ${styles.body}`}>{body}</p>
+        <span className={`mt-5 inline-flex w-fit items-center gap-2 rounded-full px-4 py-2 text-sm font-black transition group-hover:-translate-y-0.5 ${styles.action}`}>
+          {action}
+          {external ? <ExternalLink className="h-4 w-4" aria-hidden="true" /> : <ArrowRight className="h-4 w-4" aria-hidden="true" />}
+        </span>
       </span>
     </>
   );
