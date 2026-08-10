@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Archive, ArrowRight, Car, CloudSun, ExternalLink, PlayCircle, ShieldCheck, ShoppingBag, Utensils } from "lucide-react";
+import { CountdownTimer } from "@/components/CountdownTimer";
 import { LiveStreamEmbed } from "@/components/LiveStreamEmbed";
 import { SITE_LOGO_ALT, SITE_LOGO_PATH } from "@/lib/brand";
 import { YOUTUBE_CHANNEL_URL, YOUTUBE_SUPPORTER_URL } from "@/lib/seed-data";
@@ -81,6 +82,7 @@ export default async function HomePage() {
             <p className="mt-5 max-w-3xl text-lg leading-8 text-purple-100">
               The main purpose of this site is Mobile Mardi Gras parade coverage. Food and drink, parking and access, weather, and Mardi Gras gear are organized as support tools for visitors before, during, and between live coverage.
             </p>
+            <CountdownTimer />
             <div className="mt-7 flex flex-wrap gap-3">
               <Link href="/watch" className="inline-flex items-center justify-center gap-2 rounded-full bg-parade-gold px-5 py-3 text-sm font-black text-parade-purpleDark shadow-glow transition hover:-translate-y-0.5 hover:bg-parade-goldBright">
                 Watch live coverage <ArrowRight className="h-4 w-4" aria-hidden="true" />
