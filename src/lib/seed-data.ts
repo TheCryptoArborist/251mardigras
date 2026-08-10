@@ -231,13 +231,13 @@ export const resourceSeeds: ResourceSeed[] = [
     "POST",
     "Braided River Brewing Company",
     "Joe Cain Cafe",
-    "Bob's Downtown Restaurant",
-    "Pop's Midtown",
-    "Lemon T's"
+    "Bob's Downtown Restaurant"
   ].map((title, index) =>
     directoryResource(title, "Food and Drink", "Food or drink stop in the visitor directory. Confirm hours, reservations, and parade-day access with the venue.", index + 1)
   ),
   directoryResource("Port City Throws", "Mardi Gras Gear / Throws", "Mardi Gras throws and gear resource.", 1),
+  directoryResource("Pop's Midtown", "Mardi Gras Gear / Throws", "Mardi Gras gear and shopping resource.", 2),
+  directoryResource("Lemon T's", "Mardi Gras Gear / Throws", "Mardi Gras shirts, apparel, and gear resource.", 3),
   directoryResource("Mardi Gras 2026 Playlist", "Previous Parade Seasons", "Previous parade season playlist from the Mobile Mardi Gras video archive.", 1, MARDI_GRAS_2026_PLAYLIST_URL),
   directoryResource("Mardi Gras 2025 Playlist", "Previous Parade Seasons", "Previous parade season playlist from the Mobile Mardi Gras video archive.", 2, MARDI_GRAS_2025_PLAYLIST_URL),
   directoryResource("Mardi Gras 2024 Playlist", "Previous Parade Seasons", "Previous parade season playlist from the Mobile Mardi Gras video archive.", 3, MARDI_GRAS_2024_PLAYLIST_URL),
