@@ -26,8 +26,6 @@ Use square images when possible because the card layout displays them inside a s
 - `braided-river-brewing-company.jpg` — Braided River Brewing Company
 - `joe-cain-cafe.jpg` — Joe Cain Cafe
 - `bobs-downtown-restaurant.jpg` — Bob's Downtown Restaurant
-- `pops-midtown.jpg` — Pop's Midtown
-- `lemon-ts.jpg` — Lemon T's
 
 ## Local copy command pattern
 
@@ -47,3 +45,7 @@ If the file is missing or fails to load, the card falls back to the text initial
 ## Curation note
 
 Use approved, public, or owner-provided logo assets. Do not hotlink restaurant logos from third-party pages because those image URLs can break, change, or disappear.
+
+## Category note
+
+Pop's Midtown and Lemon T's are intentionally categorized under Mardi Gras Gear / Throws rather than Food and Drink.
