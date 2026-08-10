@@ -1,5 +1,7 @@
+import cachedDirectLinks from "../../data/linktree-links.json";
 import { prisma } from "./prisma";
 import { LINKTREE_URL, officialSources, resourceSeeds } from "./seed-data";
+import { findBestLinktreeMatch, normalizeLinkTitle, type LinktreeExtractedLink } from "@/services/linktree";
 
 export type PublicChange = {
   id: string;
@@ -32,6 +34,12 @@ export type ResourceItem = {
   source: string;
   sourceUrl: string;
 };
+
+type ResourceItemWithSort = ResourceItem & {
+  sortOrder?: number;
+};
+
+type CachedDirectLink = LinktreeExtractedLink;
 
 export type ParadeItem = {
   id: string;
@@ -113,32 +121,23 @@ export async function getResources(): Promise<ResourceItem[]> {
       orderBy: [{ category: "asc" }, { sortOrder: "asc" }]
     });
 
-    if (resources.length > 0) {
-      return resources.map((resource) => ({
+    return mergeResourceItems(
+      resources.map((resource) => ({
         id: String(resource.id),
         title: resource.title,
         url: resource.url,
         category: resource.category,
         description: resource.description ?? "",
         source: resource.source,
-        sourceUrl: resource.sourceUrl
-      }));
-    }
+        sourceUrl: resource.sourceUrl,
+        sortOrder: resource.sortOrder
+      }))
+    );
   } catch {
     // Fall back to curated seed data when the database has not been migrated yet.
   }
 
-  return resourceSeeds
-    .filter((resource) => resource.url !== LINKTREE_URL)
-    .map((resource, index) => ({
-      id: `seed-${index}`,
-      title: resource.title,
-      url: resource.url,
-      category: resource.category,
-      description: resource.description,
-      source: resource.source,
-      sourceUrl: resource.sourceUrl
-    }));
+  return mergeResourceItems([]);
 }
 
 export async function getParades(): Promise<ParadeItem[]> {
@@ -173,6 +172,76 @@ export async function getLatestSnapshots(limit = 6) {
   } catch {
     return [];
   }
+}
+
+function mergeResourceItems(databaseResources: ResourceItemWithSort[]): ResourceItem[] {
+  const merged = new Map<string, ResourceItemWithSort>();
+
+  databaseResources.forEach((resource) => {
+    merged.set(resourceKey(resource.title), resource);
+  });
+
+  seedResourceItems().forEach((resource) => {
+    // Curated seed data is the public source of truth for category placement.
+    // This keeps pages stable when a deployed SQLite file is missing entries or has stale categories.
+    merged.set(resourceKey(resource.title), resource);
+  });
+
+  return [...merged.values()]
+    .sort(compareResources)
+    .map(({ sortOrder: _sortOrder, ...resource }) => resource);
+}
+
+function seedResourceItems(): ResourceItemWithSort[] {
+  const cachedLinks = cachedDirectLinks as CachedDirectLink[];
+
+  return resourceSeeds.flatMap((resource, index) => {
+    const directUrl = resource.url !== LINKTREE_URL ? resource.url : findBestLinktreeMatch(resource.title, cachedLinks)?.url;
+
+    if (!directUrl || directUrl === LINKTREE_URL) {
+      return [];
+    }
+
+    return [
+      {
+        id: `seed-${index}`,
+        title: resource.title,
+        url: directUrl,
+        category: resource.category,
+        description: resource.description,
+        source: resource.source,
+        sourceUrl: resource.sourceUrl,
+        sortOrder: resource.sortOrder
+      }
+    ];
+  });
+}
+
+function compareResources(a: ResourceItemWithSort, b: ResourceItemWithSort) {
+  return (
+    categoryOrder(a.category) - categoryOrder(b.category) ||
+    a.category.localeCompare(b.category) ||
+    (a.sortOrder ?? 999) - (b.sortOrder ?? 999) ||
+    a.title.localeCompare(b.title)
+  );
+}
+
+function categoryOrder(category: string) {
+  const order: Record<string, number> = {
+    "Live Coverage / Channel Support": 1,
+    "Social Media": 2,
+    "Downtown Transportation": 3,
+    "Mobility-Friendly Access": 4,
+    "Food and Drink": 5,
+    "Mardi Gras Gear / Throws": 6,
+    "Previous Parade Seasons": 7
+  };
+
+  return order[category] ?? 99;
+}
+
+function resourceKey(title: string) {
+  return normalizeLinkTitle(title);
 }
 
 function labelForChangeType(changeType: string) {
