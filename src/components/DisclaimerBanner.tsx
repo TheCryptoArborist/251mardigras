@@ -6,7 +6,7 @@ type DisclaimerBannerProps = {
 
 export function DisclaimerBanner({ compact = false }: DisclaimerBannerProps) {
   return (
-    <section className="border-b border-amber-200 bg-parade-goldSoft">
+    <section className="border-b border-amber-200 bg-gradient-to-r from-parade-goldSoft via-parade-cream to-parade-goldSoft">
       <div className="mx-auto flex max-w-7xl gap-3 px-4 py-3 sm:px-6 lg:px-8">
         <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-amber-700" aria-hidden="true" />
         <p className="text-sm font-medium leading-6 text-amber-950">
