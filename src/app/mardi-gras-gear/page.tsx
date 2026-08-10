@@ -3,6 +3,13 @@ import { getResources } from "@/lib/data-access";
 
 export const dynamic = "force-dynamic";
 
+const gearResourceLogoPaths: Record<string, string> = {
+  "Port City Throws": "/images/food-stops/port-city-throws.png",
+  "Pop's Midtown": "/images/food-stops/pops-midtown.jpg",
+  "Lemon T's": "/images/food-stops/lemon-ts.jpg",
+  "Toomey's Mardi Gras": "/images/food-stops/toomeys-mardi-gras.png"
+};
+
 export default async function MardiGrasGearPage() {
   const resources = (await getResources()).filter((resource) => resource.category === "Mardi Gras Gear / Throws");
 
@@ -16,6 +23,7 @@ export default async function MardiGrasGearPage() {
       primaryAction="Open full resource guide"
       resourceActionLabel="Open shop"
       officialReminder="Shopping links are visitor convenience resources. Product availability, pricing, hours, and fulfillment are controlled by each vendor."
+      resourceLogoPaths={gearResourceLogoPaths}
     />
   );
 }

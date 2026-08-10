@@ -8,7 +8,7 @@ public/images/food-stops/
 
 Use square images when possible because the card layout displays them inside a small square logo frame. PNG files with transparent backgrounds are ideal, but JPG files are also supported when they match the expected filenames below.
 
-## Expected filenames
+## Expected Food and Drink filenames
 
 - `the-outsider.png` — The Outsider
 - `greers-saint-louis-market.png` — Greer's Saint Louis Market
@@ -26,6 +26,10 @@ Use square images when possible because the card layout displays them inside a s
 - `braided-river-brewing-company.jpg` — Braided River Brewing Company
 - `joe-cain-cafe.jpg` — Joe Cain Cafe
 - `bobs-downtown-restaurant.jpg` — Bob's Downtown Restaurant
+
+## Expected Mardi Gras Gear filenames
+
+- `port-city-throws.png` — Port City Throws
 - `pops-midtown.jpg` — Pop's Midtown
 - `lemon-ts.jpg` — Lemon T's
 
@@ -40,10 +44,14 @@ Copy-Item "D:\Mardi Gras\Food Logos\bake-my-day.jpg" "public\images\food-stops\b
 
 ## Behavior
 
-If the file exists at the expected path, the food stop card displays the logo.
+If the file exists at the expected path, the card displays the logo.
 
 If the file is missing or fails to load, the card falls back to the text initials badge so the page remains usable.
 
 ## Curation note
 
 Use approved, public, or owner-provided logo assets. Do not hotlink restaurant logos from third-party pages because those image URLs can break, change, or disappear.
+
+## Category note
+
+Pop's Midtown and Lemon T's are intentionally categorized under Mardi Gras Gear / Throws rather than Food and Drink.
