@@ -1,4 +1,4 @@
-export const SITE_URL = "https://251mardigras.netlify.app";
+export const SITE_URL = "https://mg251.xyz";
 export const RESOURCE_DIRECTORY_URL = `${SITE_URL}/resources`;
 export const RESOURCE_DIRECTORY_SOURCE = "Mardi Gras - Mobile, AL Resource Directory";
 
