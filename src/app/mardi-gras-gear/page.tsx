@@ -4,6 +4,7 @@ import { getResources } from "@/lib/data-access";
 export const dynamic = "force-dynamic";
 
 const gearResourceLogoPaths: Record<string, string> = {
+  "Port City Throws": "/images/food-stops/port-city-throws.png",
   "Pop's Midtown": "/images/food-stops/pops-midtown.jpg",
   "Lemon T's": "/images/food-stops/lemon-ts.jpg"
 };
