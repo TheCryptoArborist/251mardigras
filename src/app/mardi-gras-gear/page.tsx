@@ -6,7 +6,8 @@ export const dynamic = "force-dynamic";
 const gearResourceLogoPaths: Record<string, string> = {
   "Port City Throws": "/images/food-stops/port-city-throws.png",
   "Pop's Midtown": "/images/food-stops/pops-midtown.jpg",
-  "Lemon T's": "/images/food-stops/lemon-ts.jpg"
+  "Lemon T's": "/images/food-stops/lemon-ts.jpg",
+  "Toomey's Mardi Gras": "/images/food-stops/toomeys-mardi-gras.png"
 };
 
 export default async function MardiGrasGearPage() {
