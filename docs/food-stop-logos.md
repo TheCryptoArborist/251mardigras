@@ -29,6 +29,15 @@ Use PNG files with transparent backgrounds when possible. Square images work bes
 - `pops-midtown.png` — Pop's Midtown
 - `lemon-ts.png` — Lemon T's
 
+## Local copy command pattern
+
+Example:
+
+```powershell
+New-Item -ItemType Directory -Force -Path "public\images\food-stops" | Out-Null
+Copy-Item "D:\Mardi Gras\Food Logos\bake-my-day.png" "public\images\food-stops\bake-my-day.png" -Force
+```
+
 ## Behavior
 
 If the file exists at the expected path, the food stop card displays the logo.
