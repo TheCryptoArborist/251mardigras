@@ -30,20 +30,21 @@ export function CategoryResourcePage({
 }: CategoryResourcePageProps) {
   return (
     <div>
-      <section className="border-b border-parade-line bg-white">
-        <div className="mx-auto max-w-5xl px-4 py-8 sm:px-6 lg:px-8 lg:py-10">
-          <p className="text-sm font-bold uppercase tracking-wide text-parade-purple">{eyebrow}</p>
-          <h1 className="mt-2 max-w-4xl text-4xl font-black tracking-normal text-parade-ink sm:text-5xl">
+      <section className="relative overflow-hidden border-b border-parade-line bg-gradient-to-br from-white via-parade-cream to-parade-purpleMist">
+        <div className="absolute right-[-6rem] top-[-8rem] h-64 w-64 rounded-full bg-parade-gold/20 blur-3xl" aria-hidden="true" />
+        <div className="mx-auto max-w-5xl px-4 py-9 sm:px-6 lg:px-8 lg:py-12">
+          <p className="text-sm font-black uppercase tracking-wide text-parade-purple">{eyebrow}</p>
+          <h1 className="mt-2 max-w-4xl text-4xl font-black tracking-tight text-parade-ink sm:text-5xl">
             {title}
           </h1>
           <p className="mt-4 max-w-3xl text-base leading-7 text-parade-muted sm:text-lg">
             {description}
           </p>
           <div className="mt-6 flex flex-wrap gap-3">
-            <Link href={primaryHref} className="inline-flex items-center justify-center gap-2 rounded bg-parade-purple px-5 py-3 text-sm font-bold text-white hover:bg-parade-purpleDark">
+            <Link href={primaryHref} className="inline-flex items-center justify-center gap-2 rounded-full bg-parade-purple px-5 py-3 text-sm font-black text-white shadow-civic transition hover:-translate-y-0.5 hover:bg-parade-purpleDark">
               {primaryAction} <ArrowRight className="h-4 w-4" aria-hidden="true" />
             </Link>
-            <Link href="/" className="inline-flex items-center justify-center gap-2 rounded border border-parade-line bg-white px-5 py-3 text-sm font-bold text-parade-purple hover:bg-parade-purpleSoft">
+            <Link href="/" className="inline-flex items-center justify-center gap-2 rounded-full border border-parade-line bg-white/80 px-5 py-3 text-sm font-black text-parade-purple transition hover:-translate-y-0.5 hover:bg-parade-purpleSoft">
               Back to homepage <ArrowRight className="h-4 w-4" aria-hidden="true" />
             </Link>
           </div>
@@ -52,7 +53,7 @@ export function CategoryResourcePage({
 
       <div className="mx-auto max-w-5xl space-y-6 px-4 py-8 sm:px-6 lg:px-8">
         {resources.length > 0 ? (
-          <section className="grid gap-3 md:grid-cols-2">
+          <section className="grid gap-4 md:grid-cols-2">
             {resources.map((resource) => {
               const logoPath = resourceLogoPaths[resource.title] ?? resourceLogoPaths[normalizeResourceTitle(resource.title)];
 
@@ -62,12 +63,12 @@ export function CategoryResourcePage({
             })}
           </section>
         ) : (
-          <section className="rounded border border-dashed border-parade-line bg-parade-purpleSoft p-5 text-sm leading-6 text-parade-muted">
+          <section className="rounded-2xl border border-dashed border-parade-line bg-parade-purpleSoft p-5 text-sm leading-6 text-parade-muted">
             {emptyMessage}
           </section>
         )}
 
-        <section className="rounded border border-amber-200 bg-parade-goldSoft p-5">
+        <section className="rounded-2xl border border-amber-200 bg-parade-goldSoft p-5 shadow-civic">
           <div className="flex items-start gap-3">
             <MapPinned className="mt-0.5 h-5 w-5 shrink-0 text-amber-800" aria-hidden="true" />
             <p className="text-sm font-medium leading-6 text-amber-950">
@@ -95,7 +96,7 @@ function ResourceButton({
       href={resource.url}
       target="_blank"
       rel="noreferrer"
-      className="group flex min-w-0 items-center gap-3 rounded border border-parade-line bg-white px-4 py-3 text-left shadow-civic transition hover:-translate-y-0.5 hover:bg-parade-purpleSoft"
+      className="group flex min-w-0 items-center gap-3 rounded-2xl border border-parade-line bg-white px-4 py-3 text-left shadow-card transition hover:-translate-y-1 hover:bg-parade-purpleMist"
     >
       <ResourceLogo title={resource.title} logoPath={logoPath} />
       <span className="min-w-0 flex-1">
@@ -113,14 +114,14 @@ function ResourceButton({
 function ResourceLogo({ title, logoPath }: { title: string; logoPath?: string }) {
   if (logoPath) {
     return (
-      <span className="grid h-12 w-12 shrink-0 place-items-center overflow-hidden rounded-lg border border-parade-line bg-white p-1.5 shadow-sm" aria-hidden="true">
+      <span className="grid h-12 w-12 shrink-0 place-items-center overflow-hidden rounded-xl border border-parade-line bg-white p-1.5 shadow-sm" aria-hidden="true">
         <Image src={logoPath} alt={`${title} logo`} width={48} height={48} className="h-full w-full object-contain" />
       </span>
     );
   }
 
   return (
-    <span className="grid h-12 w-12 shrink-0 place-items-center rounded-lg border border-parade-gold/40 bg-parade-goldSoft text-sm font-black text-parade-purple" aria-hidden="true">
+    <span className="grid h-12 w-12 shrink-0 place-items-center rounded-xl border border-parade-gold/40 bg-parade-goldSoft text-sm font-black text-parade-purple" aria-hidden="true">
       {initialsFor(title)}
     </span>
   );
