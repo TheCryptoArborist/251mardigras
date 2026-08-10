@@ -18,22 +18,22 @@ type StopFilterId = (typeof stopFilters)[number]["id"];
 const foodStopLogoFiles = [
   ["The Outsider", "the-outsider.png"],
   ["Greer's Saint Louis Market", "greers-saint-louis-market.png"],
-  ["ellenJAY Bakery", "ellenjay-bakery.png"],
-  ["Bake My Day", "bake-my-day.png"],
-  ["Guncles Gluten Free", "guncles-gluten-free.png"],
-  ["Big Bad Breakfast", "big-bad-breakfast.png"],
-  ["Serda's Coffee Co.", "serdas-coffee-co.png"],
-  ["Knuckle Bones Elixir Co.", "knuckle-bones-elixir-co.png"],
-  ["Great Day Latte", "great-day-latte.png"],
-  ["Moe's Original BBQ", "moes-original-bbq.png"],
-  ["Cammie's Old Dutch Ice Cream Shoppe", "cammies-old-dutch-ice-cream-shoppe.png"],
-  ["LODA Bier Garten", "loda-bier-garten.png"],
-  ["POST", "post.png"],
-  ["Braided River Brewing Company", "braided-river-brewing-company.png"],
-  ["Joe Cain Cafe", "joe-cain-cafe.png"],
-  ["Bob's Downtown Restaurant", "bobs-downtown-restaurant.png"],
-  ["Pop's Midtown", "pops-midtown.png"],
-  ["Lemon T's", "lemon-ts.png"]
+  ["ellenJAY Bakery", "ellenjay-bakery.jpg"],
+  ["Bake My Day", "bake-my-day.jpg"],
+  ["Guncles Gluten Free", "guncles-gluten-free.jpg"],
+  ["Big Bad Breakfast", "big-bad-breakfast.jpg"],
+  ["Serda's Coffee Co.", "serdas-coffee-co.jpg"],
+  ["Knuckle Bones Elixir Co.", "knuckle-bones-elixir-co.jpg"],
+  ["Great Day Latte", "great-day-latte.jpg"],
+  ["Moe's Original BBQ", "moes-original-bbq.jpg"],
+  ["Cammie's Old Dutch Ice Cream Shoppe", "cammies-old-dutch-ice-cream-shoppe.jpg"],
+  ["LODA Bier Garten", "loda-bier-garten.jpg"],
+  ["POST", "post.jpg"],
+  ["Braided River Brewing Company", "braided-river-brewing-company.jpg"],
+  ["Joe Cain Cafe", "joe-cain-cafe.jpg"],
+  ["Bob's Downtown Restaurant", "bobs-downtown-restaurant.jpg"],
+  ["Pop's Midtown", "pops-midtown.jpg"],
+  ["Lemon T's", "lemon-ts.jpg"]
 ] as const;
 
 const foodStopLogoPaths = Object.fromEntries(
