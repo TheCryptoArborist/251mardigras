@@ -130,7 +130,7 @@ export function FoodStopSelector({ resources }: { resources: ResourceItem[] }) {
             <input
               value={query}
               onChange={(event) => setQuery(event.target.value)}
-              placeholder="Search coffee, bakery, BBQ, brewery, restaurant..."
+              placeholder="Search coffee, bakery, sweets, pecans, BBQ, brewery, restaurant..."
               className="w-full rounded-2xl border border-parade-gold/25 bg-white py-3 pl-11 pr-3 text-sm font-semibold text-parade-ink outline-none transition placeholder:text-parade-muted focus:border-parade-gold focus:ring-4 focus:ring-parade-gold/20"
             />
           </label>
@@ -168,7 +168,7 @@ export function FoodStopSelector({ resources }: { resources: ResourceItem[] }) {
 
         {filteredResources.length === 0 ? (
           <div className="rounded-2xl border border-dashed border-parade-gold/35 bg-parade-goldSoft p-5 text-sm leading-6 text-parade-muted">
-            No food or drink stops matched that search. Try a broader term like coffee, bakery, BBQ, brewery, restaurant, or downtown.
+            No food or drink stops matched that search. Try a broader term like coffee, bakery, sweets, pecans, BBQ, brewery, restaurant, or downtown.
           </div>
         ) : (
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
@@ -245,7 +245,7 @@ function stopTypeFor(title: string): Exclude<StopFilterId, "all"> {
     return "coffee";
   }
 
-  if (/bakery|bake|ice cream|gluten|cammie|guncle|ellenjay/.test(normalizedTitle)) {
+  if (/bakery|bake|ice cream|gluten|cammie|guncle|ellenjay|gourmet|pecan|sweets?/.test(normalizedTitle)) {
     return "bakery";
   }
 
