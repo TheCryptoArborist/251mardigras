@@ -69,7 +69,7 @@ const socialBranding: Record<string, { icon: ReactNode; background: string; fore
     icon: <YouTubeLogo />,
     background: "#ff0000",
     foreground: "#ffffff",
-    label: "Follow on YouTube"
+    label: "Subscribe on YouTube"
   },
   Facebook: {
     icon: <FacebookLogo />,
@@ -117,7 +117,7 @@ export default async function ResourcesPage() {
             Find the Mardi Gras links you need
           </h1>
           <p className="mt-4 max-w-3xl text-base leading-7 text-purple-100 sm:text-lg">
-            Follow the Mardi Gras channels, watch coverage, and jump to the visitor tools without digging through repeated link lists.
+            Subscribe on YouTube, follow the Mardi Gras channels, watch coverage, and jump to the visitor tools without digging through repeated link lists.
           </p>
         </div>
       </section>
@@ -130,7 +130,7 @@ export default async function ResourcesPage() {
                 <Share2 className="h-5 w-5" aria-hidden="true" />
               </div>
               <div>
-                <p className="text-xs font-black uppercase tracking-[0.16em] text-parade-goldBright">Follow first</p>
+                <p className="text-xs font-black uppercase tracking-[0.16em] text-parade-goldBright">Subscribe and follow first</p>
                 <h2 className="mt-1 text-2xl font-black text-white">Mardi Gras - Mobile, AL social channels</h2>
                 <p className="mt-2 max-w-3xl text-sm leading-6 text-purple-100">
                   Announcements, live updates, video coverage, reels, and community posts start here.
@@ -209,6 +209,7 @@ function SectionTitle({ title, description }: { title: string; description: stri
 
 function CompactResourceButton({ resource }: { resource: ResourceItem }) {
   const socialBrand = socialBranding[resource.title];
+  const actionLabel = resource.title === "YouTube" ? "Subscribe" : "Follow";
 
   return (
     <a
@@ -229,7 +230,7 @@ function CompactResourceButton({ resource }: { resource: ResourceItem }) {
       ) : null}
       <span className="min-w-0 flex-1">
         <span className="block truncate text-sm font-black">{resource.title}</span>
-        <span className="mt-0.5 block truncate text-[0.68rem] font-black uppercase tracking-wide text-parade-muted">Follow</span>
+        <span className="mt-0.5 block truncate text-[0.68rem] font-black uppercase tracking-wide text-parade-muted">{actionLabel}</span>
       </span>
       <ExternalLink className="h-4 w-4 shrink-0 text-parade-purple transition group-hover:translate-x-0.5" aria-hidden="true" />
     </a>
