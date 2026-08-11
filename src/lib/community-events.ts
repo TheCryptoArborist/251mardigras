@@ -90,7 +90,7 @@ export function buildGoogleCalendarUrl(event: CommunityEvent) {
   url.searchParams.set("action", "TEMPLATE");
   url.searchParams.set("text", event.title);
   url.searchParams.set("dates", `${formatGoogleDate(event.startDateTime)}/${formatGoogleDate(event.endDateTime)}`);
-  url.searchParams.set("details", event.description);
+  url.searchParams.set("details", buildCalendarDescription(event));
   url.searchParams.set("location", fullEventLocation(event));
 
   return url.toString();
@@ -112,9 +112,9 @@ export function buildCommunityEventIcs(event: CommunityEvent) {
     `DTSTART:${formatIcsDate(event.startDateTime)}`,
     `DTEND:${formatIcsDate(event.endDateTime)}`,
     `SUMMARY:${escapeIcsText(event.title)}`,
-    `DESCRIPTION:${escapeIcsText(`${event.description}\n\nVerify event details with the host organization before attending. This is a community-submitted Mardi Gras-related event, not the official parade schedule.`)}`,
+    `DESCRIPTION:${escapeIcsText(buildCalendarDescription(event))}`,
     `LOCATION:${escapeIcsText(fullEventLocation(event))}`,
-    event.ticketUrl ? `URL:${event.ticketUrl}` : null,
+    event.ticketUrl ? `URL:${event.ticketUrl}` : event.flyerUrl ? `URL:${event.flyerUrl}` : null,
     "END:VEVENT",
     "END:VCALENDAR"
   ]
@@ -132,9 +132,9 @@ export function buildCommunityCalendarIcs(events = getApprovedCommunityEvents())
       `DTSTART:${formatIcsDate(event.startDateTime)}`,
       `DTEND:${formatIcsDate(event.endDateTime)}`,
       `SUMMARY:${escapeIcsText(event.title)}`,
-      `DESCRIPTION:${escapeIcsText(`${event.description}\n\nVerify event details with the host organization before attending. This is a community-submitted Mardi Gras-related event, not the official parade schedule.`)}`,
+      `DESCRIPTION:${escapeIcsText(buildCalendarDescription(event))}`,
       `LOCATION:${escapeIcsText(fullEventLocation(event))}`,
-      event.ticketUrl ? `URL:${event.ticketUrl}` : null,
+      event.ticketUrl ? `URL:${event.ticketUrl}` : event.flyerUrl ? `URL:${event.flyerUrl}` : null,
       "END:VEVENT"
     ]
       .filter(Boolean)
@@ -155,6 +155,20 @@ export function buildCommunityCalendarIcs(events = getApprovedCommunityEvents())
 
 export function fullEventLocation(event: CommunityEvent) {
   return [event.venueName, event.venueAddress, event.cityStateZip].filter(Boolean).join(", ");
+}
+
+function buildCalendarDescription(event: CommunityEvent) {
+  return [
+    event.description,
+    event.cost ? `Cost: ${event.cost}` : null,
+    event.audience ? `Audience: ${event.audience}` : null,
+    event.publicContact ? `Public contact: ${event.publicContact}` : null,
+    event.ticketUrl ? `Event / RSVP link: ${event.ticketUrl}` : null,
+    event.flyerUrl ? `Event flyer: ${event.flyerUrl}` : null,
+    "Verify event details with the host organization before attending. This is a community-submitted Mardi Gras-related event, not the official parade schedule."
+  ]
+    .filter(Boolean)
+    .join("\n\n");
 }
 
 function formatGoogleDate(value: string) {
