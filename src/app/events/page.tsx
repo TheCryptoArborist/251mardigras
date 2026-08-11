@@ -110,6 +110,11 @@ function EventCard({ event }: { event: CommunityEvent }) {
           <a href={buildGoogleCalendarUrl(event)} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-full border border-parade-line bg-white px-4 py-2 text-sm font-black text-parade-purple hover:bg-parade-purpleSoft">
             Google Calendar <ExternalLink className="h-4 w-4" aria-hidden="true" />
           </a>
+          {event.mapUrl ? (
+            <a href={event.mapUrl} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-full border border-parade-line bg-white px-4 py-2 text-sm font-black text-parade-purple hover:bg-parade-purpleSoft">
+              Map / Directions <ExternalLink className="h-4 w-4" aria-hidden="true" />
+            </a>
+          ) : null}
           {event.flyerUrl ? (
             <a href={event.flyerUrl} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-full border border-parade-line bg-white px-4 py-2 text-sm font-black text-parade-purple hover:bg-parade-purpleSoft">
               View Flyer <ExternalLink className="h-4 w-4" aria-hidden="true" />
