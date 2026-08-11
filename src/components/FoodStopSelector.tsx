@@ -183,6 +183,8 @@ export function FoodStopSelector({ resources }: { resources: ResourceItem[] }) {
 }
 
 function FoodStopCard({ resource }: { resource: ResourceItem }) {
+  const contactNote = contactNoteForStop(resource.title);
+
   return (
     <a
       href={resource.url}
@@ -195,6 +197,7 @@ function FoodStopCard({ resource }: { resource: ResourceItem }) {
       <span className="relative z-10 min-w-0 flex-1">
         <span className="block truncate text-sm font-black text-parade-purpleDark">{resource.title}</span>
         <span className="mt-1 block text-xs font-black uppercase text-parade-muted">{labelForStop(resource.title)}</span>
+        {contactNote ? <span className="mt-1 block text-xs font-bold text-parade-purpleDark">{contactNote}</span> : null}
         <span className="mt-2 inline-flex items-center gap-1 rounded-full bg-parade-purple px-3 py-1.5 text-xs font-black uppercase text-white transition group-hover:bg-parade-purpleDark">
           Open map / directions
           <ExternalLink className="h-3.5 w-3.5" aria-hidden="true" />
@@ -265,6 +268,10 @@ function labelForStop(title: string) {
   };
 
   return labels[stopTypeFor(title)];
+}
+
+function contactNoteForStop(title: string) {
+  return normalizeSearch(title) === "big w gourmet pecans" ? "Call 251-455-5462" : null;
 }
 
 function initialsFor(title: string) {
