@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { CalendarDays, ChevronLeft, ChevronRight, Clock } from "lucide-react";
+import { useState } from "react";
+import { CalendarDays, ChevronLeft, ChevronRight } from "lucide-react";
 import type { CommunityEvent } from "@/lib/community-events";
 
 const CENTRAL_TIME_ZONE = "America/Chicago";
@@ -35,7 +36,7 @@ const eventTimeFormatter = new Intl.DateTimeFormat("en-US", {
 export function CommunityEventsMonthCalendar({ events }: { events: CommunityEvent[] }) {
   const sortedEvents = [...events].sort((a, b) => new Date(a.startDateTime).getTime() - new Date(b.startDateTime).getTime());
   const initialMonth = getInitialMonth(sortedEvents);
-  const [visibleMonth, setVisibleMonth] = useStateMonth(initialMonth);
+  const [visibleMonth, setVisibleMonth] = useState<Date>(initialMonth);
   const visibleYear = visibleMonth.getFullYear();
   const visibleMonthIndex = visibleMonth.getMonth();
   const visibleMonthLabel = monthTitleFormatter.format(visibleMonth);
@@ -190,11 +191,6 @@ function MobileAgenda({ events }: { events: CommunityEvent[] }) {
       ))}
     </div>
   );
-}
-
-function useStateMonth(initialMonth: Date) {
-  const React = require("react") as typeof import("react");
-  return React.useState<Date>(initialMonth);
 }
 
 function getInitialMonth(events: CommunityEvent[]) {
