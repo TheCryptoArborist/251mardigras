@@ -52,7 +52,7 @@ function jsonResponse(payload: Record<string, unknown>, status = 200) {
 
 async function readCounter() {
   const store = getStore(STORE_NAME);
-  const current = await store.get(COUNTER_KEY, { consistency: "strong" });
+  const current = await store.get(COUNTER_KEY, { type: "text" });
   return parseCounter(current);
 }
 
@@ -77,7 +77,7 @@ export async function GET() {
 export async function POST() {
   try {
     const store = getStore(STORE_NAME);
-    const current = parseCounter(await store.get(COUNTER_KEY, { consistency: "strong" }));
+    const current = parseCounter(await store.get(COUNTER_KEY, { type: "text" }));
     const next: VisitorCounterRecord = {
       total: current.total + 1,
       startedAt: current.startedAt,
