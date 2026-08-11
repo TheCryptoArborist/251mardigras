@@ -1,4 +1,4 @@
-import { Download, ExternalLink, MapPinned } from "lucide-react";
+import { ExternalLink, MapPinned } from "lucide-react";
 import { CategoryResourcePage } from "@/components/CategoryResourcePage";
 import { FoodStopSelector } from "@/components/FoodStopSelector";
 import { getResources } from "@/lib/data-access";
@@ -7,6 +7,7 @@ export const dynamic = "force-dynamic";
 
 const FOOD_DRINK_MAP_EMBED_URL = "https://www.google.com/maps/d/embed?mid=1pI3gA2FXFcvtCvK9KYfehhBO2aTb0a4&ehbc=2E312F";
 const FOOD_DRINK_MAP_VIEW_URL = "https://www.google.com/maps/d/viewer?mid=1pI3gA2FXFcvtCvK9KYfehhBO2aTb0a4";
+const DIRECTORY_CONTACT_EMAIL = "mgmobilealabama@gmail.com";
 
 export default async function FoodDrinkPage() {
   const resources = (await getResources()).filter((resource) => resource.category === "Food and Drink");
@@ -41,25 +42,15 @@ export default async function FoodDrinkPage() {
                 </p>
               </div>
             </div>
-            <div className="flex flex-col gap-2 sm:flex-row lg:shrink-0">
-              <a
-                href={FOOD_DRINK_MAP_VIEW_URL}
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex items-center justify-center gap-2 rounded-full bg-parade-purple px-5 py-3 text-sm font-black text-white shadow-civic transition hover:-translate-y-0.5 hover:bg-parade-purpleDark"
-              >
-                Open larger map
-                <ExternalLink className="h-4 w-4" aria-hidden="true" />
-              </a>
-              <a
-                href="/imports/food-drink-google-my-maps.csv"
-                download
-                className="inline-flex items-center justify-center gap-2 rounded-full bg-parade-gold px-5 py-3 text-sm font-black text-parade-purpleDark shadow-glow transition hover:-translate-y-0.5 hover:bg-parade-goldBright"
-              >
-                Download map CSV
-                <Download className="h-4 w-4" aria-hidden="true" />
-              </a>
-            </div>
+            <a
+              href={FOOD_DRINK_MAP_VIEW_URL}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex w-fit items-center justify-center gap-2 rounded-full bg-parade-purple px-5 py-3 text-sm font-black text-white shadow-civic transition hover:-translate-y-0.5 hover:bg-parade-purpleDark lg:shrink-0"
+            >
+              Open larger map
+              <ExternalLink className="h-4 w-4" aria-hidden="true" />
+            </a>
           </div>
 
           <div className="relative z-10 mt-5 overflow-hidden rounded-[1.25rem] border border-parade-gold/30 bg-parade-purpleDark/10 shadow-civic">
@@ -70,6 +61,16 @@ export default async function FoodDrinkPage() {
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
             />
+          </div>
+
+          <div className="relative z-10 mt-4 rounded-2xl border border-parade-gold/35 bg-white/80 p-4 shadow-sm">
+            <p className="text-sm font-bold leading-6 text-parade-purpleDark">
+              Would you like to have your establishment or business displayed in this directory? Send an email to{" "}
+              <a href={`mailto:${DIRECTORY_CONTACT_EMAIL}`} className="font-black text-parade-purple underline decoration-parade-gold decoration-2 underline-offset-4">
+                {DIRECTORY_CONTACT_EMAIL}
+              </a>
+              .
+            </p>
           </div>
 
           <p className="relative z-10 mt-3 text-xs font-semibold leading-5 text-parade-muted">
