@@ -17,5 +17,25 @@
     "audience": "Adults only, 21+",
     "publicContact": "Jessica Lindsey - board@orderofisis.org",
     "flyerUrl": "https://www.jotform.com/uploads/PeterToler/262217749749067/6622247624016799516/IMG_20260622_150742.jpg"
+  },
+  {
+    "id": "etruscans-fall-dance-2026",
+    "slug": "etruscans-fall-dance-2026",
+    "status": "approved",
+    "title": "Etruscans Fall Dance",
+    "organization": "Etruscans Mystic Society",
+    "eventType": "Party",
+    "startDateTime": "2026-09-19T19:00:00-05:00",
+    "endDateTime": "2026-09-19T23:00:00-05:00",
+    "venueName": "Via Center",
+    "venueAddress": "1717 Dauphin Street",
+    "cityStateZip": "Mobile, AL 36604",
+    "description": "Join the Etruscans Mystic Society for the Etruscans Fall Dance featuring live music by the Due South Band. Guests also have a chance to win $500 with $20 tickets. Presence is not required to win.",
+    "mapUrl": "https://maps.app.goo.gl/zSCpm6KsiWBTJVGi9",
+    "ticketUrl": "https://www.facebook.com/share/19GTqXHDF8/",
+    "cost": "Paid",
+    "audience": "Adults only, 21+",
+    "flyerUrl": "https://www.jotform.com/uploads/PeterToler/262217749749067/6622992928321830875/etruscans%20fall%20dance.jpg",
+    "organizationLogoUrl": "https://www.jotform.com/uploads/PeterToler/262217749749067/6622992928321830875/etruscans%20logo.jpg"
   }
 ]
