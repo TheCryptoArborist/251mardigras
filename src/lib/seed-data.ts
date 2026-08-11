@@ -40,7 +40,7 @@ export const resourceCurationPrinciples = [
 export const linktreeCategoryHighlights = [
   {
     title: "Social media",
-    detail: "YouTube, Facebook, Instagram, X, TikTok, and Snapchat destinations are maintained as direct resource links."
+    detail: "YouTube, Facebook, Instagram, X, and TikTok destinations are maintained as direct resource links."
   },
   {
     title: "Downtown transportation",
@@ -192,7 +192,6 @@ export const resourceSeeds: ResourceSeed[] = [
   directoryResource("Instagram", "Social Media", "Mobile Mardi Gras Instagram destination maintained as a direct social link.", 3),
   directoryResource("X", "Social Media", "Mobile Mardi Gras X destination maintained as a direct social link.", 4),
   directoryResource("TikTok", "Social Media", "Mobile Mardi Gras TikTok destination maintained as a direct social link.", 5),
-  directoryResource("Snapchat", "Social Media", "Snapchat destination maintained as a direct social link.", 6),
   directoryResource("YouTube channel", "Live Coverage / Channel Support", "Live, short-form, and previous Mobile Mardi Gras video coverage.", 1, YOUTUBE_CHANNEL_URL),
   directoryResource("Current livestream", "Live Coverage / Channel Support", "Public Mobile Mardi Gras YouTube channel used by the live coverage player when a livestream is active.", 2, YOUTUBE_CHANNEL_URL),
   directoryResource("Become a Channel Supporter", "Live Coverage / Channel Support", "YouTube channel membership link for viewers who want to support coverage.", 3, YOUTUBE_SUPPORTER_URL),
