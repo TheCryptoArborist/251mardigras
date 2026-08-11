@@ -11,8 +11,6 @@ export const YOUTUBE_CHANNEL_ID = "UCyqSGKVwxdMcXMgwaRMnDiA";
 export const YOUTUBE_SUPPORTER_URL = "https://www.youtube.com/channel/UCyqSGKVwxdMcXMgwaRMnDiA/join";
 export const YOUTUBE_LIVE_EMBED_URL =
   "https://www.youtube.com/embed/live_stream?channel=UCyqSGKVwxdMcXMgwaRMnDiA";
-export const MOBILITY_ACCESS_FORM_URL =
-  "https://docs.google.com/forms/d/e/1FAIpQLSftgyJN88i7T51O6aSrA3cVfsQyhxywi3ehE_DJxpYTt1D2VQ/viewform";
 export const MARDI_GRAS_2023_PLAYLIST_URL =
   "https://youtube.com/playlist?list=PLaLBJrBHRKOB3U6ETGoq6u2CF6FTxy3Vr&si=H19GGBst7zmVF1ro";
 export const MARDI_GRAS_2024_PLAYLIST_URL =
@@ -25,13 +23,13 @@ export const MARDI_GRAS_2026_PLAYLIST_URL =
 export const linktreeProfile = {
   title: "Mardi Gras - Mobile, AL Resource Directory",
   tagline:
-    "Direct visitor links for live coverage, social channels, parking, access support, food, gear, throws, and previous parade seasons.",
+    "Direct visitor links for live coverage, social channels, parking, food, gear, throws, and previous parade seasons.",
   sourceUrl: RESOURCE_DIRECTORY_URL,
   joined: "2024 link inventory"
 };
 
 export const resourceCurationPrinciples = [
-  "Public resources are selected for Mobile Mardi Gras livestream discovery, downtown visitor planning, access support, food and drink, gear, throws, or previous parade coverage.",
+  "Public resources are selected for Mobile Mardi Gras livestream discovery, downtown visitor planning, food and drink, gear, throws, or previous parade coverage.",
   "Legacy imported links are reviewed before publication; general discount, affiliate, or non-Mardi Gras offers are not automatically displayed in the public directory.",
   "Contact methods should be handled by a dedicated website contact/submission path instead of being mixed into the visitor resource directory.",
   "Visitor resources are convenience links. Parade schedules, routes, closures, parking rules, towing, public-safety decisions, and weather impacts still require official-source verification."
@@ -45,10 +43,6 @@ export const linktreeCategoryHighlights = [
   {
     title: "Downtown transportation",
     detail: "Parking apps, parking guide links, a downtown parking map, and the City parking guide are grouped for parade-day planning."
-  },
-  {
-    title: "Mobility-friendly access",
-    detail: "A third-party SNASY registration form is linked for mobility-friendly parade access support."
   },
   {
     title: "Food and drink",
@@ -205,13 +199,6 @@ export const resourceSeeds: ResourceSeed[] = [
     "Official City page should be verified before travel.",
     4,
     "https://www.cityofmobile.gov/mardi-gras-parade-parking/"
-  ),
-  directoryResource(
-    "Need Mobility-Friendly Mardi Gras Access? Click Here",
-    "Mobility-Friendly Access",
-    "Third-party SNASY registration form for mobility-friendly parade access support. This does not verify the official parade schedule.",
-    1,
-    MOBILITY_ACCESS_FORM_URL
   ),
   ...[
     "The Outsider",
