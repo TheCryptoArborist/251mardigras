@@ -71,13 +71,14 @@ export function FoodStopSelector({ resources }: { resources: ResourceItem[] }) {
   const hasActiveFilters = Boolean(query.trim()) || activeFilter !== "all";
 
   return (
-    <section className="overflow-hidden rounded border border-parade-line bg-white shadow-civic">
-      <div className="border-b border-parade-line bg-parade-purpleSoft p-5">
-        <div className="grid gap-5 lg:grid-cols-[1fr_auto] lg:items-start">
+    <section className="overflow-hidden rounded-[1.7rem] border border-parade-gold/40 bg-gradient-to-br from-parade-cream via-white to-parade-purpleMist shadow-card">
+      <div className="relative overflow-hidden border-b border-parade-gold/30 bg-gradient-to-br from-parade-purpleDeep via-parade-purpleDark to-parade-purple p-5 text-white">
+        <div className="absolute right-[-4rem] top-[-4rem] h-32 w-32 rounded-full bg-parade-gold/20 blur-2xl" aria-hidden="true" />
+        <div className="relative z-10 grid gap-5 lg:grid-cols-[1fr_auto] lg:items-start">
           <div>
-            <p className="text-sm font-bold uppercase tracking-wide text-parade-purple">Food and drink navigator</p>
-            <h2 className="mt-1 text-2xl font-black text-parade-ink">Find a downtown stop fast</h2>
-            <p className="mt-2 max-w-3xl text-sm leading-6 text-parade-muted">
+            <p className="text-sm font-black uppercase tracking-[0.16em] text-parade-goldBright">Food and drink navigator</p>
+            <h2 className="mt-2 text-2xl font-black text-white">Find a downtown stop fast</h2>
+            <p className="mt-2 max-w-3xl text-sm leading-6 text-purple-100">
               Choose a restaurant, coffee shop, bakery, brewery, barbecue stop, dessert stop, or direct venue link while you are walking downtown or planning your parade day.
             </p>
           </div>
@@ -92,11 +93,11 @@ export function FoodStopSelector({ resources }: { resources: ResourceItem[] }) {
       <div className="space-y-5 p-5">
         <div className="grid gap-3 lg:grid-cols-[1fr_auto]">
           <label className="block min-w-0">
-            <span className="mb-2 block text-xs font-bold uppercase text-parade-muted">Choose a food or drink stop</span>
+            <span className="mb-2 block text-xs font-black uppercase tracking-wide text-parade-purple">Choose a food or drink stop</span>
             <select
               value={selectedResourceId}
               onChange={(event) => setSelectedResourceId(event.target.value)}
-              className="w-full rounded border border-parade-line bg-white px-3 py-3 text-sm font-bold text-parade-ink outline-none transition focus:border-parade-purple focus:ring-2 focus:ring-parade-purpleSoft"
+              className="w-full rounded-2xl border border-parade-gold/25 bg-white px-4 py-3 text-sm font-bold text-parade-ink outline-none transition focus:border-parade-gold focus:ring-4 focus:ring-parade-gold/20"
             >
               <option value="">Select a downtown stop...</option>
               {resources.map((resource) => (
@@ -112,7 +113,7 @@ export function FoodStopSelector({ resources }: { resources: ResourceItem[] }) {
               href={selectedResource.url}
               target="_blank"
               rel="noreferrer"
-              className="inline-flex items-center justify-center gap-2 rounded bg-parade-purple px-5 py-3 text-sm font-bold text-white hover:bg-parade-purpleDark lg:self-end"
+              className="inline-flex items-center justify-center gap-2 rounded-full bg-parade-gold px-5 py-3 text-sm font-black text-parade-purpleDark shadow-glow transition hover:-translate-y-0.5 hover:bg-parade-goldBright lg:self-end"
             >
               Open map / directions
               <Navigation className="h-4 w-4" aria-hidden="true" />
@@ -121,7 +122,7 @@ export function FoodStopSelector({ resources }: { resources: ResourceItem[] }) {
             <button
               type="button"
               disabled
-              className="inline-flex cursor-not-allowed items-center justify-center gap-2 rounded border border-parade-line px-5 py-3 text-sm font-bold text-parade-muted opacity-70 lg:self-end"
+              className="inline-flex cursor-not-allowed items-center justify-center gap-2 rounded-full border border-parade-line bg-white/75 px-5 py-3 text-sm font-bold text-parade-muted opacity-70 lg:self-end"
             >
               Select a stop first
               <Navigation className="h-4 w-4" aria-hidden="true" />
@@ -132,19 +133,19 @@ export function FoodStopSelector({ resources }: { resources: ResourceItem[] }) {
         <div className="grid gap-3 lg:grid-cols-[1fr_auto] lg:items-center">
           <label className="relative block min-w-0">
             <span className="sr-only">Search food and drink stops</span>
-            <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-parade-muted" aria-hidden="true" />
+            <Search className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-parade-purple" aria-hidden="true" />
             <input
               value={query}
               onChange={(event) => setQuery(event.target.value)}
               placeholder="Search coffee, bakery, BBQ, brewery, restaurant..."
-              className="w-full rounded border border-parade-line bg-white py-3 pl-10 pr-3 text-sm font-semibold text-parade-ink outline-none transition placeholder:text-parade-muted focus:border-parade-purple focus:ring-2 focus:ring-parade-purpleSoft"
+              className="w-full rounded-2xl border border-parade-gold/25 bg-white py-3 pl-11 pr-3 text-sm font-semibold text-parade-ink outline-none transition placeholder:text-parade-muted focus:border-parade-gold focus:ring-4 focus:ring-parade-gold/20"
             />
           </label>
           <button
             type="button"
             onClick={clearFilters}
             disabled={!hasActiveFilters}
-            className="inline-flex items-center justify-center gap-2 rounded border border-parade-line px-4 py-3 text-sm font-bold text-parade-purple transition hover:bg-parade-purpleSoft disabled:cursor-not-allowed disabled:opacity-50"
+            className="inline-flex items-center justify-center gap-2 rounded-full border border-parade-gold/30 bg-white px-4 py-3 text-sm font-black text-parade-purple transition hover:bg-parade-goldSoft disabled:cursor-not-allowed disabled:opacity-50"
           >
             Clear
             <X className="h-4 w-4" aria-hidden="true" />
@@ -160,10 +161,10 @@ export function FoodStopSelector({ resources }: { resources: ResourceItem[] }) {
                 key={filter.id}
                 type="button"
                 onClick={() => setActiveFilter(filter.id)}
-                className={`rounded-full border px-3 py-2 text-xs font-bold uppercase transition ${
+                className={`rounded-full border px-3 py-2 text-xs font-black uppercase transition ${
                   selected
-                    ? "border-parade-purple bg-parade-purple text-white"
-                    : "border-parade-line bg-white text-parade-purple hover:bg-parade-purpleSoft"
+                    ? "border-parade-purple bg-parade-purple text-white shadow-civic"
+                    : "border-parade-gold/30 bg-white/80 text-parade-purple hover:bg-parade-goldSoft"
                 }`}
               >
                 {filter.label}
@@ -172,13 +173,13 @@ export function FoodStopSelector({ resources }: { resources: ResourceItem[] }) {
           })}
         </div>
 
-        <div className="flex items-center justify-between gap-3 text-sm font-bold text-parade-muted">
+        <div className="flex items-center justify-between gap-3 text-sm font-black text-parade-purple">
           <span>{filteredResources.length} stops shown</span>
-          <span className="hidden sm:inline">Tap a card to open its direct map or venue link</span>
+          <span className="hidden text-parade-muted sm:inline">Tap a card to open its direct map or venue link</span>
         </div>
 
         {filteredResources.length === 0 ? (
-          <div className="rounded border border-dashed border-parade-line bg-parade-purpleSoft p-5 text-sm leading-6 text-parade-muted">
+          <div className="rounded-2xl border border-dashed border-parade-gold/35 bg-parade-goldSoft p-5 text-sm leading-6 text-parade-muted">
             No food or drink stops matched that search. Try a broader term like coffee, bakery, BBQ, brewery, restaurant, or downtown.
           </div>
         ) : (
@@ -195,9 +196,9 @@ export function FoodStopSelector({ resources }: { resources: ResourceItem[] }) {
 
 function FoodStat({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded border border-white/80 bg-white/80 px-3 py-2">
-      <p className="text-lg font-black text-parade-purple">{value}</p>
-      <p className="mt-0.5 text-[0.65rem] font-bold uppercase tracking-wide text-parade-muted">{label}</p>
+    <div className="rounded-2xl border border-white/20 bg-white/90 px-3 py-2">
+      <p className="text-lg font-black text-parade-purpleDark">{value}</p>
+      <p className="mt-0.5 text-[0.65rem] font-black uppercase tracking-wide text-parade-muted">{label}</p>
     </div>
   );
 }
@@ -208,13 +209,14 @@ function FoodStopCard({ resource }: { resource: ResourceItem }) {
       href={resource.url}
       target="_blank"
       rel="noreferrer"
-      className="group flex min-w-0 items-center gap-3 rounded border border-parade-line bg-white p-3 text-left transition hover:-translate-y-0.5 hover:bg-parade-purpleSoft hover:shadow-civic"
+      className="group relative flex min-w-0 items-center gap-3 overflow-hidden rounded-2xl border border-parade-gold/30 bg-gradient-to-br from-white via-parade-cream to-parade-purpleMist p-3 text-left shadow-sm transition hover:-translate-y-0.5 hover:shadow-civic"
     >
+      <span className="pointer-events-none absolute right-[-1.75rem] top-[-1.75rem] h-16 w-16 rounded-full bg-parade-gold/20 blur-xl" aria-hidden="true" />
       <FoodStopLogo title={resource.title} />
-      <span className="min-w-0 flex-1">
-        <span className="block truncate text-sm font-black text-parade-ink">{resource.title}</span>
-        <span className="mt-1 block text-xs font-bold uppercase text-parade-muted">{labelForStop(resource.title)}</span>
-        <span className="mt-1 flex items-center gap-1 text-xs font-bold uppercase text-parade-purple group-hover:underline">
+      <span className="relative z-10 min-w-0 flex-1">
+        <span className="block truncate text-sm font-black text-parade-purpleDark">{resource.title}</span>
+        <span className="mt-1 block text-xs font-black uppercase text-parade-muted">{labelForStop(resource.title)}</span>
+        <span className="mt-2 inline-flex items-center gap-1 rounded-full bg-parade-purple px-3 py-1.5 text-xs font-black uppercase text-white transition group-hover:bg-parade-purpleDark">
           Open map / directions
           <ExternalLink className="h-3.5 w-3.5" aria-hidden="true" />
         </span>
@@ -232,7 +234,7 @@ function FoodStopLogo({ title }: { title: string }) {
   }
 
   return (
-    <span className="grid h-12 w-12 shrink-0 place-items-center overflow-hidden rounded-lg border border-parade-line bg-white p-1.5 shadow-sm" aria-hidden="true">
+    <span className="relative z-10 grid h-12 w-12 shrink-0 place-items-center overflow-hidden rounded-xl border border-parade-gold/35 bg-white p-1.5 shadow-sm" aria-hidden="true">
       <Image
         src={logoPath}
         alt={`${title} logo`}
@@ -247,7 +249,7 @@ function FoodStopLogo({ title }: { title: string }) {
 
 function InitialsBadge({ title }: { title: string }) {
   return (
-    <span className="grid h-12 w-12 shrink-0 place-items-center rounded-lg border border-parade-gold/40 bg-parade-goldSoft text-sm font-black text-parade-purple" aria-hidden="true">
+    <span className="relative z-10 grid h-12 w-12 shrink-0 place-items-center rounded-xl border border-parade-gold/40 bg-parade-goldSoft text-sm font-black text-parade-purple" aria-hidden="true">
       {initialsFor(title)}
     </span>
   );

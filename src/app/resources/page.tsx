@@ -3,7 +3,6 @@ import {
   Archive,
   Car,
   ExternalLink,
-  MapPinned,
   PlayCircle,
   Share2,
   ShieldCheck,
@@ -55,7 +54,7 @@ const planningLanes = [
   },
   {
     title: "Get downtown",
-    description: "Start with parking and transportation resources, then verify road closures and towing rules with official sources.",
+    description: "Start with parking, transportation, and access resources for parade-day planning.",
     categories: ["Downtown Transportation", "Mobility-Friendly Access"]
   },
   {
@@ -75,28 +74,33 @@ export default async function ResourcesPage() {
 
   return (
     <div>
-      <section className="border-b border-parade-line bg-white">
-        <div className="mx-auto grid max-w-7xl gap-8 px-4 py-8 sm:px-6 lg:grid-cols-[0.9fr_1.1fr] lg:px-8">
-          <div>
-            <h1 className="max-w-3xl text-4xl font-black tracking-normal text-parade-ink sm:text-5xl">
+      <section className="relative overflow-hidden border-b border-parade-gold/30 bg-gradient-to-br from-parade-purpleDeep via-parade-purpleDark to-parade-purple text-white">
+        <div className="absolute left-[-7rem] top-[-8rem] h-72 w-72 rounded-full bg-parade-gold/20 blur-3xl" aria-hidden="true" />
+        <div className="absolute bottom-[-10rem] right-[-8rem] h-80 w-80 rounded-full bg-white/10 blur-3xl" aria-hidden="true" />
+        <div className="mx-auto grid max-w-7xl gap-8 px-4 py-10 sm:px-6 lg:grid-cols-[0.9fr_1.1fr] lg:px-8 lg:py-12">
+          <div className="relative z-10">
+            <p className="inline-flex rounded-full border border-parade-gold/40 bg-white/10 px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-parade-goldBright shadow-glow">
+              Visitor resource guide
+            </p>
+            <h1 className="mt-5 max-w-3xl text-4xl font-black tracking-tight text-white sm:text-5xl">
               Mobile Mardi Gras Resource Guide
             </h1>
-            <p className="mt-4 max-w-2xl text-lg leading-8 text-parade-muted">
+            <p className="mt-5 max-w-2xl text-lg leading-8 text-purple-100">
               A direct-link visitor directory for Mobile Mardi Gras live coverage, social channels, parking, access support, food, gear, and past parade seasons. The goal is to send visitors straight to the resource they need.
             </p>
-            <div className="mt-6 flex flex-wrap gap-3">
-              <a href="/watch" className="inline-flex items-center gap-2 rounded bg-parade-purple px-5 py-3 text-sm font-bold text-white hover:bg-parade-purpleDark">
+            <div className="mt-7 flex flex-wrap gap-3">
+              <a href="/watch" className="inline-flex items-center gap-2 rounded-full bg-parade-gold px-5 py-3 text-sm font-black text-parade-purpleDark shadow-glow transition hover:-translate-y-0.5 hover:bg-parade-goldBright">
                 Watch live coverage
               </a>
-              <a href="#all-resources" className="inline-flex items-center gap-2 rounded border border-parade-line bg-white px-5 py-3 text-sm font-bold text-parade-purple hover:bg-parade-purpleSoft">
+              <a href="#all-resources" className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-5 py-3 text-sm font-black text-white transition hover:-translate-y-0.5 hover:bg-white/15">
                 Browse all resources
               </a>
             </div>
           </div>
-          <div className="rounded border border-parade-line bg-parade-purpleSoft p-5">
-            <p className="text-sm font-bold uppercase text-parade-muted">Resource directory</p>
-            <h2 className="mt-1 text-2xl font-black text-parade-ink">{linktreeProfile.title}</h2>
-            <p className="mt-3 text-sm leading-6 text-parade-muted">{linktreeProfile.tagline}</p>
+          <div className="relative z-10 rounded-[1.5rem] border border-white/15 bg-white/10 p-5 shadow-glow backdrop-blur">
+            <p className="text-sm font-black uppercase tracking-[0.16em] text-parade-goldBright">Resource directory</p>
+            <h2 className="mt-2 text-2xl font-black text-white">{linktreeProfile.title}</h2>
+            <p className="mt-3 text-sm leading-6 text-purple-100">{linktreeProfile.tagline}</p>
             <div className="mt-5 grid gap-3 sm:grid-cols-3">
               <ProfileMetric label="Direct links" value={String(resources.length)} />
               <ProfileMetric label="Guide sections" value={String(totalCategoryCount)} />
@@ -110,7 +114,7 @@ export default async function ResourcesPage() {
         <section>
           <SectionHeader
             title="Start Here"
-            description="Highest-use direct links pulled forward from the resource inventory. These are convenience links, not official parade or public-safety decisions."
+            description="Highest-use direct links pulled forward from the resource inventory for quick visitor planning."
           />
           <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
             {primaryResources.map((resource) => (
@@ -136,30 +140,20 @@ export default async function ResourcesPage() {
           </div>
         </section>
 
-        <section className="rounded border border-amber-200 bg-parade-goldSoft p-5">
+        <section className="rounded-[1.5rem] border border-parade-gold/35 bg-gradient-to-br from-parade-cream via-white to-parade-purpleMist p-5 shadow-card">
           <div className="flex items-start gap-3">
-            <MapPinned className="mt-0.5 h-5 w-5 shrink-0 text-amber-800" aria-hidden="true" />
-            <div>
-              <h2 className="text-lg font-black text-amber-950">Official-source reminder</h2>
-              <p className="mt-2 text-sm leading-6 text-amber-950">
-                Visitor resources are useful for planning and discovery, but parade schedules, routes, parking rules, towing, road closures, weather impacts, and emergency decisions should still be verified through official City, public-safety, and National Weather Service sources.
-              </p>
+            <div className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-parade-purple text-parade-goldBright ring-1 ring-parade-gold/40">
+              <ShieldCheck className="h-5 w-5" aria-hidden="true" />
             </div>
-          </div>
-        </section>
-
-        <section className="rounded border border-parade-line bg-white p-5 shadow-civic">
-          <div className="flex items-start gap-3">
-            <ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-parade-purple" aria-hidden="true" />
             <div>
-              <h2 className="text-lg font-black text-parade-ink">Curated directory, not a raw link dump</h2>
+              <h2 className="text-lg font-black text-parade-purpleDark">Curated directory, not a raw link dump</h2>
               <p className="mt-2 text-sm leading-6 text-parade-muted">
                 The website keeps a legacy cache of imported quick links, but only selected resources are published here. The public directory should stay focused on Mobile Mardi Gras visitors instead of displaying every imported discount, affiliate, or unrelated offer.
               </p>
               <ul className="mt-4 space-y-2 text-sm leading-6 text-parade-muted">
                 {resourceCurationPrinciples.map((principle) => (
                   <li key={principle} className="flex gap-2">
-                    <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-parade-purple" aria-hidden="true" />
+                    <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-parade-gold" aria-hidden="true" />
                     <span>{principle}</span>
                   </li>
                 ))}
@@ -175,8 +169,8 @@ export default async function ResourcesPage() {
           />
           <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-5">
             {linktreeCategoryHighlights.map((item) => (
-              <article key={item.title} className="rounded border border-parade-line bg-white p-4 shadow-civic">
-                <h3 className="text-sm font-bold text-parade-ink">{item.title}</h3>
+              <article key={item.title} className="rounded-[1.25rem] border border-parade-gold/30 bg-gradient-to-br from-white via-parade-cream to-parade-purpleMist p-4 shadow-card">
+                <h3 className="text-sm font-black text-parade-purpleDark">{item.title}</h3>
                 <p className="mt-2 text-sm leading-6 text-parade-muted">{item.detail}</p>
               </article>
             ))}
@@ -197,29 +191,30 @@ export default async function ResourcesPage() {
 
 function ProfileMetric({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded border border-white/70 bg-white p-3">
-      <p className="text-2xl font-black text-parade-purple">{value}</p>
-      <p className="mt-1 text-xs font-bold uppercase text-parade-muted">{label}</p>
+    <div className="rounded-2xl border border-white/15 bg-white/90 p-3">
+      <p className="text-2xl font-black text-parade-purpleDark">{value}</p>
+      <p className="mt-1 text-xs font-black uppercase text-parade-muted">{label}</p>
     </div>
   );
 }
 
 function FeaturedResourceCard({ resource }: { resource: ResourceItem }) {
   return (
-    <article className="flex h-full min-w-0 flex-col rounded border border-parade-line bg-white p-5 shadow-civic">
-      <div className="mb-4 flex items-center gap-3">
-        <div className="grid h-10 w-10 place-items-center rounded bg-parade-goldSoft text-parade-gold">
+    <article className="group relative flex h-full min-w-0 flex-col overflow-hidden rounded-[1.5rem] border border-parade-gold/35 bg-gradient-to-br from-parade-cream via-white to-parade-purpleMist p-5 shadow-card transition hover:-translate-y-1 hover:shadow-glow">
+      <span className="pointer-events-none absolute right-[-2rem] top-[-2rem] h-24 w-24 rounded-full bg-parade-gold/20 blur-2xl" aria-hidden="true" />
+      <div className="relative z-10 mb-4 flex items-center gap-3">
+        <div className="grid h-11 w-11 place-items-center rounded-2xl bg-parade-purple text-parade-goldBright ring-1 ring-parade-gold/40">
           {categoryIcons[resource.category] ?? <ExternalLink className="h-5 w-5" aria-hidden="true" />}
         </div>
-        <p className="text-xs font-bold uppercase text-parade-muted">{resource.category}</p>
+        <p className="text-xs font-black uppercase text-parade-muted">{resource.category}</p>
       </div>
-      <h3 className="text-lg font-black text-parade-ink">{resource.title}</h3>
-      <p className="mt-2 flex-1 text-sm leading-6 text-parade-muted">{resource.description}</p>
+      <h3 className="relative z-10 text-lg font-black text-parade-purpleDark">{resource.title}</h3>
+      <p className="relative z-10 mt-2 flex-1 text-sm leading-6 text-parade-muted">{resource.description}</p>
       <a
         href={resource.url}
         target="_blank"
         rel="noreferrer"
-        className="mt-4 inline-flex items-center justify-center gap-2 rounded bg-parade-purple px-4 py-2 text-sm font-bold text-white hover:bg-parade-purpleDark"
+        className="relative z-10 mt-5 inline-flex w-fit items-center justify-center gap-2 rounded-full bg-parade-purple px-4 py-2 text-sm font-black text-white transition group-hover:bg-parade-purpleDark"
       >
         Open resource <ExternalLink className="h-4 w-4" aria-hidden="true" />
       </a>
@@ -231,10 +226,10 @@ function PlanningLane({ title, description, resources }: { title: string; descri
   const previewResources = resources.slice(0, 5);
 
   return (
-    <article className="min-w-0 rounded border border-parade-line bg-white p-5 shadow-civic">
-      <h3 className="text-xl font-black text-parade-ink">{title}</h3>
+    <article className="min-w-0 rounded-[1.5rem] border border-parade-gold/35 bg-gradient-to-br from-white via-parade-cream to-parade-purpleMist p-5 shadow-card">
+      <h3 className="text-xl font-black text-parade-purpleDark">{title}</h3>
       <p className="mt-2 text-sm leading-6 text-parade-muted">{description}</p>
-      <p className="mt-4 text-xs font-bold uppercase text-parade-muted">{resources.length} resources</p>
+      <p className="mt-4 inline-flex rounded-full border border-parade-gold/35 bg-white/75 px-3 py-1 text-xs font-black uppercase text-parade-purple">{resources.length} resources</p>
       <div className="mt-4 space-y-2">
         {previewResources.map((resource) => (
           <a
@@ -242,7 +237,7 @@ function PlanningLane({ title, description, resources }: { title: string; descri
             href={resource.url}
             target="_blank"
             rel="noreferrer"
-            className="flex min-w-0 items-center justify-between gap-3 rounded border border-parade-line px-3 py-2 text-sm font-semibold text-parade-ink hover:bg-parade-purpleSoft"
+            className="flex min-w-0 items-center justify-between gap-3 rounded-2xl border border-parade-gold/20 bg-white/75 px-3 py-2 text-sm font-semibold text-parade-ink transition hover:bg-parade-goldSoft"
           >
             <span className="min-w-0 truncate">{resource.title}</span>
             <ExternalLink className="h-4 w-4 shrink-0 text-parade-purple" aria-hidden="true" />
