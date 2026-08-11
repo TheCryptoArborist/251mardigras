@@ -1,5 +1,4 @@
 import {
-  Accessibility,
   Archive,
   Car,
   ExternalLink,
@@ -19,7 +18,6 @@ const categoryIcons: Record<string, React.ReactNode> = {
   "Social Media": <Share2 className="h-5 w-5" aria-hidden="true" />,
   "Live Coverage / Channel Support": <PlayCircle className="h-5 w-5" aria-hidden="true" />,
   "Downtown Transportation": <Car className="h-5 w-5" aria-hidden="true" />,
-  "Mobility-Friendly Access": <Accessibility className="h-5 w-5" aria-hidden="true" />,
   "Food and Drink": <Utensils className="h-5 w-5" aria-hidden="true" />,
   "Mardi Gras Gear / Throws": <ShoppingBag className="h-5 w-5" aria-hidden="true" />,
   "Previous Parade Seasons": <Archive className="h-5 w-5" aria-hidden="true" />
@@ -34,8 +32,7 @@ const primaryResourceTitles = [
   "Current livestream",
   "Become a Channel Supporter",
   "City of Mobile Parking and Transportation Guide",
-  "Downtown Parking Map",
-  "Need Mobility-Friendly Mardi Gras Access? Click Here"
+  "Downtown Parking Map"
 ];
 
 const planningLanes = [
@@ -46,8 +43,8 @@ const planningLanes = [
   },
   {
     title: "Get downtown",
-    description: "Parking, transportation, and mobility-friendly access resources for parade-day planning.",
-    categories: ["Downtown Transportation", "Mobility-Friendly Access"]
+    description: "Parking and transportation resources for parade-day planning.",
+    categories: ["Downtown Transportation"]
   },
   {
     title: "Make a day of it",
@@ -76,7 +73,7 @@ export default async function ResourcesPage() {
             Find the Mardi Gras links you need
           </h1>
           <p className="mt-5 max-w-3xl text-lg leading-8 text-purple-100">
-            Follow Mardi Gras - Mobile, AL first, then jump straight to live coverage, parking, access support, food, gear, and past parade seasons.
+            Follow Mardi Gras - Mobile, AL first, then jump straight to live coverage, parking, food, gear, and past parade seasons.
           </p>
         </div>
       </section>
