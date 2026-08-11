@@ -9,6 +9,9 @@ import { YOUTUBE_CHANNEL_URL, YOUTUBE_SUPPORTER_URL } from "@/lib/seed-data";
 
 export const dynamic = "force-dynamic";
 
+const HOMEPAGE_VIDEO_SRC = "/videos/dragon-home-screen-bg.mp4";
+const HOMEPAGE_VIDEO_POSTER = "/videos/dragon-home-screen-poster.jpg";
+
 type PrimaryActionVariant = "live" | "replays" | "food" | "parking" | "weather" | "gear";
 
 type PrimaryAction = {
@@ -88,18 +91,32 @@ export default async function HomePage() {
 
   return (
     <div>
-      <section className="relative overflow-hidden border-b border-parade-line bg-gradient-to-br from-parade-purpleDeep via-parade-purpleDark to-parade-purple text-white">
-        <div className="absolute left-[-6rem] top-[-8rem] h-72 w-72 rounded-full bg-parade-gold/20 blur-3xl" aria-hidden="true" />
-        <div className="absolute bottom-[-10rem] right-[-8rem] h-96 w-96 rounded-full bg-white/10 blur-3xl" aria-hidden="true" />
-        <div className="mx-auto grid max-w-7xl gap-8 px-4 py-10 sm:px-6 lg:grid-cols-[1fr_0.34fr] lg:items-center lg:px-8 lg:py-14">
+      <section className="relative isolate overflow-hidden border-b border-parade-line bg-gradient-to-br from-parade-purpleDeep via-parade-purpleDark to-parade-purple text-white">
+        <video
+          className="absolute inset-0 z-0 h-full w-full object-cover opacity-55 motion-reduce:hidden"
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          poster={HOMEPAGE_VIDEO_POSTER}
+          aria-hidden="true"
+        >
+          <source src={HOMEPAGE_VIDEO_SRC} type="video/mp4" />
+        </video>
+        <div className="absolute inset-0 z-0 bg-gradient-to-br from-parade-purpleDeep/95 via-parade-purpleDark/88 to-parade-purple/80" aria-hidden="true" />
+        <div className="absolute inset-0 z-0 bg-[radial-gradient(circle_at_18%_8%,rgba(255,201,40,0.22),transparent_30%),radial-gradient(circle_at_82%_30%,rgba(255,255,255,0.14),transparent_35%),linear-gradient(180deg,rgba(23,4,47,0.18),rgba(23,4,47,0.58))]" aria-hidden="true" />
+        <div className="absolute left-[-6rem] top-[-8rem] z-0 h-72 w-72 rounded-full bg-parade-gold/20 blur-3xl" aria-hidden="true" />
+        <div className="absolute bottom-[-10rem] right-[-8rem] z-0 h-96 w-96 rounded-full bg-white/10 blur-3xl" aria-hidden="true" />
+        <div className="relative z-10 mx-auto grid max-w-7xl gap-8 px-4 py-10 sm:px-6 lg:grid-cols-[1fr_0.34fr] lg:items-center lg:px-8 lg:py-14">
           <div className="relative z-10">
-            <div className="inline-flex items-center gap-2 rounded-full border border-parade-gold/40 bg-white/10 px-4 py-2 text-xs font-black uppercase tracking-wide text-parade-goldBright shadow-glow">
+            <div className="inline-flex items-center gap-2 rounded-full border border-parade-gold/40 bg-white/10 px-4 py-2 text-xs font-black uppercase tracking-wide text-parade-goldBright shadow-glow backdrop-blur">
               Mobile Mardi Gras parade coverage
             </div>
-            <h1 className="mt-5 max-w-4xl text-4xl font-black tracking-tight text-white sm:text-6xl">
+            <h1 className="mt-5 max-w-4xl text-4xl font-black tracking-tight text-white drop-shadow-lg sm:text-6xl">
               Watch the parades. Find the links. Plan the day.
             </h1>
-            <p className="mt-5 max-w-3xl text-lg leading-8 text-purple-100">
+            <p className="mt-5 max-w-3xl text-lg leading-8 text-purple-100 drop-shadow">
               The main purpose of this site is Mobile Mardi Gras parade coverage. Food and drink, parking and access, weather, and Mardi Gras gear are organized as support tools for visitors before, during, and between live coverage.
             </p>
             <CountdownTimer />
@@ -107,7 +124,7 @@ export default async function HomePage() {
               <Link href="/watch" className="inline-flex items-center justify-center gap-2 rounded-full bg-parade-gold px-5 py-3 text-sm font-black text-parade-purpleDark shadow-glow transition hover:-translate-y-0.5 hover:bg-parade-goldBright">
                 Watch live coverage <ArrowRight className="h-4 w-4" aria-hidden="true" />
               </Link>
-              <Link href="/replays" className="inline-flex items-center justify-center gap-2 rounded-full border border-white/25 bg-white/10 px-5 py-3 text-sm font-black text-white transition hover:-translate-y-0.5 hover:bg-white/15">
+              <Link href="/replays" className="inline-flex items-center justify-center gap-2 rounded-full border border-white/25 bg-white/10 px-5 py-3 text-sm font-black text-white backdrop-blur transition hover:-translate-y-0.5 hover:bg-white/15">
                 Choose replay season <ArrowRight className="h-4 w-4" aria-hidden="true" />
               </Link>
             </div>
