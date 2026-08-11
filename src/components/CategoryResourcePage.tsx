@@ -30,23 +30,39 @@ export function CategoryResourcePage({
 }: CategoryResourcePageProps) {
   return (
     <div>
-      <section className="relative overflow-hidden border-b border-parade-line bg-gradient-to-br from-white via-parade-cream to-parade-purpleMist">
-        <div className="absolute right-[-6rem] top-[-8rem] h-64 w-64 rounded-full bg-parade-gold/20 blur-3xl" aria-hidden="true" />
-        <div className="mx-auto max-w-5xl px-4 py-9 sm:px-6 lg:px-8 lg:py-12">
-          <p className="text-sm font-black uppercase tracking-wide text-parade-purple">{eyebrow}</p>
-          <h1 className="mt-2 max-w-4xl text-4xl font-black tracking-tight text-parade-ink sm:text-5xl">
-            {title}
-          </h1>
-          <p className="mt-4 max-w-3xl text-base leading-7 text-parade-muted sm:text-lg">
-            {description}
-          </p>
-          <div className="mt-6 flex flex-wrap gap-3">
-            <Link href={primaryHref} className="inline-flex items-center justify-center gap-2 rounded-full bg-parade-purple px-5 py-3 text-sm font-black text-white shadow-civic transition hover:-translate-y-0.5 hover:bg-parade-purpleDark">
-              {primaryAction} <ArrowRight className="h-4 w-4" aria-hidden="true" />
-            </Link>
-            <Link href="/" className="inline-flex items-center justify-center gap-2 rounded-full border border-parade-line bg-white/80 px-5 py-3 text-sm font-black text-parade-purple transition hover:-translate-y-0.5 hover:bg-parade-purpleSoft">
-              Back to homepage <ArrowRight className="h-4 w-4" aria-hidden="true" />
-            </Link>
+      <section className="relative overflow-hidden border-b border-parade-gold/30 bg-gradient-to-br from-parade-purpleDeep via-parade-purpleDark to-parade-purple text-white">
+        <div className="absolute left-[-7rem] top-[-8rem] h-72 w-72 rounded-full bg-parade-gold/20 blur-3xl" aria-hidden="true" />
+        <div className="absolute bottom-[-10rem] right-[-8rem] h-80 w-80 rounded-full bg-white/10 blur-3xl" aria-hidden="true" />
+        <div className="mx-auto grid max-w-7xl gap-6 px-4 py-10 sm:px-6 lg:grid-cols-[1fr_0.35fr] lg:items-center lg:px-8 lg:py-12">
+          <div className="relative z-10">
+            <p className="inline-flex rounded-full border border-parade-gold/40 bg-white/10 px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-parade-goldBright shadow-glow">
+              {eyebrow}
+            </p>
+            <h1 className="mt-5 max-w-4xl text-4xl font-black tracking-tight text-white sm:text-5xl">
+              {title}
+            </h1>
+            <p className="mt-4 max-w-3xl text-base leading-7 text-purple-100 sm:text-lg">
+              {description}
+            </p>
+            <div className="mt-7 flex flex-wrap gap-3">
+              <Link href={primaryHref} className="inline-flex items-center justify-center gap-2 rounded-full bg-parade-gold px-5 py-3 text-sm font-black text-parade-purpleDark shadow-glow transition hover:-translate-y-0.5 hover:bg-parade-goldBright">
+                {primaryAction} <ArrowRight className="h-4 w-4" aria-hidden="true" />
+              </Link>
+              <Link href="/" className="inline-flex items-center justify-center gap-2 rounded-full border border-white/25 bg-white/10 px-5 py-3 text-sm font-black text-white transition hover:-translate-y-0.5 hover:bg-white/15">
+                Back to homepage <ArrowRight className="h-4 w-4" aria-hidden="true" />
+              </Link>
+            </div>
+          </div>
+
+          <div className="relative z-10 rounded-[1.5rem] border border-white/15 bg-white/10 p-4 shadow-glow backdrop-blur">
+            <p className="text-xs font-black uppercase tracking-[0.16em] text-parade-goldBright">Quick view</p>
+            <div className="mt-4 grid grid-cols-2 gap-3 text-center">
+              <HeroMetric label="Resources" value={String(resources.length)} />
+              <HeroMetric label="Links" value="Direct" />
+            </div>
+            <p className="mt-4 text-xs font-semibold leading-5 text-purple-100">
+              Visitor convenience links only. Confirm details with the source or host before making plans.
+            </p>
           </div>
         </div>
       </section>
@@ -63,12 +79,12 @@ export function CategoryResourcePage({
             })}
           </section>
         ) : (
-          <section className="rounded-2xl border border-dashed border-parade-line bg-parade-purpleSoft p-5 text-sm leading-6 text-parade-muted">
+          <section className="rounded-[1.5rem] border border-parade-gold/35 bg-gradient-to-br from-parade-cream via-white to-parade-purpleMist p-5 text-sm leading-6 text-parade-muted shadow-card">
             {emptyMessage}
           </section>
         )}
 
-        <section className="rounded-2xl border border-amber-200 bg-parade-goldSoft p-5 shadow-civic">
+        <section className="rounded-[1.5rem] border border-amber-200 bg-parade-goldSoft p-5 shadow-civic">
           <div className="flex items-start gap-3">
             <MapPinned className="mt-0.5 h-5 w-5 shrink-0 text-amber-800" aria-hidden="true" />
             <p className="text-sm font-medium leading-6 text-amber-950">
@@ -78,6 +94,15 @@ export function CategoryResourcePage({
           </div>
         </section>
       </div>
+    </div>
+  );
+}
+
+function HeroMetric({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-2xl border border-white/15 bg-white/90 px-3 py-3">
+      <p className="text-2xl font-black text-parade-purpleDark">{value}</p>
+      <p className="mt-1 text-[0.65rem] font-black uppercase tracking-wide text-parade-muted">{label}</p>
     </div>
   );
 }
@@ -96,14 +121,15 @@ function ResourceButton({
       href={resource.url}
       target="_blank"
       rel="noreferrer"
-      className="group flex min-w-0 items-center gap-3 rounded-2xl border border-parade-line bg-white px-4 py-3 text-left shadow-card transition hover:-translate-y-1 hover:bg-parade-purpleMist"
+      className="group relative flex min-w-0 items-center gap-3 overflow-hidden rounded-[1.5rem] border border-parade-gold/35 bg-gradient-to-br from-parade-cream via-white to-parade-purpleMist px-4 py-3 text-left shadow-card transition hover:-translate-y-1 hover:shadow-glow"
     >
+      <span className="pointer-events-none absolute right-[-2rem] top-[-2rem] h-20 w-20 rounded-full bg-parade-gold/20 blur-2xl" aria-hidden="true" />
       <ResourceLogo title={resource.title} logoPath={logoPath} />
-      <span className="min-w-0 flex-1">
-        <span className="block truncate text-sm font-black text-parade-ink">{resource.title}</span>
+      <span className="relative z-10 min-w-0 flex-1">
+        <span className="block truncate text-sm font-black text-parade-purpleDark">{resource.title}</span>
         <span className="mt-1 block truncate text-xs font-semibold uppercase text-parade-muted">{resource.category}</span>
       </span>
-      <span className="inline-flex shrink-0 items-center gap-1 text-xs font-black uppercase text-parade-purple group-hover:underline">
+      <span className="relative z-10 inline-flex shrink-0 items-center gap-1 rounded-full bg-parade-purple px-3 py-2 text-xs font-black uppercase text-white transition group-hover:bg-parade-purpleDark">
         {actionLabel}
         <ExternalLink className="h-4 w-4" aria-hidden="true" />
       </span>
@@ -114,14 +140,14 @@ function ResourceButton({
 function ResourceLogo({ title, logoPath }: { title: string; logoPath?: string }) {
   if (logoPath) {
     return (
-      <span className="grid h-12 w-12 shrink-0 place-items-center overflow-hidden rounded-xl border border-parade-line bg-white p-1.5 shadow-sm" aria-hidden="true">
+      <span className="relative z-10 grid h-12 w-12 shrink-0 place-items-center overflow-hidden rounded-xl border border-parade-gold/35 bg-white p-1.5 shadow-sm" aria-hidden="true">
         <Image src={logoPath} alt={`${title} logo`} width={48} height={48} className="h-full w-full object-contain" />
       </span>
     );
   }
 
   return (
-    <span className="grid h-12 w-12 shrink-0 place-items-center rounded-xl border border-parade-gold/40 bg-parade-goldSoft text-sm font-black text-parade-purple" aria-hidden="true">
+    <span className="relative z-10 grid h-12 w-12 shrink-0 place-items-center rounded-xl border border-parade-gold/40 bg-parade-goldSoft text-sm font-black text-parade-purple" aria-hidden="true">
       {initialsFor(title)}
     </span>
   );
