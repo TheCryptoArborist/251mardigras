@@ -3,7 +3,6 @@
 import Image from "next/image";
 import { useMemo, useState, type ReactNode } from "react";
 import {
-  Accessibility,
   Archive,
   Car,
   ExternalLink,
@@ -25,7 +24,6 @@ const categoryOrder = [
   "Social Media",
   "Live Coverage / Channel Support",
   "Downtown Transportation",
-  "Mobility-Friendly Access",
   FOOD_AND_DRINK_CATEGORY,
   "Mardi Gras Gear / Throws",
   "Previous Parade Seasons"
@@ -35,7 +33,6 @@ const categoryDescriptions: Record<string, string> = {
   "Social Media": "Direct public social channel destinations maintained in the website resource directory.",
   "Live Coverage / Channel Support": "YouTube livestream, archive, and channel-support links for Mobile Mardi Gras coverage.",
   "Downtown Transportation": "Parking app, downtown parking, and City parking resources. Verify traffic, towing, and closures with official sources before travel.",
-  "Mobility-Friendly Access": "Third-party access-support resources. These are convenience links and do not replace official parade or public-safety guidance.",
   "Food and Drink": "Downtown food and drink stops for parade visitors. Hours and parade-day access can change quickly.",
   "Mardi Gras Gear / Throws": "Throws, gear, and shopping resources selected for visitor planning.",
   "Previous Parade Seasons": "Past parade-season video resources and playlists from the Mobile Mardi Gras channel."
@@ -45,7 +42,6 @@ const categoryIcons: Record<string, ReactNode> = {
   "Social Media": <Share2 className="h-5 w-5" aria-hidden="true" />,
   "Live Coverage / Channel Support": <PlayCircle className="h-5 w-5" aria-hidden="true" />,
   "Downtown Transportation": <Car className="h-5 w-5" aria-hidden="true" />,
-  "Mobility-Friendly Access": <Accessibility className="h-5 w-5" aria-hidden="true" />,
   "Food and Drink": <Utensils className="h-5 w-5" aria-hidden="true" />,
   "Mardi Gras Gear / Throws": <ShoppingBag className="h-5 w-5" aria-hidden="true" />,
   "Previous Parade Seasons": <Archive className="h-5 w-5" aria-hidden="true" />
@@ -169,7 +165,7 @@ export function ResourceDirectoryBrowser({ resources }: { resources: ResourceIte
             <input
               value={query}
               onChange={(event) => setQuery(event.target.value)}
-              placeholder="Search live, parking, food, throws, mobility..."
+              placeholder="Search live, parking, food, throws, YouTube..."
               className="w-full rounded border border-parade-line bg-white py-3 pl-10 pr-3 text-sm font-semibold text-parade-ink outline-none transition placeholder:text-parade-muted focus:border-parade-purple focus:ring-2 focus:ring-parade-purpleSoft"
             />
           </label>
@@ -206,7 +202,7 @@ export function ResourceDirectoryBrowser({ resources }: { resources: ResourceIte
 
         {filteredResources.length === 0 ? (
           <div className="mt-5 rounded border border-dashed border-parade-line bg-parade-purpleSoft p-5 text-sm leading-6 text-parade-muted">
-            No resources matched that search. Try a broader term like parking, food, live, throws, mobility, YouTube, or downtown.
+            No resources matched that search. Try a broader term like parking, food, live, throws, YouTube, or downtown.
           </div>
         ) : null}
       </div>
