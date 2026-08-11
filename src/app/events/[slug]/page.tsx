@@ -65,15 +65,15 @@ export default async function CommunityEventDetailPage({ params }: CommunityEven
                   </a>
                 ) : null}
                 {event.flyerUrl ? (
-                  <a href={event.flyerUrl} target="_blank" rel="noreferrer" className="inline-flex items-center justify-center gap-2 rounded-full border border-white/25 bg-white/10 px-5 py-3 text-sm font-black text-white transition hover:bg-white/15">
-                    Open Flyer <ExternalLink className="h-4 w-4" aria-hidden="true" />
+                  <a href="#event-flyer" className="inline-flex items-center justify-center gap-2 rounded-full border border-white/25 bg-white/10 px-5 py-3 text-sm font-black text-white transition hover:bg-white/15">
+                    View Flyer
                   </a>
                 ) : null}
               </div>
             </div>
 
             {event.flyerUrl ? (
-              <div className="relative overflow-hidden rounded-[1.5rem] border border-parade-gold/35 bg-white/10 p-2 shadow-glow backdrop-blur">
+              <div id="event-flyer" className="relative scroll-mt-24 overflow-hidden rounded-[1.5rem] border border-parade-gold/35 bg-white/10 p-2 shadow-glow backdrop-blur">
                 <div className="relative aspect-[4/5] overflow-hidden rounded-[1.1rem] bg-parade-purpleDark">
                   <Image
                     src={event.flyerUrl}
@@ -129,7 +129,7 @@ export default async function CommunityEventDetailPage({ params }: CommunityEven
           {event.parkingNotes ? <DetailBlock title="Parking notes" body={event.parkingNotes} /> : null}
           {event.publicContact ? <DetailBlock title="Public contact" body={event.publicContact} /> : null}
           {event.mapUrl ? <DetailLink title="Map / directions" href={event.mapUrl} label="Open submitted map link" /> : null}
-          {event.flyerUrl ? <DetailLink title="Event flyer" href={event.flyerUrl} label="Open submitted flyer" /> : null}
+          {event.flyerUrl ? <DetailAnchor title="Event flyer" href="#event-flyer" label="View flyer on this page" /> : null}
         </section>
 
         <section className="rounded-[1.5rem] border border-amber-200 bg-parade-goldSoft p-5 shadow-civic">
@@ -180,6 +180,17 @@ function DetailLink({ title, href, label }: { title: string; href: string; label
       <h3 className="text-sm font-black uppercase tracking-wide text-parade-purple">{title}</h3>
       <a href={href} target="_blank" rel="noreferrer" className="mt-2 inline-flex items-center gap-2 rounded-full bg-parade-purple px-4 py-2 text-sm font-black text-white hover:bg-parade-purpleDark">
         {label} <ExternalLink className="h-4 w-4" aria-hidden="true" />
+      </a>
+    </div>
+  );
+}
+
+function DetailAnchor({ title, href, label }: { title: string; href: string; label: string }) {
+  return (
+    <div className="mt-5 border-t border-parade-line pt-5">
+      <h3 className="text-sm font-black uppercase tracking-wide text-parade-purple">{title}</h3>
+      <a href={href} className="mt-2 inline-flex items-center gap-2 rounded-full bg-parade-purple px-4 py-2 text-sm font-black text-white hover:bg-parade-purpleDark">
+        {label}
       </a>
     </div>
   );
