@@ -66,7 +66,7 @@ export function CommunityEventsMonthCalendar({ events }: { events: CommunityEven
             </div>
             <div>
               <p className="text-xs font-black uppercase tracking-[0.16em] text-parade-goldBright">Monthly view</p>
-              <h2 className="mt-1 text-2xl font-black text-white">Approved community events</h2>
+              <h2 className="mt-1 text-2xl font-black text-white">Community Events</h2>
               <p className="mt-2 max-w-3xl text-sm leading-6 text-purple-100">
                 Browse approved Mardi Gras-related events by month. Tap an event to open its full details, flyer, map, and calendar options.
               </p>
