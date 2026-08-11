@@ -16,6 +16,7 @@ type CategoryResourcePageProps = {
   resourceLogoPaths?: Record<string, string>;
   showHeroQuickView?: boolean;
   showResourceSection?: boolean;
+  showOfficialReminder?: boolean;
 };
 
 export function CategoryResourcePage({
@@ -30,9 +31,11 @@ export function CategoryResourcePage({
   officialReminder = "Verify parade schedules, routes, cancellations, road closures, parking rules, towing, public-safety instructions, and weather impacts with official sources.",
   resourceLogoPaths = {},
   showHeroQuickView = true,
-  showResourceSection = true
+  showResourceSection = true,
+  showOfficialReminder = false
 }: CategoryResourcePageProps) {
   const hasPrimaryAction = Boolean(primaryHref && primaryAction);
+  const showBodyContent = showResourceSection || showOfficialReminder;
 
   return (
     <div>
@@ -74,35 +77,39 @@ export function CategoryResourcePage({
         </div>
       </section>
 
-      <div className="mx-auto max-w-5xl space-y-6 px-4 py-8 sm:px-6 lg:px-8">
-        {showResourceSection ? (
-          resources.length > 0 ? (
-            <section className="grid gap-4 md:grid-cols-2">
-              {resources.map((resource) => {
-                const logoPath = resourceLogoPaths[resource.title] ?? resourceLogoPaths[normalizeResourceTitle(resource.title)];
+      {showBodyContent ? (
+        <div className="mx-auto max-w-5xl space-y-6 px-4 py-8 sm:px-6 lg:px-8">
+          {showResourceSection ? (
+            resources.length > 0 ? (
+              <section className="grid gap-4 md:grid-cols-2">
+                {resources.map((resource) => {
+                  const logoPath = resourceLogoPaths[resource.title] ?? resourceLogoPaths[normalizeResourceTitle(resource.title)];
 
-                return (
-                  <ResourceButton key={resource.id} resource={resource} actionLabel={resourceActionLabel} logoPath={logoPath} />
-                );
-              })}
-            </section>
-          ) : (
-            <section className="rounded-[1.5rem] border border-parade-gold/35 bg-gradient-to-br from-parade-cream via-white to-parade-purpleMist p-5 text-sm leading-6 text-parade-muted shadow-card">
-              {emptyMessage}
-            </section>
-          )
-        ) : null}
+                  return (
+                    <ResourceButton key={resource.id} resource={resource} actionLabel={resourceActionLabel} logoPath={logoPath} />
+                  );
+                })}
+              </section>
+            ) : (
+              <section className="rounded-[1.5rem] border border-parade-gold/35 bg-gradient-to-br from-parade-cream via-white to-parade-purpleMist p-5 text-sm leading-6 text-parade-muted shadow-card">
+                {emptyMessage}
+              </section>
+            )
+          ) : null}
 
-        <section className="rounded-[1.5rem] border border-amber-200 bg-parade-goldSoft p-5 shadow-civic">
-          <div className="flex items-start gap-3">
-            <MapPinned className="mt-0.5 h-5 w-5 shrink-0 text-amber-800" aria-hidden="true" />
-            <p className="text-sm font-medium leading-6 text-amber-950">
-              <span className="font-black">Unofficial visitor resource.</span>{" "}
-              {officialReminder}
-            </p>
-          </div>
-        </section>
-      </div>
+          {showOfficialReminder ? (
+            <section className="rounded-[1.5rem] border border-amber-200 bg-parade-goldSoft p-5 shadow-civic">
+              <div className="flex items-start gap-3">
+                <MapPinned className="mt-0.5 h-5 w-5 shrink-0 text-amber-800" aria-hidden="true" />
+                <p className="text-sm font-medium leading-6 text-amber-950">
+                  <span className="font-black">Unofficial visitor resource.</span>{" "}
+                  {officialReminder}
+                </p>
+              </div>
+            </section>
+          ) : null}
+        </div>
+      ) : null}
     </div>
   );
 }
