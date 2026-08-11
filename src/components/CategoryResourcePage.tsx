@@ -50,16 +50,13 @@ export function CategoryResourcePage({
             <p className="mt-4 max-w-3xl text-base leading-7 text-purple-100 sm:text-lg">
               {description}
             </p>
-            <div className="mt-7 flex flex-wrap gap-3">
-              {hasPrimaryAction ? (
+            {hasPrimaryAction ? (
+              <div className="mt-7 flex flex-wrap gap-3">
                 <Link href={primaryHref as string} className="inline-flex items-center justify-center gap-2 rounded-full bg-parade-gold px-5 py-3 text-sm font-black text-parade-purpleDark shadow-glow transition hover:-translate-y-0.5 hover:bg-parade-goldBright">
                   {primaryAction} <ArrowRight className="h-4 w-4" aria-hidden="true" />
                 </Link>
-              ) : null}
-              <Link href="/" className="inline-flex items-center justify-center gap-2 rounded-full border border-white/25 bg-white/10 px-5 py-3 text-sm font-black text-white transition hover:-translate-y-0.5 hover:bg-white/15">
-                Back to homepage <ArrowRight className="h-4 w-4" aria-hidden="true" />
-              </Link>
-            </div>
+              </div>
+            ) : null}
           </div>
 
           {showHeroQuickView ? (
