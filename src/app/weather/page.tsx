@@ -1,7 +1,8 @@
 import type { ReactNode } from "react";
-import { AlertTriangle, CloudSun, ExternalLink, ShieldCheck, Thermometer, Umbrella, Wind } from "lucide-react";
+import { AlertTriangle, CalendarDays, CloudSun, ExternalLink, ShieldCheck, Thermometer, Umbrella, Wind } from "lucide-react";
 import { StatusPill } from "@/components/StatusPill";
 import { WeatherRiskCard } from "@/components/WeatherRiskCard";
+import { getParades } from "@/lib/data-access";
 import { formatDateTime } from "@/lib/format";
 import { getWeatherPreview, type WeatherPreview } from "@/services/weather";
 
@@ -10,12 +11,15 @@ export const dynamic = "force-dynamic";
 type HourlyPeriod = WeatherPreview["hourly"][number];
 
 export default async function WeatherPage() {
-  const weatherResult = await getWeatherPreview()
-    .then((weather) => ({ weather, error: null }))
-    .catch((error) => ({
-      weather: null,
-      error: error instanceof Error ? error.message : "Weather refresh failed"
-    }));
+  const [parades, weatherResult] = await Promise.all([
+    getParades(),
+    getWeatherPreview()
+      .then((weather) => ({ weather, error: null }))
+      .catch((error) => ({
+        weather: null,
+        error: error instanceof Error ? error.message : "Weather refresh failed"
+      }))
+  ]);
   const weather = weatherResult.weather;
 
   return (
@@ -44,6 +48,8 @@ export default async function WeatherPage() {
         </div>
 
         <ForecastWindow weather={weather} error={weatherResult.error} />
+
+        <ParadeWeatherRiskPanel paradesLoaded={parades.length} />
 
         <section>
           <SectionTitle
@@ -135,6 +141,38 @@ function ForecastWindow({ weather, error }: { weather: WeatherPreview | null; er
           {error ? <span className="mt-2 block text-xs">Refresh note: {error}</span> : null}
         </div>
       )}
+    </section>
+  );
+}
+
+function ParadeWeatherRiskPanel({ paradesLoaded }: { paradesLoaded: number }) {
+  return (
+    <section className="relative overflow-hidden rounded-[1.5rem] border border-parade-gold/35 bg-gradient-to-br from-white via-parade-cream to-parade-purpleMist p-5 shadow-card">
+      <span className="pointer-events-none absolute right-[-3rem] top-[-3rem] h-28 w-28 rounded-full bg-parade-gold/20 blur-2xl" aria-hidden="true" />
+      <div className="relative z-10 flex items-start gap-3">
+        <div className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-parade-purple text-parade-goldBright ring-1 ring-parade-gold/40">
+          <CalendarDays className="h-6 w-6" aria-hidden="true" />
+        </div>
+        <div>
+          <p className="text-xs font-black uppercase tracking-[0.16em] text-parade-purple">Parade weather risk</p>
+          <h2 className="mt-1 text-2xl font-black text-parade-purpleDark">Parade-by-parade outlook</h2>
+          <p className="mt-2 max-w-3xl text-sm leading-6 text-parade-muted">
+            This section is reserved for parade-specific weather windows. Once official parade dates and times are loaded for the season, each parade can show its own planning outlook instead of only the general downtown forecast.
+          </p>
+        </div>
+      </div>
+      <div className="relative z-10 mt-5 grid gap-3 sm:grid-cols-2">
+        <div className="rounded-2xl border border-parade-gold/30 bg-white/85 p-4 shadow-sm">
+          <p className="text-xs font-black uppercase tracking-wide text-parade-purple">Current mode</p>
+          <p className="mt-2 text-sm font-black leading-6 text-parade-purpleDark">General downtown weather risk</p>
+        </div>
+        <div className="rounded-2xl border border-parade-gold/30 bg-white/85 p-4 shadow-sm">
+          <p className="text-xs font-black uppercase tracking-wide text-parade-purple">Parade data</p>
+          <p className="mt-2 text-sm font-black leading-6 text-parade-purpleDark">
+            {paradesLoaded > 0 ? `${paradesLoaded} parade record${paradesLoaded === 1 ? "" : "s"} loaded` : "Awaiting official parade records"}
+          </p>
+        </div>
+      </div>
     </section>
   );
 }
