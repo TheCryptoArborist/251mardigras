@@ -93,7 +93,7 @@ export default async function HomePage() {
     <div>
       <section className="relative isolate overflow-hidden border-b border-parade-line bg-gradient-to-br from-parade-purpleDeep via-parade-purpleDark to-parade-purple text-white">
         <video
-          className="absolute inset-0 z-0 h-full w-full object-cover opacity-55 motion-reduce:hidden"
+          className="absolute inset-0 z-0 h-full w-full object-cover opacity-70 motion-reduce:hidden"
           autoPlay
           muted
           loop
@@ -104,8 +104,8 @@ export default async function HomePage() {
         >
           <source src={HOMEPAGE_VIDEO_SRC} type="video/mp4" />
         </video>
-        <div className="absolute inset-0 z-0 bg-gradient-to-br from-parade-purpleDeep/95 via-parade-purpleDark/88 to-parade-purple/80" aria-hidden="true" />
-        <div className="absolute inset-0 z-0 bg-[radial-gradient(circle_at_18%_8%,rgba(255,201,40,0.22),transparent_30%),radial-gradient(circle_at_82%_30%,rgba(255,255,255,0.14),transparent_35%),linear-gradient(180deg,rgba(23,4,47,0.18),rgba(23,4,47,0.58))]" aria-hidden="true" />
+        <div className="absolute inset-0 z-0 bg-gradient-to-br from-parade-purpleDeep/88 via-parade-purpleDark/76 to-parade-purple/66" aria-hidden="true" />
+        <div className="absolute inset-0 z-0 bg-[radial-gradient(circle_at_18%_8%,rgba(255,201,40,0.22),transparent_30%),radial-gradient(circle_at_82%_30%,rgba(255,255,255,0.12),transparent_35%),linear-gradient(180deg,rgba(23,4,47,0.10),rgba(23,4,47,0.42))]" aria-hidden="true" />
         <div className="absolute left-[-6rem] top-[-8rem] z-0 h-72 w-72 rounded-full bg-parade-gold/20 blur-3xl" aria-hidden="true" />
         <div className="absolute bottom-[-10rem] right-[-8rem] z-0 h-96 w-96 rounded-full bg-white/10 blur-3xl" aria-hidden="true" />
         <div className="relative z-10 mx-auto grid max-w-7xl gap-8 px-4 py-10 sm:px-6 lg:grid-cols-[1fr_0.34fr] lg:items-center lg:px-8 lg:py-14">
