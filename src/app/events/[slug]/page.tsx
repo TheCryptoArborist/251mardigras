@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, Download, ExternalLink, MapPinned, ShieldCheck } from "lucide-react";
@@ -27,26 +28,58 @@ export default async function CommunityEventDetailPage({ params }: CommunityEven
 
   return (
     <div>
-      <section className="border-b border-parade-line bg-white">
-        <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8 lg:py-10">
-          <Link href="/events" className="inline-flex items-center gap-2 text-sm font-black text-parade-purple hover:underline">
+      <section className="relative overflow-hidden border-b border-parade-gold/30 bg-gradient-to-br from-parade-purpleDeep via-parade-purpleDark to-parade-purple text-white">
+        <div className="absolute left-[-7rem] top-[-8rem] h-72 w-72 rounded-full bg-parade-gold/20 blur-3xl" aria-hidden="true" />
+        <div className="absolute bottom-[-10rem] right-[-8rem] h-96 w-96 rounded-full bg-white/10 blur-3xl" aria-hidden="true" />
+        <div className="relative z-10 mx-auto max-w-5xl px-4 py-8 sm:px-6 lg:px-8 lg:py-12">
+          <Link href="/events" className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-4 py-2 text-sm font-black text-white transition hover:bg-white/15">
             <ArrowLeft className="h-4 w-4" aria-hidden="true" />
-            Back to Community Mardi Gras Events
+            Back to Events
           </Link>
-          <p className="mt-6 text-sm font-bold uppercase tracking-wide text-parade-purple">{event.eventType}</p>
-          <h1 className="mt-2 text-4xl font-black tracking-normal text-parade-ink sm:text-5xl">{event.title}</h1>
-          <p className="mt-3 text-base font-bold text-parade-muted">Hosted by {event.organization}</p>
-          <div className="mt-6 flex flex-wrap gap-3">
-            <a href={`/api/events/${event.id}/ics`} className="inline-flex items-center justify-center gap-2 rounded-full bg-parade-purple px-5 py-3 text-sm font-black text-white hover:bg-parade-purpleDark">
-              Add to Calendar <Download className="h-4 w-4" aria-hidden="true" />
-            </a>
-            <a href={buildGoogleCalendarUrl(event)} target="_blank" rel="noreferrer" className="inline-flex items-center justify-center gap-2 rounded-full border border-parade-line bg-white px-5 py-3 text-sm font-black text-parade-purple hover:bg-parade-purpleSoft">
-              Google Calendar <ExternalLink className="h-4 w-4" aria-hidden="true" />
-            </a>
-            {event.ticketUrl ? (
-              <a href={event.ticketUrl} target="_blank" rel="noreferrer" className="inline-flex items-center justify-center gap-2 rounded-full border border-parade-line bg-white px-5 py-3 text-sm font-black text-parade-purple hover:bg-parade-purpleSoft">
-                Event / RSVP Link <ExternalLink className="h-4 w-4" aria-hidden="true" />
-              </a>
+
+          <div className="mt-7 grid gap-6 lg:grid-cols-[1fr_0.42fr] lg:items-start">
+            <div>
+              <p className="inline-flex rounded-full border border-parade-gold/40 bg-white/10 px-3 py-1 text-xs font-black uppercase tracking-wide text-parade-goldBright">
+                {event.eventType}
+              </p>
+              <h1 className="mt-4 text-4xl font-black tracking-tight text-white sm:text-5xl">{event.title}</h1>
+              <div className="mt-4 flex items-center gap-3">
+                <OrganizationLogo event={event} />
+                <p className="text-base font-bold text-purple-100">Hosted by {event.organization}</p>
+              </div>
+              <div className="mt-6 flex flex-wrap gap-3">
+                <a href={`/api/events/${event.id}/ics`} className="inline-flex items-center justify-center gap-2 rounded-full bg-parade-gold px-5 py-3 text-sm font-black text-parade-purpleDark shadow-glow transition hover:bg-parade-goldBright">
+                  Add to Calendar <Download className="h-4 w-4" aria-hidden="true" />
+                </a>
+                <a href={buildGoogleCalendarUrl(event)} target="_blank" rel="noreferrer" className="inline-flex items-center justify-center gap-2 rounded-full border border-white/25 bg-white/10 px-5 py-3 text-sm font-black text-white transition hover:bg-white/15">
+                  Google Calendar <ExternalLink className="h-4 w-4" aria-hidden="true" />
+                </a>
+                {event.ticketUrl ? (
+                  <a href={event.ticketUrl} target="_blank" rel="noreferrer" className="inline-flex items-center justify-center gap-2 rounded-full border border-white/25 bg-white/10 px-5 py-3 text-sm font-black text-white transition hover:bg-white/15">
+                    Event / RSVP Link <ExternalLink className="h-4 w-4" aria-hidden="true" />
+                  </a>
+                ) : null}
+                {event.flyerUrl ? (
+                  <a href={event.flyerUrl} target="_blank" rel="noreferrer" className="inline-flex items-center justify-center gap-2 rounded-full border border-white/25 bg-white/10 px-5 py-3 text-sm font-black text-white transition hover:bg-white/15">
+                    Open Flyer <ExternalLink className="h-4 w-4" aria-hidden="true" />
+                  </a>
+                ) : null}
+              </div>
+            </div>
+
+            {event.flyerUrl ? (
+              <div className="relative overflow-hidden rounded-[1.5rem] border border-parade-gold/35 bg-white/10 p-2 shadow-glow backdrop-blur">
+                <div className="relative aspect-[4/5] overflow-hidden rounded-[1.1rem] bg-parade-purpleDark">
+                  <Image
+                    src={event.flyerUrl}
+                    alt={`${event.title} flyer`}
+                    fill
+                    sizes="(min-width: 1024px) 360px, 100vw"
+                    className="object-cover"
+                    priority
+                  />
+                </div>
+              </div>
             ) : null}
           </div>
         </div>
@@ -85,6 +118,7 @@ export default async function CommunityEventDetailPage({ params }: CommunityEven
           {event.accessibilityNotes ? <DetailBlock title="Accessibility notes" body={event.accessibilityNotes} /> : null}
           {event.parkingNotes ? <DetailBlock title="Parking notes" body={event.parkingNotes} /> : null}
           {event.publicContact ? <DetailBlock title="Public contact" body={event.publicContact} /> : null}
+          {event.flyerUrl ? <DetailLink title="Event flyer" href={event.flyerUrl} label="Open submitted flyer" /> : null}
         </section>
 
         <section className="rounded-[1.5rem] border border-amber-200 bg-parade-goldSoft p-5 shadow-civic">
@@ -108,11 +142,34 @@ export default async function CommunityEventDetailPage({ params }: CommunityEven
   );
 }
 
+function OrganizationLogo({ event }: { event: NonNullable<ReturnType<typeof getCommunityEventBySlug>> }) {
+  if (!event.organizationLogoUrl) {
+    return null;
+  }
+
+  return (
+    <span className="relative h-14 w-14 shrink-0 overflow-hidden rounded-2xl border border-parade-gold/40 bg-white shadow-glow">
+      <Image src={event.organizationLogoUrl} alt={`${event.organization} logo`} fill sizes="56px" className="object-contain p-1.5" />
+    </span>
+  );
+}
+
 function DetailBlock({ title, body }: { title: string; body: string }) {
   return (
     <div className="mt-5 border-t border-parade-line pt-5">
       <h3 className="text-sm font-black uppercase tracking-wide text-parade-purple">{title}</h3>
       <p className="mt-2 text-sm leading-6 text-parade-muted">{body}</p>
+    </div>
+  );
+}
+
+function DetailLink({ title, href, label }: { title: string; href: string; label: string }) {
+  return (
+    <div className="mt-5 border-t border-parade-line pt-5">
+      <h3 className="text-sm font-black uppercase tracking-wide text-parade-purple">{title}</h3>
+      <a href={href} target="_blank" rel="noreferrer" className="mt-2 inline-flex items-center gap-2 rounded-full bg-parade-purple px-4 py-2 text-sm font-black text-white hover:bg-parade-purpleDark">
+        {label} <ExternalLink className="h-4 w-4" aria-hidden="true" />
+      </a>
     </div>
   );
 }
