@@ -1,14 +1,15 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { Archive, ArrowRight, CalendarDays, Car, CloudSun, ExternalLink, PlayCircle, PlusCircle, ShieldCheck, ShoppingBag, Utensils } from "lucide-react";
+import { Archive, ArrowRight, CalendarDays, Car, CloudSun, ExternalLink, HeartHandshake, PlayCircle, PlusCircle, ShieldCheck, ShoppingBag, Utensils } from "lucide-react";
 import { CountdownTimer } from "@/components/CountdownTimer";
-import { YOUTUBE_CHANNEL_URL, YOUTUBE_SUPPORTER_URL } from "@/lib/seed-data";
+import { YOUTUBE_SUPPORTER_URL } from "@/lib/seed-data";
 
 export const dynamic = "force-dynamic";
 
 const HOMEPAGE_VIDEO_SRC = "/videos/dragon-home-screen-bg.mp4";
 const HOMEPAGE_VIDEO_POSTER = "/videos/dragon-home-screen-poster.jpg";
 const HOMEPAGE_FEATURED_VIDEO_EMBED_URL = "https://www.youtube.com/embed/vSwxOuydTjU?si=dpUnDxY4bDv-7Gqt";
+const FACEBOOK_SUPPORTER_URL = "";
 
 type PrimaryActionVariant = "live" | "replays" | "food" | "parking" | "weather" | "gear";
 
@@ -169,27 +170,7 @@ export default async function HomePage() {
           </div>
         </section>
 
-        <section className="rounded-[1.5rem] border border-parade-line bg-gradient-to-br from-white via-parade-cream to-parade-purpleMist p-5 shadow-card">
-          <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
-            <div className="flex items-start gap-3">
-              <div className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-parade-goldSoft text-parade-gold shadow-sm ring-1 ring-parade-gold/30">
-                <PlayCircle className="h-5 w-5" aria-hidden="true" />
-              </div>
-              <div>
-                <h2 className="text-xl font-black text-parade-ink">Parade Coverage Hub</h2>
-                <p className="mt-2 max-w-2xl text-sm leading-6 text-parade-muted">
-                  Jump straight to the Watch page, YouTube channel, replay archive, or supporter link. The livestream player stays on the Watch page so the homepage never shows a dead embed.
-                </p>
-              </div>
-            </div>
-            <div className="grid gap-3 sm:grid-cols-2 lg:min-w-[34rem]">
-              <CoverageAction href="/watch" label="Open live coverage page" />
-              <CoverageAction href={YOUTUBE_CHANNEL_URL} label="Open YouTube channel" external />
-              <CoverageAction href="/replays" label="Choose replay season" />
-              <CoverageAction href={YOUTUBE_SUPPORTER_URL} label="Become a channel supporter" external />
-            </div>
-          </div>
-        </section>
+        <SupportSection />
 
         <section className="rounded-[1.5rem] border border-amber-200 bg-parade-goldSoft p-5 shadow-civic">
           <div className="flex items-start gap-3">
@@ -222,6 +203,58 @@ function HomepageVideoSpotlight({ className = "" }: { className?: string }) {
           referrerPolicy="strict-origin-when-cross-origin"
           allowFullScreen
         />
+      </div>
+    </section>
+  );
+}
+
+function SupportSection() {
+  const supportOptions = [
+    {
+      platform: "YouTube",
+      body: "Support parade coverage through the YouTube channel membership option.",
+      href: YOUTUBE_SUPPORTER_URL,
+      action: "Support on YouTube",
+      available: true
+    },
+    {
+      platform: "Facebook",
+      body: "Support Mardi Gras - Mobile, Alabama through Facebook subscriptions.",
+      href: FACEBOOK_SUPPORTER_URL,
+      action: "Support on Facebook",
+      available: Boolean(FACEBOOK_SUPPORTER_URL)
+    }
+  ];
+
+  return (
+    <section className="relative overflow-hidden rounded-[1.5rem] border border-parade-gold/35 bg-gradient-to-br from-white via-parade-cream to-parade-purpleMist p-5 shadow-card">
+      <span className="pointer-events-none absolute right-[-4rem] top-[-4rem] h-32 w-32 rounded-full bg-parade-gold/20 blur-2xl" aria-hidden="true" />
+      <div className="relative z-10 flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
+        <div className="flex items-start gap-3">
+          <div className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-parade-purple text-parade-goldBright shadow-sm ring-1 ring-parade-gold/35">
+            <HeartHandshake className="h-6 w-6" aria-hidden="true" />
+          </div>
+          <div>
+            <p className="text-xs font-black uppercase tracking-[0.16em] text-parade-purple">Support the channel</p>
+            <h2 className="mt-1 text-2xl font-black text-parade-purpleDark">Support Mardi Gras - Mobile, Alabama</h2>
+            <p className="mt-2 max-w-3xl text-sm leading-6 text-parade-muted">
+              Choose the platform you already use and help support continued Mobile Mardi Gras coverage, videos, and community event updates.
+            </p>
+          </div>
+        </div>
+        <div className="grid gap-3 sm:grid-cols-2 lg:min-w-[28rem]">
+          {supportOptions.map((option) =>
+            option.available ? (
+              <a key={option.platform} href={option.href} target="_blank" rel="noreferrer" className="flex min-w-0 flex-col rounded-2xl border border-parade-gold/35 bg-white/85 p-4 text-left shadow-sm transition hover:-translate-y-0.5 hover:shadow-civic">
+                <span className="text-sm font-black text-parade-purpleDark">{option.platform}</span>
+                <span className="mt-1 text-xs font-semibold leading-5 text-parade-muted">{option.body}</span>
+                <span className="mt-3 inline-flex w-fit items-center gap-2 rounded-full bg-parade-gold px-4 py-2 text-sm font-black text-parade-purpleDark shadow-sm">
+                  {option.action} <ExternalLink className="h-4 w-4" aria-hidden="true" />
+                </span>
+              </a>
+            ) : null
+          )}
+        </div>
       </div>
     </section>
   );
@@ -344,30 +377,6 @@ function PrimaryActionCard({
           {external ? <ExternalLink className="h-4 w-4" aria-hidden="true" /> : <ArrowRight className="h-4 w-4" aria-hidden="true" />}
         </span>
       </span>
-    </>
-  );
-
-  if (external) {
-    return (
-      <a href={href} target="_blank" rel="noreferrer" className={className}>
-        {content}
-      </a>
-    );
-  }
-
-  return (
-    <Link href={href} className={className}>
-      {content}
-    </Link>
-  );
-}
-
-function CoverageAction({ href, label, external = false }: { href: string; label: string; external?: boolean }) {
-  const className = "flex min-w-0 items-center justify-between gap-3 rounded-xl border border-parade-line bg-white/80 px-4 py-3 text-sm font-black text-parade-ink transition hover:-translate-y-0.5 hover:bg-parade-purpleSoft hover:shadow-civic";
-  const content = (
-    <>
-      <span className="min-w-0 truncate">{label}</span>
-      {external ? <ExternalLink className="h-4 w-4 shrink-0 text-parade-purple" aria-hidden="true" /> : <ArrowRight className="h-4 w-4 shrink-0 text-parade-purple" aria-hidden="true" />}
     </>
   );
 
