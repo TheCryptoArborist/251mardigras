@@ -1,4 +1,5 @@
-import { Database, History, ShieldCheck } from "lucide-react";
+import Link from "next/link";
+import { CalendarPlus, Database, History, ShieldCheck } from "lucide-react";
 import { AdminRecheckButton } from "@/components/AdminRecheckButton";
 import { AdminSourceTable } from "@/components/AdminSourceTable";
 import { ChangeHistoryTable } from "@/components/ChangeHistoryTable";
@@ -18,14 +19,21 @@ export default async function AdminPage() {
     <div className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8">
       <SectionHeader
         title="Admin Dashboard"
-        description="Operational view for source status, detected changes, latest snapshots, and manual checks."
+        description="Operational view for source status, detected changes, latest snapshots, event publishing, and manual checks."
         action={<AdminRecheckButton />}
       />
 
-      <section className="grid gap-4 md:grid-cols-3">
+      <section className="grid gap-4 md:grid-cols-4">
         <AdminMetric icon={<ShieldCheck className="h-5 w-5" />} label="Sources monitored" value={String(sources.length)} tone="green" />
         <AdminMetric icon={<History className="h-5 w-5" />} label="Checked sources" value={String(checkedSources.length)} tone="purple" />
         <AdminMetric icon={<Database className="h-5 w-5" />} label="Source errors" value={String(sourcesWithErrors.length)} tone={sourcesWithErrors.length ? "red" : "green"} />
+        <Link href="/admin/community-events" className="rounded border border-parade-line bg-white p-5 shadow-civic transition hover:-translate-y-0.5 hover:shadow-lg">
+          <div className="grid h-10 w-10 place-items-center rounded bg-parade-goldSoft text-parade-purple">
+            <CalendarPlus className="h-5 w-5" aria-hidden="true" />
+          </div>
+          <p className="mt-4 text-lg font-black text-parade-ink">Events</p>
+          <p className="mt-1 text-sm font-bold uppercase text-parade-muted">Publish calendar entry</p>
+        </Link>
       </section>
 
       <section>
