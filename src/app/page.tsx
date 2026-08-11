@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import { Archive, ArrowRight, CalendarDays, Car, CloudSun, ExternalLink, HeartHandshake, PlayCircle, PlusCircle, ShieldCheck, ShoppingBag, Utensils } from "lucide-react";
 import { CountdownTimer } from "@/components/CountdownTimer";
+import { VisitorCounter } from "@/components/VisitorCounter";
 import { YOUTUBE_SUPPORTER_URL } from "@/lib/seed-data";
 
 export const dynamic = "force-dynamic";
@@ -119,14 +120,6 @@ export default async function HomePage() {
             </h1>
             <CountdownTimer />
             <HomepageVideoSpotlight className="mt-7 lg:hidden" />
-            <div className="mt-7 flex flex-wrap gap-3">
-              <Link href="/watch" className="inline-flex items-center justify-center gap-2 rounded-full bg-parade-gold px-5 py-3 text-sm font-black text-parade-purpleDark shadow-glow transition hover:-translate-y-0.5 hover:bg-parade-goldBright">
-                Watch live coverage <ArrowRight className="h-4 w-4" aria-hidden="true" />
-              </Link>
-              <Link href="/replays" className="inline-flex items-center justify-center gap-2 rounded-full border border-white/25 bg-white/10 px-5 py-3 text-sm font-black text-white backdrop-blur transition hover:-translate-y-0.5 hover:bg-white/15">
-                Choose replay season <ArrowRight className="h-4 w-4" aria-hidden="true" />
-              </Link>
-            </div>
           </div>
 
           <div className="relative z-10 hidden min-w-0 lg:block">
@@ -183,6 +176,8 @@ export default async function HomePage() {
             </div>
           </div>
         </section>
+
+        <VisitorCounter />
       </div>
     </div>
   );
