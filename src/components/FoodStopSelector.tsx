@@ -74,19 +74,12 @@ export function FoodStopSelector({ resources }: { resources: ResourceItem[] }) {
     <section className="overflow-hidden rounded-[1.7rem] border border-parade-gold/40 bg-gradient-to-br from-parade-cream via-white to-parade-purpleMist shadow-card">
       <div className="relative overflow-hidden border-b border-parade-gold/30 bg-gradient-to-br from-parade-purpleDeep via-parade-purpleDark to-parade-purple p-5 text-white">
         <div className="absolute right-[-4rem] top-[-4rem] h-32 w-32 rounded-full bg-parade-gold/20 blur-2xl" aria-hidden="true" />
-        <div className="relative z-10 grid gap-5 lg:grid-cols-[1fr_auto] lg:items-start">
-          <div>
-            <p className="text-sm font-black uppercase tracking-[0.16em] text-parade-goldBright">Food and drink navigator</p>
-            <h2 className="mt-2 text-2xl font-black text-white">Find a downtown stop fast</h2>
-            <p className="mt-2 max-w-3xl text-sm leading-6 text-purple-100">
-              Choose a restaurant, coffee shop, bakery, brewery, barbecue stop, dessert stop, or direct venue link while you are walking downtown or planning your parade day.
-            </p>
-          </div>
-          <div className="grid grid-cols-3 gap-2 text-center lg:min-w-72">
-            <FoodStat label="Stops" value={String(resources.length)} />
-            <FoodStat label="Links" value="Direct" />
-            <FoodStat label="Use" value="Mobile" />
-          </div>
+        <div className="relative z-10">
+          <p className="text-sm font-black uppercase tracking-[0.16em] text-parade-goldBright">Food and drink navigator</p>
+          <h2 className="mt-2 text-2xl font-black text-white">Find a downtown stop fast</h2>
+          <p className="mt-2 max-w-3xl text-sm leading-6 text-purple-100">
+            Choose a restaurant, coffee shop, bakery, brewery, barbecue stop, dessert stop, or direct venue link while you are walking downtown or planning your parade day.
+          </p>
         </div>
       </div>
 
@@ -173,11 +166,6 @@ export function FoodStopSelector({ resources }: { resources: ResourceItem[] }) {
           })}
         </div>
 
-        <div className="flex items-center justify-between gap-3 text-sm font-black text-parade-purple">
-          <span>{filteredResources.length} stops shown</span>
-          <span className="hidden text-parade-muted sm:inline">Tap a card to open its direct map or venue link</span>
-        </div>
-
         {filteredResources.length === 0 ? (
           <div className="rounded-2xl border border-dashed border-parade-gold/35 bg-parade-goldSoft p-5 text-sm leading-6 text-parade-muted">
             No food or drink stops matched that search. Try a broader term like coffee, bakery, BBQ, brewery, restaurant, or downtown.
@@ -191,15 +179,6 @@ export function FoodStopSelector({ resources }: { resources: ResourceItem[] }) {
         )}
       </div>
     </section>
-  );
-}
-
-function FoodStat({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="rounded-2xl border border-white/20 bg-white/90 px-3 py-2">
-      <p className="text-lg font-black text-parade-purpleDark">{value}</p>
-      <p className="mt-0.5 text-[0.65rem] font-black uppercase tracking-wide text-parade-muted">{label}</p>
-    </div>
   );
 }
 
