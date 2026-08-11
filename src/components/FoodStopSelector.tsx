@@ -108,8 +108,12 @@ export function FoodStopSelector({ resources }: { resources: ResourceItem[] }) {
               rel="noreferrer"
               className="inline-flex items-center justify-center gap-2 rounded-full bg-parade-gold px-5 py-3 text-sm font-black text-parade-purpleDark shadow-glow transition hover:-translate-y-0.5 hover:bg-parade-goldBright lg:self-end"
             >
-              Open map / directions
-              <Navigation className="h-4 w-4" aria-hidden="true" />
+              {actionLabelForStop(selectedResource.title)}
+              {isWebsiteStop(selectedResource.title) ? (
+                <ExternalLink className="h-4 w-4" aria-hidden="true" />
+              ) : (
+                <Navigation className="h-4 w-4" aria-hidden="true" />
+              )}
             </a>
           ) : (
             <button
@@ -199,7 +203,7 @@ function FoodStopCard({ resource }: { resource: ResourceItem }) {
         <span className="mt-1 block text-xs font-black uppercase text-parade-muted">{labelForStop(resource.title)}</span>
         {contactNote ? <span className="mt-1 block text-xs font-bold text-parade-purpleDark">{contactNote}</span> : null}
         <span className="mt-2 inline-flex items-center gap-1 rounded-full bg-parade-purple px-3 py-1.5 text-xs font-black uppercase text-white transition group-hover:bg-parade-purpleDark">
-          Open map / directions
+          {actionLabelForStop(resource.title)}
           <ExternalLink className="h-3.5 w-3.5" aria-hidden="true" />
         </span>
       </span>
@@ -272,6 +276,14 @@ function labelForStop(title: string) {
 
 function contactNoteForStop(title: string) {
   return normalizeSearch(title) === "big w gourmet pecans" ? "Call 251-455-5462" : null;
+}
+
+function isWebsiteStop(title: string) {
+  return normalizeSearch(title) === "big w gourmet pecans";
+}
+
+function actionLabelForStop(title: string) {
+  return isWebsiteStop(title) ? "Website" : "Open map / directions";
 }
 
 function initialsFor(title: string) {
