@@ -1,10 +1,7 @@
-import Image from "next/image";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { Archive, ArrowRight, CalendarDays, Car, CloudSun, ExternalLink, PlayCircle, PlusCircle, ShieldCheck, ShoppingBag, Utensils } from "lucide-react";
 import { CountdownTimer } from "@/components/CountdownTimer";
-import { LiveStreamEmbed } from "@/components/LiveStreamEmbed";
-import { SITE_LOGO_ALT, SITE_LOGO_PATH } from "@/lib/brand";
 import { YOUTUBE_CHANNEL_URL, YOUTUBE_SUPPORTER_URL } from "@/lib/seed-data";
 
 export const dynamic = "force-dynamic";
@@ -31,7 +28,7 @@ export default async function HomePage() {
     {
       icon: <PlayCircle className="h-5 w-5" aria-hidden="true" />,
       title: "Watch Live Coverage",
-      body: "Start with the live parade coverage hub and current player.",
+      body: "Start with the live parade coverage hub and current player on the Watch page.",
       href: "/watch",
       action: "Open Watch Live",
       external: false,
@@ -109,8 +106,8 @@ export default async function HomePage() {
         <div className="absolute inset-0 z-0 bg-[radial-gradient(circle_at_18%_8%,rgba(255,201,40,0.22),transparent_30%),radial-gradient(circle_at_82%_30%,rgba(255,255,255,0.12),transparent_35%),linear-gradient(180deg,rgba(23,4,47,0.10),rgba(23,4,47,0.42))]" aria-hidden="true" />
         <div className="absolute left-[-6rem] top-[-8rem] z-0 h-72 w-72 rounded-full bg-parade-gold/20 blur-3xl" aria-hidden="true" />
         <div className="absolute bottom-[-10rem] right-[-8rem] z-0 h-96 w-96 rounded-full bg-white/10 blur-3xl" aria-hidden="true" />
-        <div className="relative z-10 mx-auto grid max-w-7xl gap-8 px-4 py-10 sm:px-6 lg:grid-cols-[1fr_0.34fr] lg:items-center lg:px-8 lg:py-14">
-          <div className="relative z-10">
+        <div className="relative z-10 mx-auto grid max-w-7xl gap-8 px-4 py-10 sm:px-6 lg:grid-cols-[minmax(0,1fr)_minmax(20rem,0.78fr)] lg:items-center lg:px-8 lg:py-14">
+          <div className="relative z-10 min-w-0">
             <div className="inline-flex items-center gap-2 rounded-full border border-parade-gold/40 bg-white/10 px-4 py-2 text-xs font-black uppercase tracking-wide text-parade-goldBright shadow-glow backdrop-blur">
               Mobile Mardi Gras parade coverage
             </div>
@@ -121,7 +118,7 @@ export default async function HomePage() {
               The main purpose of this site is Mobile Mardi Gras parade coverage. Food and drink, parking and access, weather, and Mardi Gras gear are organized as support tools for visitors before, during, and between live coverage.
             </p>
             <CountdownTimer />
-            <HomepageVideoSpotlight />
+            <HomepageVideoSpotlight className="mt-7 lg:hidden" />
             <div className="mt-7 flex flex-wrap gap-3">
               <Link href="/watch" className="inline-flex items-center justify-center gap-2 rounded-full bg-parade-gold px-5 py-3 text-sm font-black text-parade-purpleDark shadow-glow transition hover:-translate-y-0.5 hover:bg-parade-goldBright">
                 Watch live coverage <ArrowRight className="h-4 w-4" aria-hidden="true" />
@@ -132,10 +129,8 @@ export default async function HomePage() {
             </div>
           </div>
 
-          <div className="relative z-10 hidden justify-self-center rounded-[2rem] border border-white/15 bg-white/10 p-5 shadow-glow backdrop-blur sm:block">
-            <div className="rounded-[1.5rem] bg-white/90 p-4">
-              <Image src={SITE_LOGO_PATH} alt={SITE_LOGO_ALT} width={208} height={208} className="h-44 w-44 object-contain lg:h-52 lg:w-52" priority />
-            </div>
+          <div className="relative z-10 hidden min-w-0 lg:block">
+            <HomepageVideoSpotlight />
           </div>
 
           <div className="relative z-10 lg:col-span-2">
@@ -175,29 +170,26 @@ export default async function HomePage() {
           </div>
         </section>
 
-        <section className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
-          <div className="rounded-[1.5rem] border border-parade-line bg-white p-3 shadow-card">
-            <LiveStreamEmbed />
-          </div>
-          <article className="rounded-[1.5rem] border border-parade-line bg-gradient-to-br from-white to-parade-purpleMist p-5 shadow-card">
+        <section className="rounded-[1.5rem] border border-parade-line bg-gradient-to-br from-white via-parade-cream to-parade-purpleMist p-5 shadow-card">
+          <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
             <div className="flex items-start gap-3">
               <div className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-parade-goldSoft text-parade-gold shadow-sm ring-1 ring-parade-gold/30">
                 <PlayCircle className="h-5 w-5" aria-hidden="true" />
               </div>
               <div>
                 <h2 className="text-xl font-black text-parade-ink">Parade Coverage Hub</h2>
-                <p className="mt-2 text-sm leading-6 text-parade-muted">
-                  Start here for live parade coverage, the YouTube channel, replays, and channel support. This is the core of the website.
+                <p className="mt-2 max-w-2xl text-sm leading-6 text-parade-muted">
+                  Jump straight to the Watch page, YouTube channel, replay archive, or supporter link. The livestream player stays on the Watch page so the homepage never shows a dead embed.
                 </p>
               </div>
             </div>
-            <div className="mt-5 space-y-3">
+            <div className="grid gap-3 sm:grid-cols-2 lg:min-w-[34rem]">
               <CoverageAction href="/watch" label="Open live coverage page" />
               <CoverageAction href={YOUTUBE_CHANNEL_URL} label="Open YouTube channel" external />
               <CoverageAction href="/replays" label="Choose replay season" />
               <CoverageAction href={YOUTUBE_SUPPORTER_URL} label="Become a channel supporter" external />
             </div>
-          </article>
+          </div>
         </section>
 
         <section className="rounded-[1.5rem] border border-amber-200 bg-parade-goldSoft p-5 shadow-civic">
@@ -216,9 +208,12 @@ export default async function HomePage() {
   );
 }
 
-function HomepageVideoSpotlight() {
+function HomepageVideoSpotlight({ className = "" }: { className?: string }) {
   return (
-    <section className="mt-7 max-w-3xl overflow-hidden rounded-[1.5rem] border border-parade-gold/45 bg-white/12 p-3 shadow-glow backdrop-blur" aria-label="Every Day is Mardi Gras in Mobile, Alabama video">
+    <section className={`overflow-hidden rounded-[1.5rem] border border-parade-gold/45 bg-white/12 p-3 shadow-glow backdrop-blur ${className}`} aria-label="Every Day is Mardi Gras in Mobile, Alabama video">
+      <h2 className="px-1 pb-3 text-xl font-black text-white sm:text-2xl">
+        Every Day is Mardi Gras in Mobile, Alabama
+      </h2>
       <div className="relative aspect-video overflow-hidden rounded-[1.15rem] border border-parade-gold/35 bg-parade-purpleDark shadow-civic">
         <iframe
           src={HOMEPAGE_FEATURED_VIDEO_EMBED_URL}
