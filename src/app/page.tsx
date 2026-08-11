@@ -9,7 +9,7 @@ export const dynamic = "force-dynamic";
 const HOMEPAGE_VIDEO_SRC = "/videos/dragon-home-screen-bg.mp4";
 const HOMEPAGE_VIDEO_POSTER = "/videos/dragon-home-screen-poster.jpg";
 const HOMEPAGE_FEATURED_VIDEO_EMBED_URL = "https://www.youtube.com/embed/vSwxOuydTjU?si=dpUnDxY4bDv-7Gqt";
-const FACEBOOK_SUPPORTER_URL = "";
+const FACEBOOK_SUPPORTER_URL = "https://www.facebook.com/mardigrasmobileal/support/?surface=page_top_cta_button&entrypoint_surface=page_top_cta_button";
 
 type PrimaryActionVariant = "live" | "replays" | "food" | "parking" | "weather" | "gear";
 
