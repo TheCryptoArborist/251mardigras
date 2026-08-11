@@ -15,6 +15,7 @@ type FormState = {
   venueName: string;
   venueAddress: string;
   cityStateZip: string;
+  mapUrl: string;
   description: string;
   ticketUrl: string;
   cost: string;
@@ -37,6 +38,30 @@ type PublishResult = {
   error?: string;
 };
 
+const eventTypeOptions = [
+  "Fundraiser",
+  "Ball",
+  "Party",
+  "Watch Party",
+  "Organization Event",
+  "Community Event",
+  "Family-Friendly Event",
+  "Food & Drink Event",
+  "Mardi Gras Gear / Vendor Event",
+  "Meeting",
+  "Other"
+];
+
+const audienceOptions = [
+  "",
+  "Family-friendly",
+  "All ages",
+  "Adults only",
+  "21+",
+  "Adults only, 21+",
+  "Other / see event details"
+];
+
 const initialFormState: FormState = {
   adminSecret: "",
   title: "",
@@ -49,6 +74,7 @@ const initialFormState: FormState = {
   venueName: "",
   venueAddress: "",
   cityStateZip: "Mobile, AL ",
+  mapUrl: "",
   description: "",
   ticketUrl: "",
   cost: "",
@@ -162,21 +188,29 @@ export function CommunityEventPublisherForm() {
 
           <div className="grid gap-4 sm:grid-cols-2">
             <Field label="Event type" required>
-              <input value={form.eventType} onChange={(event) => updateField("eventType", event.target.value)} className={inputClassName} />
+              <select value={form.eventType} onChange={(event) => updateField("eventType", event.target.value)} className={inputClassName}>
+                {eventTypeOptions.map((option) => (
+                  <option key={option} value={option}>{option}</option>
+                ))}
+              </select>
             </Field>
-            <Field label="Audience">
-              <input value={form.audience} onChange={(event) => updateField("audience", event.target.value)} className={inputClassName} placeholder="All ages, Adults only, 21+, etc." />
+            <Field label="Family-Friendly / All-Ages / Adults-Only">
+              <select value={form.audience} onChange={(event) => updateField("audience", event.target.value)} className={inputClassName}>
+                {audienceOptions.map((option) => (
+                  <option key={option || "blank"} value={option}>{option || "Select audience, if provided"}</option>
+                ))}
+              </select>
             </Field>
           </div>
 
           <div className="grid gap-4 sm:grid-cols-4">
-            <Field label="Date" required>
+            <Field label="Event date" required>
               <input type="date" value={form.eventDate} onChange={(event) => updateField("eventDate", event.target.value)} className={inputClassName} />
             </Field>
-            <Field label="Start" required>
+            <Field label="Start time" required>
               <input type="time" value={form.startTime} onChange={(event) => updateField("startTime", event.target.value)} className={inputClassName} />
             </Field>
-            <Field label="End" required>
+            <Field label="End time" required>
               <input type="time" value={form.endTime} onChange={(event) => updateField("endTime", event.target.value)} className={inputClassName} />
             </Field>
             <Field label="Central offset" required>
@@ -187,37 +221,44 @@ export function CommunityEventPublisherForm() {
             </Field>
           </div>
 
-          <div className="grid gap-4 sm:grid-cols-2">
-            <Field label="Venue name" required>
-              <input value={form.venueName} onChange={(event) => updateField("venueName", event.target.value)} className={inputClassName} />
-            </Field>
-            <Field label="City, State, ZIP" required>
-              <input value={form.cityStateZip} onChange={(event) => updateField("cityStateZip", event.target.value)} className={inputClassName} />
-            </Field>
-          </div>
-
-          <Field label="Venue street address or location details" required>
-            <input value={form.venueAddress} onChange={(event) => updateField("venueAddress", event.target.value)} className={inputClassName} />
-          </Field>
+          <section className="rounded-[1.25rem] border border-parade-gold/30 bg-white/70 p-4 shadow-sm">
+            <p className="text-xs font-black uppercase tracking-[0.16em] text-parade-purple">Location fields from Jotform</p>
+            <div className="mt-4 grid gap-4">
+              <Field label="Venue name" required>
+                <input value={form.venueName} onChange={(event) => updateField("venueName", event.target.value)} className={inputClassName} />
+              </Field>
+              <Field label="Venue street address" required>
+                <input value={form.venueAddress} onChange={(event) => updateField("venueAddress", event.target.value)} className={inputClassName} placeholder="Street address or location notes from the submission" />
+              </Field>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <Field label="City, State, ZIP" required>
+                  <input value={form.cityStateZip} onChange={(event) => updateField("cityStateZip", event.target.value)} className={inputClassName} />
+                </Field>
+                <Field label="Google or Apple Maps Link">
+                  <input value={form.mapUrl} onChange={(event) => updateField("mapUrl", event.target.value)} className={inputClassName} placeholder="https://maps.app.goo.gl/..." />
+                </Field>
+              </div>
+            </div>
+          </section>
 
           <Field label="Public event description" required>
             <textarea value={form.description} onChange={(event) => updateField("description", event.target.value)} className={`${inputClassName} min-h-32 resize-y`} />
           </Field>
 
           <div className="grid gap-4 sm:grid-cols-2">
-            <Field label="Ticket / RSVP / event link">
+            <Field label="Ticket, RSVP, or Event Link">
               <input value={form.ticketUrl} onChange={(event) => updateField("ticketUrl", event.target.value)} className={inputClassName} placeholder="https://" />
             </Field>
-            <Field label="Cost">
+            <Field label="Cost / Free or Paid">
               <input value={form.cost} onChange={(event) => updateField("cost", event.target.value)} className={inputClassName} placeholder="Free, $20 entry, Ticketed, etc." />
             </Field>
           </div>
 
           <div className="grid gap-4 sm:grid-cols-2">
-            <Field label="Public contact">
+            <Field label="Public contact email or phone">
               <input value={form.publicContact} onChange={(event) => updateField("publicContact", event.target.value)} className={inputClassName} placeholder="Name/email/phone intended for public display" />
             </Field>
-            <Field label="Flyer URL">
+            <Field label="Event flyer URL">
               <input value={form.flyerUrl} onChange={(event) => updateField("flyerUrl", event.target.value)} className={inputClassName} placeholder="https://www.jotform.com/uploads/..." />
             </Field>
           </div>
@@ -276,6 +317,7 @@ export function CommunityEventPublisherForm() {
             <p><span className="font-black uppercase text-parade-purple">Type:</span> {form.eventType || "Event type"}</p>
             <p><span className="font-black uppercase text-parade-purple">When:</span> {formatPreviewDate(form)}</p>
             <p><span className="font-black uppercase text-parade-purple">Where:</span> {[form.venueName, form.venueAddress, form.cityStateZip].filter(Boolean).join(", ") || "Venue"}</p>
+            {form.mapUrl ? <p><span className="font-black uppercase text-parade-purple">Map:</span> directions link included</p> : null}
           </div>
           <p className="mt-4 text-sm leading-6 text-parade-muted">{form.description || "Event description will appear here."}</p>
           <p className="mt-4 rounded-full border border-parade-gold/35 bg-white/80 px-3 py-2 text-xs font-black uppercase text-parade-purple">
@@ -290,6 +332,7 @@ export function CommunityEventPublisherForm() {
             <li>Confirm the submitter appears authorized.</li>
             <li>Do not publish private submitter name or private submitter email.</li>
             <li>Only paste public contact information if it was intended for public display.</li>
+            <li>Copy venue street address, city/state/ZIP, and map links from the Jotform submission when provided.</li>
             <li>Use -05:00 during daylight time and -06:00 during standard time.</li>
           </ul>
         </section>
