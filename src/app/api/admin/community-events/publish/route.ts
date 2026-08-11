@@ -14,6 +14,7 @@ type PublishInput = {
   venueName?: string;
   venueAddress?: string;
   cityStateZip?: string;
+  mapUrl?: string;
   description?: string;
   ticketUrl?: string;
   cost?: string;
@@ -121,6 +122,7 @@ function normalizeInput(input: Partial<PublishInput>): Required<PublishInput> {
     venueName: clean(input.venueName),
     venueAddress: clean(input.venueAddress),
     cityStateZip: clean(input.cityStateZip),
+    mapUrl: clean(input.mapUrl),
     description: clean(input.description),
     ticketUrl: clean(input.ticketUrl),
     cost: clean(input.cost),
@@ -187,6 +189,7 @@ function buildCommunityEvent(input: Required<PublishInput>, existingEvents: Comm
     description: input.description
   };
 
+  addOptional(event, "mapUrl", input.mapUrl);
   addOptional(event, "ticketUrl", input.ticketUrl);
   addOptional(event, "cost", input.cost);
   addOptional(event, "audience", input.audience);
