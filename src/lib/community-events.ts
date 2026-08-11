@@ -15,6 +15,7 @@ export type CommunityEvent = {
   venueAddress: string;
   cityStateZip: string;
   description: string;
+  mapUrl?: string;
   ticketUrl?: string;
   cost?: string;
   audience?: string;
@@ -94,7 +95,7 @@ export function buildCommunityEventIcs(event: CommunityEvent) {
     `SUMMARY:${escapeIcsText(event.title)}`,
     `DESCRIPTION:${escapeIcsText(buildCalendarDescription(event))}`,
     `LOCATION:${escapeIcsText(fullEventLocation(event))}`,
-    event.ticketUrl ? `URL:${event.ticketUrl}` : event.flyerUrl ? `URL:${event.flyerUrl}` : null,
+    event.ticketUrl ? `URL:${event.ticketUrl}` : event.mapUrl ? `URL:${event.mapUrl}` : event.flyerUrl ? `URL:${event.flyerUrl}` : null,
     "END:VEVENT",
     "END:VCALENDAR"
   ]
@@ -114,7 +115,7 @@ export function buildCommunityCalendarIcs(events = getApprovedCommunityEvents())
       `SUMMARY:${escapeIcsText(event.title)}`,
       `DESCRIPTION:${escapeIcsText(buildCalendarDescription(event))}`,
       `LOCATION:${escapeIcsText(fullEventLocation(event))}`,
-      event.ticketUrl ? `URL:${event.ticketUrl}` : event.flyerUrl ? `URL:${event.flyerUrl}` : null,
+      event.ticketUrl ? `URL:${event.ticketUrl}` : event.mapUrl ? `URL:${event.mapUrl}` : event.flyerUrl ? `URL:${event.flyerUrl}` : null,
       "END:VEVENT"
     ]
       .filter(Boolean)
@@ -144,6 +145,7 @@ function buildCalendarDescription(event: CommunityEvent) {
     event.audience ? `Audience: ${event.audience}` : null,
     event.publicContact ? `Public contact: ${event.publicContact}` : null,
     event.ticketUrl ? `Event / RSVP link: ${event.ticketUrl}` : null,
+    event.mapUrl ? `Map / directions: ${event.mapUrl}` : null,
     event.flyerUrl ? `Event flyer: ${event.flyerUrl}` : null,
     "Verify event details with the host organization before attending. This is a community-submitted Mardi Gras-related event, not the official parade schedule."
   ]
