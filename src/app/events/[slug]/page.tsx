@@ -14,6 +14,8 @@ type CommunityEventDetailPageProps = {
   params: Promise<{ slug: string }>;
 };
 
+type ApprovedEvent = NonNullable<ReturnType<typeof getCommunityEventBySlug>>;
+
 export function generateStaticParams() {
   return getApprovedCommunityEvents().map((event) => ({ slug: event.slug }));
 }
@@ -73,18 +75,21 @@ export default async function CommunityEventDetailPage({ params }: CommunityEven
             </div>
 
             {event.flyerUrl ? (
-              <div id="event-flyer" className="relative scroll-mt-24 overflow-hidden rounded-[1.5rem] border border-parade-gold/35 bg-white/10 p-2 shadow-glow backdrop-blur">
+              <a href="#event-flyer" className="relative block overflow-hidden rounded-[1.5rem] border border-parade-gold/35 bg-white/10 p-2 shadow-glow backdrop-blur transition hover:-translate-y-0.5 hover:bg-white/15">
                 <div className="relative aspect-[4/5] overflow-hidden rounded-[1.1rem] bg-parade-purpleDark">
                   <Image
                     src={event.flyerUrl}
-                    alt={`${event.title} flyer`}
+                    alt={`${event.title} flyer preview`}
                     fill
                     sizes="(min-width: 1024px) 360px, 100vw"
                     className="object-cover"
                     priority
                   />
                 </div>
-              </div>
+                <span className="mt-2 block text-center text-xs font-black uppercase tracking-wide text-parade-goldBright">
+                  Tap to view full flyer
+                </span>
+              </a>
             ) : null}
           </div>
         </div>
@@ -122,6 +127,8 @@ export default async function CommunityEventDetailPage({ params }: CommunityEven
           </dl>
         </section>
 
+        {event.flyerUrl ? <EventFlyerSection event={event} /> : null}
+
         <section className="rounded-[1.5rem] border border-parade-line bg-white p-5 shadow-card">
           <h2 className="text-2xl font-black text-parade-purpleDark">Event details</h2>
           <p className="mt-3 text-sm leading-6 text-parade-muted">{event.description}</p>
@@ -129,7 +136,7 @@ export default async function CommunityEventDetailPage({ params }: CommunityEven
           {event.parkingNotes ? <DetailBlock title="Parking notes" body={event.parkingNotes} /> : null}
           {event.publicContact ? <DetailBlock title="Public contact" body={event.publicContact} /> : null}
           {event.mapUrl ? <DetailLink title="Map / directions" href={event.mapUrl} label="Open submitted map link" /> : null}
-          {event.flyerUrl ? <DetailAnchor title="Event flyer" href="#event-flyer" label="View flyer on this page" /> : null}
+          {event.flyerUrl ? <DetailAnchor title="Event flyer" href="#event-flyer" label="View full flyer on this page" /> : null}
         </section>
 
         <section className="rounded-[1.5rem] border border-amber-200 bg-parade-goldSoft p-5 shadow-civic">
@@ -153,7 +160,32 @@ export default async function CommunityEventDetailPage({ params }: CommunityEven
   );
 }
 
-function OrganizationLogo({ event }: { event: NonNullable<ReturnType<typeof getCommunityEventBySlug>> }) {
+function EventFlyerSection({ event }: { event: ApprovedEvent }) {
+  return (
+    <section id="event-flyer" className="scroll-mt-24 rounded-[1.5rem] border border-parade-gold/35 bg-gradient-to-br from-parade-purpleDeep via-parade-purpleDark to-parade-purple p-4 text-white shadow-card sm:p-5">
+      <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <p className="text-xs font-black uppercase tracking-[0.16em] text-parade-goldBright">Event flyer</p>
+          <h2 className="mt-1 text-2xl font-black text-white">{event.title}</h2>
+        </div>
+        <p className="text-xs font-bold text-purple-100">Displayed on this page — no download required.</p>
+      </div>
+      <div className="overflow-hidden rounded-[1.25rem] border border-parade-gold/35 bg-white p-2 shadow-glow">
+        <div className="relative aspect-[4/5] w-full overflow-hidden rounded-[1rem] bg-white sm:aspect-[3/4]">
+          <Image
+            src={event.flyerUrl!}
+            alt={`${event.title} flyer`}
+            fill
+            sizes="(min-width: 1024px) 760px, 100vw"
+            className="object-contain"
+          />
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function OrganizationLogo({ event }: { event: ApprovedEvent }) {
   if (!event.organizationLogoUrl) {
     return null;
   }
