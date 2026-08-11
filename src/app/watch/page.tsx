@@ -1,4 +1,5 @@
 import Link from "next/link";
+import type { ReactNode } from "react";
 import { Archive, ArrowRight, ExternalLink, PlayCircle, ShieldCheck } from "lucide-react";
 import { LiveStreamEmbed } from "@/components/LiveStreamEmbed";
 import { YOUTUBE_CHANNEL_URL } from "@/lib/seed-data";
@@ -78,7 +79,7 @@ function WatchFallbackCard({
   action,
   external = false
 }: {
-  icon: React.ReactNode;
+  icon: ReactNode;
   title: string;
   body: string;
   href: string;
