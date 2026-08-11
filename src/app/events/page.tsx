@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, CalendarDays, Download, ExternalLink, PlusCircle, ShieldCheck } from "lucide-react";
 import {
@@ -77,32 +78,79 @@ export default function CommunityEventsPage() {
 
 function EventCard({ event }: { event: CommunityEvent }) {
   return (
-    <article className="rounded-[1.5rem] border border-parade-line bg-gradient-to-br from-white via-parade-cream to-parade-purpleMist p-5 shadow-card">
-      <p className="text-xs font-black uppercase tracking-wide text-parade-purple">{event.eventType}</p>
-      <h2 className="mt-2 text-2xl font-black text-parade-purpleDark">{event.title}</h2>
-      <p className="mt-1 text-sm font-bold text-parade-muted">Hosted by {event.organization}</p>
-      <dl className="mt-4 space-y-2 text-sm leading-6 text-parade-muted">
-        <div>
-          <dt className="font-black uppercase text-parade-purple">When</dt>
-          <dd>{formatCommunityEventDate(event)}</dd>
+    <article className="overflow-hidden rounded-[1.5rem] border border-parade-line bg-gradient-to-br from-white via-parade-cream to-parade-purpleMist shadow-card">
+      <EventCardMedia event={event} />
+      <div className="p-5">
+        <div className="flex items-start gap-3">
+          <OrganizationLogo event={event} />
+          <div className="min-w-0 flex-1">
+            <p className="text-xs font-black uppercase tracking-wide text-parade-purple">{event.eventType}</p>
+            <h2 className="mt-2 text-2xl font-black text-parade-purpleDark">{event.title}</h2>
+            <p className="mt-1 text-sm font-bold text-parade-muted">Hosted by {event.organization}</p>
+          </div>
         </div>
-        <div>
-          <dt className="font-black uppercase text-parade-purple">Where</dt>
-          <dd>{fullEventLocation(event)}</dd>
+        <dl className="mt-4 space-y-2 text-sm leading-6 text-parade-muted">
+          <div>
+            <dt className="font-black uppercase text-parade-purple">When</dt>
+            <dd>{formatCommunityEventDate(event)}</dd>
+          </div>
+          <div>
+            <dt className="font-black uppercase text-parade-purple">Where</dt>
+            <dd>{fullEventLocation(event)}</dd>
+          </div>
+        </dl>
+        <p className="mt-4 text-sm leading-6 text-parade-muted">{event.description}</p>
+        <div className="mt-5 flex flex-wrap gap-2">
+          <Link href={`/events/${event.slug}`} className="inline-flex items-center gap-2 rounded-full bg-parade-purple px-4 py-2 text-sm font-black text-white hover:bg-parade-purpleDark">
+            Event details <ArrowRight className="h-4 w-4" aria-hidden="true" />
+          </Link>
+          <a href={`/api/events/${event.id}/ics`} className="inline-flex items-center gap-2 rounded-full border border-parade-line bg-white px-4 py-2 text-sm font-black text-parade-purple hover:bg-parade-purpleSoft">
+            Add to Calendar <Download className="h-4 w-4" aria-hidden="true" />
+          </a>
+          <a href={buildGoogleCalendarUrl(event)} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-full border border-parade-line bg-white px-4 py-2 text-sm font-black text-parade-purple hover:bg-parade-purpleSoft">
+            Google Calendar <ExternalLink className="h-4 w-4" aria-hidden="true" />
+          </a>
+          {event.flyerUrl ? (
+            <a href={event.flyerUrl} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-full border border-parade-line bg-white px-4 py-2 text-sm font-black text-parade-purple hover:bg-parade-purpleSoft">
+              View Flyer <ExternalLink className="h-4 w-4" aria-hidden="true" />
+            </a>
+          ) : null}
         </div>
-      </dl>
-      <p className="mt-4 text-sm leading-6 text-parade-muted">{event.description}</p>
-      <div className="mt-5 flex flex-wrap gap-2">
-        <Link href={`/events/${event.slug}`} className="inline-flex items-center gap-2 rounded-full bg-parade-purple px-4 py-2 text-sm font-black text-white hover:bg-parade-purpleDark">
-          Event details <ArrowRight className="h-4 w-4" aria-hidden="true" />
-        </Link>
-        <a href={`/api/events/${event.id}/ics`} className="inline-flex items-center gap-2 rounded-full border border-parade-line bg-white px-4 py-2 text-sm font-black text-parade-purple hover:bg-parade-purpleSoft">
-          Add to Calendar <Download className="h-4 w-4" aria-hidden="true" />
-        </a>
-        <a href={buildGoogleCalendarUrl(event)} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-full border border-parade-line bg-white px-4 py-2 text-sm font-black text-parade-purple hover:bg-parade-purpleSoft">
-          Google Calendar <ExternalLink className="h-4 w-4" aria-hidden="true" />
-        </a>
       </div>
     </article>
+  );
+}
+
+function EventCardMedia({ event }: { event: CommunityEvent }) {
+  if (!event.flyerUrl) {
+    return null;
+  }
+
+  return (
+    <Link href={`/events/${event.slug}`} className="relative block h-56 overflow-hidden border-b border-parade-line bg-parade-purpleDark sm:h-64">
+      <Image
+        src={event.flyerUrl}
+        alt={`${event.title} flyer`}
+        fill
+        sizes="(min-width: 1024px) 50vw, 100vw"
+        className="object-cover transition duration-300 hover:scale-105"
+      />
+      <span className="absolute inset-0 bg-gradient-to-t from-parade-purpleDeep/55 via-transparent to-transparent" aria-hidden="true" />
+      <span className="absolute bottom-3 left-3 rounded-full bg-parade-gold px-3 py-1 text-xs font-black uppercase tracking-wide text-parade-purpleDark shadow-glow">
+        Event Flyer
+      </span>
+    </Link>
+  );
+}
+
+function OrganizationLogo({ event }: { event: CommunityEvent }) {
+  if (!event.organizationLogoUrl) {
+    return null;
+  }
+
+  return (
+    <span className="relative h-14 w-14 shrink-0 overflow-hidden rounded-2xl border border-parade-gold/40 bg-white shadow-sm">
+      <Image src={event.organizationLogoUrl} alt={`${event.organization} logo`} fill sizes="56px" className="object-contain p-1.5" />
+    </span>
   );
 }
