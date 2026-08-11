@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, CalendarDays, Download, ExternalLink, PlusCircle, ShieldCheck } from "lucide-react";
+import { CommunityEventsMonthCalendar } from "@/components/CommunityEventsMonthCalendar";
 import {
   buildGoogleCalendarUrl,
   formatCommunityEventDate,
@@ -52,11 +53,23 @@ export default function CommunityEventsPage() {
         </section>
 
         {events.length > 0 ? (
-          <section className="grid gap-4 lg:grid-cols-2">
-            {events.map((event) => (
-              <EventCard key={event.id} event={event} />
-            ))}
-          </section>
+          <>
+            <CommunityEventsMonthCalendar events={events} />
+
+            <section id="approved-event-details">
+              <div className="mb-4">
+                <h2 className="text-2xl font-black text-parade-purpleDark">Approved event details</h2>
+                <p className="mt-2 max-w-3xl text-sm leading-6 text-parade-muted">
+                  Open an event for its flyer, venue, map, RSVP link, public contact, and add-to-calendar options.
+                </p>
+              </div>
+              <div className="grid gap-4 lg:grid-cols-2">
+                {events.map((event) => (
+                  <EventCard key={event.id} event={event} />
+                ))}
+              </div>
+            </section>
+          </>
         ) : (
           <section className="rounded-[1.5rem] border border-dashed border-parade-line bg-white p-6 text-center shadow-card">
             <div className="mx-auto grid h-14 w-14 place-items-center rounded-2xl bg-parade-goldSoft text-parade-purple ring-1 ring-parade-gold/40">
@@ -116,9 +129,9 @@ function EventCard({ event }: { event: CommunityEvent }) {
             </a>
           ) : null}
           {event.flyerUrl ? (
-            <a href={event.flyerUrl} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-full border border-parade-line bg-white px-4 py-2 text-sm font-black text-parade-purple hover:bg-parade-purpleSoft">
-              View Flyer <ExternalLink className="h-4 w-4" aria-hidden="true" />
-            </a>
+            <Link href={`/events/${event.slug}#event-flyer`} className="inline-flex items-center gap-2 rounded-full border border-parade-line bg-white px-4 py-2 text-sm font-black text-parade-purple hover:bg-parade-purpleSoft">
+              View Flyer <ArrowRight className="h-4 w-4" aria-hidden="true" />
+            </Link>
           ) : null}
         </div>
       </div>
@@ -132,7 +145,7 @@ function EventCardMedia({ event }: { event: CommunityEvent }) {
   }
 
   return (
-    <Link href={`/events/${event.slug}`} className="relative block h-56 overflow-hidden border-b border-parade-line bg-parade-purpleDark sm:h-64">
+    <Link href={`/events/${event.slug}#event-flyer`} className="relative block h-56 overflow-hidden border-b border-parade-line bg-parade-purpleDark sm:h-64">
       <Image
         src={event.flyerUrl}
         alt={`${event.title} flyer`}
