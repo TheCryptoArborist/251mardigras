@@ -22,6 +22,7 @@ export default async function ParkingAccessPage() {
       primaryAction="Open full visitor guide"
       resourceActionLabel="Open link"
       officialReminder="Parking, towing, road closures, public-safety instructions, and parade-day access should be verified through official City and public-safety sources before travel."
+      showHeroQuickView={false}
     >
       <ParkingAccessMap />
     </CategoryResourcePage>
