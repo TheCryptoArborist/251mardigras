@@ -218,14 +218,14 @@ export default async function HomePage() {
 
 function HomepageVideoSpotlight() {
   return (
-    <section className="mt-7 max-w-3xl overflow-hidden rounded-[1.5rem] border border-parade-gold/45 bg-white/12 p-3 shadow-glow backdrop-blur" aria-label="Every Day is Mardi Gras video">
+    <section className="mt-7 max-w-3xl overflow-hidden rounded-[1.5rem] border border-parade-gold/45 bg-white/12 p-3 shadow-glow backdrop-blur" aria-label="Every Day is Mardi Gras in Mobile, Alabama video">
       <h2 className="px-1 pb-3 text-xl font-black text-white sm:text-2xl">
-        Every Day is Mardi Gras
+        Every Day is Mardi Gras in Mobile, Alabama
       </h2>
       <div className="relative aspect-video overflow-hidden rounded-[1.15rem] border border-parade-gold/35 bg-parade-purpleDark shadow-civic">
         <iframe
           src={HOMEPAGE_FEATURED_VIDEO_EMBED_URL}
-          title="Every Day is Mardi Gras"
+          title="Every Day is Mardi Gras in Mobile, Alabama"
           className="absolute inset-0 h-full w-full border-0"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
           referrerPolicy="strict-origin-when-cross-origin"
