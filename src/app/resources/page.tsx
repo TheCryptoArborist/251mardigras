@@ -3,7 +3,6 @@ import {
   Archive,
   Car,
   ExternalLink,
-  MapPinned,
   PlayCircle,
   Share2,
   ShieldCheck,
@@ -55,7 +54,7 @@ const planningLanes = [
   },
   {
     title: "Get downtown",
-    description: "Start with parking and transportation resources, then verify road closures and towing rules with official sources.",
+    description: "Start with parking, transportation, and access resources for parade-day planning.",
     categories: ["Downtown Transportation", "Mobility-Friendly Access"]
   },
   {
@@ -115,7 +114,7 @@ export default async function ResourcesPage() {
         <section>
           <SectionHeader
             title="Start Here"
-            description="Highest-use direct links pulled forward from the resource inventory. These are convenience links, not official parade or public-safety decisions."
+            description="Highest-use direct links pulled forward from the resource inventory for quick visitor planning."
           />
           <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
             {primaryResources.map((resource) => (
@@ -138,18 +137,6 @@ export default async function ResourcesPage() {
                 resources={lane.categories.flatMap((category) => grouped[category] ?? [])}
               />
             ))}
-          </div>
-        </section>
-
-        <section className="rounded-[1.5rem] border border-amber-200 bg-parade-goldSoft p-5 shadow-civic">
-          <div className="flex items-start gap-3">
-            <MapPinned className="mt-0.5 h-5 w-5 shrink-0 text-amber-800" aria-hidden="true" />
-            <div>
-              <h2 className="text-lg font-black text-amber-950">Official-source reminder</h2>
-              <p className="mt-2 text-sm leading-6 text-amber-950">
-                Visitor resources are useful for planning and discovery, but parade schedules, routes, parking rules, towing, road closures, weather impacts, and emergency decisions should still be verified through official City, public-safety, and National Weather Service sources.
-              </p>
-            </div>
           </div>
         </section>
 
