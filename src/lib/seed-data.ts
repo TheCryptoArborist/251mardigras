@@ -220,6 +220,13 @@ export const resourceSeeds: ResourceSeed[] = [
   ].map((title, index) =>
     directoryResource(title, "Food and Drink", "Food or drink stop in the visitor directory. Confirm hours, reservations, and parade-day access with the venue.", index + 1)
   ),
+  directoryResource(
+    "Big W Gourmet Pecans",
+    "Food and Drink",
+    "Gourmet pecans and sweets vendor. Contact 251-455-5462 and confirm availability before making plans.",
+    17,
+    "https://www.facebook.com/profile.php?id=61560877037579"
+  ),
   directoryResource("Port City Throws", "Mardi Gras Gear / Throws", "Mardi Gras throws and gear resource.", 1),
   directoryResource("Pop's Midtown", "Mardi Gras Gear / Throws", "Mardi Gras gear and shopping resource.", 2),
   directoryResource("Lemon T's", "Mardi Gras Gear / Throws", "Mardi Gras shirts, apparel, and gear resource.", 3),
