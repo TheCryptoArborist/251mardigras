@@ -30,8 +30,7 @@ const primaryResourceTitles = [
   "YouTube channel",
   "Need Mobility-Friendly Mardi Gras Access? Click Here",
   "City of Mobile Parking and Transportation Guide",
-  "Downtown Parking Map",
-  "Mardi Gras 2026 Parking Guide Mobile, Alabama"
+  "Downtown Parking Map"
 ];
 
 const planningLanes = [
