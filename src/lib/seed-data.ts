@@ -223,7 +223,7 @@ export const resourceSeeds: ResourceSeed[] = [
   directoryResource(
     "Big W Gourmet Pecans",
     "Food and Drink",
-    "Gourmet pecans and sweets vendor. Contact 251-455-5462 and confirm availability before making plans.",
+    "Gourmet pecans and sweets vendor. Confirm availability before making plans.",
     17,
     "https://www.facebook.com/profile.php?id=61560877037579"
   ),
