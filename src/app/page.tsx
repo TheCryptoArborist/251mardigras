@@ -111,12 +111,11 @@ export default async function HomePage() {
             <div className="inline-flex items-center gap-2 rounded-full border border-parade-gold/40 bg-white/10 px-4 py-2 text-xs font-black uppercase tracking-wide text-parade-goldBright shadow-glow backdrop-blur">
               Mobile Mardi Gras parade coverage
             </div>
-            <h1 className="mt-5 max-w-4xl text-4xl font-black tracking-tight text-white drop-shadow-lg sm:text-6xl">
-              Watch the parades. Find the links. Plan the day.
+            <h1 className="mt-5 max-w-4xl text-4xl font-black leading-[0.98] tracking-tight text-white drop-shadow-lg sm:text-6xl lg:text-7xl">
+              <span className="block">Watch the parades</span>
+              <span className="block">Find the links</span>
+              <span className="block">Plan the day</span>
             </h1>
-            <p className="mt-5 max-w-3xl text-lg leading-8 text-purple-100 drop-shadow">
-              The main purpose of this site is Mobile Mardi Gras parade coverage. Food and drink, parking and access, weather, and Mardi Gras gear are organized as support tools for visitors before, during, and between live coverage.
-            </p>
             <CountdownTimer />
             <HomepageVideoSpotlight className="mt-7 lg:hidden" />
             <div className="mt-7 flex flex-wrap gap-3">
