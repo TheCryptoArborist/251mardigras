@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, ExternalLink, PlayCircle, ShieldCheck, Video } from "lucide-react";
+import { ArrowRight, ExternalLink, PlayCircle, Video } from "lucide-react";
 import { LiveStreamEmbed } from "@/components/LiveStreamEmbed";
 import { SectionHeader } from "@/components/SectionHeader";
 import { YOUTUBE_CHANNEL_URL, YOUTUBE_SUPPORTER_URL } from "@/lib/seed-data";
@@ -42,8 +42,7 @@ const watchLinks = [
 const viewerNotes = [
   "The live player works when a public Mobile Mardi Gras livestream is active on the YouTube channel.",
   "Subscribe on YouTube and turn on notifications so the stream is easier to find when live coverage begins.",
-  "Previous parade videos and season playlists remain available through the channel and resource directory.",
-  "This website helps viewers find coverage, but official parade, route, closure, and safety decisions still need to be verified with official public sources."
+  "Previous parade videos and season playlists remain available through the channel and resource directory."
 ];
 
 export default function WatchPage() {
@@ -120,7 +119,7 @@ export default function WatchPage() {
           </div>
         </section>
 
-        <section className="grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
+        <section className="max-w-3xl">
           <article className="rounded-[1.5rem] border border-parade-gold/35 bg-gradient-to-br from-parade-cream via-white to-parade-purpleMist p-5 shadow-card">
             <div className="flex items-start gap-3">
               <div className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-parade-purple text-parade-goldBright shadow-sm ring-1 ring-parade-gold/35">
@@ -136,21 +135,6 @@ export default function WatchPage() {
                     </li>
                   ))}
                 </ul>
-              </div>
-            </div>
-          </article>
-
-          <article className="rounded-[1.5rem] border border-amber-200 bg-parade-goldSoft p-5 shadow-civic">
-            <div className="flex items-start gap-3">
-              <ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-amber-800" aria-hidden="true" />
-              <div>
-                <h2 className="text-lg font-black text-amber-950">Official-source reminder</h2>
-                <p className="mt-2 text-sm leading-6 text-amber-950">
-                  Live coverage and visitor resources do not replace official guidance. Parade schedules, routes, cancellations, road closures, public-safety instructions, and weather impacts should be verified through official City, public-safety, parade organization, and National Weather Service sources.
-                </p>
-                <Link href="/resources" className="mt-4 inline-flex items-center gap-2 rounded-full bg-amber-950 px-4 py-2 text-sm font-black text-parade-goldSoft hover:bg-parade-purpleDark">
-                  Browse visitor resources <ArrowRight className="h-4 w-4" aria-hidden="true" />
-                </Link>
               </div>
             </div>
           </article>
