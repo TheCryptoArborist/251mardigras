@@ -10,6 +10,39 @@ export const dynamic = "force-dynamic";
 
 type HourlyPeriod = WeatherPreview["hourly"][number];
 
+const paradeForecastPreviewCards = [
+  {
+    title: "Parade name",
+    meta: "Official date • Step-off time",
+    risk: "Risk level",
+    window: "Forecast window around step-off",
+    temp: "Temp",
+    rain: "Rain",
+    wind: "Wind",
+    alert: "Alerts"
+  },
+  {
+    title: "Parade name",
+    meta: "Official date • Step-off time",
+    risk: "Risk level",
+    window: "Forecast window around step-off",
+    temp: "Temp",
+    rain: "Rain",
+    wind: "Wind",
+    alert: "Alerts"
+  },
+  {
+    title: "Parade name",
+    meta: "Official date • Step-off time",
+    risk: "Risk level",
+    window: "Forecast window around step-off",
+    temp: "Temp",
+    rain: "Rain",
+    wind: "Wind",
+    alert: "Alerts"
+  }
+];
+
 export default async function WeatherPage() {
   const [parades, weatherResult] = await Promise.all([
     getParades(),
@@ -126,11 +159,11 @@ function ForecastWindow({ weather, error }: { weather: WeatherPreview | null; er
   return (
     <section>
       <SectionTitle
-        title="Next few hours downtown"
-        description={`Last weather refresh: ${formatDateTime(weather?.checkedAt)}`}
+        title="Compact downtown forecast"
+        description={`Next few hours from NWS data. Last refresh: ${formatDateTime(weather?.checkedAt)}`}
       />
       {hourly.length > 0 ? (
-        <div className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+        <div className="mt-4 grid gap-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
           {hourly.map((period) => (
             <ForecastCard key={period.startTime} period={period} />
           ))}
@@ -155,12 +188,13 @@ function ParadeWeatherRiskPanel({ paradesLoaded }: { paradesLoaded: number }) {
         </div>
         <div>
           <p className="text-xs font-black uppercase tracking-[0.16em] text-parade-purple">Parade weather risk</p>
-          <h2 className="mt-1 text-2xl font-black text-parade-purpleDark">Parade-by-parade outlook</h2>
+          <h2 className="mt-1 text-2xl font-black text-parade-purpleDark">Parade-by-parade outlook preview</h2>
           <p className="mt-2 max-w-3xl text-sm leading-6 text-parade-muted">
-            This section is reserved for parade-specific weather windows. Once official parade dates and times are loaded for the season, each parade can show its own planning outlook instead of only the general downtown forecast.
+            This preview shows the layout planned for the 2027 schedule. Once official parade dates and times are loaded, these sample cards can be replaced by real parade-specific forecast windows.
           </p>
         </div>
       </div>
+
       <div className="relative z-10 mt-5 grid gap-3 sm:grid-cols-2">
         <div className="rounded-2xl border border-parade-gold/30 bg-white/85 p-4 shadow-sm">
           <p className="text-xs font-black uppercase tracking-wide text-parade-purple">Current mode</p>
@@ -173,33 +207,93 @@ function ParadeWeatherRiskPanel({ paradesLoaded }: { paradesLoaded: number }) {
           </p>
         </div>
       </div>
+
+      <div className="relative z-10 mt-5 rounded-[1.25rem] border border-parade-gold/30 bg-white/80 p-4 shadow-sm">
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <p className="text-xs font-black uppercase tracking-[0.16em] text-parade-purple">Preview only</p>
+            <h3 className="mt-1 text-lg font-black text-parade-purpleDark">Future parade forecast cards</h3>
+          </div>
+          <StatusPill tone="gold">Sample layout</StatusPill>
+        </div>
+        <div className="mt-4 grid gap-3 lg:grid-cols-3">
+          {paradeForecastPreviewCards.map((card, index) => (
+            <ParadeForecastPreviewCard key={`${card.title}-${index}`} {...card} />
+          ))}
+        </div>
+      </div>
     </section>
   );
 }
 
 function ForecastCard({ period }: { period: HourlyPeriod }) {
   return (
-    <article className="relative overflow-hidden rounded-[1.25rem] border border-parade-gold/30 bg-gradient-to-br from-white via-parade-cream to-parade-purpleMist p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-civic">
-      <span className="pointer-events-none absolute right-[-2rem] top-[-2rem] h-20 w-20 rounded-full bg-parade-gold/20 blur-2xl" aria-hidden="true" />
+    <article className="relative overflow-hidden rounded-2xl border border-parade-gold/30 bg-gradient-to-br from-white via-parade-cream to-parade-purpleMist p-3 shadow-sm transition hover:-translate-y-0.5 hover:shadow-civic">
+      <span className="pointer-events-none absolute right-[-1.5rem] top-[-1.5rem] h-16 w-16 rounded-full bg-parade-gold/20 blur-xl" aria-hidden="true" />
       <div className="relative z-10">
-        <p className="text-xs font-black uppercase tracking-wide text-parade-purple">{formatDateTime(period.startTime)}</p>
-        <h3 className="mt-2 text-lg font-black text-parade-purpleDark">{period.shortForecast}</h3>
-        <div className="mt-4 grid gap-2 text-sm font-semibold text-parade-muted">
-          <span className="inline-flex items-center gap-2">
-            <Thermometer className="h-4 w-4 text-parade-purple" aria-hidden="true" />
-            {period.temperature} {period.temperatureUnit}
-          </span>
-          <span className="inline-flex items-center gap-2">
-            <Wind className="h-4 w-4 text-parade-purple" aria-hidden="true" />
-            {period.windSpeed} {period.windDirection}
-          </span>
-          <span className="inline-flex items-center gap-2">
-            <Umbrella className="h-4 w-4 text-parade-purple" aria-hidden="true" />
-            Rain chance: {period.probabilityOfPrecipitation?.value ?? 0}%
-          </span>
+        <p className="text-[0.7rem] font-black uppercase tracking-wide text-parade-purple">{formatDateTime(period.startTime)}</p>
+        <div className="mt-2 flex items-start justify-between gap-2">
+          <div>
+            <p className="text-2xl font-black text-parade-purpleDark">{period.temperature}°</p>
+            <p className="text-[0.65rem] font-black uppercase text-parade-muted">{period.temperatureUnit}</p>
+          </div>
+          <CloudSun className="h-5 w-5 shrink-0 text-parade-purple" aria-hidden="true" />
+        </div>
+        <h3 className="mt-2 line-clamp-2 min-h-10 text-sm font-black leading-5 text-parade-purpleDark">{period.shortForecast}</h3>
+        <div className="mt-3 space-y-1 text-xs font-semibold text-parade-muted">
+          <span className="block truncate">Rain {period.probabilityOfPrecipitation?.value ?? 0}%</span>
+          <span className="block truncate">Wind {period.windSpeed} {period.windDirection}</span>
         </div>
       </div>
     </article>
+  );
+}
+
+function ParadeForecastPreviewCard({
+  title,
+  meta,
+  risk,
+  window,
+  temp,
+  rain,
+  wind,
+  alert
+}: {
+  title: string;
+  meta: string;
+  risk: string;
+  window: string;
+  temp: string;
+  rain: string;
+  wind: string;
+  alert: string;
+}) {
+  return (
+    <article className="rounded-2xl border border-parade-gold/30 bg-gradient-to-br from-white via-parade-cream to-parade-purpleMist p-4 shadow-sm">
+      <div className="flex items-start justify-between gap-3">
+        <div>
+          <p className="text-xs font-black uppercase tracking-wide text-parade-purple">{meta}</p>
+          <h4 className="mt-1 text-base font-black text-parade-purpleDark">{title}</h4>
+        </div>
+        <StatusPill tone="gray">{risk}</StatusPill>
+      </div>
+      <p className="mt-3 text-xs font-semibold leading-5 text-parade-muted">{window}</p>
+      <div className="mt-4 grid grid-cols-2 gap-2 text-xs font-black text-parade-purpleDark">
+        <PreviewMetric label="Temp" value={temp} />
+        <PreviewMetric label="Rain" value={rain} />
+        <PreviewMetric label="Wind" value={wind} />
+        <PreviewMetric label="NWS" value={alert} />
+      </div>
+    </article>
+  );
+}
+
+function PreviewMetric({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-xl border border-parade-gold/25 bg-white/80 px-3 py-2">
+      <p className="text-[0.62rem] uppercase tracking-wide text-parade-muted">{label}</p>
+      <p className="mt-0.5 truncate text-xs font-black text-parade-purpleDark">{value}</p>
+    </div>
   );
 }
 
