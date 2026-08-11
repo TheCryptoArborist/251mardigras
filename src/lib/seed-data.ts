@@ -199,13 +199,12 @@ export const resourceSeeds: ResourceSeed[] = [
   directoryResource("Previous parade playlists", "Live Coverage / Channel Support", "Latest Mobile Mardi Gras parade playlist and channel archive resources.", 4, MARDI_GRAS_2026_PLAYLIST_URL),
   directoryResource("ParkWhiz Google Play link", "Downtown Transportation", "Parking app link for downtown transportation planning.", 1),
   directoryResource("ParkWhiz Apple App Store link", "Downtown Transportation", "Parking app link for downtown transportation planning.", 2),
-  directoryResource("Mardi Gras 2026 Parking Guide Mobile, Alabama", "Downtown Transportation", "Parking guide resource. Verify parking, towing, and traffic rules with official sources.", 3),
-  directoryResource("Downtown Parking Map", "Downtown Transportation", "Downtown parking map resource. Verify closures and towing rules before travel.", 4),
+  directoryResource("Downtown Parking Map", "Downtown Transportation", "Downtown parking map resource. Verify closures and towing rules before travel.", 3),
   directoryResource(
     "City of Mobile Parking and Transportation Guide",
     "Downtown Transportation",
     "Official City page should be verified before travel.",
-    5,
+    4,
     "https://www.cityofmobile.gov/mardi-gras-parade-parking/"
   ),
   directoryResource(
