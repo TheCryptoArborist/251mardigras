@@ -64,6 +64,39 @@ const toolCards = [
   }
 ];
 
+const socialBranding: Record<string, { icon: ReactNode; background: string; foreground: string; label: string }> = {
+  YouTube: {
+    icon: <YouTubeLogo />,
+    background: "#ff0000",
+    foreground: "#ffffff",
+    label: "Follow on YouTube"
+  },
+  Facebook: {
+    icon: <FacebookLogo />,
+    background: "#1877f2",
+    foreground: "#ffffff",
+    label: "Follow on Facebook"
+  },
+  Instagram: {
+    icon: <InstagramLogo />,
+    background: "linear-gradient(135deg, #f58529 0%, #dd2a7b 45%, #8134af 72%, #515bd4 100%)",
+    foreground: "#ffffff",
+    label: "Follow on Instagram"
+  },
+  TikTok: {
+    icon: <TikTokLogo />,
+    background: "#000000",
+    foreground: "#ffffff",
+    label: "Follow on TikTok"
+  },
+  X: {
+    icon: <XLogo />,
+    background: "#000000",
+    foreground: "#ffffff",
+    label: "Follow on X"
+  }
+};
+
 export default async function ResourcesPage() {
   const resources = await getResources();
   const socialResources = pickResources(resources, socialTitles);
@@ -175,14 +208,29 @@ function SectionTitle({ title, description }: { title: string; description: stri
 }
 
 function CompactResourceButton({ resource }: { resource: ResourceItem }) {
+  const socialBrand = socialBranding[resource.title];
+
   return (
     <a
       href={resource.url}
       target="_blank"
       rel="noreferrer"
-      className="group flex min-w-0 items-center justify-between gap-3 rounded-2xl border border-white/20 bg-white/95 px-4 py-3 text-parade-purpleDark shadow-sm transition hover:-translate-y-0.5 hover:bg-parade-goldSoft"
+      aria-label={socialBrand?.label ?? `Open ${resource.title}`}
+      className="group flex min-w-0 items-center gap-3 rounded-2xl border border-white/20 bg-white/95 px-3 py-2.5 text-parade-purpleDark shadow-sm transition hover:-translate-y-0.5 hover:bg-parade-goldSoft"
     >
-      <span className="min-w-0 truncate text-sm font-black">{resource.title}</span>
+      {socialBrand ? (
+        <span
+          className="grid h-9 w-9 shrink-0 place-items-center rounded-xl shadow-sm ring-1 ring-black/5"
+          style={{ background: socialBrand.background, color: socialBrand.foreground }}
+          aria-hidden="true"
+        >
+          {socialBrand.icon}
+        </span>
+      ) : null}
+      <span className="min-w-0 flex-1">
+        <span className="block truncate text-sm font-black">{resource.title}</span>
+        <span className="mt-0.5 block truncate text-[0.68rem] font-black uppercase tracking-wide text-parade-muted">Follow</span>
+      </span>
       <ExternalLink className="h-4 w-4 shrink-0 text-parade-purple transition group-hover:translate-x-0.5" aria-hidden="true" />
     </a>
   );
@@ -241,5 +289,47 @@ function ResourceGroup({
         ))}
       </div>
     </section>
+  );
+}
+
+function YouTubeLogo() {
+  return (
+    <svg viewBox="0 0 24 24" className="h-5 w-5" fill="currentColor" aria-hidden="true">
+      <path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8ZM9.6 15.6V8.4l6.3 3.6-6.3 3.6Z" />
+    </svg>
+  );
+}
+
+function FacebookLogo() {
+  return (
+    <svg viewBox="0 0 24 24" className="h-5 w-5" fill="currentColor" aria-hidden="true">
+      <path d="M24 12.1C24 5.4 18.6 0 12 0S0 5.4 0 12.1c0 6 4.4 11 10.1 11.9v-8.4h-3v-3.5h3V9.4c0-3 1.8-4.7 4.5-4.7 1.3 0 2.7.2 2.7.2v3h-1.5c-1.5 0-2 .9-2 1.9v2.3h3.4l-.5 3.5h-2.9V24c5.8-.9 10.2-5.9 10.2-11.9Z" />
+    </svg>
+  );
+}
+
+function InstagramLogo() {
+  return (
+    <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <rect x="3" y="3" width="18" height="18" rx="5" />
+      <circle cx="12" cy="12" r="4" />
+      <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none" />
+    </svg>
+  );
+}
+
+function TikTokLogo() {
+  return (
+    <svg viewBox="0 0 24 24" className="h-5 w-5" fill="currentColor" aria-hidden="true">
+      <path d="M16.7 1.8c.4 3.1 2.1 5 5.1 5.2v3.5a8.7 8.7 0 0 1-5.1-1.6v7.1c0 4.5-3.1 6.7-6.3 6.7-3.6 0-6.4-2.5-6.4-5.9 0-3.6 3-6.1 6.9-5.9v3.7c-1.7-.2-3 .7-3 2.1 0 1.3 1.1 2.1 2.4 2.1 1.4 0 2.5-.8 2.5-2.8V1.8h3.9Z" />
+    </svg>
+  );
+}
+
+function XLogo() {
+  return (
+    <svg viewBox="0 0 24 24" className="h-4 w-4" fill="currentColor" aria-hidden="true">
+      <path d="M18.9 2h3.3l-7.2 8.2L23.5 22h-6.7l-5.2-6.8L5.6 22H2.3l7.7-8.8L1.8 2h6.8l4.7 6.2L18.9 2Zm-1.2 18h1.8L7.6 3.9H5.7L17.7 20Z" />
+    </svg>
   );
 }
