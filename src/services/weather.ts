@@ -50,6 +50,8 @@ type NwsAlertFeature = {
     effective?: string;
     expires?: string;
     ends?: string | null;
+    status?: string;
+    messageType?: string;
   };
 };
 
@@ -88,7 +90,7 @@ export type WeatherPreview = {
 };
 
 const NWS_POINTS_URL = `https://api.weather.gov/points/${DOWNTOWN_MOBILE_COORDINATES.latitude},${DOWNTOWN_MOBILE_COORDINATES.longitude}`;
-const NWS_ALERTS_URL = `https://api.weather.gov/alerts/active?point=${DOWNTOWN_MOBILE_COORDINATES.latitude},${DOWNTOWN_MOBILE_COORDINATES.longitude}`;
+const NWS_ALERTS_URL = `https://api.weather.gov/alerts/active?status=actual&message_type=alert&point=${DOWNTOWN_MOBILE_COORDINATES.latitude},${DOWNTOWN_MOBILE_COORDINATES.longitude}`;
 
 function nwsHeaders() {
   return {
@@ -122,7 +124,7 @@ async function getLiveWeatherPreview(): Promise<WeatherPreview> {
 
   const current = hourly.properties.periods[0] ?? null;
   const nextSixHours = hourly.properties.periods.slice(0, 6);
-  const activeAlerts = alerts.features ?? [];
+  const activeAlerts = filterPublicAlerts(alerts.features ?? []);
 
   return {
     current,
@@ -239,6 +241,36 @@ function buildRiskSummary(
   return `${riskLevel} weather risk in the next few hours. Rain chance is ${rainChance}% and listed wind is up to ${windMph} mph. Weather risk does not mean a parade is canceled unless officially announced.`;
 }
 
+function filterPublicAlerts(alerts: NwsAlertFeature[]) {
+  return alerts.filter((alert) => {
+    const status = alert.properties.status?.toLowerCase() ?? "actual";
+    const messageType = alert.properties.messageType?.toLowerCase() ?? "alert";
+    const alertText = [
+      alert.properties.event,
+      alert.properties.headline,
+      alert.properties.description,
+      alert.properties.instruction
+    ]
+      .filter(Boolean)
+      .join(" ")
+      .toLowerCase();
+
+    if (["test", "exercise", "system", "draft"].includes(status)) {
+      return false;
+    }
+
+    if (messageType !== "alert") {
+      return false;
+    }
+
+    if (/(^|\s)test(\s|:|-)/i.test(alertText)) {
+      return false;
+    }
+
+    return true;
+  });
+}
+
 export async function checkWeatherAndStore() {
   const preview = await getLiveWeatherPreview();
   const current = preview.current;
@@ -261,6 +293,18 @@ export async function checkWeatherAndStore() {
       contentHash
     }
   });
+
+  if (preview.alerts.length > 0) {
+    await prisma.weatherAlert.updateMany({
+      where: { active: true, alertId: { notIn: preview.alerts.map((alert) => alert.id) } },
+      data: { active: false }
+    });
+  } else {
+    await prisma.weatherAlert.updateMany({
+      where: { active: true },
+      data: { active: false }
+    });
+  }
 
   for (const alert of preview.alerts) {
     await prisma.weatherAlert.upsert({
@@ -328,13 +372,12 @@ function parseOptionalDate(value?: string | null) {
 }
 
 async function getStoredWeatherPreview(): Promise<WeatherPreview | null> {
-  const [snapshot, riskScore, activeAlerts] = await Promise.all([
+  const [snapshot, activeAlerts] = await Promise.all([
     prisma.weatherSnapshot.findFirst({ orderBy: { checkedAt: "desc" } }),
-    prisma.weatherRiskScore.findFirst({ orderBy: { calculatedAt: "desc" } }),
     prisma.weatherAlert.findMany({ where: { active: true }, orderBy: { effective: "desc" } })
   ]);
 
-  if (!snapshot && !riskScore) {
+  if (!snapshot && activeAlerts.length === 0) {
     return null;
   }
 
@@ -357,21 +400,8 @@ async function getStoredWeatherPreview(): Promise<WeatherPreview | null> {
   }));
   const current = parsedPreview?.current ?? buildCurrentPeriodFromSnapshot(snapshot);
   const hourly = parsedPreview?.hourly?.length ? parsedPreview.hourly : current ? [current] : [];
-  const alerts = storedAlerts.length ? storedAlerts : parsedPreview?.alerts ?? [];
-  const risk =
-    riskScore
-      ? {
-          riskLevel: riskScore.riskLevel as WeatherRiskBreakdown["riskLevel"],
-          riskScore: riskScore.riskScore,
-          rainScore: riskScore.rainScore,
-          lightningScore: riskScore.lightningScore,
-          windScore: riskScore.windScore,
-          heatScore: riskScore.heatScore,
-          coldScore: riskScore.coldScore,
-          floodScore: riskScore.floodScore,
-          summary: riskScore.summary
-        }
-      : parsedPreview?.risk ?? scoreWeatherRisk(hourly, alerts);
+  const alerts = filterPublicAlerts(storedAlerts.length ? storedAlerts : parsedPreview?.alerts ?? []);
+  const risk = scoreWeatherRisk(hourly, alerts);
 
   return {
     current,
@@ -380,7 +410,7 @@ async function getStoredWeatherPreview(): Promise<WeatherPreview | null> {
     alerts,
     point: parsedPreview?.point ?? null,
     risk,
-    checkedAt: snapshot?.checkedAt.toISOString() ?? riskScore?.calculatedAt.toISOString() ?? new Date().toISOString(),
+    checkedAt: snapshot?.checkedAt.toISOString() ?? new Date().toISOString(),
     sourceUrls: parsedPreview?.sourceUrls ?? {
       points: NWS_POINTS_URL,
       alerts: NWS_ALERTS_URL
