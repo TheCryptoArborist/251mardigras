@@ -11,6 +11,7 @@ export const dynamic = "force-dynamic";
 
 const HOMEPAGE_VIDEO_SRC = "/videos/dragon-home-screen-bg.mp4";
 const HOMEPAGE_VIDEO_POSTER = "/videos/dragon-home-screen-poster.jpg";
+const HOMEPAGE_FEATURED_VIDEO_EMBED_URL = "https://www.youtube.com/embed/vSwxOuydTjU?si=dpUnDxY4bDv-7Gqt";
 
 type PrimaryActionVariant = "live" | "replays" | "food" | "parking" | "weather" | "gear";
 
@@ -173,6 +174,8 @@ export default async function HomePage() {
           </div>
         </section>
 
+        <HomepageVideoSpotlight />
+
         <section className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
           <div className="rounded-[1.5rem] border border-parade-line bg-white p-3 shadow-card">
             <LiveStreamEmbed />
@@ -211,6 +214,40 @@ export default async function HomePage() {
         </section>
       </div>
     </div>
+  );
+}
+
+function HomepageVideoSpotlight() {
+  return (
+    <section className="overflow-hidden rounded-[1.5rem] border border-parade-gold/35 bg-gradient-to-br from-white via-parade-cream to-parade-purpleMist shadow-card">
+      <div className="grid gap-0 lg:grid-cols-[0.72fr_1.28fr] lg:items-stretch">
+        <div className="relative overflow-hidden bg-gradient-to-br from-parade-purpleDeep via-parade-purpleDark to-parade-purple p-5 text-white">
+          <span className="pointer-events-none absolute right-[-3rem] top-[-3rem] h-28 w-28 rounded-full bg-parade-gold/20 blur-2xl" aria-hidden="true" />
+          <div className="relative z-10 flex h-full flex-col justify-center">
+            <div className="grid h-12 w-12 place-items-center rounded-2xl bg-parade-gold text-parade-purpleDark shadow-glow">
+              <PlayCircle className="h-6 w-6" aria-hidden="true" />
+            </div>
+            <p className="mt-4 text-xs font-black uppercase tracking-[0.16em] text-parade-goldBright">Featured video</p>
+            <h2 className="mt-2 text-2xl font-black text-white">Mardi Gras Mobile spotlight</h2>
+            <p className="mt-3 text-sm leading-6 text-purple-100">
+              Watch the latest featured video from Mardi Gras - Mobile, AL without leaving the homepage.
+            </p>
+          </div>
+        </div>
+        <div className="bg-white p-3">
+          <div className="relative aspect-video overflow-hidden rounded-[1.2rem] border border-parade-gold/30 bg-parade-purpleDark shadow-civic">
+            <iframe
+              src={HOMEPAGE_FEATURED_VIDEO_EMBED_URL}
+              title="Mardi Gras Mobile featured video"
+              className="absolute inset-0 h-full w-full border-0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              referrerPolicy="strict-origin-when-cross-origin"
+              allowFullScreen
+            />
+          </div>
+        </div>
+      </div>
+    </section>
   );
 }
 
