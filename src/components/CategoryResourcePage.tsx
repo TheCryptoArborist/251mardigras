@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import type { ReactNode } from "react";
 import { ArrowRight, ExternalLink, MapPinned } from "lucide-react";
 import type { ResourceItem } from "@/lib/data-access";
 
@@ -17,6 +18,7 @@ type CategoryResourcePageProps = {
   showHeroQuickView?: boolean;
   showResourceSection?: boolean;
   showOfficialReminder?: boolean;
+  children?: ReactNode;
 };
 
 export function CategoryResourcePage({
@@ -32,10 +34,11 @@ export function CategoryResourcePage({
   resourceLogoPaths = {},
   showHeroQuickView = true,
   showResourceSection = true,
-  showOfficialReminder = false
+  showOfficialReminder = false,
+  children
 }: CategoryResourcePageProps) {
   const hasPrimaryAction = Boolean(primaryHref && primaryAction);
-  const showBodyContent = showResourceSection || showOfficialReminder;
+  const showBodyContent = Boolean(children) || showResourceSection || showOfficialReminder;
 
   return (
     <div>
@@ -79,6 +82,8 @@ export function CategoryResourcePage({
 
       {showBodyContent ? (
         <div className="mx-auto max-w-5xl space-y-6 px-4 py-8 sm:px-6 lg:px-8">
+          {children ? children : null}
+
           {showResourceSection ? (
             resources.length > 0 ? (
               <section className="grid gap-4 md:grid-cols-2">
