@@ -8,12 +8,14 @@ type CategoryResourcePageProps = {
   title: string;
   description: string;
   resources: ResourceItem[];
-  primaryHref?: string;
-  primaryAction?: string;
+  primaryHref?: string | null;
+  primaryAction?: string | null;
   emptyMessage?: string;
   resourceActionLabel?: string;
   officialReminder?: string;
   resourceLogoPaths?: Record<string, string>;
+  showHeroQuickView?: boolean;
+  showResourceSection?: boolean;
 };
 
 export function CategoryResourcePage({
@@ -26,8 +28,12 @@ export function CategoryResourcePage({
   emptyMessage = "No direct resources are currently published in this category. Use the full resource guide for the latest available links.",
   resourceActionLabel = "Open resource",
   officialReminder = "Verify parade schedules, routes, cancellations, road closures, parking rules, towing, public-safety instructions, and weather impacts with official sources.",
-  resourceLogoPaths = {}
+  resourceLogoPaths = {},
+  showHeroQuickView = true,
+  showResourceSection = true
 }: CategoryResourcePageProps) {
+  const hasPrimaryAction = Boolean(primaryHref && primaryAction);
+
   return (
     <div>
       <section className="relative overflow-hidden border-b border-parade-gold/30 bg-gradient-to-br from-parade-purpleDeep via-parade-purpleDark to-parade-purple text-white">
@@ -45,44 +51,50 @@ export function CategoryResourcePage({
               {description}
             </p>
             <div className="mt-7 flex flex-wrap gap-3">
-              <Link href={primaryHref} className="inline-flex items-center justify-center gap-2 rounded-full bg-parade-gold px-5 py-3 text-sm font-black text-parade-purpleDark shadow-glow transition hover:-translate-y-0.5 hover:bg-parade-goldBright">
-                {primaryAction} <ArrowRight className="h-4 w-4" aria-hidden="true" />
-              </Link>
+              {hasPrimaryAction ? (
+                <Link href={primaryHref as string} className="inline-flex items-center justify-center gap-2 rounded-full bg-parade-gold px-5 py-3 text-sm font-black text-parade-purpleDark shadow-glow transition hover:-translate-y-0.5 hover:bg-parade-goldBright">
+                  {primaryAction} <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                </Link>
+              ) : null}
               <Link href="/" className="inline-flex items-center justify-center gap-2 rounded-full border border-white/25 bg-white/10 px-5 py-3 text-sm font-black text-white transition hover:-translate-y-0.5 hover:bg-white/15">
                 Back to homepage <ArrowRight className="h-4 w-4" aria-hidden="true" />
               </Link>
             </div>
           </div>
 
-          <div className="relative z-10 rounded-[1.5rem] border border-white/15 bg-white/10 p-4 shadow-glow backdrop-blur">
-            <p className="text-xs font-black uppercase tracking-[0.16em] text-parade-goldBright">Quick view</p>
-            <div className="mt-4 grid grid-cols-2 gap-3 text-center">
-              <HeroMetric label="Resources" value={String(resources.length)} />
-              <HeroMetric label="Links" value="Direct" />
+          {showHeroQuickView ? (
+            <div className="relative z-10 rounded-[1.5rem] border border-white/15 bg-white/10 p-4 shadow-glow backdrop-blur">
+              <p className="text-xs font-black uppercase tracking-[0.16em] text-parade-goldBright">Quick view</p>
+              <div className="mt-4 grid grid-cols-2 gap-3 text-center">
+                <HeroMetric label="Resources" value={String(resources.length)} />
+                <HeroMetric label="Links" value="Direct" />
+              </div>
+              <p className="mt-4 text-xs font-semibold leading-5 text-purple-100">
+                Visitor convenience links only. Confirm details with the source or host before making plans.
+              </p>
             </div>
-            <p className="mt-4 text-xs font-semibold leading-5 text-purple-100">
-              Visitor convenience links only. Confirm details with the source or host before making plans.
-            </p>
-          </div>
+          ) : null}
         </div>
       </section>
 
       <div className="mx-auto max-w-5xl space-y-6 px-4 py-8 sm:px-6 lg:px-8">
-        {resources.length > 0 ? (
-          <section className="grid gap-4 md:grid-cols-2">
-            {resources.map((resource) => {
-              const logoPath = resourceLogoPaths[resource.title] ?? resourceLogoPaths[normalizeResourceTitle(resource.title)];
+        {showResourceSection ? (
+          resources.length > 0 ? (
+            <section className="grid gap-4 md:grid-cols-2">
+              {resources.map((resource) => {
+                const logoPath = resourceLogoPaths[resource.title] ?? resourceLogoPaths[normalizeResourceTitle(resource.title)];
 
-              return (
-                <ResourceButton key={resource.id} resource={resource} actionLabel={resourceActionLabel} logoPath={logoPath} />
-              );
-            })}
-          </section>
-        ) : (
-          <section className="rounded-[1.5rem] border border-parade-gold/35 bg-gradient-to-br from-parade-cream via-white to-parade-purpleMist p-5 text-sm leading-6 text-parade-muted shadow-card">
-            {emptyMessage}
-          </section>
-        )}
+                return (
+                  <ResourceButton key={resource.id} resource={resource} actionLabel={resourceActionLabel} logoPath={logoPath} />
+                );
+              })}
+            </section>
+          ) : (
+            <section className="rounded-[1.5rem] border border-parade-gold/35 bg-gradient-to-br from-parade-cream via-white to-parade-purpleMist p-5 text-sm leading-6 text-parade-muted shadow-card">
+              {emptyMessage}
+            </section>
+          )
+        ) : null}
 
         <section className="rounded-[1.5rem] border border-amber-200 bg-parade-goldSoft p-5 shadow-civic">
           <div className="flex items-start gap-3">
