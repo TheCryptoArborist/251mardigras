@@ -1,3 +1,4 @@
+// SEO helpers for public indexable pages on mg251.xyz.
 import type { Metadata } from "next";
 import { SITE_LOGO_PATH } from "@/lib/brand";
 
