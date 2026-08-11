@@ -1,6 +1,7 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import Image from "next/image";
+import { useMemo, useState, type ReactNode } from "react";
 import {
   Accessibility,
   Archive,
@@ -40,7 +41,7 @@ const categoryDescriptions: Record<string, string> = {
   "Previous Parade Seasons": "Past parade-season video resources and playlists from the Mobile Mardi Gras channel."
 };
 
-const categoryIcons: Record<string, React.ReactNode> = {
+const categoryIcons: Record<string, ReactNode> = {
   "Social Media": <Share2 className="h-5 w-5" aria-hidden="true" />,
   "Live Coverage / Channel Support": <PlayCircle className="h-5 w-5" aria-hidden="true" />,
   "Downtown Transportation": <Car className="h-5 w-5" aria-hidden="true" />,
@@ -48,6 +49,30 @@ const categoryIcons: Record<string, React.ReactNode> = {
   "Food and Drink": <Utensils className="h-5 w-5" aria-hidden="true" />,
   "Mardi Gras Gear / Throws": <ShoppingBag className="h-5 w-5" aria-hidden="true" />,
   "Previous Parade Seasons": <Archive className="h-5 w-5" aria-hidden="true" />
+};
+
+const resourceLogoPaths: Record<string, string> = {
+  "The Outsider": "/images/food-stops/the-outsider.png",
+  "Greer's Saint Louis Market": "/images/food-stops/greers-saint-louis-market.png",
+  "ellenJAY Bakery": "/images/food-stops/ellenjay-bakery.jpg",
+  "Bake My Day": "/images/food-stops/bake-my-day.jpg",
+  "Guncles Gluten Free": "/images/food-stops/guncles-gluten-free.jpg",
+  "Big Bad Breakfast": "/images/food-stops/big-bad-breakfast.jpg",
+  "Serda's Coffee Co.": "/images/food-stops/serdas-coffee-co.jpg",
+  "Knuckle Bones Elixir Co.": "/images/food-stops/knuckle-bones-elixir-co.jpg",
+  "Great Day Latte": "/images/food-stops/great-day-latte.jpg",
+  "Moe's Original BBQ": "/images/food-stops/moes-original-bbq.jpg",
+  "Cammie's Old Dutch Ice Cream Shoppe": "/images/food-stops/cammies-old-dutch-ice-cream-shoppe.jpg",
+  "LODA Bier Garten": "/images/food-stops/loda-bier-garten.jpg",
+  POST: "/images/food-stops/post.jpg",
+  "Braided River Brewing Company": "/images/food-stops/braided-river-brewing-company.jpg",
+  "Joe Cain Cafe": "/images/food-stops/joe-cain-cafe.jpg",
+  "Bob's Downtown Restaurant": "/images/food-stops/bobs-downtown-restaurant.jpg",
+  "Port City Throws": "/images/food-stops/port-city-throws.png",
+  "Pop's Midtown": "/images/food-stops/pops-midtown.jpg",
+  "Lemon T's": "/images/food-stops/lemon-ts.jpg",
+  "Lemon T’s": "/images/food-stops/lemon-ts.jpg",
+  "Toomey's Mardi Gras": "/images/food-stops/toomeys-mardi-gras.png"
 };
 
 export function ResourceDirectoryBrowser({ resources }: { resources: ResourceItem[] }) {
@@ -288,9 +313,7 @@ function RestaurantQuickLink({ resource }: { resource: ResourceItem }) {
       rel="noreferrer"
       className="flex min-w-0 items-center gap-3 rounded border border-parade-line bg-white p-3 text-left transition hover:bg-parade-purpleSoft hover:shadow-civic"
     >
-      <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-parade-purple text-sm font-black text-white" aria-hidden="true">
-        {initialsFor(resource.title)}
-      </span>
+      <ResourceVisual resource={resource} />
       <span className="min-w-0 flex-1">
         <span className="block truncate text-sm font-black text-parade-ink">{resource.title}</span>
         <span className="mt-1 flex items-center gap-1 text-xs font-bold uppercase text-parade-purple">
@@ -355,7 +378,10 @@ function CompactResourceLink({ resource }: { resource: ResourceItem }) {
       rel="noreferrer"
       className="flex min-w-0 items-center justify-between gap-3 rounded border border-parade-line px-3 py-2 text-sm font-semibold text-parade-ink hover:bg-parade-purpleSoft"
     >
-      <span className="min-w-0 truncate">{resource.title}</span>
+      <span className="flex min-w-0 items-center gap-2">
+        <ResourceVisual resource={resource} compact />
+        <span className="min-w-0 truncate">{resource.title}</span>
+      </span>
       <ExternalLink className="h-4 w-4 shrink-0 text-parade-purple" aria-hidden="true" />
     </a>
   );
@@ -364,8 +390,13 @@ function CompactResourceLink({ resource }: { resource: ResourceItem }) {
 function ResourceLinkCard({ resource }: { resource: ResourceItem }) {
   return (
     <article className="flex h-full min-w-0 flex-col rounded border border-parade-line bg-white p-4 transition hover:-translate-y-0.5 hover:shadow-civic">
-      <h3 className="text-base font-bold text-parade-ink">{resource.title}</h3>
-      <p className="mt-2 flex-1 text-sm leading-6 text-parade-muted">{resource.description}</p>
+      <div className="flex items-start gap-3">
+        <ResourceVisual resource={resource} />
+        <div className="min-w-0">
+          <h3 className="text-base font-bold text-parade-ink">{resource.title}</h3>
+          <p className="mt-2 text-sm leading-6 text-parade-muted">{resource.description}</p>
+        </div>
+      </div>
       <div className="mt-4 flex items-center justify-between gap-3">
         <span className="min-w-0 truncate text-xs font-semibold uppercase text-parade-muted">{resource.source}</span>
         <a
@@ -381,6 +412,29 @@ function ResourceLinkCard({ resource }: { resource: ResourceItem }) {
   );
 }
 
+function ResourceVisual({ resource, compact = false }: { resource: ResourceItem; compact?: boolean }) {
+  const logoPath = getResourceLogoPath(resource.title);
+  const sizeClassName = compact ? "h-9 w-9 rounded-xl" : "h-11 w-11 rounded-2xl";
+
+  if (logoPath) {
+    return (
+      <span className={`relative shrink-0 overflow-hidden border border-parade-gold/35 bg-white p-1.5 shadow-sm ${sizeClassName}`} aria-hidden="true">
+        <Image src={logoPath} alt={`${resource.title} logo`} fill sizes={compact ? "36px" : "44px"} className="object-contain p-1" />
+      </span>
+    );
+  }
+
+  return (
+    <span className={`grid shrink-0 place-items-center bg-parade-purple text-parade-goldBright ring-1 ring-parade-gold/35 ${sizeClassName}`} aria-hidden="true">
+      {categoryIcons[resource.category] ?? <ExternalLink className="h-5 w-5" aria-hidden="true" />}
+    </span>
+  );
+}
+
+function getResourceLogoPath(title: string) {
+  return resourceLogoPaths[title] ?? resourceLogoPaths[normalizeSearch(title)] ?? null;
+}
+
 function normalizeSearch(value: string) {
   return value
     .normalize("NFKD")
@@ -388,13 +442,4 @@ function normalizeSearch(value: string) {
     .replace(/[^a-z0-9]+/g, " ")
     .replace(/\s+/g, " ")
     .trim();
-}
-
-function initialsFor(title: string) {
-  const words = normalizeSearch(title)
-    .split(" ")
-    .filter(Boolean)
-    .slice(0, 2);
-
-  return words.map((word) => word[0]?.toUpperCase()).join("") || "MG";
 }
