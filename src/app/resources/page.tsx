@@ -26,11 +26,16 @@ const categoryIcons: Record<string, React.ReactNode> = {
 };
 
 const primaryResourceTitles = [
+  "YouTube",
+  "Facebook",
+  "Instagram",
+  "TikTok",
+  "X",
   "Current livestream",
-  "YouTube channel",
-  "Need Mobility-Friendly Mardi Gras Access? Click Here",
+  "Become a Channel Supporter",
   "City of Mobile Parking and Transportation Guide",
-  "Downtown Parking Map"
+  "Downtown Parking Map",
+  "Need Mobility-Friendly Mardi Gras Access? Click Here"
 ];
 
 const planningLanes = [
@@ -71,7 +76,7 @@ export default async function ResourcesPage() {
             Find the Mardi Gras links you need
           </h1>
           <p className="mt-5 max-w-3xl text-lg leading-8 text-purple-100">
-            Direct links for live coverage, replays, social channels, parking, access support, food, gear, and past parade seasons. Pick what you need and go straight to the source.
+            Follow Mardi Gras - Mobile, AL first, then jump straight to live coverage, parking, access support, food, gear, and past parade seasons.
           </p>
         </div>
       </section>
@@ -81,9 +86,9 @@ export default async function ResourcesPage() {
           <section>
             <SectionHeader
               title="Start Here"
-              description="The most useful links for watching, getting downtown, and planning around parade day."
+              description="Follow the Mardi Gras channels without hunting through the page. The key watching and planning links are pulled forward right after them."
             />
-            <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+            <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-5">
               {primaryResources.map((resource) => (
                 <FeaturedResourceCard key={resource.id} resource={resource} />
               ))}
