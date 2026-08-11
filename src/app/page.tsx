@@ -121,6 +121,7 @@ export default async function HomePage() {
               The main purpose of this site is Mobile Mardi Gras parade coverage. Food and drink, parking and access, weather, and Mardi Gras gear are organized as support tools for visitors before, during, and between live coverage.
             </p>
             <CountdownTimer />
+            <HomepageVideoSpotlight />
             <div className="mt-7 flex flex-wrap gap-3">
               <Link href="/watch" className="inline-flex items-center justify-center gap-2 rounded-full bg-parade-gold px-5 py-3 text-sm font-black text-parade-purpleDark shadow-glow transition hover:-translate-y-0.5 hover:bg-parade-goldBright">
                 Watch live coverage <ArrowRight className="h-4 w-4" aria-hidden="true" />
@@ -174,8 +175,6 @@ export default async function HomePage() {
           </div>
         </section>
 
-        <HomepageVideoSpotlight />
-
         <section className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
           <div className="rounded-[1.5rem] border border-parade-line bg-white p-3 shadow-card">
             <LiveStreamEmbed />
@@ -219,33 +218,25 @@ export default async function HomePage() {
 
 function HomepageVideoSpotlight() {
   return (
-    <section className="overflow-hidden rounded-[1.5rem] border border-parade-gold/35 bg-gradient-to-br from-white via-parade-cream to-parade-purpleMist shadow-card">
-      <div className="grid gap-0 lg:grid-cols-[0.72fr_1.28fr] lg:items-stretch">
-        <div className="relative overflow-hidden bg-gradient-to-br from-parade-purpleDeep via-parade-purpleDark to-parade-purple p-5 text-white">
-          <span className="pointer-events-none absolute right-[-3rem] top-[-3rem] h-28 w-28 rounded-full bg-parade-gold/20 blur-2xl" aria-hidden="true" />
-          <div className="relative z-10 flex h-full flex-col justify-center">
-            <div className="grid h-12 w-12 place-items-center rounded-2xl bg-parade-gold text-parade-purpleDark shadow-glow">
-              <PlayCircle className="h-6 w-6" aria-hidden="true" />
-            </div>
-            <p className="mt-4 text-xs font-black uppercase tracking-[0.16em] text-parade-goldBright">Featured video</p>
-            <h2 className="mt-2 text-2xl font-black text-white">Mardi Gras Mobile spotlight</h2>
-            <p className="mt-3 text-sm leading-6 text-purple-100">
-              Watch the latest featured video from Mardi Gras - Mobile, AL without leaving the homepage.
-            </p>
-          </div>
+    <section className="mt-7 max-w-3xl overflow-hidden rounded-[1.5rem] border border-parade-gold/45 bg-white/12 p-3 shadow-glow backdrop-blur">
+      <div className="mb-3 flex items-center gap-3 px-1">
+        <div className="grid h-10 w-10 shrink-0 place-items-center rounded-2xl bg-parade-gold text-parade-purpleDark shadow-glow">
+          <PlayCircle className="h-5 w-5" aria-hidden="true" />
         </div>
-        <div className="bg-white p-3">
-          <div className="relative aspect-video overflow-hidden rounded-[1.2rem] border border-parade-gold/30 bg-parade-purpleDark shadow-civic">
-            <iframe
-              src={HOMEPAGE_FEATURED_VIDEO_EMBED_URL}
-              title="Mardi Gras Mobile featured video"
-              className="absolute inset-0 h-full w-full border-0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              referrerPolicy="strict-origin-when-cross-origin"
-              allowFullScreen
-            />
-          </div>
+        <div>
+          <p className="text-xs font-black uppercase tracking-[0.16em] text-parade-goldBright">Featured video</p>
+          <h2 className="text-lg font-black text-white">Mardi Gras Mobile spotlight</h2>
         </div>
+      </div>
+      <div className="relative aspect-video overflow-hidden rounded-[1.15rem] border border-parade-gold/35 bg-parade-purpleDark shadow-civic">
+        <iframe
+          src={HOMEPAGE_FEATURED_VIDEO_EMBED_URL}
+          title="Mardi Gras Mobile featured video"
+          className="absolute inset-0 h-full w-full border-0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          referrerPolicy="strict-origin-when-cross-origin"
+          allowFullScreen
+        />
       </div>
     </section>
   );
