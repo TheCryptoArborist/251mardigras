@@ -218,20 +218,11 @@ export default async function HomePage() {
 
 function HomepageVideoSpotlight() {
   return (
-    <section className="mt-7 max-w-3xl overflow-hidden rounded-[1.5rem] border border-parade-gold/45 bg-white/12 p-3 shadow-glow backdrop-blur">
-      <div className="mb-3 flex items-center gap-3 px-1">
-        <div className="grid h-10 w-10 shrink-0 place-items-center rounded-2xl bg-parade-gold text-parade-purpleDark shadow-glow">
-          <PlayCircle className="h-5 w-5" aria-hidden="true" />
-        </div>
-        <div>
-          <p className="text-xs font-black uppercase tracking-[0.16em] text-parade-goldBright">Featured video</p>
-          <h2 className="text-lg font-black text-white">Mardi Gras Mobile spotlight</h2>
-        </div>
-      </div>
+    <section className="mt-7 max-w-3xl overflow-hidden rounded-[1.5rem] border border-parade-gold/45 bg-white/12 p-3 shadow-glow backdrop-blur" aria-label="Mardi Gras Mobile overview video">
       <div className="relative aspect-video overflow-hidden rounded-[1.15rem] border border-parade-gold/35 bg-parade-purpleDark shadow-civic">
         <iframe
           src={HOMEPAGE_FEATURED_VIDEO_EMBED_URL}
-          title="Mardi Gras Mobile featured video"
+          title="Mardi Gras Mobile overview video"
           className="absolute inset-0 h-full w-full border-0"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
           referrerPolicy="strict-origin-when-cross-origin"
