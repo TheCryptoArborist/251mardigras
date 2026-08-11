@@ -59,6 +59,11 @@ export default async function CommunityEventDetailPage({ params }: CommunityEven
                     Event / RSVP Link <ExternalLink className="h-4 w-4" aria-hidden="true" />
                   </a>
                 ) : null}
+                {event.mapUrl ? (
+                  <a href={event.mapUrl} target="_blank" rel="noreferrer" className="inline-flex items-center justify-center gap-2 rounded-full border border-white/25 bg-white/10 px-5 py-3 text-sm font-black text-white transition hover:bg-white/15">
+                    Map / Directions <ExternalLink className="h-4 w-4" aria-hidden="true" />
+                  </a>
+                ) : null}
                 {event.flyerUrl ? (
                   <a href={event.flyerUrl} target="_blank" rel="noreferrer" className="inline-flex items-center justify-center gap-2 rounded-full border border-white/25 bg-white/10 px-5 py-3 text-sm font-black text-white transition hover:bg-white/15">
                     Open Flyer <ExternalLink className="h-4 w-4" aria-hidden="true" />
@@ -96,6 +101,11 @@ export default async function CommunityEventDetailPage({ params }: CommunityEven
               <dt className="text-xs font-black uppercase tracking-wide text-parade-purple">Where</dt>
               <dd className="mt-1 text-base font-bold text-parade-ink">{event.venueName}</dd>
               <dd className="mt-1 text-sm leading-6 text-parade-muted">{event.venueAddress}, {event.cityStateZip}</dd>
+              {event.mapUrl ? (
+                <a href={event.mapUrl} target="_blank" rel="noreferrer" className="mt-3 inline-flex items-center gap-2 rounded-full bg-parade-purple px-4 py-2 text-xs font-black text-white hover:bg-parade-purpleDark">
+                  Open map / directions <ExternalLink className="h-4 w-4" aria-hidden="true" />
+                </a>
+              ) : null}
             </div>
             {event.cost ? (
               <div>
@@ -118,6 +128,7 @@ export default async function CommunityEventDetailPage({ params }: CommunityEven
           {event.accessibilityNotes ? <DetailBlock title="Accessibility notes" body={event.accessibilityNotes} /> : null}
           {event.parkingNotes ? <DetailBlock title="Parking notes" body={event.parkingNotes} /> : null}
           {event.publicContact ? <DetailBlock title="Public contact" body={event.publicContact} /> : null}
+          {event.mapUrl ? <DetailLink title="Map / directions" href={event.mapUrl} label="Open submitted map link" /> : null}
           {event.flyerUrl ? <DetailLink title="Event flyer" href={event.flyerUrl} label="Open submitted flyer" /> : null}
         </section>
 

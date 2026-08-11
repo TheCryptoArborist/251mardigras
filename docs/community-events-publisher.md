@@ -16,6 +16,8 @@ The publisher is intentionally simpler than a full database-backed admin workflo
 
 The page contains a form for approved public event details and a preview panel.
 
+The publisher form should mirror the Jotform public fields closely so approved submissions can be copied without rewording field names. The event type field is a dropdown to reduce typing errors.
+
 ## API route
 
 ```text
@@ -73,7 +75,10 @@ Publish:
 - Organization
 - Event type
 - Date and time
-- Venue/location
+- Venue name
+- Venue street address or location details
+- City, state, ZIP
+- Google or Apple Maps link
 - Public description
 - Ticket/RSVP link
 - Cost
