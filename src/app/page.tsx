@@ -127,6 +127,10 @@ export default async function HomePage() {
           </div>
 
           <div className="relative z-10 lg:col-span-2">
+            <CommunityEventsCallout />
+          </div>
+
+          <div className="relative z-10 lg:col-span-2">
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {primaryActions.map((action) => (
                 <PrimaryActionCard key={action.title} {...action} />
@@ -137,32 +141,6 @@ export default async function HomePage() {
       </section>
 
       <div className="mx-auto max-w-7xl space-y-10 px-4 py-8 sm:px-6 lg:px-8">
-        <section className="relative overflow-hidden rounded-[1.5rem] border border-parade-gold/35 bg-gradient-to-br from-parade-purpleDeep via-parade-purpleDark to-parade-purple p-5 text-white shadow-card">
-          <span className="pointer-events-none absolute right-[-4rem] top-[-4rem] h-32 w-32 rounded-full bg-parade-gold/20 blur-2xl" aria-hidden="true" />
-          <div className="relative z-10 flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
-            <div className="flex items-start gap-3">
-              <div className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-parade-gold text-parade-purpleDark shadow-glow">
-                <CalendarDays className="h-6 w-6" aria-hidden="true" />
-              </div>
-              <div>
-                <p className="text-xs font-black uppercase tracking-[0.16em] text-parade-goldBright">Community Mardi Gras Events</p>
-                <h2 className="mt-1 text-2xl font-black text-white">Have a Mardi Gras-related event?</h2>
-                <p className="mt-2 max-w-3xl text-sm leading-6 text-purple-100">
-                  Organizations can submit Mardi Gras balls, fundraisers, watch parties, and Carnival-related happenings for review. Approved events may appear on the Community Mardi Gras Events calendar.
-                </p>
-              </div>
-            </div>
-            <div className="flex flex-col gap-2 sm:flex-row lg:shrink-0">
-              <Link href="/events" className="inline-flex items-center justify-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-black text-parade-purpleDark shadow-civic transition hover:-translate-y-0.5 hover:bg-parade-goldSoft">
-                View event calendar <ArrowRight className="h-4 w-4" aria-hidden="true" />
-              </Link>
-              <Link href="/submit-event" className="inline-flex items-center justify-center gap-2 rounded-full bg-parade-gold px-5 py-3 text-sm font-black text-parade-purpleDark shadow-glow transition hover:-translate-y-0.5 hover:bg-parade-goldBright">
-                Submit your event <PlusCircle className="h-4 w-4" aria-hidden="true" />
-              </Link>
-            </div>
-          </div>
-        </section>
-
         <SupportSection />
 
         <section className="rounded-[1.5rem] border border-amber-200 bg-parade-goldSoft p-5 shadow-civic">
@@ -198,6 +176,36 @@ function HomepageVideoSpotlight({ className = "" }: { className?: string }) {
           referrerPolicy="strict-origin-when-cross-origin"
           allowFullScreen
         />
+      </div>
+    </section>
+  );
+}
+
+function CommunityEventsCallout() {
+  return (
+    <section className="relative overflow-hidden rounded-[1.5rem] border border-parade-gold/45 bg-gradient-to-br from-parade-purpleDeep via-parade-purpleDark to-parade-purple p-5 text-white shadow-card">
+      <span className="pointer-events-none absolute right-[-4rem] top-[-4rem] h-32 w-32 rounded-full bg-parade-gold/20 blur-2xl" aria-hidden="true" />
+      <div className="relative z-10 flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
+        <div className="flex items-start gap-3">
+          <div className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-parade-gold text-parade-purpleDark shadow-glow">
+            <CalendarDays className="h-6 w-6" aria-hidden="true" />
+          </div>
+          <div>
+            <p className="text-xs font-black uppercase tracking-[0.16em] text-parade-goldBright">Community Mardi Gras Events</p>
+            <h2 className="mt-1 text-2xl font-black text-white">Have a Mardi Gras-related event?</h2>
+            <p className="mt-2 max-w-3xl text-sm leading-6 text-purple-100">
+              Submit Mardi Gras balls, fundraisers, watch parties, socials, and Carnival-related events for review. Approved events may appear on the Community Mardi Gras Events calendar.
+            </p>
+          </div>
+        </div>
+        <div className="flex flex-col gap-2 sm:flex-row lg:shrink-0">
+          <Link href="/events" className="inline-flex items-center justify-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-black text-parade-purpleDark shadow-civic transition hover:-translate-y-0.5 hover:bg-parade-goldSoft">
+            View event calendar <ArrowRight className="h-4 w-4" aria-hidden="true" />
+          </Link>
+          <Link href="/submit-event" className="inline-flex items-center justify-center gap-2 rounded-full bg-parade-gold px-5 py-3 text-sm font-black text-parade-purpleDark shadow-glow transition hover:-translate-y-0.5 hover:bg-parade-goldBright">
+            Submit your event <PlusCircle className="h-4 w-4" aria-hidden="true" />
+          </Link>
+        </div>
       </div>
     </section>
   );
