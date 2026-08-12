@@ -26,7 +26,7 @@ const quickLinkGroups = [
   },
   {
     title: "Support",
-    description: "Choose YouTube, Facebook, or Buy Me a Coffee to support Mardi Gras - Mobile, Alabama.",
+    description: "Choose YouTube, Facebook, or Buy Me a MoonPie to support Mardi Gras - Mobile, Alabama.",
     href: "/links/support",
     categories: ["Support"],
     icon: <HeartHandshake className="h-5 w-5" aria-hidden="true" />,
