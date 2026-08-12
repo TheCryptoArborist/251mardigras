@@ -220,10 +220,10 @@ function SupportSection() {
       available: Boolean(FACEBOOK_SUPPORTER_URL)
     },
     {
-      platform: "Buy Me a Coffee",
+      platform: "Buy Me a MoonPie",
       body: "Send a one-time show of support for Mardi Gras - Mobile, Alabama coverage.",
       href: BUY_ME_COFFEE_URL,
-      action: "Buy Me a Coffee",
+      action: "Buy Me a MoonPie",
       available: true
     }
   ];
