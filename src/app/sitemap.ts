@@ -9,6 +9,7 @@ const staticRoutes: MetadataRoute.Sitemap = [
   { url: absoluteUrl("/links/support"), changeFrequency: "weekly", priority: 0.82 },
   { url: absoluteUrl("/links/food-drink"), changeFrequency: "weekly", priority: 0.82 },
   { url: absoluteUrl("/links/parking-access"), changeFrequency: "weekly", priority: 0.82 },
+  { url: absoluteUrl("/links/history-culture"), changeFrequency: "weekly", priority: 0.8 },
   { url: absoluteUrl("/links/social-channels"), changeFrequency: "weekly", priority: 0.82 },
   { url: absoluteUrl("/links/gear-throws"), changeFrequency: "weekly", priority: 0.75 },
   { url: absoluteUrl("/watch"), changeFrequency: "daily", priority: 0.95 },
