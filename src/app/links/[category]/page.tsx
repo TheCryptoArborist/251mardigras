@@ -6,6 +6,7 @@ import {
   Car,
   ExternalLink,
   HeartHandshake,
+  Landmark,
   MapPinned,
   PlayCircle,
   Share2,
@@ -56,6 +57,16 @@ const categoryPages = [
     icon: <Car className="h-5 w-5" aria-hidden="true" />,
     primaryHref: "/resources",
     primaryAction: "Open visitor guide"
+  },
+  {
+    slug: "history-culture",
+    title: "History & Culture",
+    eyebrow: "Mobile Mardi Gras history",
+    description: "Mobile Carnival Museum and culture resources for visitors who want to learn more about Mobile Carnival history, mystic society traditions, costumes, artifacts, and Mardi Gras culture.",
+    categories: ["History & Culture"],
+    icon: <Landmark className="h-5 w-5" aria-hidden="true" />,
+    primaryHref: "/resources",
+    primaryAction: "Open full resource guide"
   },
   {
     slug: "social-channels",
