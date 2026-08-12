@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import { Car, DollarSign, MapPinned, MessageSquare, Phone } from "lucide-react";
 import { CategoryResourcePage } from "@/components/CategoryResourcePage";
 import { getResources } from "@/lib/data-access";
@@ -109,7 +110,7 @@ function FeaturedVendor() {
   );
 }
 
-function VendorInfoCard({ icon, label, value }: { icon: React.ReactNode; label: string; value: string }) {
+function VendorInfoCard({ icon, label, value }: { icon: ReactNode; label: string; value: string }) {
   return (
     <div className="rounded-2xl border border-white/15 bg-white/90 p-3 text-parade-purpleDark shadow-sm">
       <div className="flex items-center gap-2 text-parade-purple">
