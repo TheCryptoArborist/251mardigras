@@ -5,6 +5,12 @@ import { absoluteUrl } from "@/lib/seo";
 const staticRoutes: MetadataRoute.Sitemap = [
   { url: absoluteUrl("/"), changeFrequency: "daily", priority: 1 },
   { url: absoluteUrl("/links"), changeFrequency: "daily", priority: 0.95 },
+  { url: absoluteUrl("/links/parade-coverage"), changeFrequency: "daily", priority: 0.9 },
+  { url: absoluteUrl("/links/support"), changeFrequency: "weekly", priority: 0.82 },
+  { url: absoluteUrl("/links/food-drink"), changeFrequency: "weekly", priority: 0.82 },
+  { url: absoluteUrl("/links/parking-access"), changeFrequency: "weekly", priority: 0.82 },
+  { url: absoluteUrl("/links/social-channels"), changeFrequency: "weekly", priority: 0.82 },
+  { url: absoluteUrl("/links/gear-throws"), changeFrequency: "weekly", priority: 0.75 },
   { url: absoluteUrl("/watch"), changeFrequency: "daily", priority: 0.95 },
   { url: absoluteUrl("/replays"), changeFrequency: "weekly", priority: 0.9 },
   { url: absoluteUrl("/events"), changeFrequency: "daily", priority: 0.9 },
