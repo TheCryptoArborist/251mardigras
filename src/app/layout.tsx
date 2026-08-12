@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { DEFAULT_SITE_DESCRIPTION, DEFAULT_SITE_TITLE, organizationJsonLd, jsonLdScript, SITE_NAME, SITE_URL, websiteJsonLd } from "@/lib/seo";
 
@@ -47,14 +48,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <script type="application/ld+json" dangerouslySetInnerHTML={jsonLdScript([websiteJsonLd(), organizationJsonLd()])} />
         <SiteHeader />
         <main>{children}</main>
-        <footer className="border-t border-parade-line bg-gradient-to-r from-white via-parade-cream to-parade-purpleMist">
-          <div className="mx-auto flex max-w-7xl flex-col gap-3 px-4 py-8 text-sm text-parade-muted sm:px-6 lg:px-8">
-            <p className="font-black text-parade-ink">Mardi Gras - Mobile, AL</p>
-            <p>
-              Unofficial public-source monitor and visitor hub. Verify parade, route, traffic, public safety, emergency, and weather decisions with official agencies.
-            </p>
-          </div>
-        </footer>
+        <SiteFooter />
       </body>
     </html>
   );
