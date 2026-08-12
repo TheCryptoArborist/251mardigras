@@ -4,6 +4,7 @@ import {
   Car,
   CloudSun,
   ExternalLink,
+  HeartHandshake,
   MapPinned,
   PlayCircle,
   Share2,
@@ -17,11 +18,19 @@ export const dynamic = "force-dynamic";
 const quickLinkGroups = [
   {
     title: "Parade Coverage",
-    description: "Live coverage, YouTube channel, supporter link, and parade replays.",
+    description: "Live coverage, YouTube channel, and parade replays.",
     href: "/links/parade-coverage",
     categories: ["Live Coverage / Channel Support", "Previous Parade Seasons"],
     icon: <PlayCircle className="h-5 w-5" aria-hidden="true" />,
     action: "Open coverage links"
+  },
+  {
+    title: "Support",
+    description: "Choose YouTube, Facebook, or Buy Me a Coffee to support Mardi Gras - Mobile, Alabama.",
+    href: "/links/support",
+    categories: ["Support"],
+    icon: <HeartHandshake className="h-5 w-5" aria-hidden="true" />,
+    action: "Support the channel"
   },
   {
     title: "Food and Drink",
@@ -77,7 +86,7 @@ export default async function LinksPage() {
             Choose what you need.
           </h1>
           <p className="mx-auto mt-4 max-w-2xl text-base leading-7 text-parade-muted sm:text-lg">
-            This page replaces the old Linktree-style list with separated paths for parade coverage, food, parking, access, weather, social channels, and gear.
+            This page replaces the old Linktree-style list with separated paths for parade coverage, support, food, parking, access, weather, social channels, and gear.
           </p>
           <div className="mt-6 flex flex-wrap justify-center gap-3">
             <Link href="/watch" className="inline-flex items-center justify-center gap-2 rounded bg-parade-purple px-5 py-3 text-sm font-bold text-white hover:bg-parade-purpleDark">
