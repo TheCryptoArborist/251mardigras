@@ -3,7 +3,7 @@ import type { ReactNode } from "react";
 import { Archive, ArrowRight, CalendarDays, Car, CloudSun, ExternalLink, HeartHandshake, PlayCircle, PlusCircle, ShieldCheck, ShoppingBag, Utensils } from "lucide-react";
 import { CountdownTimer } from "@/components/CountdownTimer";
 import { VisitorCounter } from "@/components/VisitorCounter";
-import { YOUTUBE_SUPPORTER_URL } from "@/lib/seed-data";
+import { BUY_ME_COFFEE_URL, YOUTUBE_SUPPORTER_URL } from "@/lib/seed-data";
 
 export const dynamic = "force-dynamic";
 
@@ -218,6 +218,13 @@ function SupportSection() {
       href: FACEBOOK_SUPPORTER_URL,
       action: "Support on Facebook",
       available: Boolean(FACEBOOK_SUPPORTER_URL)
+    },
+    {
+      platform: "Buy Me a Coffee",
+      body: "Send a one-time show of support for Mardi Gras - Mobile, Alabama coverage.",
+      href: BUY_ME_COFFEE_URL,
+      action: "Buy Me a Coffee",
+      available: true
     }
   ];
 
@@ -237,7 +244,7 @@ function SupportSection() {
             </p>
           </div>
         </div>
-        <div className="grid gap-3 sm:grid-cols-2 lg:min-w-[28rem]">
+        <div className="grid gap-3 md:grid-cols-3 lg:min-w-[42rem]">
           {supportOptions.map((option) =>
             option.available ? (
               <a key={option.platform} href={option.href} target="_blank" rel="noreferrer" className="flex min-w-0 flex-col rounded-2xl border border-parade-gold/35 bg-white/85 p-4 text-left shadow-sm transition hover:-translate-y-0.5 hover:shadow-civic">
