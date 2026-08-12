@@ -31,7 +31,7 @@ const categoryPages = [
     slug: "support",
     title: "Support",
     eyebrow: "Support the channel",
-    description: "Choose YouTube, Facebook, or Buy Me a Coffee to support Mardi Gras - Mobile, Alabama coverage, videos, and community event updates.",
+    description: "Choose YouTube, Facebook, or Buy Me a MoonPie to support Mardi Gras - Mobile, Alabama coverage, videos, and community event updates.",
     categories: ["Support"],
     icon: <HeartHandshake className="h-5 w-5" aria-hidden="true" />,
     primaryHref: "/",
