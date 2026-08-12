@@ -5,6 +5,7 @@ import {
   ArrowRight,
   Car,
   ExternalLink,
+  HeartHandshake,
   MapPinned,
   PlayCircle,
   Share2,
@@ -20,11 +21,21 @@ const categoryPages = [
     slug: "parade-coverage",
     title: "Parade Coverage",
     eyebrow: "Watch first",
-    description: "Live coverage, YouTube channel access, supporter link, and previous parade-season replays.",
+    description: "Live coverage, YouTube channel access, and previous parade-season replays.",
     categories: ["Live Coverage / Channel Support", "Previous Parade Seasons"],
     icon: <PlayCircle className="h-5 w-5" aria-hidden="true" />,
     primaryHref: "/watch",
     primaryAction: "Open Watch Live page"
+  },
+  {
+    slug: "support",
+    title: "Support",
+    eyebrow: "Support the channel",
+    description: "Choose YouTube, Facebook, or Buy Me a Coffee to support Mardi Gras - Mobile, Alabama coverage, videos, and community event updates.",
+    categories: ["Support"],
+    icon: <HeartHandshake className="h-5 w-5" aria-hidden="true" />,
+    primaryHref: "/",
+    primaryAction: "Back to homepage"
   },
   {
     slug: "food-drink",
