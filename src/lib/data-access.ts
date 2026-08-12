@@ -243,8 +243,9 @@ function categoryOrder(category: string) {
     "Downtown Transportation": 3,
     "Mobility-Friendly Access": 4,
     "Food and Drink": 5,
-    "Mardi Gras Gear / Throws": 6,
-    "Previous Parade Seasons": 7
+    "History & Culture": 6,
+    "Mardi Gras Gear / Throws": 7,
+    "Previous Parade Seasons": 8
   };
 
   return order[category] ?? 99;
