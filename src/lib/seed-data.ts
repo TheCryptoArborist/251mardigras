@@ -10,6 +10,7 @@ export const YOUTUBE_CHANNEL_URL = "https://www.youtube.com/@MobileMardiGras";
 export const YOUTUBE_CHANNEL_ID = "UCyqSGKVwxdMcXMgwaRMnDiA";
 export const YOUTUBE_SUPPORTER_URL = "https://www.youtube.com/channel/UCyqSGKVwxdMcXMgwaRMnDiA/join";
 export const BUY_ME_COFFEE_URL = "https://www.buymeacoffee.com/mg251";
+export const MOBILE_CARNIVAL_MUSEUM_URL = "https://mobilecarnivalmuseum.com/";
 export const YOUTUBE_LIVE_EMBED_URL =
   "https://www.youtube.com/embed/live_stream?channel=UCyqSGKVwxdMcXMgwaRMnDiA";
 export const MARDI_GRAS_2023_PLAYLIST_URL =
@@ -24,13 +25,13 @@ export const MARDI_GRAS_2026_PLAYLIST_URL =
 export const linktreeProfile = {
   title: "Mardi Gras - Mobile, AL Resource Directory",
   tagline:
-    "Direct visitor links for live coverage, social channels, parking, food, gear, throws, and previous parade seasons.",
+    "Direct visitor links for live coverage, social channels, parking, food, history, culture, gear, throws, and previous parade seasons.",
   sourceUrl: RESOURCE_DIRECTORY_URL,
   joined: "2024 link inventory"
 };
 
 export const resourceCurationPrinciples = [
-  "Public resources are selected for Mobile Mardi Gras livestream discovery, downtown visitor planning, food and drink, gear, throws, or previous parade coverage.",
+  "Public resources are selected for Mobile Mardi Gras livestream discovery, downtown visitor planning, food and drink, history and culture, gear, throws, or previous parade coverage.",
   "Legacy imported links are reviewed before publication; general discount, affiliate, or non-Mardi Gras offers are not automatically displayed in the public directory.",
   "Contact methods should be handled by a dedicated website contact/submission path instead of being mixed into the visitor resource directory.",
   "Visitor resources are convenience links. Parade schedules, routes, closures, parking rules, towing, public-safety decisions, and weather impacts still require official-source verification."
@@ -48,6 +49,10 @@ export const linktreeCategoryHighlights = [
   {
     title: "Food and drink",
     detail: "Downtown food, coffee, bakery, brewery, barbecue, and dessert stops are grouped for parade visitors."
+  },
+  {
+    title: "History and culture",
+    detail: "Mobile Carnival Museum and related culture resources help visitors learn more about Mobile Mardi Gras traditions."
   },
   {
     title: "Gear, throws, and past seasons",
@@ -230,6 +235,13 @@ export const resourceSeeds: ResourceSeed[] = [
     "Gourmet pecans and sweets vendor. Confirm availability before making plans.",
     17,
     "https://www.facebook.com/profile.php?id=61560877037579"
+  ),
+  directoryResource(
+    "Mobile Carnival Museum",
+    "History & Culture",
+    "Learn more about Mobile's Carnival history, mystic society traditions, costumes, artifacts, and Mardi Gras culture. Verify hours, tickets, and tour details with the museum before visiting.",
+    1,
+    MOBILE_CARNIVAL_MUSEUM_URL
   ),
   directoryResource("Port City Throws", "Mardi Gras Gear / Throws", "Mardi Gras throws and gear resource.", 1),
   directoryResource("Pop's Midtown", "Mardi Gras Gear / Throws", "Mardi Gras gear and shopping resource.", 2),
