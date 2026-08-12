@@ -1,11 +1,13 @@
+import Image from "next/image";
 import type { ReactNode } from "react";
-import { Car, DollarSign, MapPinned, MessageSquare, Phone } from "lucide-react";
+import { DollarSign, MapPinned, MessageSquare, Phone } from "lucide-react";
 import { CategoryResourcePage } from "@/components/CategoryResourcePage";
 import { getResources } from "@/lib/data-access";
 
 export const dynamic = "force-dynamic";
 
 const PARKING_ACCESS_MAP_EMBED_URL = "https://www.google.com/maps/d/embed?mid=1C22zB6qJUbU4fOUCpCeDGanJZstzmKs&ehbc=2E312F";
+const MOB_CITY_RIDES_LOGO_PATH = "/images/parking-access/mob%20city%20rides.jpg";
 const MOB_CITY_RIDES_PHONE_DISPLAY = "251-367-7433";
 const MOB_CITY_RIDES_PHONE_LINK = "2513677433";
 
@@ -70,8 +72,14 @@ function FeaturedVendor() {
       <span className="pointer-events-none absolute bottom-[-4rem] left-[-4rem] h-32 w-32 rounded-full bg-white/10 blur-2xl" aria-hidden="true" />
       <div className="relative z-10 grid gap-5 lg:grid-cols-[1fr_auto] lg:items-center">
         <div className="flex items-start gap-3">
-          <div className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-parade-gold text-parade-purpleDark shadow-glow">
-            <Car className="h-6 w-6" aria-hidden="true" />
+          <div className="grid h-16 w-16 shrink-0 place-items-center overflow-hidden rounded-2xl border border-parade-gold/45 bg-white p-1.5 shadow-glow">
+            <Image
+              src={MOB_CITY_RIDES_LOGO_PATH}
+              alt="MOB City Rides logo"
+              width={64}
+              height={64}
+              className="h-full w-full object-contain"
+            />
           </div>
           <div>
             <p className="text-xs font-black uppercase tracking-[0.16em] text-parade-goldBright">Featured vendor</p>
