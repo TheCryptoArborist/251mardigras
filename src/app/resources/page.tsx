@@ -5,6 +5,7 @@ import {
   Car,
   CloudSun,
   ExternalLink,
+  Landmark,
   MapPinned,
   PlayCircle,
   Share2,
@@ -23,6 +24,7 @@ const parkingTitles = [
   "ParkWhiz Google Play link",
   "ParkWhiz Apple App Store link"
 ];
+const historyTitles = ["Mobile Carnival Museum"];
 const replayTitles = ["Mardi Gras 2026 Playlist", "Mardi Gras 2025 Playlist", "Mardi Gras 2024 Playlist", "Mardi Gras 2023 Playlist"];
 
 const toolCards = [
@@ -102,6 +104,7 @@ export default async function ResourcesPage() {
   const socialResources = pickResources(resources, socialTitles);
   const watchResources = pickResources(resources, watchTitles);
   const parkingResources = pickResources(resources, parkingTitles);
+  const historyResources = pickResources(resources, historyTitles);
   const replayResources = pickResources(resources, replayTitles);
 
   return (
@@ -117,7 +120,7 @@ export default async function ResourcesPage() {
             Find the Mardi Gras links you need
           </h1>
           <p className="mt-4 max-w-3xl text-base leading-7 text-purple-100 sm:text-lg">
-            Subscribe on YouTube, follow the Mardi Gras channels, watch coverage, and jump to the visitor tools without digging through repeated link lists.
+            Subscribe on YouTube, follow the Mardi Gras channels, watch coverage, explore Mobile Carnival history, and jump to the visitor tools without digging through repeated link lists.
           </p>
         </div>
       </section>
@@ -156,6 +159,15 @@ export default async function ResourcesPage() {
             ))}
           </div>
         </section>
+
+        {historyResources.length > 0 ? (
+          <ResourceGroup
+            title="History & Culture"
+            description="Learn more about Mobile Carnival history, mystic society traditions, costumes, artifacts, and Mardi Gras culture. Verify hours, tickets, and tour details with the museum before visiting."
+            resources={historyResources}
+            icon={<Landmark className="h-5 w-5" aria-hidden="true" />}
+          />
+        ) : null}
 
         {watchResources.length > 0 ? (
           <ResourceGroup
