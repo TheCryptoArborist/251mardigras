@@ -5,6 +5,7 @@ import {
   CloudSun,
   ExternalLink,
   HeartHandshake,
+  Landmark,
   MapPinned,
   PlayCircle,
   Share2,
@@ -57,8 +58,16 @@ const quickLinkGroups = [
     action: "Check weather"
   },
   {
+    title: "History & Culture",
+    description: "Mobile Carnival Museum and visitor resources for Mobile Mardi Gras history and culture.",
+    href: "/links/history-culture",
+    categories: ["History & Culture"],
+    icon: <Landmark className="h-5 w-5" aria-hidden="true" />,
+    action: "Explore history"
+  },
+  {
     title: "Social Channels",
-    description: "Follow Mardi Gras - Mobile, AL on YouTube, Facebook, Instagram, TikTok, X, and Snapchat.",
+    description: "Follow Mardi Gras - Mobile, AL on YouTube, Facebook, Instagram, TikTok, and X.",
     href: "/links/social-channels",
     categories: ["Social Media"],
     icon: <Share2 className="h-5 w-5" aria-hidden="true" />,
@@ -86,7 +95,7 @@ export default async function LinksPage() {
             Choose what you need.
           </h1>
           <p className="mx-auto mt-4 max-w-2xl text-base leading-7 text-parade-muted sm:text-lg">
-            This page replaces the old Linktree-style list with separated paths for parade coverage, support, food, parking, access, weather, social channels, and gear.
+            This page replaces the old Linktree-style list with separated paths for parade coverage, support, food, parking, access, weather, history and culture, social channels, and gear.
           </p>
           <div className="mt-6 flex flex-wrap justify-center gap-3">
             <Link href="/watch" className="inline-flex items-center justify-center gap-2 rounded bg-parade-purple px-5 py-3 text-sm font-bold text-white hover:bg-parade-purpleDark">
