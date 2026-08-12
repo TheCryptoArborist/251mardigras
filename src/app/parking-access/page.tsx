@@ -83,8 +83,7 @@ function FeaturedVendor() {
         </div>
 
         <div className="min-w-0 flex-1">
-          <p className="text-xs font-black uppercase tracking-[0.16em] text-parade-goldBright">Featured vendor</p>
-          <h2 className="mt-1 text-3xl font-black text-white">MOB City Rides</h2>
+          <h2 className="text-3xl font-black text-white">MOB City Rides</h2>
           <p className="mt-1 text-base font-black text-parade-goldBright">Golf Cart Shuttle</p>
           <p className="mt-3 max-w-3xl text-sm leading-6 text-purple-100">
             Mardi Gras golf cart shuttle service is available by text or call at {MOB_CITY_RIDES_PHONE_DISPLAY}. Rides are $5 per person / ride. Confirm pickup points, availability, and current service details directly with the vendor before making plans.
