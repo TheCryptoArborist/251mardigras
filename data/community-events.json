@@ -37,5 +37,25 @@
     "audience": "Adults only, 21+",
     "flyerUrl": "https://www.jotform.com/uploads/PeterToler/262217749749067/6622992928321830875/etruscans%20fall%20dance.jpg",
     "organizationLogoUrl": "https://www.jotform.com/uploads/PeterToler/262217749749067/6622992928321830875/etruscans%20logo.jpg"
+  },
+  {
+    "id": "crawl-o-ween-2026",
+    "slug": "crawl-o-ween-2026",
+    "status": "approved",
+    "title": "Crawl-O-Ween",
+    "organization": "Etruscans Mystic Society",
+    "eventType": "Fundraiser",
+    "startDateTime": "2026-10-24T12:00:00-05:00",
+    "endDateTime": "2026-10-24T18:00:00-05:00",
+    "venueName": "Veet's",
+    "venueAddress": "66 S. Royal Street",
+    "cityStateZip": "Mobile, AL 36602",
+    "description": "Join the Etruscans Mystic Society for Crawl-O-Ween, a Halloween pub crawl featuring a costume contest, raffles, door prizes, and more.",
+    "mapUrl": "https://www.google.com/maps/place/veet's+bar/data=!4m2!3m1!1s0x889a4fda100c70ff:0x3cc3ca89e43a2f9d?sa=X&ved=1t:242&ictx=111",
+    "cost": "Paid",
+    "audience": "Adults only, 21+",
+    "publicContact": "sberitiech@gmail.com",
+    "flyerUrl": "https://www.jotform.com/uploads/PeterToler/262217749749067/6623737865912982091/Halloween%20pub%20crawl.png",
+    "organizationLogoUrl": "https://www.jotform.com/uploads/PeterToler/262217749749067/6623737865912982091/LOGO%20Picture.png"
   }
 ]
