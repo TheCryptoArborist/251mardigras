@@ -143,5 +143,26 @@
     "publicContact": "sberitiech@gmail.com",
     "flyerUrl": "https://www.jotform.com/uploads/PeterToler/262217749749067/6623737865912982091/Halloween%20pub%20crawl.png",
     "organizationLogoUrl": "https://www.jotform.com/uploads/PeterToler/262217749749067/6623737865912982091/LOGO%20Picture.png"
+  },
+  {
+    "id": "mobile-mystics-mardi-gras-ball-2027",
+    "slug": "mobile-mystics-mardi-gras-ball-2027",
+    "status": "approved",
+    "title": "Mobile Mystics Mardi Gras Ball",
+    "organization": "Mobile Mystics",
+    "eventType": "Ball",
+    "startDateTime": "2027-01-30T18:00:00-06:00",
+    "endDateTime": "2027-01-31T00:00:00-06:00",
+    "venueName": "Mobile Convention Center",
+    "venueAddress": "1 S Water St.",
+    "cityStateZip": "Mobile, AL",
+    "description": "Join the Mobile Mystics for the Mobile Mystics Mardi Gras Ball at the Mobile Convention Center on January 30, 2027. Doors open at 6:00 PM, with callouts beginning at 7:00 PM. Tickets are $140 per couple. Entertainment will be announced soon. Physical tickets/armbands must be purchased in person from Mobile Mystics members only. Do not purchase from unverified online sellers or scam accounts.",
+    "ticketUrl": "https://facebook.com/events/s/the-mobile-mystics-annual-mard/1559136422561718/",
+    "ticketLabel": "Facebook Event Info",
+    "cost": "$140 per couple",
+    "audience": "Adults only, 21+",
+    "publicContact": "mmnewsletter@gmail.com",
+    "flyerUrl": "https://www.jotform.com/uploads/PeterToler/262217749749067/6625549383712631657/FB_IMG_1786745613821.jpg",
+    "organizationLogoUrl": "https://www.jotform.com/uploads/PeterToler/262217749749067/6625549383712631657/FB_IMG_1786745058314.jpg"
   }
 ]
