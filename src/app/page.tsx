@@ -260,9 +260,9 @@ function SupportSection() {
       featured: false
     },
     {
-      platform: "Buy Me a MoonPie",
-      eyebrow: "One-time support",
-      body: "One-time support through Buy Me a Coffee for casual contributions.",
+      platform: "One-Time Support",
+      eyebrow: "Buy Me a Coffee",
+      body: "Send a one-time contribution through Buy Me a Coffee.",
       href: BUY_ME_COFFEE_URL,
       action: "Send Support",
       featured: false
