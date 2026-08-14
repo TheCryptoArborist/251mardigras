@@ -1,5 +1,5 @@
 import { createHash } from "node:crypto";
-import { getStore } from "@netlify/blobs";
+import { getDeployStore, getStore } from "@netlify/blobs";
 import { NextRequest, NextResponse } from "next/server";
 
 export const dynamic = "force-dynamic";
@@ -54,7 +54,7 @@ export async function POST(request: NextRequest) {
   const key = `${CAMPAIGN}/${createHash("sha256").update(email).digest("hex")}`;
 
   try {
-    const store = getStore(STORE_NAME);
+    const store = getSignupStore();
     const existing = await store.get(key, { type: "text" });
 
     if (existing) {
@@ -75,6 +75,10 @@ export async function POST(request: NextRequest) {
   } catch {
     return jsonResponse({ ok: false, error: "Unable to save your email right now. Please try again." }, 503);
   }
+}
+
+function getSignupStore() {
+  return process.env.CONTEXT === "production" ? getStore(STORE_NAME) : getDeployStore(STORE_NAME);
 }
 
 function jsonResponse(payload: Record<string, unknown>, status = 200) {
