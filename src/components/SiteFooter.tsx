@@ -21,7 +21,7 @@ const supportLinks = [
     href: FACEBOOK_SUPPORTER_URL
   },
   {
-    label: "MoonPie",
+    label: "One-Time Support",
     href: BUY_ME_COFFEE_URL
   }
 ];
