@@ -1,6 +1,9 @@
 "use client";
 
+import Link from "next/link";
+import { ArrowRight, CalendarDays } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
+import { ScheduleNotificationSignup } from "@/components/ScheduleNotificationSignup";
 
 const FIRST_DOWNTOWN_PARADE_TARGET = "2027-01-22T18:30:00-06:00";
 const TARGET_LABEL = "January 22, 2027 • 6:30 PM CT";
@@ -54,6 +57,31 @@ export function CountdownTimer() {
       <p className="mt-3 text-xs font-medium leading-5 text-purple-100/90">
         This countdown is for visitor planning and channel coverage. Verify official schedules, routes, road closures, and public-safety guidance with official sources before travel.
       </p>
+
+      <div className="mt-4 rounded-2xl border border-parade-gold/45 bg-parade-purpleDeep/60 p-4">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+          <div className="flex items-start gap-3">
+            <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-parade-gold text-parade-purpleDark shadow-sm">
+              <CalendarDays className="h-5 w-5" aria-hidden="true" />
+            </div>
+            <div>
+              <p className="text-lg font-black text-white">2027 Parade Schedule Coming Soon</p>
+              <p className="mt-1 text-sm font-semibold leading-5 text-purple-100">
+                Verified dates, start times, routes, and official-source links will be posted after the schedule is released.
+              </p>
+            </div>
+          </div>
+          <Link
+            href="/schedule"
+            className="inline-flex shrink-0 items-center justify-center gap-2 rounded-full border border-parade-gold/55 bg-white/10 px-4 py-2.5 text-sm font-black text-white transition hover:-translate-y-0.5 hover:bg-white/15"
+          >
+            Schedule page <ArrowRight className="h-4 w-4" aria-hidden="true" />
+          </Link>
+        </div>
+        <div className="mt-4">
+          <ScheduleNotificationSignup source="homepage" compact />
+        </div>
+      </div>
     </section>
   );
 }

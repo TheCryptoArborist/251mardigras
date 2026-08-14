@@ -1,5 +1,5 @@
 import { CalendarDays, ExternalLink } from "lucide-react";
-import { EmptyState } from "@/components/EmptyState";
+import { ScheduleComingSoon } from "@/components/ScheduleComingSoon";
 import { SectionHeader } from "@/components/SectionHeader";
 import { StatusPill } from "@/components/StatusPill";
 import { getParades } from "@/lib/data-access";
@@ -13,15 +13,12 @@ export default async function SchedulePage() {
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
       <SectionHeader
-        title="Parade Schedule"
-        description="All parade dates, times, routes, status labels, source links, and last checked timestamps should be verified against official sources."
+        title="2027 Parade Schedule"
+        description="Verified parade dates, start times, routes, status labels, official-source links, and last-checked timestamps will appear here when available."
       />
 
       {parades.length === 0 ? (
-        <EmptyState
-          title="No verified schedule records yet"
-          message="Phase 1 creates the database and page structure. Phase 2 should parse official schedule and route data from the City dashboard and ArcGIS StoryMap."
-        />
+        <ScheduleComingSoon />
       ) : (
         <div className="grid gap-4 md:grid-cols-2">
           {parades.map((parade) => (
@@ -60,4 +57,3 @@ function Detail({ label, value }: { label: string; value: string }) {
     </div>
   );
 }
-
