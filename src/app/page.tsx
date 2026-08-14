@@ -3,7 +3,7 @@ import type { ReactNode } from "react";
 import { Archive, ArrowRight, CalendarDays, Car, CloudSun, ExternalLink, HeartHandshake, PlayCircle, PlusCircle, ShieldCheck, ShoppingBag, Utensils } from "lucide-react";
 import { CountdownTimer } from "@/components/CountdownTimer";
 import { VisitorCounter } from "@/components/VisitorCounter";
-import { BUY_ME_COFFEE_URL, YOUTUBE_SUPPORTER_URL } from "@/lib/seed-data";
+import { BUY_ME_COFFEE_URL, PATREON_SUPPORT_URL, YOUTUBE_SUPPORTER_URL } from "@/lib/seed-data";
 
 export const dynamic = "force-dynamic";
 
@@ -228,6 +228,13 @@ function SupportSection() {
       available: Boolean(FACEBOOK_SUPPORTER_URL)
     },
     {
+      platform: "Patreon",
+      body: "Support Mardi Gras - Mobile, Alabama through Patreon membership.",
+      href: PATREON_SUPPORT_URL,
+      action: "Support on Patreon",
+      available: true
+    },
+    {
       platform: "Buy Me a MoonPie",
       body: "Send a one-time show of support for Mardi Gras - Mobile, Alabama coverage.",
       href: BUY_ME_COFFEE_URL,
@@ -252,7 +259,7 @@ function SupportSection() {
             </p>
           </div>
         </div>
-        <div className="grid gap-3 md:grid-cols-3 lg:min-w-[42rem]">
+        <div className="grid w-full gap-3 sm:grid-cols-2 xl:grid-cols-4 xl:min-w-[52rem]">
           {supportOptions.map((option) =>
             option.available ? (
               <a key={option.platform} href={option.href} target="_blank" rel="noreferrer" className="flex min-w-0 flex-col rounded-2xl border border-parade-gold/35 bg-white/85 p-4 text-left shadow-sm transition hover:-translate-y-0.5 hover:shadow-civic">
