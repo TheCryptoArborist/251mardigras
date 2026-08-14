@@ -58,7 +58,7 @@ export default async function CommunityEventDetailPage({ params }: CommunityEven
                 </a>
                 {event.ticketUrl ? (
                   <a href={event.ticketUrl} target="_blank" rel="noreferrer" className="inline-flex items-center justify-center gap-2 rounded-full border border-white/25 bg-white/10 px-5 py-3 text-sm font-black text-white transition hover:bg-white/15">
-                    Event / RSVP Link <ExternalLink className="h-4 w-4" aria-hidden="true" />
+                    {event.ticketLabel ?? "Event / RSVP Link"} <ExternalLink className="h-4 w-4" aria-hidden="true" />
                   </a>
                 ) : null}
                 {event.mapUrl ? (
