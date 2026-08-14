@@ -17,6 +17,7 @@ export type CommunityEvent = {
   description: string;
   mapUrl?: string;
   ticketUrl?: string;
+  ticketLabel?: string;
   cost?: string;
   audience?: string;
   publicContact?: string;
@@ -144,7 +145,7 @@ function buildCalendarDescription(event: CommunityEvent) {
     event.cost ? `Cost: ${event.cost}` : null,
     event.audience ? `Audience: ${event.audience}` : null,
     event.publicContact ? `Public contact: ${event.publicContact}` : null,
-    event.ticketUrl ? `Event / RSVP link: ${event.ticketUrl}` : null,
+    event.ticketUrl ? `${event.ticketLabel ?? "Event / RSVP link"}: ${event.ticketUrl}` : null,
     event.mapUrl ? `Map / directions: ${event.mapUrl}` : null,
     event.flyerUrl ? `Event flyer: ${event.flyerUrl}` : null,
     "Verify event details with the host organization before attending. This is a community-submitted Mardi Gras-related event, not the official parade schedule."
