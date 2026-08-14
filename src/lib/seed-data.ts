@@ -10,6 +10,7 @@ export const YOUTUBE_CHANNEL_URL = "https://www.youtube.com/@MobileMardiGras";
 export const YOUTUBE_CHANNEL_ID = "UCyqSGKVwxdMcXMgwaRMnDiA";
 export const YOUTUBE_SUPPORTER_URL = "https://www.youtube.com/channel/UCyqSGKVwxdMcXMgwaRMnDiA/join";
 export const BUY_ME_COFFEE_URL = "https://www.buymeacoffee.com/mg251";
+export const PATREON_SUPPORT_URL = "https://www.patreon.com/cw/mg251/membership";
 export const MOBILE_CARNIVAL_MUSEUM_URL = "https://mobilecarnivalmuseum.com/";
 export const YOUTUBE_LIVE_EMBED_URL =
   "https://www.youtube.com/embed/live_stream?channel=UCyqSGKVwxdMcXMgwaRMnDiA";
@@ -198,7 +199,8 @@ export const resourceSeeds: ResourceSeed[] = [
   directoryResource("Previous parade playlists", "Live Coverage / Channel Support", "Latest Mobile Mardi Gras parade playlist and channel archive resources.", 4, MARDI_GRAS_2026_PLAYLIST_URL),
   directoryResource("Support on YouTube", "Support", "YouTube channel membership link for viewers who want to support Mobile Mardi Gras coverage.", 1, YOUTUBE_SUPPORTER_URL),
   directoryResource("Support on Facebook", "Support", "Facebook subscription link for viewers who want to support Mardi Gras - Mobile, Alabama.", 2, "https://www.facebook.com/mardigrasmobileal/support/?surface=page_top_cta_button&entrypoint_surface=page_top_cta_button"),
-  directoryResource("Buy Me a MoonPie", "Support", "One-time support option for Mardi Gras - Mobile, Alabama coverage.", 3, BUY_ME_COFFEE_URL),
+  directoryResource("Support on Patreon", "Support", "Patreon membership link for viewers who want to support Mardi Gras - Mobile, Alabama.", 3, PATREON_SUPPORT_URL),
+  directoryResource("Buy Me a MoonPie", "Support", "One-time support option for Mardi Gras - Mobile, Alabama coverage.", 4, BUY_ME_COFFEE_URL),
   directoryResource("ParkWhiz Google Play link", "Downtown Transportation", "Parking app link for downtown transportation planning.", 1),
   directoryResource("ParkWhiz Apple App Store link", "Downtown Transportation", "Parking app link for downtown transportation planning.", 2),
   directoryResource("Downtown Parking Map", "Downtown Transportation", "Downtown parking map resource. Verify closures and towing rules before travel.", 3),
