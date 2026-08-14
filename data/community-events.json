@@ -103,6 +103,28 @@
     "organizationLogoUrl": "https://www.jotform.com/uploads/PeterToler/262217749749067/6625244986627164457/IMG_8240.jpeg"
   },
   {
+    "id": "cavalier-classic-golf-tournament-2026",
+    "slug": "cavalier-classic-golf-tournament-2026",
+    "status": "approved",
+    "title": "Cavalier Classic Golf Tournament",
+    "organization": "Condé Cavaliers",
+    "eventType": "Golf Tournament / Fundraiser",
+    "startDateTime": "2026-10-03T08:30:00-05:00",
+    "endDateTime": "2026-10-03T16:00:00-05:00",
+    "venueName": "Heron Lakes Country Club",
+    "venueAddress": "3851 Government Blvd",
+    "cityStateZip": "Mobile, AL 36693",
+    "description": "Join the Condé Cavaliers for the Cavalier Classic Golf Tournament, a Mardi Gras-themed 4-man scramble at Heron Lakes Country Club. The event includes food, drinks, prizes, contests, and raffles. Entry is $125 per player or $500 per team. Contact Cavalierclassic1977@gmail.com to register or request more information.",
+    "mapUrl": "https://maps.apple/p/pEVW9zjNSzrxkw",
+    "ticketUrl": "mailto:Cavalierclassic1977@gmail.com",
+    "ticketLabel": "Email to Register",
+    "cost": "$125 per player / $500 per team",
+    "audience": "Adults only, 21+",
+    "publicContact": "Cavalierclassic1977@gmail.com",
+    "flyerUrl": "https://www.jotform.com/uploads/PeterToler/262217749749067/6625500698218606505/Untitled%20design_8184.jpeg",
+    "organizationLogoUrl": "https://www.jotform.com/uploads/PeterToler/262217749749067/6625500698218606505/IMG_3556.png"
+  },
+  {
     "id": "crawl-o-ween-2026",
     "slug": "crawl-o-ween-2026",
     "status": "approved",
