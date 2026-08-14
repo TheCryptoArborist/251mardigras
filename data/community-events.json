@@ -1,5 +1,27 @@
 [
   {
+    "id": "etruscans-baby-back-rib-sale-2026",
+    "slug": "etruscans-baby-back-rib-sale-2026",
+    "status": "approved",
+    "title": "The Etruscans Baby Back Rib Sale — Orders Open Now",
+    "organization": "The Etruscans",
+    "eventType": "Fundraiser",
+    "startDateTime": "2026-08-29T14:00:00-05:00",
+    "endDateTime": "2026-08-29T17:00:00-05:00",
+    "venueName": "Sam’s Club",
+    "venueAddress": "601 E I-65 Service Road S",
+    "cityStateZip": "Mobile, AL 36606",
+    "description": "Orders are open now for The Etruscans Baby Back Rib Sale. Baby back ribs are $30 per slab and will be cooked for pickup on Saturday, August 29. Pickup will be available at 2:00 PM near the gas pumps at Sam’s Club Mobile or at 5:00 PM in Theodore. Contact René Reel at 251-377-1368 to place your order and receive the Theodore pickup address. When paying through Venmo, include your name, phone number, and the number of slabs ordered in the payment description.",
+    "mapUrl": "https://maps.apple/p/oRfdQ1NxMw-GXm",
+    "ticketUrl": "https://venmo.com/code?user_id=2237835516051456126&created=1776951409.8816519",
+    "cost": "$30 per slab",
+    "audience": "All-Ages",
+    "publicContact": "251-377-1368",
+    "parkingNotes": "The 2:00 PM pickup will be near the gas pumps at Sam’s Club Mobile.",
+    "flyerUrl": "https://www.jotform.com/uploads/PeterToler/262217749749067/6625201928329411260/D4C54F2D-6A9D-40E1-8AC5-D5F9543664B7.png",
+    "organizationLogoUrl": "https://www.jotform.com/uploads/PeterToler/262217749749067/6625201928329411260/IMG_7998.jpeg"
+  },
+  {
     "id": "order-of-isis-marshal-poker-run-2026",
     "slug": "order-of-isis-marshal-poker-run-2026",
     "status": "approved",
