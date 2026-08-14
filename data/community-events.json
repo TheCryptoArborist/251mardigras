@@ -61,6 +61,27 @@
     "organizationLogoUrl": "https://www.jotform.com/uploads/PeterToler/262217749749067/6622992928321830875/etruscans%20logo.jpg"
   },
   {
+    "id": "order-of-athena-5k-run-2026",
+    "slug": "order-of-athena-5k-run-2026",
+    "status": "approved",
+    "title": "Order of Athena 5K Run",
+    "organization": "Order of Athena",
+    "eventType": "Fundraiser",
+    "startDateTime": "2026-10-03T08:00:00-05:00",
+    "endDateTime": "2026-10-03T13:00:00-05:00",
+    "venueName": "Rolston Park",
+    "venueAddress": "Coden",
+    "cityStateZip": "AL",
+    "description": "Run like a Goddess and race for a cure at the Order of Athena 5K Run, a fundraiser supporting Breast Cancer Awareness. Racers, sponsors, and vendors are needed.",
+    "mapUrl": "https://maps.app.goo.gl/NMCn73i7kYjrJu339?g_st=ic",
+    "ticketUrl": "https://runsignup.com/Race/AL/Coden/OrderOfAthena5k",
+    "cost": "Paid",
+    "audience": "All-Ages",
+    "publicContact": "Kassidy LaForce — 251-635-8519",
+    "flyerUrl": "https://www.jotform.com/uploads/PeterToler/262217749749067/6625244986627164457/IMG_8240_966.jpeg",
+    "organizationLogoUrl": "https://www.jotform.com/uploads/PeterToler/262217749749067/6625244986627164457/IMG_8240.jpeg"
+  },
+  {
     "id": "crawl-o-ween-2026",
     "slug": "crawl-o-ween-2026",
     "status": "approved",
