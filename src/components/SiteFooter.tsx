@@ -2,7 +2,7 @@
 
 import { ExternalLink, HeartHandshake } from "lucide-react";
 import { usePathname } from "next/navigation";
-import { BUY_ME_COFFEE_URL, YOUTUBE_SUPPORTER_URL } from "@/lib/seed-data";
+import { BUY_ME_COFFEE_URL, PATREON_SUPPORT_URL, YOUTUBE_SUPPORTER_URL } from "@/lib/seed-data";
 
 const FACEBOOK_SUPPORTER_URL =
   "https://www.facebook.com/mardigrasmobileal/support/?surface=page_top_cta_button&entrypoint_surface=page_top_cta_button";
@@ -15,6 +15,10 @@ const supportLinks = [
   {
     label: "Facebook",
     href: FACEBOOK_SUPPORTER_URL
+  },
+  {
+    label: "Patreon",
+    href: PATREON_SUPPORT_URL
   },
   {
     label: "Buy Me a MoonPie",
