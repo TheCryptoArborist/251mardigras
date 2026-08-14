@@ -41,6 +41,27 @@
     "flyerUrl": "https://www.jotform.com/uploads/PeterToler/262217749749067/6622247624016799516/IMG_20260622_150742.jpg"
   },
   {
+    "id": "1st-annual-kids-fishing-rodeo-2026",
+    "slug": "1st-annual-kids-fishing-rodeo-2026",
+    "status": "approved",
+    "title": "1st Annual Kids' Fishing Rodeo",
+    "organization": "Krewe De La Dauphine",
+    "eventType": "Family Event",
+    "startDateTime": "2026-09-05T05:00:00-05:00",
+    "endDateTime": "2026-09-05T17:00:00-05:00",
+    "venueName": "Dauphin Island Marina",
+    "venueAddress": "650 Lemoyne Dr",
+    "cityStateZip": "Dauphin Island, AL 36528",
+    "description": "Krewe De La Dauphine is excited to host our 1st Annual Kids Fishing Rodeo on September 5, 2026, at Dauphin Island Marina. This event is designed to provide a fun, family-friendly day for local children while encouraging a love of the outdoors and our coastal community.",
+    "mapUrl": "https://maps.app.goo.gl/5eUwJAPZA6Um2iix9",
+    "ticketUrl": "https://app.fishingchaos.com/tournament/CHYChxr5l9BVIOOuRTXn",
+    "cost": "Paid",
+    "audience": "All-Ages",
+    "publicContact": "krewedauphine@gmail.com",
+    "flyerUrl": "https://www.jotform.com/uploads/PeterToler/262217749749067/6625291962225358408/ticket%20flyer.png",
+    "organizationLogoUrl": "https://www.jotform.com/uploads/PeterToler/262217749749067/6625291962225358408/kdld%20logo.jpg"
+  },
+  {
     "id": "etruscans-fall-dance-2026",
     "slug": "etruscans-fall-dance-2026",
     "status": "approved",
