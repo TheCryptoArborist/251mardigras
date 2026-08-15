@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { Archive, ArrowRight, CalendarDays, Car, CloudSun, ExternalLink, HeartHandshake, PlayCircle, PlusCircle, ShieldCheck, ShoppingBag, Utensils } from "lucide-react";
+import { Archive, ArrowRight, CalendarDays, Car, CloudSun, ExternalLink, HeartHandshake, Landmark, PlayCircle, PlusCircle, ShieldCheck, ShoppingBag, Utensils } from "lucide-react";
 import { CountdownTimer } from "@/components/CountdownTimer";
 import { VisitorCounter } from "@/components/VisitorCounter";
 import { BUY_ME_COFFEE_URL, PATREON_SUPPORT_URL, YOUTUBE_SUPPORTER_URL } from "@/lib/seed-data";
@@ -163,6 +163,7 @@ export default async function HomePage() {
       </section>
 
       <div className="mx-auto max-w-7xl space-y-10 px-4 py-8 sm:px-6 lg:px-8">
+        <HomepageHistoryCallout />
         <SupportSection />
 
         <section className="rounded-[1.5rem] border border-amber-200 bg-parade-goldSoft p-5 shadow-civic">
@@ -228,6 +229,31 @@ function CommunityEventsCallout() {
             Submit your event <PlusCircle className="h-4 w-4" aria-hidden="true" />
           </Link>
         </div>
+      </div>
+    </section>
+  );
+}
+
+function HomepageHistoryCallout() {
+  return (
+    <section className="relative overflow-hidden rounded-[1.5rem] border border-parade-gold/35 bg-gradient-to-br from-white via-parade-cream to-parade-purpleMist p-5 shadow-card">
+      <span className="pointer-events-none absolute right-[-4rem] top-[-4rem] h-32 w-32 rounded-full bg-parade-gold/20 blur-2xl" aria-hidden="true" />
+      <div className="relative z-10 flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
+        <div className="flex items-start gap-3">
+          <div className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-parade-purple text-parade-goldBright shadow-sm ring-1 ring-parade-gold/35">
+            <Landmark className="h-6 w-6" aria-hidden="true" />
+          </div>
+          <div>
+            <p className="text-xs font-black uppercase tracking-[0.16em] text-parade-purple">History & Culture</p>
+            <h2 className="mt-1 text-2xl font-black text-parade-purpleDark">Brief History of Mobile Mardi Gras</h2>
+            <p className="mt-2 max-w-3xl text-sm leading-6 text-parade-muted">
+              Mobile is widely known as the birthplace of American Mardi Gras. Its Carnival story includes French colonial roots, the well-known 1703 tradition, and the mystic society culture that helped shape modern Mobile Mardi Gras in the 1830s and 1840s.
+            </p>
+          </div>
+        </div>
+        <Link href="/resources#mobile-mardi-gras-history" className="inline-flex items-center justify-center gap-2 rounded-full bg-parade-purple px-5 py-3 text-sm font-black text-white shadow-civic transition hover:-translate-y-0.5 hover:bg-parade-purpleDark lg:shrink-0">
+          Read brief history <ArrowRight className="h-4 w-4" aria-hidden="true" />
+        </Link>
       </div>
     </section>
   );
