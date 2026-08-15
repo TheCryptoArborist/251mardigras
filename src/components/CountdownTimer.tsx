@@ -86,9 +86,9 @@ export function CountdownTimer() {
                 </p>
               </div>
               <div className="mt-2 grid grid-cols-3 gap-2">
-                <CountdownMiniValue label="Hrs" value={timeRemaining.hours} showPlus />
-                <CountdownMiniValue label="Min" value={timeRemaining.minutes} showPlus />
-                <CountdownMiniValue label="Sec" value={timeRemaining.seconds} showPlus />
+                <CountdownMiniValue label="Hrs" value={timeRemaining.hours} />
+                <CountdownMiniValue label="Min" value={timeRemaining.minutes} />
+                <CountdownMiniValue label="Sec" value={timeRemaining.seconds} />
               </div>
             </div>
 
@@ -170,12 +170,10 @@ function CountdownValue({ label, value }: { label: string; value: number }) {
   );
 }
 
-function CountdownMiniValue({ label, value, showPlus = false }: { label: string; value: number; showPlus?: boolean }) {
+function CountdownMiniValue({ label, value }: { label: string; value: number }) {
   return (
     <div className="rounded-2xl border border-parade-gold/25 bg-white/12 px-2 py-2.5 text-center shadow-sm ring-1 ring-white/10">
-      <p className="text-xl font-black tabular-nums text-white">
-        {showPlus ? "+" : ""}{String(value).padStart(2, "0")}
-      </p>
+      <p className="text-xl font-black tabular-nums text-white">{String(value).padStart(2, "0")}</p>
       <p className="mt-0.5 text-[0.62rem] font-black uppercase tracking-[0.14em] text-parade-goldBright">{label}</p>
     </div>
   );
