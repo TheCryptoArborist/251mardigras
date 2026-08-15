@@ -7,6 +7,7 @@ import { ScheduleNotificationSignup } from "@/components/ScheduleNotificationSig
 
 const FIRST_DOWNTOWN_PARADE_TARGET = "2027-01-22T18:30:00-06:00";
 const COUNTDOWN_PROGRESS_START = "2026-01-22T18:30:00-06:00";
+const COUNTDOWN_PROGRESS_START_LABEL = "Jan. 22, 2026";
 const TARGET_EVENT_NAME = "Conde Cavaliers";
 const TARGET_FULL_DATE_LABEL = "January 22, 2027 • 6:30 PM CT";
 const TARGET_SHORT_DATE_LABEL = "Jan. 22, 2027 • 6:30 PM CT";
@@ -34,6 +35,7 @@ export function CountdownTimer() {
 
   const countdownExpired = timeRemaining.totalMilliseconds <= 0;
   const countdownProgress = getCountdownProgress(progressStartDate, targetDate, timeRemaining.totalMilliseconds);
+  const countdownProgressLabel = `${Math.round(countdownProgress)}% complete`;
   const daysRemainingLabel = timeRemaining.days === 1 ? "1 day remaining" : `${timeRemaining.days} days remaining`;
 
   return (
@@ -79,14 +81,14 @@ export function CountdownTimer() {
                 <p className="relative z-10 text-6xl font-black leading-none tabular-nums tracking-tight text-parade-purpleDark">
                   {timeRemaining.days}
                 </p>
-                <p className="relative z-10 mt-2 text-xs font-black uppercase tracking-[0.18em] text-parade-muted">
-                  Days until parade season
+                <p className="relative z-10 mt-2 text-xs font-black uppercase tracking-[0.22em] text-parade-muted">
+                  Days
                 </p>
               </div>
               <div className="mt-2 grid grid-cols-3 gap-2">
-                <CountdownMiniValue label="Hrs" value={timeRemaining.hours} />
-                <CountdownMiniValue label="Min" value={timeRemaining.minutes} />
-                <CountdownMiniValue label="Sec" value={timeRemaining.seconds} />
+                <CountdownMiniValue label="Hrs" value={timeRemaining.hours} showPlus />
+                <CountdownMiniValue label="Min" value={timeRemaining.minutes} showPlus />
+                <CountdownMiniValue label="Sec" value={timeRemaining.seconds} showPlus />
               </div>
             </div>
 
@@ -99,16 +101,25 @@ export function CountdownTimer() {
 
             <div className="mt-3 rounded-2xl border border-parade-gold/30 bg-parade-purpleDeep/45 p-3 shadow-sm sm:mt-4">
               <div className="flex flex-wrap items-center justify-between gap-2 text-[0.72rem] font-black uppercase tracking-wide text-purple-100">
-                <span className="sm:hidden">{daysRemainingLabel}</span>
-                <span className="hidden sm:inline">Parade season is getting closer</span>
-                <span className="hidden text-parade-goldBright sm:inline">{daysRemainingLabel}</span>
+                <span>Countdown progress</span>
+                <span className="text-parade-goldBright">{countdownProgressLabel}</span>
               </div>
-              <div className="mt-2 h-2 overflow-hidden rounded-full bg-white/15 ring-1 ring-white/10">
+              <p className="mt-1 text-xs font-bold leading-5 text-purple-100/90">
+                {daysRemainingLabel} until the first downtown parade.
+              </p>
+              <div
+                className="mt-2 h-2 overflow-hidden rounded-full bg-white/15 ring-1 ring-white/10"
+                aria-label={`Countdown progress: ${countdownProgressLabel}, ${daysRemainingLabel}`}
+              >
                 <span
                   className="block h-full rounded-full bg-gradient-to-r from-parade-gold via-parade-goldBright to-white shadow-glow transition-[width] duration-700 ease-out"
                   style={{ width: `${countdownProgress}%` }}
                   aria-hidden="true"
                 />
+              </div>
+              <div className="mt-2 hidden items-center justify-between text-[0.65rem] font-black uppercase tracking-wide text-purple-100/70 sm:flex">
+                <span>{COUNTDOWN_PROGRESS_START_LABEL}</span>
+                <span>{TARGET_SHORT_DATE_LABEL}</span>
               </div>
             </div>
           </>
@@ -159,10 +170,12 @@ function CountdownValue({ label, value }: { label: string; value: number }) {
   );
 }
 
-function CountdownMiniValue({ label, value }: { label: string; value: number }) {
+function CountdownMiniValue({ label, value, showPlus = false }: { label: string; value: number; showPlus?: boolean }) {
   return (
     <div className="rounded-2xl border border-parade-gold/25 bg-white/12 px-2 py-2.5 text-center shadow-sm ring-1 ring-white/10">
-      <p className="text-xl font-black tabular-nums text-white">{String(value).padStart(2, "0")}</p>
+      <p className="text-xl font-black tabular-nums text-white">
+        {showPlus ? "+" : ""}{String(value).padStart(2, "0")}
+      </p>
       <p className="mt-0.5 text-[0.62rem] font-black uppercase tracking-[0.14em] text-parade-goldBright">{label}</p>
     </div>
   );
