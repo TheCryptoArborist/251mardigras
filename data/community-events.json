@@ -1,5 +1,27 @@
 [
   {
+    "id": "nocte-revelers-disco-bingo-2026",
+    "slug": "nocte-revelers-disco-bingo-2026",
+    "status": "approved",
+    "title": "Nocte Revelers Disco Bingo",
+    "organization": "Nocte Revelers",
+    "eventType": "Fundraiser",
+    "startDateTime": "2026-08-22T17:30:00-05:00",
+    "endDateTime": "2026-08-22T20:00:00-05:00",
+    "venueName": "Dew Drop Inn",
+    "venueAddress": "1808 Old Shell Road",
+    "cityStateZip": "Mobile, AL 36607",
+    "description": "Join the Nocte Revelers for Disco Bingo, a disco-themed bingo fundraiser at Dew Drop Inn. Doors open at 5:00 PM, and bingo runs from 5:30 PM to 8:00 PM. The event includes prizes, music, and BYOB. Guests are encouraged to wear 70s disco attire.",
+    "mapUrl": "https://maps.apple/p/Wcz5pn.W4k~IcV",
+    "ticketUrl": "https://www.facebook.com/share/1C9QgFMtYL/",
+    "ticketLabel": "Facebook Event Info",
+    "cost": "$20 for all rounds / $5 additional cards",
+    "audience": "Family-Friendly",
+    "publicContact": "smoore39562@gmail.com",
+    "flyerUrl": "https://www.jotform.com/uploads/PeterToler/262217749749067/6626199768465634565/file_000000006df4820cbe94a146f64c0b79.png",
+    "organizationLogoUrl": "https://www.jotform.com/uploads/PeterToler/262217749749067/6626199768465634565/FB_IMG_1786810595297.jpg"
+  },
+  {
     "id": "etruscans-baby-back-rib-sale-2026",
     "slug": "etruscans-baby-back-rib-sale-2026",
     "status": "approved",
