@@ -22,6 +22,27 @@
     "organizationLogoUrl": "https://www.jotform.com/uploads/PeterToler/262217749749067/6626199768465634565/FB_IMG_1786810595297.jpg"
   },
   {
+    "id": "light-camera-glamour-dueling-pianos-2026",
+    "slug": "light-camera-glamour-dueling-pianos-2026",
+    "status": "approved",
+    "title": "Light, Camera, Glamour: A Night of Dueling Pianos",
+    "organization": "Order of Venus",
+    "eventType": "Fundraiser",
+    "startDateTime": "2026-08-22T19:00:00-05:00",
+    "endDateTime": "2026-08-22T23:00:00-05:00",
+    "venueName": "Electric Piano Parlor",
+    "venueAddress": "267 Dauphin St.",
+    "cityStateZip": "Mobile, AL 36602",
+    "description": "Join the Order of Venus for Light, Camera, Glamour: A Night of Dueling Pianos at Electric Piano Parlor. This red-carpet-themed fundraiser features dueling pianos, song requests for tips, a cash prize for best dressed, Split the Pot, Wagon of Cheer, and other raffles. Guests are encouraged to dress in red-carpet glam for an evening of music, laughter, and glamour.",
+    "mapUrl": "https://maps.app.goo.gl/7AMbUWxHyDguAoWu9?g_st=ic",
+    "ticketUrl": "https://lightscameraglamour.rsvpify.com/",
+    "ticketLabel": "Tickets / RSVP",
+    "cost": "Pre-sale admission $30 / Door $35",
+    "audience": "Adults only, 21+",
+    "publicContact": "oovevents@gmail.com",
+    "flyerUrl": "https://www.jotform.com/uploads/PeterToler/262217749749067/6626412759923081175/IMG_0241.jpeg"
+  },
+  {
     "id": "etruscans-baby-back-rib-sale-2026",
     "slug": "etruscans-baby-back-rib-sale-2026",
     "status": "approved",
