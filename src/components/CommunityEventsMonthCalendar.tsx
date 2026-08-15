@@ -40,6 +40,8 @@ export function CommunityEventsMonthCalendar({ events }: { events: CommunityEven
   const visibleYear = visibleMonth.getFullYear();
   const visibleMonthIndex = visibleMonth.getMonth();
   const visibleMonthLabel = monthTitleFormatter.format(visibleMonth);
+  const todayParts = getCentralDateParts(new Date().toISOString());
+  const todayIsInVisibleMonth = todayParts.year === visibleYear && todayParts.monthIndex === visibleMonthIndex;
   const eventsByDate = groupEventsByDate(sortedEvents);
   const monthCells = buildMonthCells(visibleYear, visibleMonthIndex);
   const visibleMonthEvents = sortedEvents.filter((event) => {
@@ -117,13 +119,25 @@ export function CommunityEventsMonthCalendar({ events }: { events: CommunityEven
               }
 
               const dayEvents = eventsByDate[cell.dateKey] ?? [];
+              const isToday = cell.dateKey === todayParts.dateKey;
+              const dayCellClassName = isToday
+                ? "min-h-28 rounded-2xl border border-parade-gold/75 bg-parade-goldSoft p-2 shadow-glow ring-2 ring-parade-gold/35"
+                : "min-h-28 rounded-2xl border border-parade-gold/25 bg-white/80 p-2 shadow-sm";
+              const dayNumberClassName = isToday
+                ? "grid h-7 w-7 place-items-center rounded-full bg-parade-gold text-xs font-black text-parade-purpleDark shadow-sm ring-2 ring-white/80"
+                : "grid h-7 w-7 place-items-center rounded-full bg-parade-purple text-xs font-black text-parade-goldBright";
 
               return (
-                <div key={cell.dateKey} className="min-h-28 rounded-2xl border border-parade-gold/25 bg-white/80 p-2 shadow-sm">
+                <div key={cell.dateKey} className={dayCellClassName} aria-current={isToday ? "date" : undefined}>
                   <div className="flex items-center justify-between gap-2">
-                    <span className="grid h-7 w-7 place-items-center rounded-full bg-parade-purple text-xs font-black text-parade-goldBright">
-                      {cell.day}
-                    </span>
+                    <div className="flex min-w-0 items-center gap-1.5">
+                      <span className={dayNumberClassName}>{cell.day}</span>
+                      {isToday ? (
+                        <span className="rounded-full border border-parade-gold/45 bg-white/85 px-2 py-0.5 text-[0.62rem] font-black uppercase tracking-wide text-parade-purpleDark shadow-sm">
+                          Today
+                        </span>
+                      ) : null}
+                    </div>
                     {dayEvents.length > 0 ? (
                       <span className="rounded-full bg-parade-goldSoft px-2 py-0.5 text-[0.62rem] font-black uppercase text-parade-purple">
                         {dayEvents.length}
@@ -155,7 +169,14 @@ export function CommunityEventsMonthCalendar({ events }: { events: CommunityEven
         </div>
 
         <div className="md:hidden">
-          <h3 className="text-base font-black text-parade-purpleDark">{visibleMonthLabel} agenda</h3>
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+            <h3 className="text-base font-black text-parade-purpleDark">{visibleMonthLabel} agenda</h3>
+            {todayIsInVisibleMonth ? (
+              <span className="inline-flex w-fit items-center rounded-full border border-parade-gold/45 bg-parade-goldSoft px-3 py-1 text-xs font-black uppercase tracking-wide text-parade-purpleDark">
+                Today: {todayParts.day}
+              </span>
+            ) : null}
+          </div>
           <MobileAgenda events={visibleMonthEvents} />
         </div>
 
