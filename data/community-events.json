@@ -125,6 +125,28 @@
     "organizationLogoUrl": "https://www.jotform.com/uploads/PeterToler/262217749749067/6625500698218606505/IMG_3556.png"
   },
   {
+    "id": "2nd-annual-ways-means-topgolf-event-2026",
+    "slug": "2nd-annual-ways-means-topgolf-event-2026",
+    "status": "approved",
+    "title": "2nd Annual Ways & Means Topgolf Event",
+    "organization": "Order of LaShe’s",
+    "eventType": "Fundraiser",
+    "startDateTime": "2026-10-18T13:00:00-05:00",
+    "endDateTime": "2026-10-18T16:00:00-05:00",
+    "venueName": "Topgolf",
+    "venueAddress": "1250 Satchel Paige Dr",
+    "cityStateZip": "Mobile, AL 36606",
+    "description": "Join the Order of LaShe’s for the 2nd Annual Ways & Means Topgolf Event, a Mardi Gras-themed fundraiser at Topgolf Mobile. Guests are encouraged to wear Mardi Gras attire and decorate their bays. Sign-ups end October 1.",
+    "mapUrl": "https://maps.apple/p/13Ioo2UiL-skiM",
+    "ticketUrl": "mailto:oolwaysandmeans@gmail.com",
+    "ticketLabel": "Email to RSVP",
+    "cost": "Paid",
+    "audience": "All-Ages",
+    "publicContact": "oolwaysandmeans@gmail.com",
+    "flyerUrl": "https://www.jotform.com/uploads/PeterToler/262217749749067/6625531905324273947/960FCA74-3EF2-4DB7-8D56-B0298F1DEBE2.png",
+    "organizationLogoUrl": "/images/event-logos/order-of-lashes-logo.svg"
+  },
+  {
     "id": "crawl-o-ween-2026",
     "slug": "crawl-o-ween-2026",
     "status": "approved",
