@@ -160,14 +160,7 @@ export default async function ResourcesPage() {
           </div>
         </section>
 
-        {historyResources.length > 0 ? (
-          <ResourceGroup
-            title="History & Culture"
-            description="Learn more about Mobile Carnival history, mystic society traditions, costumes, artifacts, and Mardi Gras culture. Verify hours, tickets, and tour details with the museum before visiting."
-            resources={historyResources}
-            icon={<Landmark className="h-5 w-5" aria-hidden="true" />}
-          />
-        ) : null}
+        {historyResources.length > 0 ? <HistoryCultureSection resources={historyResources} /> : null}
 
         {watchResources.length > 0 ? (
           <ResourceGroup
@@ -216,6 +209,59 @@ function SectionTitle({ title, description }: { title: string; description: stri
       <h2 className="text-2xl font-black text-parade-purpleDark">{title}</h2>
       <p className="mt-2 max-w-3xl text-sm leading-6 text-parade-muted">{description}</p>
     </div>
+  );
+}
+
+function HistoryCultureSection({ resources }: { resources: ResourceItem[] }) {
+  return (
+    <section id="mobile-mardi-gras-history" className="scroll-mt-24 space-y-4">
+      <div className="relative overflow-hidden rounded-[1.5rem] border border-parade-gold/35 bg-gradient-to-br from-parade-purpleDeep via-parade-purpleDark to-parade-purple p-5 text-white shadow-card">
+        <span className="pointer-events-none absolute right-[-4rem] top-[-4rem] h-32 w-32 rounded-full bg-parade-gold/20 blur-2xl" aria-hidden="true" />
+        <span className="pointer-events-none absolute bottom-[-5rem] left-[-4rem] h-40 w-40 rounded-full bg-white/10 blur-3xl" aria-hidden="true" />
+        <div className="relative z-10 flex items-start gap-3">
+          <div className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-parade-gold text-parade-purpleDark shadow-glow">
+            <Landmark className="h-6 w-6" aria-hidden="true" />
+          </div>
+          <div>
+            <p className="text-xs font-black uppercase tracking-[0.16em] text-parade-goldBright">Brief history</p>
+            <h2 className="mt-1 text-2xl font-black text-white">Mobile Mardi Gras History</h2>
+            <div className="mt-3 space-y-3 text-sm leading-6 text-purple-100">
+              <p>
+                Mobile is widely known as the birthplace of American Mardi Gras. The city&apos;s Carnival story is often traced to its early French colonial roots and the well-known 1703 tradition, but like much of Carnival, the story includes both history and myth.
+              </p>
+              <p>
+                The organized mystic society culture, balls, symbolism, and traditions that shaped modern Mobile Mardi Gras developed most clearly in the 1830s and 1840s. Today, Mobile Mardi Gras continues through parades, balls, mystic societies, music, costumes, throws, and community celebrations.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <SectionTitle
+        title="History & Culture"
+        description="Learn more about Mobile Carnival history, mystic society traditions, costumes, artifacts, and Mardi Gras culture. Verify hours, tickets, and tour details with the museum before visiting."
+      />
+      <div className="grid gap-3 md:grid-cols-2">
+        {resources.map((resource) => (
+          <a
+            key={resource.id}
+            href={resource.url}
+            target="_blank"
+            rel="noreferrer"
+            className="group flex min-w-0 items-center gap-3 rounded-2xl border border-parade-gold/30 bg-white px-4 py-3 shadow-sm transition hover:-translate-y-0.5 hover:bg-parade-goldSoft hover:shadow-civic"
+          >
+            <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-parade-purple text-parade-goldBright ring-1 ring-parade-gold/35">
+              <Landmark className="h-5 w-5" aria-hidden="true" />
+            </span>
+            <span className="min-w-0 flex-1">
+              <span className="block truncate text-sm font-black text-parade-purpleDark">{resource.title}</span>
+              <span className="mt-1 block truncate text-xs font-semibold uppercase text-parade-muted">Visit museum website</span>
+            </span>
+            <ExternalLink className="h-4 w-4 shrink-0 text-parade-purple transition group-hover:translate-x-0.5" aria-hidden="true" />
+          </a>
+        ))}
+      </div>
+    </section>
   );
 }
 
