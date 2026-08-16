@@ -56,11 +56,11 @@ export default function CommunityEventsPage() {
           <>
             <CommunityEventsMonthCalendar events={events} />
 
-            <section id="approved-event-details">
+            <section id="community-event-listings">
               <div className="mb-4">
-                <h2 className="text-2xl font-black text-parade-purpleDark">Approved event details</h2>
+                <h2 className="text-2xl font-black text-parade-purpleDark">Community event listings</h2>
                 <p className="mt-2 max-w-3xl text-sm leading-6 text-parade-muted">
-                  Open an event for its flyer, venue, map, RSVP link, public contact, and add-to-calendar options.
+                  Browse the posted events and open any listing for its flyer, venue, map, RSVP link, public contact, and add-to-calendar options.
                 </p>
               </div>
               <div className="grid gap-4 lg:grid-cols-2">
@@ -75,7 +75,7 @@ export default function CommunityEventsPage() {
             <div className="mx-auto grid h-14 w-14 place-items-center rounded-2xl bg-parade-goldSoft text-parade-purple ring-1 ring-parade-gold/40">
               <CalendarDays className="h-7 w-7" aria-hidden="true" />
             </div>
-            <h2 className="mt-4 text-2xl font-black text-parade-purpleDark">No approved community events are posted yet</h2>
+            <h2 className="mt-4 text-2xl font-black text-parade-purpleDark">No community events are posted yet</h2>
             <p className="mx-auto mt-3 max-w-2xl text-sm leading-6 text-parade-muted">
               Organization-submitted events will appear here after review. If your group has a Mardi Gras or Carnival-related event, submit it for consideration.
             </p>
