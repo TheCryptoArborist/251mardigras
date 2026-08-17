@@ -230,5 +230,28 @@
     "publicContact": "mmnewsletter@gmail.com",
     "flyerUrl": "https://www.jotform.com/uploads/PeterToler/262217749749067/6625549383712631657/FB_IMG_1786745613821.jpg",
     "organizationLogoUrl": "https://www.jotform.com/uploads/PeterToler/262217749749067/6625549383712631657/FB_IMG_1786745058314.jpg"
+  },
+  {
+    "id": "a-night-of-royalty-2027",
+    "slug": "a-night-of-royalty-2027",
+    "status": "approved",
+    "title": "A Night of Royalty",
+    "organization": "Le Mardi Gras of Royalty — Deaf Society",
+    "eventType": "Ball",
+    "startDateTime": "2027-02-06T19:00:00-06:00",
+    "endDateTime": "2027-02-07T02:00:00-06:00",
+    "venueName": "Via",
+    "venueAddress": "Dauphin Street",
+    "cityStateZip": "Mobile, AL",
+    "description": "Join Le Mardi Gras of Royalty for A Night of Royalty, an adults-only Mardi Gras ball celebrating a society of Deaf Mobilians and its support for the Deaf community and beyond. The organization uses visual language to communicate, and guests are encouraged to reach out in advance if accommodations are needed.",
+    "mapUrl": "https://maps.apple/p/LoPctyepNXC2sr",
+    "ticketUrl": "tel:2519239708",
+    "ticketLabel": "Call for Tickets",
+    "cost": "$70",
+    "audience": "Adults only, 21+",
+    "publicContact": "251-923-9708",
+    "accessibilityNotes": "Reach out if accommodations are needed.",
+    "parkingNotes": "Parking available.",
+    "organizationLogoUrl": "https://www.jotform.com/uploads/PeterToler/262217749749067/6627232038361478720/IMG_8843.png"
   }
 ]
