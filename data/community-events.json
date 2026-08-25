@@ -126,6 +126,28 @@
     "organizationLogoUrl": "https://www.jotform.com/uploads/PeterToler/262217749749067/6622992928321830875/etruscans%20logo.jpg"
   },
   {
+    "id": "pierrettes-poker-crawl-2026",
+    "slug": "pierrettes-poker-crawl-2026",
+    "status": "approved",
+    "title": "Pierrettes Poker Crawl",
+    "organization": "Pierrettes",
+    "eventType": "Fundraiser",
+    "startDateTime": "2026-09-26T14:00:00-05:00",
+    "endDateTime": "2026-09-26T20:00:00-05:00",
+    "venueName": "The Stables Bar",
+    "venueAddress": "352 St. Francis St.",
+    "cityStateZip": "Mobile, AL 36602",
+    "description": "Join the Pierrettes for the Pierrettes Poker Crawl, a cowboy-themed Mardi Gras fundraiser and 5-stop bar crawl in downtown Mobile. The crawl starts at The Stables Bar and continues to Hayley’s, Pat’s, Brickyard, and Electric Piano Bar. Registration is $25 cash only, and the winning poker hand takes home a $500 cash prize.",
+    "mapUrl": "https://maps.app.goo.gl/LRXQcxGgAjNG8UVVA",
+    "ticketUrl": "https://facebook.com/events/s/pierrettes-poker-crawl/957650250711563/",
+    "ticketLabel": "Facebook Event Info",
+    "cost": "$25 registration, cash only",
+    "audience": "Adults only, 21+",
+    "publicContact": "(251) 689-4777",
+    "flyerUrl": "https://www.jotform.com/uploads/PeterToler/262217749749067/6633938598113319295/IMG_1152.jpeg",
+    "organizationLogoUrl": "https://www.jotform.com/uploads/PeterToler/262217749749067/6633938598113319295/IMG_1185.jpeg"
+  },
+  {
     "id": "order-of-athena-5k-run-2026",
     "slug": "order-of-athena-5k-run-2026",
     "status": "approved",
