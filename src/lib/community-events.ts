@@ -15,6 +15,8 @@ export type CommunityEvent = {
   venueAddress: string;
   cityStateZip: string;
   description: string;
+  dateLabel?: string;
+  locationLabel?: string;
   mapUrl?: string;
   ticketUrl?: string;
   ticketLabel?: string;
@@ -47,6 +49,10 @@ export function getCommunityEventById(eventId: string) {
 }
 
 export function formatCommunityEventDate(event: CommunityEvent) {
+  if (event.dateLabel) {
+    return event.dateLabel;
+  }
+
   const start = new Date(event.startDateTime);
   const end = new Date(event.endDateTime);
 
@@ -136,6 +142,10 @@ export function buildCommunityCalendarIcs(events = getApprovedCommunityEvents())
 }
 
 export function fullEventLocation(event: CommunityEvent) {
+  if (event.locationLabel) {
+    return event.locationLabel;
+  }
+
   return [event.venueName, event.venueAddress, event.cityStateZip].filter(Boolean).join(", ");
 }
 
