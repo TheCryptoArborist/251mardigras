@@ -28,6 +28,8 @@ export default async function CommunityEventDetailPage({ params }: CommunityEven
     notFound();
   }
 
+  const locationDetails = [event.venueAddress, event.cityStateZip].filter(Boolean).join(", ");
+
   return (
     <div>
       <section className="relative overflow-hidden border-b border-parade-gold/30 bg-gradient-to-br from-parade-purpleDeep via-parade-purpleDark to-parade-purple text-white">
@@ -104,8 +106,8 @@ export default async function CommunityEventDetailPage({ params }: CommunityEven
             </div>
             <div>
               <dt className="text-xs font-black uppercase tracking-wide text-parade-purple">Where</dt>
-              <dd className="mt-1 text-base font-bold text-parade-ink">{event.venueName}</dd>
-              <dd className="mt-1 text-sm leading-6 text-parade-muted">{event.venueAddress}, {event.cityStateZip}</dd>
+              <dd className="mt-1 text-base font-bold text-parade-ink">{event.locationLabel ?? event.venueName}</dd>
+              {locationDetails ? <dd className="mt-1 text-sm leading-6 text-parade-muted">{locationDetails}</dd> : null}
               {event.mapUrl ? (
                 <a href={event.mapUrl} target="_blank" rel="noreferrer" className="mt-3 inline-flex items-center gap-2 rounded-full bg-parade-purple px-4 py-2 text-xs font-black text-white hover:bg-parade-purpleDark">
                   Open map / directions <ExternalLink className="h-4 w-4" aria-hidden="true" />
