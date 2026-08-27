@@ -44,6 +44,27 @@
     "organizationLogoUrl": "/images/event-logos/order-of-venus-logo.svg"
   },
   {
+    "id": "order-of-athena-yard-inflatable-sale-2026",
+    "slug": "order-of-athena-yard-inflatable-sale-2026",
+    "status": "approved",
+    "title": "Yard Inflatable Sale",
+    "organization": "Order of Athena",
+    "eventType": "Fundraiser / Online Sale",
+    "startDateTime": "2026-08-27T11:10:00-05:00",
+    "endDateTime": "2026-08-27T23:59:00-05:00",
+    "dateLabel": "Begins Thu, Aug 27, 2026 • Available while supplies last",
+    "venueName": "Online",
+    "venueAddress": "",
+    "cityStateZip": "",
+    "description": "The Order of Athena is offering limited-quantity Mobile Mardi Gras yard inflatables as an online fundraiser. These one-of-a-kind inflatables celebrate Mobile Mardi Gras and are available while supplies last.",
+    "ticketUrl": "https://form.jotform.com/262364205376053",
+    "ticketLabel": "Order Online",
+    "cost": "Paid",
+    "audience": "All-Ages",
+    "publicContact": "ooathena1954@gmail.com",
+    "flyerUrl": "https://www.jotform.com/uploads/PeterToler/262217749749067/6636440154371860725/inbound6518126194397424756.jpg"
+  },
+  {
     "id": "etruscans-baby-back-rib-sale-2026",
     "slug": "etruscans-baby-back-rib-sale-2026",
     "status": "approved",
