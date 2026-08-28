@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { ArrowRight, CalendarDays, ExternalLink, Landmark, Mail, MapPinned, PartyPopper, ShieldCheck } from "lucide-react";
+import { EventCountdown } from "@/components/EventCountdown";
 import {
   formatCommunityEventDate,
   fullEventLocation,
@@ -10,11 +11,13 @@ import {
 
 const officialWebsiteUrl = "https://theetruscans.org";
 const officialEmail = "etruscanswebmasters@gmail.com";
+const etruscansBallDateTime = "2027-01-09T20:00:00-06:00";
+const etruscansBallDateLabel = "Saturday, January 9, 2027 • 8:00 PM CT";
 
 export const metadata: Metadata = {
   title: "The Etruscans Mystic Society | Mobile Mardi Gras",
   description:
-    "Learn about The Etruscans Mystic Society, a Mobile Mardi Gras husband-and-wife non-parading organization organized in 1950, with official contact and event links.",
+    "Learn about The Etruscans Mystic Society, a Mobile Mardi Gras husband-and-wife non-parading organization organized in 1950, with a countdown to the 76th Etruscans Mystic Society Ball.",
   alternates: {
     canonical: "/mystic-societies/etruscans"
   }
@@ -32,9 +35,9 @@ const profileHighlights = [
     description: "The society describes itself as the oldest husband-and-wife, non-parading organization."
   },
   {
-    label: "Annual ball",
-    value: "Saturday night, four weeks before Mardi Gras",
-    description: "The Etruscans place a strong emphasis on producing one of Mobile's best Mardi Gras mystic balls."
+    label: "76th ball",
+    value: "January 9, 2027",
+    description: "The 76th Etruscans Mystic Society Ball is scheduled for 8:00 PM CT."
   }
 ];
 
@@ -61,7 +64,7 @@ export default function EtruscansMysticSocietyPage() {
                 The Etruscans Mystic Society
               </h1>
               <p className="mt-5 max-w-3xl text-lg leading-8 text-purple-100">
-                Organized in 1950, The Etruscans Mystic Society is a Mobile Mardi Gras husband-and-wife non-parading organization known for its annual mystic ball, year-round fellowship, and community fundraisers.
+                Organized in 1950, The Etruscans Mystic Society is a Mobile Mardi Gras husband-and-wife non-parading organization known for its annual mystic ball, year-round fellowship, and community fundraisers. The 76th Etruscans Mystic Society Ball is scheduled for January 9, 2027 at 8:00 PM CT.
               </p>
               <div className="mt-7 flex flex-wrap gap-3">
                 <a
@@ -93,6 +96,10 @@ export default function EtruscansMysticSocietyPage() {
                   <dd className="mt-1 text-purple-100">Husband-and-wife non-parading Mardi Gras organization</dd>
                 </div>
                 <div>
+                  <dt className="font-black uppercase text-parade-goldBright">76th ball</dt>
+                  <dd className="mt-1 text-purple-100">January 9, 2027 • 8:00 PM CT</dd>
+                </div>
+                <div>
                   <dt className="font-black uppercase text-parade-goldBright">Official contact</dt>
                   <dd className="mt-1 text-purple-100">{officialEmail}</dd>
                 </div>
@@ -103,6 +110,15 @@ export default function EtruscansMysticSocietyPage() {
       </section>
 
       <div className="mx-auto max-w-6xl space-y-8 px-4 py-8 sm:px-6 lg:px-8">
+        <EventCountdown
+          eyebrow="Etruscans ball countdown"
+          title="Countdown to the 76th Etruscans Mystic Society Ball"
+          eventName="The Etruscans Mystic Society"
+          targetDateTime={etruscansBallDateTime}
+          dateLabel={etruscansBallDateLabel}
+          locationLabel="Mobile Mardi Gras mystic ball"
+        />
+
         <section className="grid gap-4 md:grid-cols-3">
           {profileHighlights.map((item) => (
             <article key={item.label} className="rounded-[1.35rem] border border-parade-gold/35 bg-gradient-to-br from-white via-parade-cream to-parade-purpleMist p-5 shadow-card">
@@ -129,7 +145,7 @@ export default function EtruscansMysticSocietyPage() {
                 The Etruscans Mystic Society describes itself as the oldest husband-and-wife, non-parading organization. Its public information emphasizes the society's annual Mardi Gras Mystic Ball and its role in Mobile's Carnival culture.
               </p>
               <p>
-                The society's Annual Ball is held on a Saturday night four weeks before Mardi Gras. The group also maintains a year-round social calendar centered on fellowship, activities, and fundraisers.
+                The 76th Etruscans Mystic Society Ball is scheduled for Saturday, January 9, 2027 at 8:00 PM CT. The group also maintains a year-round social calendar centered on fellowship, activities, and fundraisers.
               </p>
             </div>
           </article>
