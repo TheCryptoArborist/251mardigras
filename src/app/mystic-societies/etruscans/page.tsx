@@ -142,7 +142,7 @@ export default function EtruscansMysticSocietyPage() {
             </div>
             <div className="mt-4 space-y-4 text-sm leading-7 text-parade-muted">
               <p>
-                The Etruscans Mystic Society describes itself as the oldest husband-and-wife, non-parading organization. Its public information emphasizes the society's annual Mardi Gras Mystic Ball and its role in Mobile's Carnival culture.
+                The Etruscans Mystic Society describes itself as the oldest husband-and-wife, non-parading organization. Its public information emphasizes the society&apos;s annual Mardi Gras Mystic Ball and its role in Mobile&apos;s Carnival culture.
               </p>
               <p>
                 The 76th Etruscans Mystic Society Ball is scheduled for Saturday, January 9, 2027 at 8:00 PM CT. The group also maintains a year-round social calendar centered on fellowship, activities, and fundraisers.
@@ -238,7 +238,7 @@ export default function EtruscansMysticSocietyPage() {
             <ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-amber-800" aria-hidden="true" />
             <p className="text-sm font-medium leading-6 text-amber-950">
               <span className="font-black">Organization profile note.</span>{" "}
-              This MG251 page summarizes public information from The Etruscans Mystic Society's official website and connects visitors to related community event listings. Verify ball details, membership information, and event updates directly with the society before making plans.
+              This MG251 page summarizes public information from The Etruscans Mystic Society&apos;s official website and connects visitors to related community event listings. Verify ball details, membership information, and event updates directly with the society before making plans.
             </p>
           </div>
         </section>
