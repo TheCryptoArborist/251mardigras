@@ -2,8 +2,14 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { Metadata } from "next";
-import { ArrowRight, ExternalLink, Mail, PartyPopper, ShieldCheck } from "lucide-react";
+import { ArrowRight, CalendarDays, ExternalLink, Mail, ShieldCheck } from "lucide-react";
 import { EventCountdown } from "@/components/EventCountdown";
+import {
+  formatCommunityEventDate,
+  fullEventLocation,
+  getApprovedCommunityEvents,
+  type CommunityEvent
+} from "@/lib/community-events";
 
 const officialWebsiteUrl = "https://theetruscans.org";
 const officialEmail = "etruscanswebmasters@gmail.com";
@@ -38,6 +44,11 @@ const ballPhotos = [
 const profileFacts = ["Organized 1950", "Husband-and-wife non-parading organization", "76th Ball • January 9, 2027"];
 
 export default function EtruscansMysticSocietyPage() {
+  const etruscansEvents = getApprovedCommunityEvents().filter((event) => {
+    const searchableText = `${event.organization} ${event.title}`.toLowerCase();
+    return searchableText.includes("etruscan");
+  });
+
   return (
     <div>
       <section className="relative overflow-hidden border-b border-parade-gold/30 bg-gradient-to-br from-parade-purpleDeep via-parade-purpleDark to-parade-purple text-white">
@@ -164,26 +175,7 @@ export default function EtruscansMysticSocietyPage() {
             </dl>
           </article>
 
-          <article className="rounded-[1.5rem] border border-parade-line bg-gradient-to-br from-parade-purpleDeep via-parade-purpleDark to-parade-purple p-5 text-white shadow-card">
-            <div className="flex items-start gap-3">
-              <div className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-parade-gold text-parade-purpleDark shadow-glow">
-                <PartyPopper className="h-6 w-6" aria-hidden="true" />
-              </div>
-              <div>
-                <p className="text-xs font-black uppercase tracking-[0.16em] text-parade-goldBright">Events and fundraisers</p>
-                <h2 className="mt-1 text-2xl font-black text-white">See community event listings</h2>
-              </div>
-            </div>
-            <p className="mt-4 text-sm leading-6 text-purple-100">
-              Current Mardi Gras-related fundraisers and community events are listed on the MG251 events page. Verify details directly with the host organization before making plans.
-            </p>
-            <Link
-              href="/events"
-              className="mt-5 inline-flex items-center justify-center gap-2 rounded-full bg-parade-gold px-5 py-3 text-sm font-black text-parade-purpleDark shadow-glow transition hover:-translate-y-0.5 hover:bg-parade-goldBright"
-            >
-              Open Community Events <ArrowRight className="h-4 w-4" aria-hidden="true" />
-            </Link>
-          </article>
+          <EtruscansEventsPanel events={etruscansEvents} />
         </section>
 
         <section className="rounded-[1.25rem] border border-amber-200 bg-parade-goldSoft p-4 shadow-civic">
@@ -219,5 +211,56 @@ function BallPhotoCard({ photo }: { photo: BallPhoto }) {
         <h3 className="mt-1 text-xl font-black text-parade-purpleDark">{photo.label}</h3>
       </div>
     </article>
+  );
+}
+
+function EtruscansEventsPanel({ events }: { events: CommunityEvent[] }) {
+  const displayedEvents = events.slice(0, 4);
+
+  return (
+    <article className="rounded-[1.5rem] border border-parade-line bg-gradient-to-br from-parade-purpleDeep via-parade-purpleDark to-parade-purple p-5 text-white shadow-card">
+      <div className="flex items-start gap-3">
+        <div className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-parade-gold text-parade-purpleDark shadow-glow">
+          <CalendarDays className="h-6 w-6" aria-hidden="true" />
+        </div>
+        <div>
+          <p className="text-xs font-black uppercase tracking-[0.16em] text-parade-goldBright">MG251 calendar</p>
+          <h2 className="mt-1 text-2xl font-black text-white">Etruscans community events</h2>
+        </div>
+      </div>
+
+      {displayedEvents.length > 0 ? (
+        <div className="mt-5 space-y-3">
+          {displayedEvents.map((event) => (
+            <EtruscansEventCard key={event.id} event={event} />
+          ))}
+        </div>
+      ) : (
+        <p className="mt-5 text-sm leading-6 text-purple-100">
+          No Etruscans community event listings are currently posted on MG251. Check the official society website for the latest updates.
+        </p>
+      )}
+
+      <Link
+        href="/events"
+        className="mt-5 inline-flex items-center justify-center gap-2 rounded-full bg-parade-gold px-5 py-3 text-sm font-black text-parade-purpleDark shadow-glow transition hover:-translate-y-0.5 hover:bg-parade-goldBright"
+      >
+        Open Community Events <ArrowRight className="h-4 w-4" aria-hidden="true" />
+      </Link>
+    </article>
+  );
+}
+
+function EtruscansEventCard({ event }: { event: CommunityEvent }) {
+  return (
+    <Link
+      href={`/events/${event.slug}`}
+      className="group block rounded-2xl border border-parade-gold/30 bg-white/10 px-4 py-3 text-purple-50 transition hover:-translate-y-0.5 hover:bg-white/15"
+    >
+      <p className="text-[0.68rem] font-black uppercase tracking-[0.18em] text-parade-goldBright">{event.eventType}</p>
+      <h3 className="mt-1 text-base font-black text-white group-hover:text-parade-goldBright">{event.title}</h3>
+      <p className="mt-1 text-sm font-semibold leading-6 text-purple-100">{formatCommunityEventDate(event)}</p>
+      <p className="mt-1 text-xs font-semibold uppercase tracking-wide text-purple-200">{fullEventLocation(event)}</p>
+    </Link>
   );
 }
