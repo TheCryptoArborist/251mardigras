@@ -13,6 +13,7 @@ import {
 
 const officialWebsiteUrl = "https://theetruscans.org";
 const officialEmail = "etruscanswebmasters@gmail.com";
+const officialEmailComposeUrl = "https://mail.google.com/mail/?view=cm&fs=1&to=etruscanswebmasters%40gmail.com&su=Question%20about%20The%20Etruscans";
 const etruscansLogoUrl = "/images/mystic-societies/etruscans-logo.svg";
 const etruscansBallDateTime = "2027-01-09T20:00:00-06:00";
 const etruscansBallDateLabel = "Saturday, January 9, 2027 • 8:00 PM CT";
@@ -102,7 +103,9 @@ export default function EtruscansMysticSocietyPage() {
                   Visit Official Website <ExternalLink className="h-4 w-4" aria-hidden="true" />
                 </a>
                 <a
-                  href={`mailto:${officialEmail}`}
+                  href={officialEmailComposeUrl}
+                  target="_blank"
+                  rel="noreferrer"
                   className="inline-flex items-center justify-center gap-2 rounded-full border border-white/25 bg-white/10 px-5 py-3 text-sm font-black text-white transition hover:-translate-y-0.5 hover:bg-white/15"
                 >
                   Email The Etruscans <Mail className="h-4 w-4" aria-hidden="true" />
@@ -155,9 +158,17 @@ export default function EtruscansMysticSocietyPage() {
               <div>
                 <dt className="font-black uppercase text-parade-purple">Email</dt>
                 <dd className="mt-1">
-                  <a href={`mailto:${officialEmail}`} className="font-bold text-parade-purple underline decoration-parade-gold/60 underline-offset-4 hover:text-parade-purpleDark">
+                  <a
+                    href={officialEmailComposeUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="font-bold text-parade-purple underline decoration-parade-gold/60 underline-offset-4 hover:text-parade-purpleDark"
+                  >
                     {officialEmail}
                   </a>
+                  <p className="mt-2 text-xs font-semibold uppercase tracking-wide text-parade-muted">
+                    Opens a Gmail compose window. You can also copy and paste the address above into any email app.
+                  </p>
                 </dd>
               </div>
               <div>
