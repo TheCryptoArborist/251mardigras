@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import type { Metadata } from "next";
 import { ArrowRight, CalendarDays, ExternalLink, Landmark, Mail, MapPinned, PartyPopper, ShieldCheck } from "lucide-react";
 import { EventCountdown } from "@/components/EventCountdown";
@@ -11,6 +12,7 @@ import {
 
 const officialWebsiteUrl = "https://theetruscans.org";
 const officialEmail = "etruscanswebmasters@gmail.com";
+const etruscansLogoUrl = "/images/mystic-societies/etruscans-logo.svg";
 const etruscansBallDateTime = "2027-01-09T20:00:00-06:00";
 const etruscansBallDateLabel = "Saturday, January 9, 2027 • 8:00 PM CT";
 
@@ -60,6 +62,23 @@ export default function EtruscansMysticSocietyPage() {
           </p>
           <div className="mt-6 grid gap-8 lg:grid-cols-[1fr_0.42fr] lg:items-start">
             <div>
+              <div className="mb-5 flex flex-col gap-4 sm:flex-row sm:items-center">
+                <span className="relative h-24 w-24 shrink-0 overflow-hidden rounded-[1.4rem] border border-parade-gold/45 bg-white p-2 shadow-glow ring-1 ring-white/20">
+                  <Image
+                    src={etruscansLogoUrl}
+                    alt="The Etruscans Mystic Society logo"
+                    fill
+                    sizes="96px"
+                    className="object-contain p-1"
+                    priority
+                    unoptimized
+                  />
+                </span>
+                <div>
+                  <p className="text-xs font-black uppercase tracking-[0.18em] text-parade-goldBright">Organized 1950</p>
+                  <p className="mt-1 text-sm font-bold text-purple-100">Mobile Mardi Gras mystic society</p>
+                </div>
+              </div>
               <h1 className="max-w-4xl text-4xl font-black tracking-tight text-white sm:text-6xl">
                 The Etruscans Mystic Society
               </h1>
@@ -85,6 +104,22 @@ export default function EtruscansMysticSocietyPage() {
             </div>
 
             <aside className="rounded-[1.5rem] border border-parade-gold/35 bg-white/10 p-5 shadow-glow backdrop-blur">
+              <div className="mb-5 flex items-center gap-4 rounded-[1.25rem] border border-white/15 bg-white/10 p-3">
+                <span className="relative h-16 w-16 shrink-0 overflow-hidden rounded-2xl bg-white p-2 shadow-glow">
+                  <Image
+                    src={etruscansLogoUrl}
+                    alt="The Etruscans Mystic Society logo"
+                    fill
+                    sizes="64px"
+                    className="object-contain p-1"
+                    unoptimized
+                  />
+                </span>
+                <div>
+                  <p className="text-xs font-black uppercase tracking-[0.16em] text-parade-goldBright">The Etruscans</p>
+                  <p className="mt-1 text-sm font-semibold text-purple-100">Mystic Society</p>
+                </div>
+              </div>
               <p className="text-xs font-black uppercase tracking-[0.18em] text-parade-goldBright">Quick profile</p>
               <dl className="mt-4 space-y-4 text-sm leading-6">
                 <div>
