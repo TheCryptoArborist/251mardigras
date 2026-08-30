@@ -12,6 +12,29 @@ const HOMEPAGE_VIDEO_POSTER = "/videos/dragon-home-screen-poster.jpg";
 const HOMEPAGE_FEATURED_VIDEO_EMBED_URL = "https://www.youtube.com/embed/vSwxOuydTjU?si=dpUnDxY4bDv-7Gqt";
 const FACEBOOK_SUPPORTER_URL = "https://www.facebook.com/mardigrasmobileal/support/?surface=page_top_cta_button&entrypoint_surface=page_top_cta_button";
 
+const socialLinks = [
+  {
+    label: "Facebook",
+    href: "https://m.facebook.com/mardigrasmobileal/"
+  },
+  {
+    label: "Instagram",
+    href: "https://www.instagram.com/mardi_gras_mobile_alabama"
+  },
+  {
+    label: "YouTube",
+    href: "https://www.youtube.com/@MobileMardiGras?sub_confirmation=1"
+  },
+  {
+    label: "TikTok",
+    href: "https://www.tiktok.com/@mobilemardigras"
+  },
+  {
+    label: "X",
+    href: "https://x.com/MobMardiGras"
+  }
+] as const;
+
 type PrimaryActionVariant = "live" | "replays" | "food" | "parking" | "weather" | "gear";
 
 type PrimaryAction = {
@@ -121,6 +144,7 @@ export default async function HomePage() {
               <span className="block">Plan the day</span>
             </h1>
             <CountdownTimer />
+            <SocialLinksStrip className="mt-7" />
             <HomepageVideoSpotlight className="mt-7 lg:hidden" />
           </div>
 
@@ -181,6 +205,31 @@ export default async function HomePage() {
         <VisitorCounter />
       </div>
     </div>
+  );
+}
+
+function SocialLinksStrip({ className = "" }: { className?: string }) {
+  return (
+    <section
+      aria-label="Follow Mardi Gras - Mobile, Alabama on social media"
+      className={`rounded-2xl border border-parade-gold/35 bg-white/10 p-3 shadow-civic backdrop-blur sm:inline-flex sm:items-center sm:gap-3 ${className}`}
+    >
+      <p className="text-xs font-black uppercase tracking-[0.16em] text-parade-goldBright sm:shrink-0">Follow for updates</p>
+      <div className="mt-3 flex flex-wrap gap-2 sm:mt-0">
+        {socialLinks.map((link) => (
+          <a
+            key={link.label}
+            href={link.href}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex items-center justify-center gap-1.5 rounded-full border border-white/15 bg-white/12 px-3 py-2 text-xs font-black text-white transition hover:-translate-y-0.5 hover:bg-parade-gold hover:text-parade-purpleDark"
+          >
+            {link.label}
+            <ExternalLink className="h-3.5 w-3.5" aria-hidden="true" />
+          </a>
+        ))}
+      </div>
+    </section>
   );
 }
 
