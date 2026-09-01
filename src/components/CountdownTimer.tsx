@@ -13,6 +13,7 @@ const TARGET_FULL_DATE_LABEL = "January 22, 2027 • 6:30 PM CT";
 const TARGET_SHORT_DATE_LABEL = "Jan. 22, 2027 • 6:30 PM CT";
 const COUNTDOWN_SHARE_URL = "https://mg251.xyz/#mardi-gras-countdown";
 const COUNTDOWN_SHARE_TITLE = "Mobile Mardi Gras Countdown";
+const X_SHARE_INTENT_URL = "https://x.com/intent/tweet";
 
 type TimeRemaining = {
   totalMilliseconds: number;
@@ -54,6 +55,8 @@ export function CountdownTimer() {
   const daysRemainingLabel = timeRemaining.days === 1 ? "1 day remaining" : `${timeRemaining.days} days remaining`;
   const shareButtonLabel = getShareButtonLabel(shareStatus);
   const shareStatusMessage = getShareStatusMessage(shareStatus);
+  const currentShareText = buildCountdownShareText(timeRemaining);
+  const xShareUrl = buildXIntentUrl(currentShareText);
 
   async function handleShareCountdown() {
     const shareText = buildCountdownShareText(timeRemaining);
@@ -111,7 +114,7 @@ export function CountdownTimer() {
               <span className="block sm:hidden">{TARGET_SHORT_DATE_LABEL}</span>
             </p>
           </div>
-          <div className="flex shrink-0 flex-col gap-2 sm:items-end">
+          <div className="flex shrink-0 flex-wrap gap-2 sm:justify-end">
             <button
               type="button"
               onClick={handleShareCountdown}
@@ -121,8 +124,18 @@ export function CountdownTimer() {
               {shareStatus === "shared" || shareStatus === "copied" ? <Check className="h-3.5 w-3.5" aria-hidden="true" /> : <Share2 className="h-3.5 w-3.5" aria-hidden="true" />}
               {shareButtonLabel}
             </button>
+            <a
+              href={xShareUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex w-fit items-center justify-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-3 py-2 text-xs font-black text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-white/15"
+              aria-label="Post the current Mobile Mardi Gras countdown to X"
+            >
+              <span className="text-sm leading-none" aria-hidden="true">𝕏</span>
+              Post to X
+            </a>
             {countdownExpired ? (
-              <p className="rounded-2xl bg-parade-gold px-4 py-3 text-sm font-black text-parade-purpleDark shadow-glow">
+              <p className="basis-full rounded-2xl bg-parade-gold px-4 py-3 text-sm font-black text-parade-purpleDark shadow-glow sm:text-right">
                 Parade season is underway.
               </p>
             ) : null}
@@ -283,6 +296,14 @@ function formatTimeRemainingForShare(timeRemaining: TimeRemaining) {
 
 function formatShareUnit(value: number, unit: string) {
   return `${value} ${unit}${value === 1 ? "" : "s"}`;
+}
+
+function buildXIntentUrl(shareText: string) {
+  const params = new URLSearchParams({
+    text: `${shareText}\n\n${COUNTDOWN_SHARE_URL}`
+  });
+
+  return `${X_SHARE_INTENT_URL}?${params.toString()}`;
 }
 
 async function copyCountdownShareText(shareText: string) {
