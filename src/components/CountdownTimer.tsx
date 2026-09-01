@@ -89,7 +89,7 @@ export function CountdownTimer() {
     <div className="mt-7 max-w-4xl space-y-3">
       <section
         id="mardi-gras-countdown"
-        className="scroll-mt-28 overflow-hidden rounded-[1.55rem] border border-parade-gold/35 bg-gradient-to-br from-white/14 via-white/10 to-parade-purpleDeep/40 p-4 shadow-glow backdrop-blur sm:rounded-[1.75rem] sm:p-5"
+        className="scroll-mt-28 overflow-hidden rounded-[1.55rem] border border-parade-gold/40 bg-gradient-to-br from-parade-purpleDeep/72 via-parade-purpleDark/62 to-parade-purple/48 p-4 shadow-glow backdrop-blur sm:rounded-[1.75rem] sm:p-5"
         aria-label="Countdown to the first downtown Mobile parade"
       >
         <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
@@ -97,7 +97,7 @@ export function CountdownTimer() {
             <div className="flex flex-wrap items-center gap-2">
               <p className="text-xs font-black uppercase tracking-[0.18em] text-parade-goldBright">Parade season countdown</p>
               {!countdownExpired ? (
-                <span className="inline-flex items-center gap-1.5 rounded-full border border-parade-gold/35 bg-white/10 px-2.5 py-1 text-[0.65rem] font-black uppercase tracking-wide text-white shadow-sm">
+                <span className="inline-flex items-center gap-1.5 rounded-full border border-parade-gold/35 bg-parade-purpleDeep/45 px-2.5 py-1 text-[0.65rem] font-black uppercase tracking-wide text-purple-50 shadow-sm">
                   <span className="relative flex h-2 w-2">
                     <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-parade-gold opacity-75" aria-hidden="true" />
                     <span className="relative inline-flex h-2 w-2 rounded-full bg-parade-gold" aria-hidden="true" />
@@ -128,7 +128,7 @@ export function CountdownTimer() {
               href={xShareUrl}
               target="_blank"
               rel="noreferrer"
-              className="inline-flex w-fit items-center justify-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-3 py-2 text-xs font-black text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-white/15"
+              className="inline-flex w-fit items-center justify-center gap-1.5 rounded-full border border-parade-gold/30 bg-parade-purpleDeep/45 px-3 py-2 text-xs font-black text-white shadow-sm transition hover:-translate-y-0.5 hover:border-parade-gold/55 hover:bg-parade-purpleDeep/65"
               aria-label="Post the current Mobile Mardi Gras countdown to X"
             >
               <span className="text-sm leading-none" aria-hidden="true">𝕏</span>
@@ -149,12 +149,13 @@ export function CountdownTimer() {
         {!countdownExpired ? (
           <>
             <div className="mt-5 sm:hidden" aria-live="polite">
-              <div className="relative overflow-hidden rounded-[1.35rem] border border-parade-gold/45 bg-gradient-to-br from-white via-parade-cream to-parade-purpleMist px-4 py-5 text-center shadow-civic ring-1 ring-white/55">
+              <div className="relative overflow-hidden rounded-[1.35rem] border border-parade-gold/45 bg-gradient-to-br from-parade-purpleDeep/95 via-parade-purpleDark/90 to-parade-purple/75 px-4 py-5 text-center shadow-civic ring-1 ring-parade-gold/25">
                 <span className="pointer-events-none absolute right-[-2.5rem] top-[-2.5rem] h-24 w-24 rounded-full bg-parade-gold/25 blur-2xl" aria-hidden="true" />
-                <p className="relative z-10 text-6xl font-black leading-none tabular-nums tracking-tight text-parade-purpleDark">
+                <span className="pointer-events-none absolute left-[-2rem] bottom-[-2rem] h-20 w-20 rounded-full bg-white/8 blur-2xl" aria-hidden="true" />
+                <p className="relative z-10 text-6xl font-black leading-none tabular-nums tracking-tight text-parade-goldBright drop-shadow-lg">
                   {timeRemaining.days}
                 </p>
-                <p className="relative z-10 mt-2 text-xs font-black uppercase tracking-[0.22em] text-parade-muted">
+                <p className="relative z-10 mt-2 text-xs font-black uppercase tracking-[0.22em] text-purple-100">
                   Days
                 </p>
               </div>
@@ -172,7 +173,7 @@ export function CountdownTimer() {
               <CountdownValue label="Seconds" value={timeRemaining.seconds} />
             </div>
 
-            <div className="mt-3 rounded-2xl border border-parade-gold/30 bg-parade-purpleDeep/45 p-3 shadow-sm sm:mt-4">
+            <div className="mt-3 rounded-2xl border border-parade-gold/30 bg-parade-purpleDeep/55 p-3 shadow-sm sm:mt-4">
               <div className="flex flex-wrap items-center justify-between gap-2 text-[0.72rem] font-black uppercase tracking-wide text-purple-100">
                 <span>Countdown progress</span>
                 <span className="text-parade-goldBright">{countdownProgressLabel}</span>
@@ -181,11 +182,11 @@ export function CountdownTimer() {
                 {daysRemainingLabel} until the first downtown parade.
               </p>
               <div
-                className="mt-2 h-2 overflow-hidden rounded-full bg-white/15 ring-1 ring-white/10"
+                className="mt-2 h-2 overflow-hidden rounded-full bg-black/20 ring-1 ring-parade-gold/15"
                 aria-label={`Countdown progress: ${countdownProgressLabel}, ${daysRemainingLabel}`}
               >
                 <span
-                  className="block h-full rounded-full bg-gradient-to-r from-parade-gold via-parade-goldBright to-white shadow-glow transition-[width] duration-700 ease-out"
+                  className="block h-full rounded-full bg-gradient-to-r from-parade-gold via-parade-goldBright to-parade-goldSoft shadow-glow transition-[width] duration-700 ease-out"
                   style={{ width: `${countdownProgress}%` }}
                   aria-hidden="true"
                 />
@@ -233,21 +234,22 @@ export function CountdownTimer() {
 
 function CountdownValue({ label, value }: { label: string; value: number }) {
   return (
-    <div className="relative overflow-hidden rounded-2xl border border-parade-gold/35 bg-gradient-to-br from-white via-parade-cream to-parade-purpleMist px-2 py-4 text-center shadow-civic ring-1 ring-white/55">
-      <span className="pointer-events-none absolute right-[-1.75rem] top-[-1.75rem] h-16 w-16 rounded-full bg-parade-gold/20 blur-2xl" aria-hidden="true" />
-      <p className="relative z-10 text-4xl font-black tabular-nums tracking-tight text-parade-purpleDark">
+    <div className="relative overflow-hidden rounded-2xl border border-parade-gold/35 bg-gradient-to-br from-parade-purpleDeep/95 via-parade-purpleDark/90 to-parade-purple/72 px-2 py-4 text-center shadow-civic ring-1 ring-parade-gold/25">
+      <span className="pointer-events-none absolute right-[-1.75rem] top-[-1.75rem] h-16 w-16 rounded-full bg-parade-gold/25 blur-2xl" aria-hidden="true" />
+      <span className="pointer-events-none absolute left-[-1.5rem] bottom-[-1.5rem] h-14 w-14 rounded-full bg-white/8 blur-2xl" aria-hidden="true" />
+      <p className="relative z-10 text-4xl font-black tabular-nums tracking-tight text-parade-goldBright drop-shadow-lg">
         {String(value).padStart(2, "0")}
       </p>
-      <p className="relative z-10 mt-1 text-[0.65rem] font-black uppercase tracking-[0.14em] text-parade-muted">{label}</p>
+      <p className="relative z-10 mt-1 text-[0.65rem] font-black uppercase tracking-[0.14em] text-purple-100">{label}</p>
     </div>
   );
 }
 
 function CountdownMiniValue({ label, value }: { label: string; value: number }) {
   return (
-    <div className="rounded-2xl border border-parade-gold/25 bg-white/12 px-2 py-2.5 text-center shadow-sm ring-1 ring-white/10">
-      <p className="text-xl font-black tabular-nums text-white">{String(value).padStart(2, "0")}</p>
-      <p className="mt-0.5 text-[0.62rem] font-black uppercase tracking-[0.14em] text-parade-goldBright">{label}</p>
+    <div className="rounded-2xl border border-parade-gold/30 bg-parade-purpleDeep/55 px-2 py-2.5 text-center shadow-sm ring-1 ring-parade-gold/10">
+      <p className="text-xl font-black tabular-nums text-parade-goldBright">{String(value).padStart(2, "0")}</p>
+      <p className="mt-0.5 text-[0.62rem] font-black uppercase tracking-[0.14em] text-purple-100">{label}</p>
     </div>
   );
 }
