@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight, CalendarDays } from "lucide-react";
+import { ArrowRight, CalendarDays, Check, Share2 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { ScheduleNotificationSignup } from "@/components/ScheduleNotificationSignup";
 
@@ -11,6 +11,9 @@ const COUNTDOWN_PROGRESS_START_LABEL = "Jan. 22, 2026";
 const TARGET_EVENT_NAME = "Conde Cavaliers";
 const TARGET_FULL_DATE_LABEL = "January 22, 2027 • 6:30 PM CT";
 const TARGET_SHORT_DATE_LABEL = "Jan. 22, 2027 • 6:30 PM CT";
+const COUNTDOWN_SHARE_URL = "https://mg251.xyz/#mardi-gras-countdown";
+const COUNTDOWN_SHARE_TITLE = "Mobile Mardi Gras Countdown";
+const COUNTDOWN_SHARE_TEXT = `The countdown is on for the first downtown Mobile Mardi Gras parade: ${TARGET_EVENT_NAME} — ${TARGET_FULL_DATE_LABEL}.`;
 
 type TimeRemaining = {
   totalMilliseconds: number;
@@ -20,10 +23,13 @@ type TimeRemaining = {
   seconds: number;
 };
 
+type ShareStatus = "idle" | "shared" | "copied" | "error";
+
 export function CountdownTimer() {
   const targetDate = useMemo(() => new Date(FIRST_DOWNTOWN_PARADE_TARGET), []);
   const progressStartDate = useMemo(() => new Date(COUNTDOWN_PROGRESS_START), []);
   const [timeRemaining, setTimeRemaining] = useState(() => getTimeRemaining(targetDate));
+  const [shareStatus, setShareStatus] = useState<ShareStatus>("idle");
 
   useEffect(() => {
     const updateCountdown = () => setTimeRemaining(getTimeRemaining(targetDate));
@@ -33,15 +39,54 @@ export function CountdownTimer() {
     return () => window.clearInterval(interval);
   }, [targetDate]);
 
+  useEffect(() => {
+    if (shareStatus === "idle") {
+      return undefined;
+    }
+
+    const timeout = window.setTimeout(() => setShareStatus("idle"), 2800);
+
+    return () => window.clearTimeout(timeout);
+  }, [shareStatus]);
+
   const countdownExpired = timeRemaining.totalMilliseconds <= 0;
   const countdownProgress = getCountdownProgress(progressStartDate, targetDate, timeRemaining.totalMilliseconds);
   const countdownProgressLabel = `${Math.round(countdownProgress)}% complete`;
   const daysRemainingLabel = timeRemaining.days === 1 ? "1 day remaining" : `${timeRemaining.days} days remaining`;
+  const shareButtonLabel = getShareButtonLabel(shareStatus);
+  const shareStatusMessage = getShareStatusMessage(shareStatus);
+
+  async function handleShareCountdown() {
+    const shareData = {
+      title: COUNTDOWN_SHARE_TITLE,
+      text: COUNTDOWN_SHARE_TEXT,
+      url: COUNTDOWN_SHARE_URL
+    };
+
+    try {
+      if (navigator.share) {
+        await navigator.share(shareData);
+        setShareStatus("shared");
+        return;
+      }
+
+      const copied = await copyCountdownShareText();
+      setShareStatus(copied ? "copied" : "error");
+    } catch (error) {
+      if (error instanceof DOMException && error.name === "AbortError") {
+        return;
+      }
+
+      const copied = await copyCountdownShareText().catch(() => false);
+      setShareStatus(copied ? "copied" : "error");
+    }
+  }
 
   return (
     <div className="mt-7 max-w-4xl space-y-3">
       <section
-        className="overflow-hidden rounded-[1.55rem] border border-parade-gold/35 bg-gradient-to-br from-white/14 via-white/10 to-parade-purpleDeep/40 p-4 shadow-glow backdrop-blur sm:rounded-[1.75rem] sm:p-5"
+        id="mardi-gras-countdown"
+        className="scroll-mt-28 overflow-hidden rounded-[1.55rem] border border-parade-gold/35 bg-gradient-to-br from-white/14 via-white/10 to-parade-purpleDeep/40 p-4 shadow-glow backdrop-blur sm:rounded-[1.75rem] sm:p-5"
         aria-label="Countdown to the first downtown Mobile parade"
       >
         <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
@@ -66,12 +111,30 @@ export function CountdownTimer() {
               <span className="block sm:hidden">{TARGET_SHORT_DATE_LABEL}</span>
             </p>
           </div>
-          {countdownExpired ? (
-            <p className="rounded-2xl bg-parade-gold px-4 py-3 text-sm font-black text-parade-purpleDark shadow-glow">
-              Parade season is underway.
+          <div className="flex shrink-0 flex-col gap-2 sm:items-end">
+            <button
+              type="button"
+              onClick={handleShareCountdown}
+              className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-parade-gold/55 bg-parade-gold px-4 py-2.5 text-sm font-black text-parade-purpleDark shadow-glow transition hover:-translate-y-0.5 hover:bg-parade-goldBright sm:w-auto"
+              aria-label="Share the Mobile Mardi Gras countdown"
+            >
+              {shareStatus === "shared" || shareStatus === "copied" ? <Check className="h-4 w-4" aria-hidden="true" /> : <Share2 className="h-4 w-4" aria-hidden="true" />}
+              {shareButtonLabel}
+            </button>
+            <p className="text-center text-[0.68rem] font-bold uppercase tracking-wide text-purple-100/80 sm:text-right">
+              Share to social media
             </p>
-          ) : null}
+            {countdownExpired ? (
+              <p className="rounded-2xl bg-parade-gold px-4 py-3 text-sm font-black text-parade-purpleDark shadow-glow">
+                Parade season is underway.
+              </p>
+            ) : null}
+          </div>
         </div>
+
+        <p className="sr-only" aria-live="polite">
+          {shareStatusMessage}
+        </p>
 
         {!countdownExpired ? (
           <>
@@ -202,4 +265,45 @@ function getCountdownProgress(startDate: Date, targetDate: Date, remainingMillis
   const percentage = totalWindow > 0 ? (elapsed / totalWindow) * 100 : 100;
 
   return Math.min(Math.max(percentage, 0), 100);
+}
+
+async function copyCountdownShareText() {
+  if (!navigator.clipboard?.writeText) {
+    return false;
+  }
+
+  await navigator.clipboard.writeText(`${COUNTDOWN_SHARE_TEXT}\n${COUNTDOWN_SHARE_URL}`);
+  return true;
+}
+
+function getShareButtonLabel(status: ShareStatus) {
+  if (status === "shared") {
+    return "Shared";
+  }
+
+  if (status === "copied") {
+    return "Link copied";
+  }
+
+  if (status === "error") {
+    return "Copy link failed";
+  }
+
+  return "Share countdown";
+}
+
+function getShareStatusMessage(status: ShareStatus) {
+  if (status === "shared") {
+    return "Countdown share menu opened.";
+  }
+
+  if (status === "copied") {
+    return "Countdown link copied to clipboard.";
+  }
+
+  if (status === "error") {
+    return "Countdown link could not be copied automatically.";
+  }
+
+  return "";
 }
