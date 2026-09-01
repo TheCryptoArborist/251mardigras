@@ -13,7 +13,6 @@ const TARGET_FULL_DATE_LABEL = "January 22, 2027 • 6:30 PM CT";
 const TARGET_SHORT_DATE_LABEL = "Jan. 22, 2027 • 6:30 PM CT";
 const COUNTDOWN_SHARE_URL = "https://mg251.xyz/#mardi-gras-countdown";
 const COUNTDOWN_SHARE_TITLE = "Mobile Mardi Gras Countdown";
-const COUNTDOWN_SHARE_TEXT = `The countdown is on for the first downtown Mobile Mardi Gras parade: ${TARGET_EVENT_NAME} — ${TARGET_FULL_DATE_LABEL}.`;
 
 type TimeRemaining = {
   totalMilliseconds: number;
@@ -57,9 +56,10 @@ export function CountdownTimer() {
   const shareStatusMessage = getShareStatusMessage(shareStatus);
 
   async function handleShareCountdown() {
+    const shareText = buildCountdownShareText(timeRemaining);
     const shareData = {
       title: COUNTDOWN_SHARE_TITLE,
-      text: COUNTDOWN_SHARE_TEXT,
+      text: shareText,
       url: COUNTDOWN_SHARE_URL
     };
 
@@ -70,14 +70,14 @@ export function CountdownTimer() {
         return;
       }
 
-      const copied = await copyCountdownShareText();
+      const copied = await copyCountdownShareText(shareText);
       setShareStatus(copied ? "copied" : "error");
     } catch (error) {
       if (error instanceof DOMException && error.name === "AbortError") {
         return;
       }
 
-      const copied = await copyCountdownShareText().catch(() => false);
+      const copied = await copyCountdownShareText(shareText).catch(() => false);
       setShareStatus(copied ? "copied" : "error");
     }
   }
@@ -89,7 +89,7 @@ export function CountdownTimer() {
         className="scroll-mt-28 overflow-hidden rounded-[1.55rem] border border-parade-gold/35 bg-gradient-to-br from-white/14 via-white/10 to-parade-purpleDeep/40 p-4 shadow-glow backdrop-blur sm:rounded-[1.75rem] sm:p-5"
         aria-label="Countdown to the first downtown Mobile parade"
       >
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
           <div className="min-w-0">
             <div className="flex flex-wrap items-center gap-2">
               <p className="text-xs font-black uppercase tracking-[0.18em] text-parade-goldBright">Parade season countdown</p>
@@ -115,15 +115,12 @@ export function CountdownTimer() {
             <button
               type="button"
               onClick={handleShareCountdown}
-              className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-parade-gold/55 bg-parade-gold px-4 py-2.5 text-sm font-black text-parade-purpleDark shadow-glow transition hover:-translate-y-0.5 hover:bg-parade-goldBright sm:w-auto"
-              aria-label="Share the Mobile Mardi Gras countdown"
+              className="inline-flex w-fit items-center justify-center gap-1.5 rounded-full border border-parade-gold/55 bg-parade-gold px-3 py-2 text-xs font-black text-parade-purpleDark shadow-glow transition hover:-translate-y-0.5 hover:bg-parade-goldBright"
+              aria-label="Share the Mobile Mardi Gras countdown with the current countdown numbers"
             >
-              {shareStatus === "shared" || shareStatus === "copied" ? <Check className="h-4 w-4" aria-hidden="true" /> : <Share2 className="h-4 w-4" aria-hidden="true" />}
+              {shareStatus === "shared" || shareStatus === "copied" ? <Check className="h-3.5 w-3.5" aria-hidden="true" /> : <Share2 className="h-3.5 w-3.5" aria-hidden="true" />}
               {shareButtonLabel}
             </button>
-            <p className="text-center text-[0.68rem] font-bold uppercase tracking-wide text-purple-100/80 sm:text-right">
-              Share to social media
-            </p>
             {countdownExpired ? (
               <p className="rounded-2xl bg-parade-gold px-4 py-3 text-sm font-black text-parade-purpleDark shadow-glow">
                 Parade season is underway.
@@ -267,12 +264,33 @@ function getCountdownProgress(startDate: Date, targetDate: Date, remainingMillis
   return Math.min(Math.max(percentage, 0), 100);
 }
 
-async function copyCountdownShareText() {
+function buildCountdownShareText(timeRemaining: TimeRemaining) {
+  if (timeRemaining.totalMilliseconds <= 0) {
+    return `Mobile Mardi Gras parade season is underway. The countdown was tracking the first downtown parade: ${TARGET_EVENT_NAME} — ${TARGET_FULL_DATE_LABEL}.`;
+  }
+
+  return `Current countdown: ${formatTimeRemainingForShare(timeRemaining)} until the first downtown Mobile Mardi Gras parade — ${TARGET_EVENT_NAME}, ${TARGET_FULL_DATE_LABEL}.`;
+}
+
+function formatTimeRemainingForShare(timeRemaining: TimeRemaining) {
+  return [
+    formatShareUnit(timeRemaining.days, "day"),
+    formatShareUnit(timeRemaining.hours, "hour"),
+    formatShareUnit(timeRemaining.minutes, "minute"),
+    formatShareUnit(timeRemaining.seconds, "second")
+  ].join(", ");
+}
+
+function formatShareUnit(value: number, unit: string) {
+  return `${value} ${unit}${value === 1 ? "" : "s"}`;
+}
+
+async function copyCountdownShareText(shareText: string) {
   if (!navigator.clipboard?.writeText) {
     return false;
   }
 
-  await navigator.clipboard.writeText(`${COUNTDOWN_SHARE_TEXT}\n${COUNTDOWN_SHARE_URL}`);
+  await navigator.clipboard.writeText(`${shareText}\n${COUNTDOWN_SHARE_URL}`);
   return true;
 }
 
@@ -282,27 +300,27 @@ function getShareButtonLabel(status: ShareStatus) {
   }
 
   if (status === "copied") {
-    return "Link copied";
+    return "Copied";
   }
 
   if (status === "error") {
-    return "Copy link failed";
+    return "Copy failed";
   }
 
-  return "Share countdown";
+  return "Share";
 }
 
 function getShareStatusMessage(status: ShareStatus) {
   if (status === "shared") {
-    return "Countdown share menu opened.";
+    return "Countdown share menu opened with the current countdown numbers.";
   }
 
   if (status === "copied") {
-    return "Countdown link copied to clipboard.";
+    return "Countdown text and link copied to clipboard.";
   }
 
   if (status === "error") {
-    return "Countdown link could not be copied automatically.";
+    return "Countdown text and link could not be copied automatically.";
   }
 
   return "";
