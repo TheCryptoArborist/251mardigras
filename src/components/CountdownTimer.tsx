@@ -6,8 +6,8 @@ import { useEffect, useMemo, useState } from "react";
 import { ScheduleNotificationSignup } from "@/components/ScheduleNotificationSignup";
 
 const FIRST_DOWNTOWN_PARADE_TARGET = "2027-01-22T18:30:00-06:00";
-const COUNTDOWN_PROGRESS_START = "2026-01-22T18:30:00-06:00";
-const COUNTDOWN_PROGRESS_START_LABEL = "Jan. 22, 2026";
+const COUNTDOWN_PROGRESS_START = "2026-02-17T00:00:00-06:00";
+const COUNTDOWN_PROGRESS_START_LABEL = "Feb. 17, 2026";
 const TARGET_EVENT_NAME = "Conde Cavaliers";
 const TARGET_FULL_DATE_LABEL = "January 22, 2027 • 6:30 PM CT";
 const TARGET_SHORT_DATE_LABEL = "Jan. 22, 2027 • 6:30 PM CT";
@@ -175,7 +175,7 @@ export function CountdownTimer() {
 
             <div className="mt-3 rounded-2xl border border-parade-gold/30 bg-parade-purpleDeep/55 p-3 shadow-sm sm:mt-4">
               <div className="flex flex-wrap items-center justify-between gap-2 text-[0.72rem] font-black uppercase tracking-wide text-purple-100">
-                <span>Countdown progress</span>
+                <span>Progress since {COUNTDOWN_PROGRESS_START_LABEL}</span>
                 <span className="text-parade-goldBright">{countdownProgressLabel}</span>
               </div>
               <p className="mt-1 text-xs font-bold leading-5 text-purple-100/90">
@@ -183,7 +183,7 @@ export function CountdownTimer() {
               </p>
               <div
                 className="mt-2 h-2 overflow-hidden rounded-full bg-black/20 ring-1 ring-parade-gold/15"
-                aria-label={`Countdown progress: ${countdownProgressLabel}, ${daysRemainingLabel}`}
+                aria-label={`Countdown progress from ${COUNTDOWN_PROGRESS_START_LABEL} to ${TARGET_SHORT_DATE_LABEL}: ${countdownProgressLabel}, ${daysRemainingLabel}`}
               >
                 <span
                   className="block h-full rounded-full bg-gradient-to-r from-parade-gold via-parade-goldBright to-parade-goldSoft shadow-glow transition-[width] duration-700 ease-out"
