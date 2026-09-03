@@ -254,6 +254,27 @@
     "organizationLogoUrl": "https://www.jotform.com/uploads/PeterToler/262217749749067/6623737865912982091/LOGO%20Picture.png"
   },
   {
+    "id": "pharaohs-spooktacular-halloween-party-2026",
+    "slug": "pharaohs-spooktacular-halloween-party-2026",
+    "status": "approved",
+    "title": "2026 Spooktacular Halloween Party",
+    "organization": "Pharaohs",
+    "eventType": "Party",
+    "startDateTime": "2026-10-24T19:00:00-05:00",
+    "endDateTime": "2026-10-25T00:00:00-05:00",
+    "dateLabel": "Sat, Oct 24, 2026 • 7:00 PM–Midnight CT",
+    "venueName": "Music Box",
+    "venueAddress": "659 Conti St",
+    "cityStateZip": "Mobile, AL 36602",
+    "description": "Join Pharaohs for their annual Spooktacular Halloween Party at Music Box in downtown Mobile. The evening will feature food, a cash bar, a Yeti raffle, and a raffle for a ride spot on a Mardi Gras float.",
+    "mapUrl": "https://maps.apple/p/qqiaAiemNjYmU.z",
+    "cost": "$30 at the door",
+    "audience": "Adults only, 21+",
+    "publicContact": "251-554-9871",
+    "flyerUrl": "https://www.jotform.com/uploads/PeterToler/262217749749067/6642119660127693690/IMG_4812_1356.jpeg",
+    "organizationLogoUrl": "https://www.jotform.com/uploads/PeterToler/262217749749067/6642119660127693690/IMG_4816.jpeg"
+  },
+  {
     "id": "mobile-mystics-mardi-gras-ball-2027",
     "slug": "mobile-mystics-mardi-gras-ball-2027",
     "status": "approved",
