@@ -212,6 +212,26 @@
     "organizationLogoUrl": "https://www.jotform.com/uploads/PeterToler/262217749749067/6625500698218606505/IMG_3556.png"
   },
   {
+    "id": "order-of-isis-monster-mash-cash-bash-2026",
+    "slug": "order-of-isis-monster-mash-cash-bash-2026",
+    "status": "approved",
+    "title": "Monster Mash Cash Bash",
+    "organization": "Order of Isis",
+    "eventType": "Fundraiser",
+    "startDateTime": "2026-10-17T18:00:00-05:00",
+    "endDateTime": "2026-10-17T23:00:00-05:00",
+    "venueName": "The Elks Lodge",
+    "venueAddress": "2571 Dauphin Island Parkway",
+    "cityStateZip": "Mobile, AL 36605",
+    "description": "Join the Order of Isis for Monster Mash Cash Bash, an adults-only Halloween drawdown fundraiser at The Elks Lodge. The evening will feature food, games, and a costume contest. Costumes are encouraged but not required. Doors open at 6:00 PM, numbers start at 7:00 PM, and the event is BYOB. Tickets are $75, optional insurance is $25, and reserved tables are $50. Payment is accepted by Zelle to board@orderofisis.org.",
+    "mapUrl": "https://maps.apple/p/IPImUVysiS.PY6",
+    "cost": "$75 tickets / $25 optional insurance / $50 reserved tables",
+    "audience": "Adults only, 21+",
+    "publicContact": "board@orderofisis.org",
+    "flyerUrl": "https://www.jotform.com/uploads/PeterToler/262217749749067/6648000098556931747/Brown%20And%20Black%20Vintage%20Spooky%20Playful%20Halloween%20invitation%20Flyer.png",
+    "organizationLogoUrl": "https://www.jotform.com/uploads/PeterToler/262217749749067/6648000098556931747/Isis%20logo%20color.jpg"
+  },
+  {
     "id": "2nd-annual-ways-means-topgolf-event-2026",
     "slug": "2nd-annual-ways-means-topgolf-event-2026",
     "status": "approved",
