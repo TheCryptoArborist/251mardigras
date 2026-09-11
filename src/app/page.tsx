@@ -1,9 +1,25 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { Archive, ArrowRight, CalendarDays, Car, CloudSun, ExternalLink, HeartHandshake, Landmark, PlayCircle, PlusCircle, ShieldCheck, ShoppingBag, Utensils } from "lucide-react";
+import {
+  Archive,
+  ArrowRight,
+  CalendarDays,
+  Car,
+  CloudSun,
+  ExternalLink,
+  HeartHandshake,
+  Landmark,
+  MapPinned,
+  PlayCircle,
+  PlusCircle,
+  ShieldCheck,
+  ShoppingBag,
+  Utensils
+} from "lucide-react";
 import { CountdownTimer } from "@/components/CountdownTimer";
 import { VisitorCounter } from "@/components/VisitorCounter";
 import { BUY_ME_COFFEE_URL, PATREON_SUPPORT_URL, YOUTUBE_SUPPORTER_URL } from "@/lib/seed-data";
+import paradeSchedule2027 from "../../data/parade-schedule-2027.json";
 
 export const dynamic = "force-dynamic";
 
@@ -11,6 +27,31 @@ const HOMEPAGE_VIDEO_SRC = "/videos/dragon-home-screen-bg.mp4";
 const HOMEPAGE_VIDEO_POSTER = "/videos/dragon-home-screen-poster.jpg";
 const HOMEPAGE_FEATURED_VIDEO_EMBED_URL = "https://www.youtube.com/embed/vSwxOuydTjU?si=dpUnDxY4bDv-7Gqt";
 const FACEBOOK_SUPPORTER_URL = "https://www.facebook.com/mardigrasmobileal/support/?surface=page_top_cta_button&entrypoint_surface=page_top_cta_button";
+
+type HomepageParadeEntry = {
+  id: string;
+  time: string;
+  name: string;
+  route: string;
+  routeNote?: string;
+};
+
+type HomepageParadeDay = {
+  date: string;
+  label: string;
+  specialLabel?: string;
+  parades: HomepageParadeEntry[];
+};
+
+type HomepageSchedule = {
+  displayDateRange: string;
+  mardiGrasDay: string;
+  days: HomepageParadeDay[];
+};
+
+const homepageSchedule = paradeSchedule2027 as HomepageSchedule;
+const homepageParades = homepageSchedule.days.flatMap((day) => day.parades.map((parade) => ({ ...parade, day })));
+const homepageFirstParade = homepageParades[0];
 
 const socialLinks = [
   {
@@ -35,7 +76,7 @@ const socialLinks = [
   }
 ] as const;
 
-type PrimaryActionVariant = "live" | "replays" | "food" | "parking" | "weather" | "gear";
+type PrimaryActionVariant = "schedule" | "routes" | "live" | "replays" | "food" | "parking" | "weather" | "gear";
 
 type PrimaryAction = {
   icon: ReactNode;
@@ -50,6 +91,26 @@ type PrimaryAction = {
 
 export default async function HomePage() {
   const primaryActions: PrimaryAction[] = [
+    {
+      icon: <CalendarDays className="h-5 w-5" aria-hidden="true" />,
+      title: "2027 Parade Schedule",
+      body: "Browse dates, start times, and route badges for the full Mobile Mardi Gras season.",
+      href: "/schedule",
+      action: "View Schedule",
+      external: false,
+      featured: true,
+      variant: "schedule"
+    },
+    {
+      icon: <MapPinned className="h-5 w-5" aria-hidden="true" />,
+      title: "Route Maps",
+      body: "Open Route A through Route H maps from the schedule page without leaving the lineup.",
+      href: "/schedule#all-route-maps",
+      action: "Open Route Maps",
+      external: false,
+      featured: true,
+      variant: "routes"
+    },
     {
       icon: <PlayCircle className="h-5 w-5" aria-hidden="true" />,
       title: "Watch Live Coverage",
@@ -67,7 +128,7 @@ export default async function HomePage() {
       href: "/replays",
       action: "Watch Replays",
       external: false,
-      featured: true,
+      featured: false,
       variant: "replays"
     },
     {
@@ -129,27 +190,33 @@ export default async function HomePage() {
         >
           <source src={HOMEPAGE_VIDEO_SRC} type="video/mp4" />
         </video>
-        <div className="absolute inset-0 z-0 bg-gradient-to-br from-parade-purpleDeep/88 via-parade-purpleDark/76 to-parade-purple/66" aria-hidden="true" />
-        <div className="absolute inset-0 z-0 bg-[radial-gradient(circle_at_18%_8%,rgba(255,201,40,0.22),transparent_30%),radial-gradient(circle_at_82%_30%,rgba(255,255,255,0.12),transparent_35%),linear-gradient(180deg,rgba(23,4,47,0.10),rgba(23,4,47,0.42))]" aria-hidden="true" />
+        <div className="absolute inset-0 z-0 bg-gradient-to-br from-parade-purpleDeep/90 via-parade-purpleDark/78 to-parade-purple/66" aria-hidden="true" />
+        <div className="absolute inset-0 z-0 bg-[radial-gradient(circle_at_18%_8%,rgba(255,201,40,0.24),transparent_30%),radial-gradient(circle_at_82%_30%,rgba(255,255,255,0.12),transparent_35%),linear-gradient(180deg,rgba(23,4,47,0.10),rgba(23,4,47,0.46))]" aria-hidden="true" />
         <div className="absolute left-[-6rem] top-[-8rem] z-0 h-72 w-72 rounded-full bg-parade-gold/20 blur-3xl" aria-hidden="true" />
         <div className="absolute bottom-[-10rem] right-[-8rem] z-0 h-96 w-96 rounded-full bg-white/10 blur-3xl" aria-hidden="true" />
-        <div className="relative z-10 mx-auto grid max-w-7xl gap-8 px-4 py-10 sm:px-6 lg:grid-cols-[minmax(0,1fr)_minmax(20rem,0.78fr)] lg:items-center lg:px-8 lg:py-14">
+        <div className="relative z-10 mx-auto grid max-w-7xl gap-8 px-4 py-9 sm:px-6 lg:grid-cols-[minmax(0,1fr)_minmax(20rem,0.82fr)] lg:items-start lg:px-8 lg:py-12">
           <div className="relative z-10 min-w-0">
             <div className="inline-flex items-center gap-2 rounded-full border border-parade-gold/40 bg-white/10 px-4 py-2 text-xs font-black uppercase tracking-wide text-parade-goldBright shadow-glow backdrop-blur">
-              Mobile Mardi Gras parade coverage
+              2027 Mobile Mardi Gras schedule is live
             </div>
             <h1 className="mt-5 max-w-4xl text-4xl font-black leading-[0.98] tracking-tight text-white drop-shadow-lg sm:text-6xl lg:text-7xl">
-              <span className="block">Watch the parades</span>
-              <span className="block">Find the links</span>
-              <span className="block">Plan the day</span>
+              <span className="block">Plan the parades</span>
+              <span className="block">Know the route</span>
+              <span className="block">Watch it live</span>
             </h1>
+            <p className="mt-5 max-w-3xl text-base font-semibold leading-7 text-purple-100 sm:text-lg">
+              Dates, start times, route maps, live coverage, replays, and visitor resources for Mobile Mardi Gras.
+            </p>
+            <HeroScheduleActions />
+            <HomepageScheduleSpotlight className="mt-6 lg:hidden" />
             <CountdownTimer />
             <SocialLinksStrip className="mt-7" />
             <HomepageVideoSpotlight className="mt-7 lg:hidden" />
           </div>
 
           <div className="relative z-10 hidden min-w-0 lg:block">
-            <HomepageVideoSpotlight />
+            <HomepageScheduleSpotlight />
+            <HomepageVideoSpotlight className="mt-5" />
           </div>
 
           <div className="relative z-10 lg:col-span-2">
@@ -162,21 +229,21 @@ export default async function HomePage() {
                 <div>
                   <p className="text-xs font-black uppercase tracking-[0.18em] text-parade-goldBright">Visitor tools</p>
                   <h2 id="plan-day-heading" className="mt-1 text-2xl font-black leading-tight text-white sm:text-3xl">
-                    Plan Your Mardi Gras Day
+                    Start Here for Parade Day
                   </h2>
                 </div>
                 <p className="max-w-2xl text-sm font-semibold leading-6 text-purple-100 md:text-right">
-                  Start with live coverage, replays, food, parking, weather, and gear.
+                  Start with the schedule and route maps, then plan live coverage, parking, food, weather, and gear.
                 </p>
               </div>
 
-              <div className="grid gap-4 lg:grid-cols-2">
+              <div className="grid gap-4 lg:grid-cols-3">
                 {featuredActions.map((action) => (
                   <PrimaryActionCard key={action.title} {...action} />
                 ))}
               </div>
 
-              <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+              <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-5">
                 {planningActions.map((action) => (
                   <PrimaryActionCard key={action.title} {...action} />
                 ))}
@@ -204,6 +271,66 @@ export default async function HomePage() {
 
         <VisitorCounter />
       </div>
+    </div>
+  );
+}
+
+function HeroScheduleActions() {
+  return (
+    <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+      <Link href="/schedule" className="inline-flex items-center justify-center gap-2 rounded-full bg-parade-gold px-5 py-3 text-sm font-black text-parade-purpleDark shadow-glow transition hover:-translate-y-0.5 hover:bg-parade-goldBright">
+        View 2027 Schedule <CalendarDays className="h-4 w-4" aria-hidden="true" />
+      </Link>
+      <Link href="/schedule#all-route-maps" className="inline-flex items-center justify-center gap-2 rounded-full border border-parade-gold/45 bg-white/10 px-5 py-3 text-sm font-black text-white shadow-civic backdrop-blur transition hover:-translate-y-0.5 hover:bg-white/15">
+        Route Maps <MapPinned className="h-4 w-4" aria-hidden="true" />
+      </Link>
+      <Link href="/watch" className="inline-flex items-center justify-center gap-2 rounded-full border border-white/20 bg-white/10 px-5 py-3 text-sm font-black text-white shadow-civic backdrop-blur transition hover:-translate-y-0.5 hover:bg-white/15">
+        Watch Live <PlayCircle className="h-4 w-4" aria-hidden="true" />
+      </Link>
+    </div>
+  );
+}
+
+function HomepageScheduleSpotlight({ className = "" }: { className?: string }) {
+  const firstParadeDate = homepageFirstParade ? compactHomepageDate(homepageFirstParade.day.label) : "Opening night";
+
+  return (
+    <section className={`relative overflow-hidden rounded-[1.5rem] border border-parade-gold/45 bg-white/12 p-4 text-white shadow-glow backdrop-blur sm:p-5 ${className}`} aria-label="2027 Mardi Gras parade schedule quick access">
+      <span className="pointer-events-none absolute right-[-3rem] top-[-3rem] h-28 w-28 rounded-full bg-parade-gold/25 blur-2xl" aria-hidden="true" />
+      <div className="relative z-10">
+        <p className="text-xs font-black uppercase tracking-[0.18em] text-parade-goldBright">Schedule posted</p>
+        <h2 className="mt-2 text-2xl font-black leading-tight text-white">2027 Parade Lineup</h2>
+        <div className="mt-4 grid gap-3">
+          <div className="rounded-2xl border border-parade-gold/30 bg-parade-purpleDeep/55 p-4 shadow-civic">
+            <p className="text-[0.68rem] font-black uppercase tracking-[0.16em] text-parade-goldBright">First parade</p>
+            <p className="mt-1 text-lg font-black leading-tight text-white">{homepageFirstParade?.name ?? "Posted"}</p>
+            <p className="mt-1 text-sm font-semibold leading-5 text-purple-100">
+              {firstParadeDate}{homepageFirstParade ? ` • ${homepageFirstParade.time} • ${homepageFirstParade.route}` : null}
+            </p>
+          </div>
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
+            <ScheduleMiniStat label="Total parades" value={`${homepageParades.length}`} />
+            <ScheduleMiniStat label="Mardi Gras Day" value={homepageSchedule.mardiGrasDay} />
+          </div>
+        </div>
+        <div className="mt-4 grid gap-2 sm:grid-cols-2">
+          <Link href="/schedule" className="inline-flex items-center justify-center gap-2 rounded-full bg-parade-gold px-4 py-2.5 text-sm font-black text-parade-purpleDark shadow-glow transition hover:-translate-y-0.5 hover:bg-parade-goldBright">
+            Full Schedule <ArrowRight className="h-4 w-4" aria-hidden="true" />
+          </Link>
+          <Link href="/schedule#all-route-maps" className="inline-flex items-center justify-center gap-2 rounded-full border border-parade-gold/35 bg-white/10 px-4 py-2.5 text-sm font-black text-white transition hover:-translate-y-0.5 hover:bg-white/15">
+            Route Maps <MapPinned className="h-4 w-4" aria-hidden="true" />
+          </Link>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function ScheduleMiniStat({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-2xl border border-white/15 bg-white/10 p-3 shadow-sm">
+      <p className="text-[0.65rem] font-black uppercase tracking-[0.14em] text-parade-goldBright">{label}</p>
+      <p className="mt-1 text-sm font-black leading-tight text-white">{value}</p>
     </div>
   );
 }
@@ -428,6 +555,26 @@ const actionCardStyles: Record<
     glow: string;
   }
 > = {
+  schedule: {
+    label: "2027 lineup",
+    card: "border-parade-gold/85 bg-gradient-to-br from-parade-gold via-parade-goldSoft to-white shadow-glow",
+    badge: "bg-parade-purple text-parade-goldBright ring-parade-purple/25 shadow-civic",
+    title: "text-parade-purpleDark",
+    body: "text-parade-ink/75",
+    labelClass: "border-parade-purple/20 bg-white/70 text-parade-purple",
+    action: "bg-parade-purple text-white shadow-civic group-hover:bg-parade-purpleDark",
+    glow: "bg-parade-purple/16"
+  },
+  routes: {
+    label: "Route maps",
+    card: "border-parade-gold/70 bg-gradient-to-br from-[#f3e8ff] via-white to-parade-goldSoft shadow-glow",
+    badge: "bg-parade-gold text-parade-purpleDark ring-parade-goldBright/60 shadow-sm",
+    title: "text-parade-purpleDark",
+    body: "text-parade-ink/75",
+    labelClass: "border-parade-gold/40 bg-white/65 text-parade-purple",
+    action: "bg-parade-gold text-parade-purpleDark shadow-glow group-hover:bg-parade-goldBright",
+    glow: "bg-parade-gold/25"
+  },
   live: {
     label: "Live coverage",
     card: "border-parade-gold/80 bg-gradient-to-br from-parade-goldSoft via-white to-[#e6d4ff] shadow-glow",
@@ -535,4 +682,8 @@ function PrimaryActionCard({
       {content}
     </Link>
   );
+}
+
+function compactHomepageDate(label: string) {
+  return label.replace("January", "Jan.").replace("February", "Feb.");
 }
