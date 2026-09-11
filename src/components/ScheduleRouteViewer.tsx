@@ -126,11 +126,11 @@ export function ScheduleRouteViewer({ schedule }: ScheduleRouteViewerProps) {
 
           <div className="relative z-10 flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
             <div className="min-w-0">
-              <p className="text-xs font-black uppercase tracking-[0.18em] text-parade-goldBright">Official schedule transcribed</p>
+              <p className="text-xs font-black uppercase tracking-[0.18em] text-parade-goldBright">2027 parade schedule</p>
               <h1 className="mt-2 text-3xl font-black leading-tight tracking-tight text-white drop-shadow-lg sm:text-4xl">2027 Mobile Mardi Gras Parade Schedule</h1>
               <p className="mt-2 text-base font-black text-parade-goldBright">{schedule.displayDateRange}</p>
               <p className="mt-2 max-w-3xl text-sm font-semibold leading-6 text-purple-100">
-                The parade schedule is shown first for quick phone access. Tap any route badge to open the matching route map without leaving the schedule.
+                Dates, start times, and route-map access for the Mobile Mardi Gras season.
               </p>
             </div>
 
@@ -172,7 +172,7 @@ export function ScheduleRouteViewer({ schedule }: ScheduleRouteViewerProps) {
                 <h2 id="quick-parade-schedule-heading" className="mt-1 text-3xl font-black tracking-tight text-white drop-shadow-lg">Daily parade listings</h2>
               </div>
               <p className="max-w-2xl text-sm font-semibold leading-6 text-purple-100">
-                Last transcribed from the official source on {formatTranscribedDate(schedule.lastTranscribedAt)}. Tap a route badge for the map.
+                Select a date below to jump directly to that day’s lineup.
               </p>
             </div>
 
@@ -397,13 +397,4 @@ function RouteMapDialog({ route, schedule, onClose }: { route: RouteMap; schedul
 
 function compactDateLabel(label: string) {
   return label.replace(/^\w+,\s*/, "").replace("January", "Jan.").replace("February", "Feb.");
-}
-
-function formatTranscribedDate(value: string) {
-  return new Intl.DateTimeFormat("en-US", {
-    month: "long",
-    day: "numeric",
-    year: "numeric",
-    timeZone: "America/Chicago"
-  }).format(new Date(`${value}T12:00:00-05:00`));
 }
