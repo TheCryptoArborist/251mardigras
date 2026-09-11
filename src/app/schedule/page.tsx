@@ -180,9 +180,9 @@ export default function SchedulePage() {
           </p>
         </div>
 
-        <div className="grid gap-4 lg:grid-cols-[minmax(0,1.16fr)_minmax(18rem,0.84fr)]">
+        <div className="grid gap-4">
           <RouteMapCard route={featuredRoute} featured />
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-1">
+          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
             {secondaryRoutes.map((route) => (
               <RouteMapCard key={route.name} route={route} />
             ))}
@@ -316,7 +316,7 @@ function RouteMapCard({ route, featured = false }: { route: RouteMap; featured?:
     <article id={route.anchor} className="scroll-mt-28 overflow-hidden rounded-[1.45rem] border border-parade-gold/35 bg-white shadow-card">
       <div className={`grid gap-0 ${featured ? "lg:grid-cols-[minmax(0,1.25fr)_minmax(16rem,0.75fr)]" : ""}`}>
         <div
-          className={`relative bg-white bg-contain bg-center bg-no-repeat ${featured ? "min-h-[22rem] sm:min-h-[26rem] lg:min-h-[30rem]" : "min-h-[14rem]"}`}
+          className={`relative bg-white bg-contain bg-center bg-no-repeat ${featured ? "min-h-[22rem] sm:min-h-[26rem] lg:min-h-[30rem]" : "min-h-[16rem]"}`}
           style={{ backgroundImage: `url(${route.imageUrl})` }}
           role="img"
           aria-label={`${route.name} Mobile Mardi Gras route map`}
@@ -325,7 +325,7 @@ function RouteMapCard({ route, featured = false }: { route: RouteMap; featured?:
             {route.name}
           </div>
         </div>
-        <div className="border-t border-parade-line bg-gradient-to-br from-parade-cream via-white to-white p-4 lg:border-l lg:border-t-0">
+        <div className={`border-t border-parade-line bg-gradient-to-br from-parade-cream via-white to-white p-4 ${featured ? "lg:border-l lg:border-t-0" : ""}`}>
           <p className="text-xs font-black uppercase tracking-[0.16em] text-parade-purple">Route map</p>
           <h3 className="mt-1 text-2xl font-black text-parade-ink">{route.name}</h3>
           <p className="mt-2 text-sm font-semibold leading-6 text-parade-muted">{route.note}</p>
