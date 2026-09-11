@@ -1,0 +1,149 @@
+{
+  "season": "2027",
+  "title": "2027 Mobile Mardi Gras Parade Schedule",
+  "source": {
+    "name": "City of Mobile Parade Schedule and Routes StoryMap",
+    "url": "https://storymaps.arcgis.com/stories/aa1969cf3b68462a8676acdfb4839ad4"
+  },
+  "lastTranscribedAt": "2026-09-11",
+  "displayDateRange": "January 22 – February 9, 2027",
+  "mardiGrasDay": "February 9, 2027",
+  "defaultRouteNote": "The official source notes that downtown Mobile parades roll on Route A unless otherwise noted.",
+  "scheduleStatus": "Official source posted; MG251 transcription for visitor planning.",
+  "days": [
+    {
+      "date": "2027-01-22",
+      "label": "Friday, January 22",
+      "parades": [
+        { "id": "conde-cavaliers-2027", "time": "6:30 PM", "name": "Conde Cavaliers Parade", "route": "Route A" }
+      ]
+    },
+    {
+      "date": "2027-01-23",
+      "label": "Saturday, January 23",
+      "parades": [
+        { "id": "bayport-parading-society-2027", "time": "2:00 PM", "name": "Bayport Parading Society Parade", "route": "Route A" },
+        { "id": "mystic-dj-riders-2027", "time": "2:30 PM", "name": "Mystic DJ Riders", "route": "Route A" },
+        { "id": "pharaohs-2027", "time": "6:30 PM", "name": "Pharaohs Parade", "route": "Route A" },
+        { "id": "conde-explorers-2027", "time": "7:00 PM", "name": "Conde Explorers Parade", "route": "Route A" }
+      ]
+    },
+    {
+      "date": "2027-01-28",
+      "label": "Thursday, January 28",
+      "parades": [
+        { "id": "order-of-polka-dots-2027", "time": "6:30 PM", "name": "Order of Polka Dots Parade", "route": "Route A" }
+      ]
+    },
+    {
+      "date": "2027-01-29",
+      "label": "Friday, January 29",
+      "parades": [
+        { "id": "order-of-inca-2027", "time": "6:30 PM", "name": "Order of Inca Parade", "route": "Route A" },
+        { "id": "order-of-khaos-january-29-2027", "time": "7:00 PM", "name": "Order of Khaos", "route": "Route A" }
+      ]
+    },
+    {
+      "date": "2027-01-30",
+      "label": "Saturday, January 30",
+      "parades": [
+        { "id": "mobile-mystics-2027", "time": "1:00 PM", "name": "Mobile Mystics Parade", "route": "Route A" },
+        { "id": "mobile-mystical-revelers-2027", "time": "1:30 PM", "name": "Mobile Mystical Revelers Parade", "route": "Route A" },
+        { "id": "mobile-mystical-friends-2027", "time": "2:00 PM", "name": "Mobile Mystical Friends", "route": "Route A" },
+        { "id": "maids-of-mirth-2027", "time": "6:30 PM", "name": "Maids of Mirth Parade", "route": "Route A" },
+        { "id": "order-of-butterfly-maidens-2027", "time": "7:00 PM", "name": "Order of Butterfly Maidens Parade", "route": "Route A" },
+        { "id": "krewe-of-marry-mates-2027", "time": "7:30 PM", "name": "Krewe of Marry Mates Parade", "route": "Route A" }
+      ]
+    },
+    {
+      "date": "2027-01-31",
+      "label": "Sunday, January 31",
+      "parades": [
+        { "id": "neptunes-daughters-2027", "time": "6:30 PM", "name": "Neptune’s Daughters Parade", "route": "Route A" },
+        { "id": "order-of-isis-2027", "time": "7:00 PM", "name": "Order of Isis", "route": "Route A" }
+      ]
+    },
+    {
+      "date": "2027-02-01",
+      "label": "Monday, February 1",
+      "parades": [
+        { "id": "order-of-venus-2027", "time": "6:30 PM", "name": "Order of Venus Parade", "route": "Route A" },
+        { "id": "order-of-many-faces-2027", "time": "7:30 PM", "name": "Order of Many Faces Parade", "route": "Route A" }
+      ]
+    },
+    {
+      "date": "2027-02-02",
+      "label": "Tuesday, February 2",
+      "parades": [
+        { "id": "order-of-lashes-2027", "time": "6:30 PM", "name": "Order of LaShe’s Parade", "route": "Route A" },
+        { "id": "order-of-olympia-2027", "time": "7:00 PM", "name": "Order of Olympia", "route": "Route A" }
+      ]
+    },
+    {
+      "date": "2027-02-04",
+      "label": "Thursday, February 4",
+      "parades": [
+        { "id": "mystic-stripers-society-2027", "time": "6:30 PM", "name": "Mystic Stripers Society Parade", "route": "Route A" }
+      ]
+    },
+    {
+      "date": "2027-02-05",
+      "label": "Friday, February 5",
+      "parades": [
+        { "id": "crewe-of-columbus-2027", "time": "6:30 PM", "name": "Crewe of Columbus Parade", "route": "Route A" },
+        { "id": "krewe-de-secondline-february-5-2027", "time": "7:00 PM", "name": "Krewe de Secondline", "route": "Route A" }
+      ]
+    },
+    {
+      "date": "2027-02-06",
+      "label": "Saturday, February 6",
+      "parades": [
+        { "id": "floral-parade-february-6-2027", "time": "Noon", "name": "Floral Parade", "route": "Route A" },
+        { "id": "knights-of-mobile-2027", "time": "12:30 PM", "name": "Knights of Mobile Parade", "route": "Route A" },
+        { "id": "mobile-mystical-ladies-2027", "time": "1:00 PM", "name": "Mobile Mystical Ladies Parade", "route": "Route A" },
+        { "id": "order-of-angels-2027", "time": "1:30 PM", "name": "Order of Angels", "route": "Route A" },
+        { "id": "krewe-of-saint-jude-2027", "time": "2:00 PM", "name": "Krewe of Saint Judé", "route": "Route A" },
+        { "id": "mystics-of-time-2027", "time": "5:45 PM", "name": "Mystics of Time Parade", "route": "Route H", "routeNote": "Route H" }
+      ]
+    },
+    {
+      "date": "2027-02-07",
+      "label": "Sunday, February 7",
+      "specialLabel": "Joe Cain Day",
+      "parades": [
+        { "id": "king-elexis-i-motorcade-2027", "time": "2:00 PM", "name": "King Elexis I Motorcade", "route": "Route E", "routeNote": "Route E" },
+        { "id": "joe-cain-procession-2027", "time": "2:30 PM", "name": "Joe Cain Procession", "route": "Route A" },
+        { "id": "le-krewe-de-bienville-2027", "time": "5:00 PM", "name": "Le Krewe de Bienville", "route": "Route A" },
+        { "id": "order-of-khaos-february-7-2027", "time": "5:00 PM", "name": "Order of Khaos", "route": "Route A" },
+        { "id": "krewe-de-secondline-february-7-2027", "time": "5:00 PM", "name": "Krewe de Secondline", "route": "Route A" }
+      ]
+    },
+    {
+      "date": "2027-02-08",
+      "label": "Monday, February 8",
+      "specialLabel": "Lundi Gras",
+      "parades": [
+        { "id": "king-felix-iii-lundi-gras-2027", "time": "11:30 AM", "name": "King Felix III Parade", "route": "Route A" },
+        { "id": "floral-parade-february-8-2027", "time": "Noon", "name": "Floral Parade", "route": "Route A" },
+        { "id": "mlk-business-civic-organization-2027", "time": "2:00 PM", "name": "MLK Business & Civic Organization Parade", "route": "Route D", "routeNote": "Route D" },
+        { "id": "mlk-monday-mystics-2027", "time": "2:30 PM", "name": "MLK Monday Mystics Parade", "route": "Route D", "routeNote": "Route D" },
+        { "id": "northside-merchants-2027", "time": "3:00 PM", "name": "Northside Merchants Parade", "route": "Route D", "routeNote": "Route D" },
+        { "id": "infant-mystics-2027", "time": "6:30 PM", "name": "Infant Mystics Parade", "route": "Route F", "routeNote": "Route F" },
+        { "id": "order-of-doves-2027", "time": "7:00 PM", "name": "Order of Doves Parade", "route": "Route F", "routeNote": "Route F" }
+      ]
+    },
+    {
+      "date": "2027-02-09",
+      "label": "Tuesday, February 9",
+      "specialLabel": "Mardi Gras Day / Fat Tuesday",
+      "parades": [
+        { "id": "order-of-athena-2027", "time": "10:30 AM", "name": "Order of Athena Parade", "route": "Route A" },
+        { "id": "knights-of-revelry-2027", "time": "12:30 PM", "name": "Knights of Revelry Parade", "route": "Route A" },
+        { "id": "king-felix-iii-mardi-gras-day-2027", "time": "1:00 PM", "name": "King Felix III Parade", "route": "Route A" },
+        { "id": "comic-cowboys-2027", "time": "1:30 PM", "name": "Comic Cowboys Parade", "route": "Route A" },
+        { "id": "mamga-mammoth-2027", "time": "2:00 PM", "name": "MAMGA Mammoth Parade", "route": "Route B", "routeNote": "Route B" },
+        { "id": "order-of-myths-2027", "time": "6:00 PM", "name": "Order of Myths Parade", "route": "Route C", "routeNote": "Route C" }
+      ]
+    }
+  ]
+}
