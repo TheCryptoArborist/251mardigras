@@ -225,14 +225,6 @@ export function ScheduleRouteViewer({ schedule }: ScheduleRouteViewerProps) {
                           >
                             {parade.route} map <MapPinned className="h-3.5 w-3.5" aria-hidden="true" />
                           </button>
-                          <a
-                            href={schedule.source.url}
-                            target="_blank"
-                            rel="noreferrer"
-                            className="inline-flex items-center justify-center gap-1.5 rounded-full border border-white/15 bg-white/10 px-3 py-2 text-xs font-black uppercase tracking-wide text-white transition hover:-translate-y-0.5 hover:bg-white/15"
-                          >
-                            Source <ExternalLink className="h-3.5 w-3.5" aria-hidden="true" />
-                          </a>
                         </div>
                       </div>
                     </article>
