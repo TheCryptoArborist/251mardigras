@@ -211,9 +211,9 @@ export function CountdownTimer() {
               <CalendarDays className="h-5 w-5" aria-hidden="true" />
             </div>
             <div>
-              <p className="text-xl font-black leading-tight text-white sm:text-lg">2027 Parade Schedule Coming Soon</p>
+              <p className="text-xl font-black leading-tight text-white sm:text-lg">2027 Parade Schedule Available</p>
               <p className="mt-1 text-sm font-semibold leading-5 text-purple-100">
-                Get notified when verified dates, start times, routes, and official-source links are posted.
+                Open the released City of Mobile schedule and routes, and sign up for MG251 updates when new details or changes are posted.
               </p>
             </div>
           </div>
@@ -221,7 +221,7 @@ export function CountdownTimer() {
             href="/schedule"
             className="inline-flex w-full shrink-0 items-center justify-center gap-2 rounded-full border border-parade-gold/55 bg-white/10 px-4 py-2.5 text-sm font-black text-white transition hover:-translate-y-0.5 hover:bg-white/15 sm:w-auto"
           >
-            Schedule page <ArrowRight className="h-4 w-4" aria-hidden="true" />
+            Open schedule <ArrowRight className="h-4 w-4" aria-hidden="true" />
           </Link>
         </div>
         <div className="mt-4">
