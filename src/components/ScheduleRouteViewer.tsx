@@ -1,7 +1,7 @@
 "use client";
 
 import { CalendarDays, ExternalLink, MapPinned, ShieldCheck, X } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { StatusPill } from "@/components/StatusPill";
 
 export type ParadeEntry = {
@@ -103,6 +103,28 @@ export function ScheduleRouteViewer({ schedule }: ScheduleRouteViewerProps) {
   const allParades = useMemo(() => schedule.days.flatMap((day) => day.parades.map((parade) => ({ ...parade, day }))), [schedule.days]);
   const firstParade = allParades[0];
   const selectedRoute = selectedRouteName ? routeMapByName.get(selectedRouteName) ?? null : null;
+
+  useEffect(() => {
+    if (!selectedRouteName) {
+      return undefined;
+    }
+
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        setSelectedRouteName(null);
+      }
+    }
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.body.style.overflow = originalOverflow;
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [selectedRouteName]);
 
   function openRouteMap(routeName: string) {
     setSelectedRouteName(routeName);
@@ -295,7 +317,7 @@ function ScheduleStat({ label, value }: { label: string; value: string }) {
 
 function RouteMapCard({ route, onOpen }: { route: RouteMap; onOpen: (routeName: string) => void }) {
   return (
-    <article id={route.anchor} className="scroll-mt-28 overflow-hidden rounded-[1.35rem] border border-parade-gold/35 bg-parade-purpleDeep/65 text-white shadow-card backdrop-blur">
+    <article id={route.anchor} className="scroll-mt-48 overflow-hidden rounded-[1.35rem] border border-parade-gold/35 bg-parade-purpleDeep/65 text-white shadow-card backdrop-blur sm:scroll-mt-28">
       <div className="border-b border-parade-gold/25 bg-gradient-to-r from-parade-purpleDeep via-parade-purpleDark to-parade-purple px-4 py-3 text-white">
         <div className="flex items-center justify-between gap-3">
           <div>
@@ -313,7 +335,7 @@ function RouteMapCard({ route, onOpen }: { route: RouteMap; onOpen: (routeName: 
       </div>
       <button type="button" onClick={() => onOpen(route.name)} className="block w-full bg-white/10 p-2 text-left" aria-label={`Open ${route.name} map`}>
         <div className="overflow-hidden rounded-2xl border border-parade-gold/25 bg-white shadow-civic">
-          <img src={route.imageUrl} alt={`${route.name} Mardi Gras parade route map`} className="h-64 w-full object-contain" loading="lazy" />
+          <img src={route.imageUrl} alt={`${route.name} Mardi Gras parade route map`} className="h-auto w-full object-contain sm:h-64" loading="lazy" />
         </div>
       </button>
       <p className="px-4 pb-4 text-sm font-semibold leading-6 text-purple-100">{route.note}</p>
@@ -329,9 +351,14 @@ function RouteMapDialog({ route, schedule, onClose }: { route: RouteMap; schedul
   );
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/70 p-0 backdrop-blur-sm sm:items-center sm:p-4" role="dialog" aria-modal="true" aria-labelledby="route-map-dialog-title">
-      <div className="max-h-[92vh] w-full overflow-hidden rounded-t-[1.5rem] border border-parade-gold/40 bg-parade-purpleDeep shadow-card sm:max-w-5xl sm:rounded-[1.5rem]">
-        <div className="flex items-start justify-between gap-4 border-b border-parade-gold/25 bg-gradient-to-r from-parade-purpleDeep via-parade-purpleDark to-parade-purple px-4 py-4 text-white sm:px-5">
+    <div
+      className="fixed inset-0 z-[100] flex items-start justify-center overflow-y-auto bg-black/75 px-3 pt-[calc(env(safe-area-inset-top)+0.75rem)] pb-[calc(env(safe-area-inset-bottom)+1rem)] backdrop-blur-sm sm:items-center sm:p-4"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="route-map-dialog-title"
+    >
+      <div className="max-h-[calc(100dvh-2rem)] w-full overflow-hidden rounded-[1.5rem] border border-parade-gold/40 bg-parade-purpleDeep shadow-card sm:max-w-5xl">
+        <div className="flex items-start justify-between gap-4 border-b border-parade-gold/25 bg-gradient-to-r from-parade-purpleDeep via-parade-purpleDark to-parade-purple px-4 py-3 text-white sm:px-5 sm:py-4">
           <div>
             <p className="text-xs font-black uppercase tracking-[0.18em] text-parade-goldBright">Route map</p>
             <h2 id="route-map-dialog-title" className="mt-1 text-2xl font-black text-white">{route.name}</h2>
@@ -346,23 +373,25 @@ function RouteMapDialog({ route, schedule, onClose }: { route: RouteMap; schedul
           </button>
         </div>
 
-        <div className="max-h-[calc(92vh-5rem)] overflow-y-auto p-4 text-white sm:p-5">
-          <div className="overflow-hidden rounded-2xl border border-parade-gold/25 bg-white shadow-civic">
-            <img src={route.imageUrl} alt={`${route.name} Mardi Gras parade route map`} className="max-h-[68vh] w-full object-contain" />
+        <div className="max-h-[calc(100dvh-7rem)] overflow-y-auto p-3 text-white sm:p-5">
+          <div className="overflow-hidden rounded-2xl border border-parade-gold/25 bg-white p-1 shadow-civic sm:p-2">
+            <img src={route.imageUrl} alt={`${route.name} Mardi Gras parade route map`} className="h-auto max-h-[52dvh] w-full object-contain sm:max-h-[68vh]" />
           </div>
 
           <div className="mt-4 grid gap-4 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-start">
             <div>
-              <p className="text-sm font-bold text-purple-100">{route.note}</p>
+              <p className="text-sm font-bold leading-6 text-purple-100">{route.note}</p>
               {routeParades.length > 0 ? (
-                <div className="mt-3 rounded-2xl border border-parade-gold/25 bg-white/10 p-4">
-                  <p className="text-xs font-black uppercase tracking-[0.16em] text-parade-goldBright">Listed parades on {route.name}</p>
-                  <ul className="mt-2 grid gap-1.5 text-sm font-semibold leading-6 text-purple-100">
+                <details className="mt-3 rounded-2xl border border-parade-gold/25 bg-white/10 p-4">
+                  <summary className="cursor-pointer text-xs font-black uppercase tracking-[0.16em] text-parade-goldBright">
+                    Listed parades on {route.name} ({routeParades.length})
+                  </summary>
+                  <ul className="mt-3 grid gap-1.5 text-sm font-semibold leading-6 text-purple-100">
                     {routeParades.map((parade) => (
                       <li key={parade}>{parade}</li>
                     ))}
                   </ul>
-                </div>
+                </details>
               ) : (
                 <p className="mt-3 rounded-2xl border border-parade-gold/25 bg-white/10 p-4 text-sm font-semibold leading-6 text-purple-100">
                   No parade in this 2027 MG251 transcription currently uses {route.name}, but the map remains available for reference.
@@ -377,7 +406,7 @@ function RouteMapDialog({ route, schedule, onClose }: { route: RouteMap; schedul
                 rel="noreferrer"
                 className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-parade-gold/45 bg-parade-gold/20 px-4 py-2.5 text-sm font-black text-parade-goldBright transition hover:-translate-y-0.5 hover:bg-parade-gold hover:text-parade-purpleDark sm:w-auto"
               >
-                Open map image <MapPinned className="h-4 w-4" aria-hidden="true" />
+                Open full map <MapPinned className="h-4 w-4" aria-hidden="true" />
               </a>
               <a
                 href={schedule.source.url}
@@ -397,4 +426,13 @@ function RouteMapDialog({ route, schedule, onClose }: { route: RouteMap; schedul
 
 function compactDateLabel(label: string) {
   return label.replace(/^\w+,\s*/, "").replace("January", "Jan.").replace("February", "Feb.");
+}
+
+function formatTranscribedDate(value: string) {
+  return new Intl.DateTimeFormat("en-US", {
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+    timeZone: "America/Chicago"
+  }).format(new Date(`${value}T12:00:00-05:00`));
 }
