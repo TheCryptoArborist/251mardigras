@@ -1,6 +1,6 @@
 "use client";
 
-import { CalendarDays, ExternalLink, MapPinned, ShieldCheck, Sparkles, X } from "lucide-react";
+import { CalendarDays, ExternalLink, MapPinned, ShieldCheck, X } from "lucide-react";
 import { useMemo, useState } from "react";
 import { StatusPill } from "@/components/StatusPill";
 
@@ -312,7 +312,7 @@ function RouteMapCard({ route, onOpen }: { route: RouteMap; onOpen: (routeName: 
           </button>
         </div>
       </div>
-      <button type="button" onClick={() => onOpen(route.name)} className="block w-full bg-white p-2 text-left" aria-label={`Open ${route.name} map`}> 
+      <button type="button" onClick={() => onOpen(route.name)} className="block w-full bg-white p-2 text-left" aria-label={`Open ${route.name} map`}>
         <div className="overflow-hidden rounded-2xl border border-parade-line bg-white">
           <img src={route.imageUrl} alt={`${route.name} Mardi Gras parade route map`} className="h-64 w-full object-contain" loading="lazy" />
         </div>
