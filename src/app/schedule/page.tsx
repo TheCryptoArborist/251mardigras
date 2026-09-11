@@ -37,7 +37,6 @@ const schedule = paradeSchedule2027 as ParadeSchedule;
 const allParades = schedule.days.flatMap((day) => day.parades.map((parade) => ({ ...parade, day })));
 const routeCounts = getRouteCounts(schedule.days);
 const firstParade = allParades[0];
-const lastParade = allParades[allParades.length - 1];
 
 export const dynamic = "force-dynamic";
 
@@ -101,14 +100,13 @@ export default function SchedulePage() {
         </div>
         <div className="mt-4 flex flex-wrap gap-2">
           {routeCounts.map((route) => (
-            <a
+            <span
               key={route.name}
-              href={`#${route.anchor}`}
-              className="inline-flex items-center gap-2 rounded-full border border-parade-gold/35 bg-parade-cream px-3 py-2 text-xs font-black uppercase tracking-wide text-parade-purpleDark transition hover:-translate-y-0.5 hover:border-parade-gold"
+              className="inline-flex items-center gap-2 rounded-full border border-parade-gold/35 bg-parade-cream px-3 py-2 text-xs font-black uppercase tracking-wide text-parade-purpleDark"
             >
               <MapPinned className="h-3.5 w-3.5" aria-hidden="true" />
               {route.name} <span className="text-parade-muted">{route.count}</span>
-            </a>
+            </span>
           ))}
         </div>
       </section>
@@ -143,7 +141,7 @@ export default function SchedulePage() {
                     <div className="min-w-0">
                       <div className="flex flex-wrap items-center gap-2">
                         <span className="rounded-full bg-parade-purpleSoft px-3 py-1 text-xs font-black uppercase tracking-wide text-parade-purple">{parade.time}</span>
-                        <span id={routeAnchor(parade.route)} className="rounded-full bg-parade-gold/20 px-3 py-1 text-xs font-black uppercase tracking-wide text-parade-purpleDark">{parade.route}</span>
+                        <span className="rounded-full bg-parade-gold/20 px-3 py-1 text-xs font-black uppercase tracking-wide text-parade-purpleDark">{parade.route}</span>
                       </div>
                       <h4 className="mt-2 text-xl font-black leading-tight text-parade-ink">{parade.name}</h4>
                       <p className="mt-1 text-sm font-semibold leading-6 text-parade-muted">
@@ -205,11 +203,7 @@ function getRouteCounts(days: ParadeDay[]) {
 
   return [...counts.entries()]
     .sort(([routeA], [routeB]) => routeA.localeCompare(routeB, "en", { numeric: true }))
-    .map(([name, count]) => ({ name, count, anchor: routeAnchor(name) }));
-}
-
-function routeAnchor(route: string) {
-  return route.toLowerCase().replace(/\s+/g, "-");
+    .map(([name, count]) => ({ name, count }));
 }
 
 function formatTranscribedDate(value: string) {
