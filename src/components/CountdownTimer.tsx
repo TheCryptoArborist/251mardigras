@@ -1,9 +1,7 @@
 "use client";
 
-import Link from "next/link";
-import { ArrowRight, CalendarDays, Check, Share2 } from "lucide-react";
+import { Check, Share2 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
-import { ScheduleNotificationSignup } from "@/components/ScheduleNotificationSignup";
 
 const FIRST_DOWNTOWN_PARADE_TARGET = "2027-01-22T18:30:00-06:00";
 const COUNTDOWN_PROGRESS_START = "2026-02-17T00:00:00-06:00";
@@ -86,7 +84,7 @@ export function CountdownTimer() {
   }
 
   return (
-    <div className="mt-7 max-w-4xl space-y-3">
+    <div className="mt-7 max-w-4xl">
       <section
         id="mardi-gras-countdown"
         className="scroll-mt-28 overflow-hidden rounded-[1.55rem] border border-parade-gold/40 bg-gradient-to-br from-parade-purpleDeep/72 via-parade-purpleDark/62 to-parade-purple/48 p-4 shadow-glow backdrop-blur sm:rounded-[1.75rem] sm:p-5"
@@ -202,31 +200,6 @@ export function CountdownTimer() {
         <p className="mt-3 text-xs font-semibold leading-5 text-purple-100/90 sm:text-sm sm:leading-6">
           For planning only. Verify schedules, routes, closures, and public-safety updates with official sources.
         </p>
-      </section>
-
-      <section className="rounded-[1.35rem] border border-parade-gold/45 bg-parade-purpleDeep/60 p-4 shadow-civic backdrop-blur sm:rounded-2xl">
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-          <div className="flex items-start gap-3">
-            <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-parade-gold text-parade-purpleDark shadow-sm">
-              <CalendarDays className="h-5 w-5" aria-hidden="true" />
-            </div>
-            <div>
-              <p className="text-xl font-black leading-tight text-white sm:text-lg">2027 Parade Schedule Available</p>
-              <p className="mt-1 text-sm font-semibold leading-5 text-purple-100">
-                Open the released City of Mobile schedule and routes, and sign up for MG251 updates when new details or changes are posted.
-              </p>
-            </div>
-          </div>
-          <Link
-            href="/schedule"
-            className="inline-flex w-full shrink-0 items-center justify-center gap-2 rounded-full border border-parade-gold/55 bg-white/10 px-4 py-2.5 text-sm font-black text-white transition hover:-translate-y-0.5 hover:bg-white/15 sm:w-auto"
-          >
-            Open schedule <ArrowRight className="h-4 w-4" aria-hidden="true" />
-          </Link>
-        </div>
-        <div className="mt-4">
-          <ScheduleNotificationSignup source="homepage" compact />
-        </div>
       </section>
     </div>
   );
