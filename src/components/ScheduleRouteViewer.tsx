@@ -472,31 +472,42 @@ function FeaturedParadePanel({
   const countdown = now ? formatCountdown(start.getTime() - now.getTime()) : "Calculating…";
 
   return (
-    <section className="relative overflow-hidden rounded-[1.45rem] border border-parade-gold/55 bg-gradient-to-r from-parade-goldSoft via-white to-parade-purpleMist p-5 text-parade-ink shadow-glow sm:p-6">
-      <span className="pointer-events-none absolute right-[-3rem] top-[-4rem] h-36 w-36 rounded-full bg-parade-gold/25 blur-2xl" aria-hidden="true" />
+    <section className="relative overflow-hidden rounded-[1.45rem] border border-parade-gold/65 bg-gradient-to-br from-parade-purpleDeep via-parade-purpleDark to-parade-purple p-5 text-white shadow-glow sm:p-6">
+      <span className="pointer-events-none absolute left-[-4rem] top-[-5rem] h-40 w-40 rounded-full bg-parade-gold/25 blur-3xl" aria-hidden="true" />
+      <span className="pointer-events-none absolute bottom-[-5rem] right-[-3rem] h-44 w-44 rounded-full bg-parade-gold/20 blur-3xl" aria-hidden="true" />
+      <div className="pointer-events-none absolute inset-x-0 top-0 flex justify-around px-4" aria-hidden="true">
+        {Array.from({ length: 14 }, (_, index) => (
+          <span key={index} className={`h-2.5 w-2.5 rounded-full shadow-glow ${index % 3 === 0 ? "bg-white/75" : "bg-parade-gold"}`} />
+        ))}
+      </div>
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 flex justify-around px-8" aria-hidden="true">
+        {Array.from({ length: 11 }, (_, index) => (
+          <span key={index} className={`h-2 w-2 rounded-full ${index % 3 === 1 ? "bg-white/55" : "bg-parade-gold/85"}`} />
+        ))}
+      </div>
       <div className="relative z-10 grid gap-5 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center">
         <div>
-          <p className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.18em] text-parade-purple">
+          <p className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.18em] text-parade-goldBright">
             <Clock3 className="h-4 w-4" aria-hidden="true" /> {isFocused ? "Shared parade" : "Next parade"}
           </p>
-          <h2 className="mt-2 text-2xl font-black leading-tight text-parade-purpleDark sm:text-3xl">{entry.name}</h2>
-          <p className="mt-2 text-sm font-black text-parade-purple sm:text-base">
+          <h2 className="mt-2 text-2xl font-black leading-tight text-white drop-shadow-lg sm:text-3xl">{entry.name}</h2>
+          <p className="mt-2 text-sm font-black text-parade-goldBright sm:text-base">
             {formatParadeShareDate(entry.day.date)} • {entry.time} • {entry.route}
           </p>
-          {!isFocused ? <p className="mt-2 text-sm font-bold text-parade-muted">{countdown}</p> : null}
+          {!isFocused ? <p className="mt-2 text-sm font-bold text-purple-100">{countdown}</p> : null}
         </div>
 
         <div className="flex flex-wrap gap-2 lg:max-w-[28rem] lg:justify-end">
-          <a href={`#${entry.id}`} className="inline-flex items-center justify-center gap-2 rounded-full bg-parade-purple px-4 py-2.5 text-sm font-black text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-parade-purpleDark">
+          <a href={`#${entry.id}`} className="inline-flex items-center justify-center gap-2 rounded-full bg-parade-gold px-4 py-2.5 text-sm font-black text-parade-purpleDark shadow-glow transition hover:-translate-y-0.5 hover:bg-parade-goldBright">
             View listing <ChevronDown className="h-4 w-4" aria-hidden="true" />
           </a>
-          <button type="button" onClick={() => onMap(entry.route)} className="inline-flex items-center justify-center gap-2 rounded-full border border-parade-purple/25 bg-white/70 px-4 py-2.5 text-sm font-black text-parade-purple transition hover:-translate-y-0.5 hover:bg-white">
+          <button type="button" onClick={() => onMap(entry.route)} className="inline-flex items-center justify-center gap-2 rounded-full border border-parade-gold/45 bg-white/10 px-4 py-2.5 text-sm font-black text-white transition hover:-translate-y-0.5 hover:bg-white/15">
             {entry.route} map <MapPinned className="h-4 w-4" aria-hidden="true" />
           </button>
-          <button type="button" onClick={() => onCalendar(entry, entry.day)} className="inline-flex items-center justify-center gap-2 rounded-full border border-parade-purple/25 bg-white/70 px-4 py-2.5 text-sm font-black text-parade-purple transition hover:-translate-y-0.5 hover:bg-white">
+          <button type="button" onClick={() => onCalendar(entry, entry.day)} className="inline-flex items-center justify-center gap-2 rounded-full border border-parade-gold/45 bg-white/10 px-4 py-2.5 text-sm font-black text-white transition hover:-translate-y-0.5 hover:bg-white/15">
             Calendar <CalendarPlus className="h-4 w-4" aria-hidden="true" />
           </button>
-          <button type="button" onClick={() => onShare(entry, entry.day)} className="inline-flex items-center justify-center gap-2 rounded-full border border-parade-purple/25 bg-white/70 px-4 py-2.5 text-sm font-black text-parade-purple transition hover:-translate-y-0.5 hover:bg-white">
+          <button type="button" onClick={() => onShare(entry, entry.day)} className="inline-flex items-center justify-center gap-2 rounded-full border border-parade-gold/45 bg-white/10 px-4 py-2.5 text-sm font-black text-white transition hover:-translate-y-0.5 hover:bg-white/15">
             {shareStatus === "shared" || shareStatus === "copied" ? <Check className="h-4 w-4" aria-hidden="true" /> : <Share2 className="h-4 w-4" aria-hidden="true" />}
             {getShareButtonLabel(shareStatus)}
           </button>
