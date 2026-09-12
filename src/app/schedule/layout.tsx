@@ -4,7 +4,8 @@ import { breadcrumbJsonLd, createPageMetadata, jsonLdScript } from "@/lib/seo";
 export const metadata = createPageMetadata({
   title: "Mobile Mardi Gras Parade Schedule",
   description: "View Mobile Mardi Gras parade schedule information and verify official parade details before making plans.",
-  path: "/schedule"
+  path: "/schedule",
+  image: "/schedule/opengraph-image"
 });
 
 export default function ScheduleLayout({ children }: { children: ReactNode }) {
