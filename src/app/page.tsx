@@ -260,11 +260,11 @@ function SocialLinksStrip({ className = "" }: { className?: string }) {
       aria-label="Follow Mardi Gras - Mobile, Alabama on social media"
       className={`rounded-2xl border border-parade-gold/35 bg-white/10 p-4 shadow-civic backdrop-blur ${className}`}
     >
-      <div className="flex items-center gap-2.5">
+      <div className="flex items-center justify-center gap-2.5 text-center">
         <HomepageBannerIcon kind="logo" size="small" />
         <p className="text-xs font-black uppercase tracking-[0.16em] text-parade-goldBright">Follow for updates</p>
       </div>
-      <div className="mt-3 flex flex-wrap gap-2.5">
+      <div className="mt-3 flex flex-wrap justify-center gap-2.5">
         {socialLinks.map((link) => (
           <a
             key={link.label}
