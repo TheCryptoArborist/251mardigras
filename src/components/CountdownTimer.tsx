@@ -129,7 +129,6 @@ export function CountdownTimer() {
               className="inline-flex w-fit items-center justify-center gap-1.5 rounded-full border border-parade-gold/30 bg-parade-purpleDeep/45 px-3 py-2 text-xs font-black text-white shadow-sm transition hover:-translate-y-0.5 hover:border-parade-gold/55 hover:bg-parade-purpleDeep/65"
               aria-label="Post the current Mobile Mardi Gras countdown to X"
             >
-              <span className="text-sm leading-none" aria-hidden="true">𝕏</span>
               Post to X
             </a>
             {countdownExpired ? (
@@ -197,9 +196,6 @@ export function CountdownTimer() {
           </>
         ) : null}
 
-        <p className="mt-3 text-xs font-semibold leading-5 text-purple-100/90 sm:text-sm sm:leading-6">
-          For planning only. Verify schedules, routes, closures, and public-safety updates with official sources.
-        </p>
       </section>
     </div>
   );
