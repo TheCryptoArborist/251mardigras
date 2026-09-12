@@ -308,10 +308,7 @@ function HomepageScheduleSpotlight({ className = "" }: { className?: string }) {
               {firstParadeDate}{homepageFirstParade ? ` • ${homepageFirstParade.time} • ${homepageFirstParade.route}` : null}
             </p>
           </div>
-          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
-            <ScheduleMiniStat label="Total parades" value={`${homepageParades.length}`} />
-            <ScheduleMiniStat label="Mardi Gras Day" value={homepageSchedule.mardiGrasDay} />
-          </div>
+          <ScheduleMiniStat label="Mardi Gras Day" value={homepageSchedule.mardiGrasDay} />
         </div>
         <div className="mt-4 grid gap-2 sm:grid-cols-2">
           <Link href="/schedule" className="inline-flex items-center justify-center gap-2 rounded-full bg-parade-gold px-4 py-2.5 text-sm font-black text-parade-purpleDark shadow-glow transition hover:-translate-y-0.5 hover:bg-parade-goldBright">
