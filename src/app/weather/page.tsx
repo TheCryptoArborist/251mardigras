@@ -57,8 +57,6 @@ type ParadeWeatherOutlook = {
 };
 
 const schedule = paradeSchedule2027 as ParadeSchedule;
-const allScheduledParades = schedule.days.flatMap((day) => day.parades.map((parade) => ({ ...parade, day })));
-const firstScheduledParade = allScheduledParades[0];
 
 export default async function WeatherPage() {
   const weatherResult = await getWeatherPreview()
@@ -70,7 +68,8 @@ export default async function WeatherPage() {
 
   const weather = weatherResult.weather;
   const paradeOutlooks = buildParadeWeatherOutlooks(schedule, weather, 8);
-  const forecastRange = getForecastRangeLabel(weather?.hourly ?? []);
+  const forecastReadyOutlooks = paradeOutlooks.filter((outlook) => outlook.status === "available");
+  const nextParadeOutlook = paradeOutlooks[0] ?? null;
 
   return (
     <main className="relative isolate min-h-screen overflow-hidden bg-gradient-to-br from-parade-purpleDeep via-parade-purpleDark to-parade-purple text-white">
@@ -84,74 +83,46 @@ export default async function WeatherPage() {
           <span className="pointer-events-none absolute right-[-4rem] top-[-5rem] h-44 w-44 rounded-full bg-parade-gold/20 blur-3xl" aria-hidden="true" />
           <span className="pointer-events-none absolute bottom-[-5rem] left-[-5rem] h-40 w-40 rounded-full bg-white/10 blur-3xl" aria-hidden="true" />
 
-          <div className="relative z-10 grid gap-5 lg:grid-cols-[minmax(0,1fr)_minmax(18rem,0.7fr)] lg:items-start">
+          <div className="relative z-10 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
             <div>
               <div className="inline-flex items-center gap-2 rounded-full border border-parade-gold/40 bg-white/10 px-4 py-2 text-xs font-black uppercase tracking-wide text-parade-goldBright shadow-glow backdrop-blur">
                 <CloudSun className="h-4 w-4" aria-hidden="true" />
-                Parade weather center
+                Downtown Mobile
               </div>
-              <h1 className="mt-5 max-w-4xl text-4xl font-black leading-tight tracking-tight text-white drop-shadow-lg sm:text-5xl">
-                Weather for Mobile Mardi Gras
+              <h1 className="mt-4 text-3xl font-black leading-tight tracking-tight text-white drop-shadow-lg sm:text-4xl">
+                Mardi Gras Weather Center
               </h1>
-              <p className="mt-4 max-w-3xl text-base font-semibold leading-7 text-purple-100 sm:text-lg">
-                Downtown Mobile conditions, NWS alerts, and parade-weather planning tied to the posted 2027 parade schedule.
+              <p className="mt-2 max-w-3xl text-sm font-semibold leading-6 text-purple-100 sm:text-base">
+                Current conditions, NWS alerts, and parade-weather planning for downtown Mobile.
               </p>
-              <div className="mt-5 flex flex-col gap-2 sm:flex-row sm:flex-wrap">
-                <Link href="#parade-weather-outlook" className="inline-flex items-center justify-center gap-2 rounded-full bg-parade-gold px-5 py-3 text-sm font-black text-parade-purpleDark shadow-glow transition hover:-translate-y-0.5 hover:bg-parade-goldBright">
-                  Parade Outlooks <CalendarDays className="h-4 w-4" aria-hidden="true" />
-                </Link>
-                <Link href="#downtown-forecast" className="inline-flex items-center justify-center gap-2 rounded-full border border-parade-gold/45 bg-white/10 px-5 py-3 text-sm font-black text-white shadow-civic backdrop-blur transition hover:-translate-y-0.5 hover:bg-white/15">
-                  Downtown Forecast <CloudSun className="h-4 w-4" aria-hidden="true" />
-                </Link>
-                <Link href="/schedule" className="inline-flex items-center justify-center gap-2 rounded-full border border-white/20 bg-white/10 px-5 py-3 text-sm font-black text-white shadow-civic backdrop-blur transition hover:-translate-y-0.5 hover:bg-white/15">
-                  Parade Schedule <MapPinned className="h-4 w-4" aria-hidden="true" />
-                </Link>
-              </div>
             </div>
-
-            <div className="grid gap-3 sm:grid-cols-3 lg:grid-cols-1">
-              <WeatherHeroStat label="Current focus" value="Downtown Mobile" />
-              <WeatherHeroStat label="First parade" value={firstScheduledParade ? `${compactDateLabel(firstScheduledParade.day.label)} • ${firstScheduledParade.time}` : "Posted"} />
-              <WeatherHeroStat label="Forecast range" value={forecastRange} />
+            <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap">
+              <Link href="#downtown-forecast" className="inline-flex items-center justify-center gap-2 rounded-full bg-parade-gold px-5 py-2.5 text-sm font-black text-parade-purpleDark shadow-glow transition hover:-translate-y-0.5 hover:bg-parade-goldBright">
+                Hourly Forecast <CloudSun className="h-4 w-4" aria-hidden="true" />
+              </Link>
+              <Link href="/schedule" className="inline-flex items-center justify-center gap-2 rounded-full border border-white/20 bg-white/10 px-5 py-2.5 text-sm font-black text-white shadow-civic backdrop-blur transition hover:-translate-y-0.5 hover:bg-white/15">
+                Parade Schedule <MapPinned className="h-4 w-4" aria-hidden="true" />
+              </Link>
             </div>
           </div>
         </section>
 
-        <section className="grid gap-5 lg:grid-cols-[0.95fr_1.05fr]">
+        <section className="grid items-start gap-5 lg:grid-cols-[1.15fr_0.85fr]">
           <WeatherRiskCard weather={weather} error={weatherResult.error} />
           <ActiveAlertsCard weather={weather} />
         </section>
 
-        <ParadeWeatherRiskPanel weather={weather} error={weatherResult.error} outlooks={paradeOutlooks} />
-
         <ForecastWindow weather={weather} error={weatherResult.error} />
 
-        <section>
-          <SectionTitle
-            title="What the risk score looks at"
-            description="These are planning signals only. They do not replace official weather alerts or public-safety announcements."
-          />
-          <div className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-            <RiskDetail title="Wind" icon={<Wind className="h-5 w-5" aria-hidden="true" />} value={weather?.risk.windScore ?? 0} />
-            <RiskDetail title="Rain and storms" icon={<Umbrella className="h-5 w-5" aria-hidden="true" />} value={(weather?.risk.rainScore ?? 0) + (weather?.risk.lightningScore ?? 0)} />
-            <RiskDetail title="Warm weather" icon={<Thermometer className="h-5 w-5" aria-hidden="true" />} value={weather?.risk.heatScore ?? 0} />
-            <RiskDetail title="Cold weather" icon={<Thermometer className="h-5 w-5" aria-hidden="true" />} value={weather?.risk.coldScore ?? 0} />
-          </div>
-        </section>
+        <ParadeWeatherRiskPanel
+          error={weatherResult.error}
+          outlooks={forecastReadyOutlooks}
+          nextOutlook={nextParadeOutlook}
+        />
 
-        <WeatherPlanningChecklist />
+        <RiskMethod weather={weather} />
 
-        <OfficialWeatherSources weather={weather} />
-
-        <section className="rounded-[1.35rem] border border-parade-gold/45 bg-parade-goldSoft p-5 text-amber-950 shadow-civic">
-          <div className="flex items-start gap-3">
-            <ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-amber-800" aria-hidden="true" />
-            <p className="text-sm font-medium leading-6 text-amber-950">
-              <span className="font-black">Unofficial weather planning resource.</span>{" "}
-              Weather risk does not mean a parade is delayed, changed, or canceled unless an official source announces it.
-            </p>
-          </div>
-        </section>
+        <BeforeYouGo weather={weather} />
       </div>
     </main>
   );
@@ -201,13 +172,13 @@ function ActiveAlertsCard({ weather }: { weather: WeatherPreview | null }) {
 }
 
 function ParadeWeatherRiskPanel({
-  weather,
   error,
-  outlooks
+  outlooks,
+  nextOutlook
 }: {
-  weather: WeatherPreview | null;
   error: string | null;
   outlooks: ParadeWeatherOutlook[];
+  nextOutlook: ParadeWeatherOutlook | null;
 }) {
   return (
     <section id="parade-weather-outlook" className="scroll-mt-28 relative overflow-hidden rounded-[1.5rem] border border-parade-gold/35 bg-white/10 p-5 text-white shadow-card backdrop-blur">
@@ -219,9 +190,9 @@ function ParadeWeatherRiskPanel({
           </div>
           <div>
             <p className="text-xs font-black uppercase tracking-[0.16em] text-parade-goldBright">Parade weather outlook</p>
-            <h2 className="mt-1 text-2xl font-black text-white">Weather tied to the 2027 schedule</h2>
+            <h2 className="mt-1 text-2xl font-black text-white">Weather for upcoming parades</h2>
             <p className="mt-2 max-w-3xl text-sm font-semibold leading-6 text-purple-100">
-              Upcoming parade cards are pulled from the posted schedule. Weather details appear when the parade falls inside the available forecast data.
+              Parade forecasts appear automatically when an event enters the available NWS forecast window.
             </p>
           </div>
         </div>
@@ -236,18 +207,30 @@ function ParadeWeatherRiskPanel({
         </div>
       ) : null}
 
-      <div className="relative z-10 mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-        <WeatherHeroStat label="Schedule range" value={schedule.displayDateRange} />
-        <WeatherHeroStat label="Mardi Gras Day" value={schedule.mardiGrasDay} />
-        <WeatherHeroStat label="Next listed" value={outlooks[0] ? `${compactDateLabel(outlooks[0].day.label)} • ${outlooks[0].parade.time}` : "Posted"} />
-        <WeatherHeroStat label="NWS refresh" value={formatDateTime(weather?.checkedAt)} />
-      </div>
-
-      <div className="relative z-10 mt-5 grid gap-3 lg:grid-cols-2">
-        {outlooks.map((outlook) => (
-          <ParadeWeatherCard key={`${outlook.day.date}-${outlook.parade.id}`} outlook={outlook} />
-        ))}
-      </div>
+      {outlooks.length > 0 ? (
+        <div className="relative z-10 mt-5 grid gap-3 lg:grid-cols-2">
+          {outlooks.map((outlook) => (
+            <ParadeWeatherCard key={`${outlook.day.date}-${outlook.parade.id}`} outlook={outlook} />
+          ))}
+        </div>
+      ) : (
+        <div className="relative z-10 mt-5 flex flex-col gap-3 rounded-2xl border border-parade-gold/30 bg-parade-purpleDeep/55 p-4 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <StatusPill tone="gray">Outside forecast window</StatusPill>
+            <p className="mt-3 text-sm font-semibold leading-6 text-purple-100">
+              No scheduled parades are currently within the NWS forecast window.
+            </p>
+          </div>
+          {nextOutlook ? (
+            <div className="shrink-0 rounded-xl border border-white/15 bg-white/10 px-4 py-3 sm:text-right">
+              <p className="text-xs font-black uppercase tracking-wide text-parade-goldBright">Next parade</p>
+              <p className="mt-1 text-sm font-black text-white">
+                {compactDateLabel(nextOutlook.day.label)} • {nextOutlook.parade.time}
+              </p>
+            </div>
+          ) : null}
+        </div>
+      )}
     </section>
   );
 }
@@ -309,7 +292,7 @@ function ForecastWindow({ weather, error }: { weather: WeatherPreview | null; er
         description={`Next few hours from NWS data. Last refresh: ${formatDateTime(weather?.checkedAt)}`}
       />
       {hourly.length > 0 ? (
-        <div className="mt-4 grid gap-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
+        <div className="mt-4 grid snap-x snap-mandatory grid-flow-col auto-cols-[minmax(10rem,1fr)] gap-2 overflow-x-auto pb-2 sm:grid-flow-row sm:grid-cols-2 sm:overflow-visible sm:pb-0 lg:grid-cols-3 xl:grid-cols-6">
           {hourly.map((period) => (
             <ForecastCard key={period.startTime} period={period} />
           ))}
@@ -326,7 +309,7 @@ function ForecastWindow({ weather, error }: { weather: WeatherPreview | null; er
 
 function ForecastCard({ period }: { period: HourlyPeriod }) {
   return (
-    <article className="relative overflow-hidden rounded-2xl border border-parade-gold/30 bg-white/10 p-3 text-white shadow-sm backdrop-blur transition hover:-translate-y-0.5 hover:shadow-civic">
+    <article className="relative snap-start overflow-hidden rounded-2xl border border-parade-gold/30 bg-white/10 p-3 text-white shadow-sm backdrop-blur transition hover:-translate-y-0.5 hover:shadow-civic">
       <span className="pointer-events-none absolute right-[-1.5rem] top-[-1.5rem] h-16 w-16 rounded-full bg-parade-gold/20 blur-xl" aria-hidden="true" />
       <div className="relative z-10">
         <p className="text-[0.7rem] font-black uppercase tracking-wide text-parade-goldBright">{formatDateTime(period.startTime)}</p>
@@ -347,19 +330,38 @@ function ForecastCard({ period }: { period: HourlyPeriod }) {
   );
 }
 
-function RiskDetail({ title, icon, value }: { title: string; icon: ReactNode; value: number }) {
+function RiskMethod({ weather }: { weather: WeatherPreview | null }) {
+  const risk = weather?.risk;
+
   return (
-    <article className="rounded-[1.25rem] border border-parade-gold/30 bg-white/10 p-4 text-white shadow-sm backdrop-blur">
-      <div className="grid h-10 w-10 place-items-center rounded-xl bg-parade-gold text-parade-purpleDark ring-1 ring-white/20 shadow-glow">
-        {icon}
+    <details className="group rounded-[1.35rem] border border-parade-gold/30 bg-white/10 text-white shadow-civic backdrop-blur">
+      <summary className="flex cursor-pointer list-none items-center justify-between gap-4 p-4 marker:hidden sm:p-5">
+        <div>
+          <p className="text-xs font-black uppercase tracking-[0.16em] text-parade-goldBright">Planning method</p>
+          <h2 className="mt-1 text-lg font-black text-white">How the weather risk is calculated</h2>
+        </div>
+        <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-parade-gold text-xl font-black text-parade-purpleDark transition group-open:rotate-45" aria-hidden="true">+</span>
+      </summary>
+      <div className="grid gap-2 border-t border-white/10 p-4 sm:grid-cols-2 sm:p-5 lg:grid-cols-4">
+        <RiskSignal icon={<Wind className="h-4 w-4" aria-hidden="true" />} label="Wind" value={risk?.windScore ?? 0} />
+        <RiskSignal icon={<Umbrella className="h-4 w-4" aria-hidden="true" />} label="Rain and storms" value={(risk?.rainScore ?? 0) + (risk?.lightningScore ?? 0)} />
+        <RiskSignal icon={<Thermometer className="h-4 w-4" aria-hidden="true" />} label="Warm weather" value={risk?.heatScore ?? 0} />
+        <RiskSignal icon={<Thermometer className="h-4 w-4" aria-hidden="true" />} label="Cold weather" value={risk?.coldScore ?? 0} />
       </div>
-      <h3 className="mt-3 text-base font-black text-white">{title}</h3>
-      <p className="mt-2 text-sm font-semibold text-purple-100">Score contribution: {value}</p>
-    </article>
+    </details>
   );
 }
 
-function WeatherPlanningChecklist() {
+function RiskSignal({ icon, label, value }: { icon: ReactNode; label: string; value: number }) {
+  return (
+    <div className="flex items-center justify-between gap-3 rounded-xl border border-parade-gold/25 bg-parade-purpleDeep/55 px-3 py-2.5">
+      <span className="flex items-center gap-2 text-sm font-black text-white">{icon}{label}</span>
+      <span className="text-xs font-black uppercase tracking-wide text-parade-goldBright">Score {value}</span>
+    </div>
+  );
+}
+
+function BeforeYouGo({ weather }: { weather: WeatherPreview | null }) {
   const items = [
     "Check active NWS alerts before leaving for downtown.",
     "Treat thunder, lightning, and strong wind as high-priority planning signals.",
@@ -370,39 +372,41 @@ function WeatherPlanningChecklist() {
   return (
     <section className="relative overflow-hidden rounded-[1.5rem] border border-parade-gold/35 bg-white/10 p-5 text-white shadow-card backdrop-blur">
       <span className="pointer-events-none absolute right-[-3rem] top-[-3rem] h-28 w-28 rounded-full bg-parade-gold/20 blur-2xl" aria-hidden="true" />
-      <div className="relative z-10 flex items-start gap-3">
-        <div className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-parade-gold text-parade-purpleDark ring-1 ring-white/20 shadow-glow">
-          <Umbrella className="h-6 w-6" aria-hidden="true" />
+      <div className="relative z-10 grid gap-6 lg:grid-cols-[1.15fr_0.85fr]">
+        <div>
+          <div className="flex items-start gap-3">
+            <div className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-parade-gold text-parade-purpleDark ring-1 ring-white/20 shadow-glow">
+              <Umbrella className="h-6 w-6" aria-hidden="true" />
+            </div>
+            <div>
+              <p className="text-xs font-black uppercase tracking-[0.16em] text-parade-goldBright">Before you go</p>
+              <h2 className="mt-1 text-2xl font-black text-white">Parade-day weather checklist</h2>
+            </div>
+          </div>
+          <div className="mt-5 grid gap-2 sm:grid-cols-2">
+            {items.map((item) => (
+              <div key={item} className="flex items-start gap-3 rounded-2xl border border-parade-gold/25 bg-parade-purpleDeep/55 p-3">
+                <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-parade-goldBright" aria-hidden="true" />
+                <p className="text-sm font-semibold leading-5 text-purple-100">{item}</p>
+              </div>
+            ))}
+          </div>
         </div>
         <div>
-          <p className="text-xs font-black uppercase tracking-[0.16em] text-parade-goldBright">Parade-day checklist</p>
-          <h2 className="mt-1 text-2xl font-black text-white">Weather planning before heading downtown</h2>
-        </div>
-      </div>
-      <div className="relative z-10 mt-5 grid gap-3 md:grid-cols-2">
-        {items.map((item) => (
-          <div key={item} className="flex items-start gap-3 rounded-2xl border border-parade-gold/25 bg-parade-purpleDeep/55 p-4">
-            <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-parade-goldBright" aria-hidden="true" />
-            <p className="text-sm font-semibold leading-6 text-purple-100">{item}</p>
+          <p className="text-xs font-black uppercase tracking-[0.16em] text-parade-goldBright">National Weather Service</p>
+          <h2 className="mt-1 text-xl font-black text-white">Official weather links</h2>
+          <div className="mt-4 grid gap-2 sm:grid-cols-2 lg:grid-cols-1">
+            <WeatherLink href={weather?.sourceUrls.forecastHourly ?? "https://api.weather.gov/points/30.6954,-88.0399"} label="Hourly forecast" />
+            <WeatherLink href={weather?.sourceUrls.forecast ?? "https://api.weather.gov/points/30.6954,-88.0399"} label="Daily forecast" />
+            <WeatherLink href={weather?.sourceUrls.alerts ?? "https://api.weather.gov/alerts/active?point=30.6954,-88.0399"} label="Active alerts" />
           </div>
-        ))}
-      </div>
-    </section>
-  );
-}
-
-function OfficialWeatherSources({ weather }: { weather: WeatherPreview | null }) {
-  return (
-    <section className="rounded-[1.5rem] border border-parade-gold/35 bg-white/10 p-5 text-white shadow-card backdrop-blur">
-      <SectionTitle
-        title="Official weather sources"
-        description="Use these National Weather Service links when weather decisions matter."
-      />
-      <div className="mt-4 grid gap-3 sm:grid-cols-2">
-        <WeatherLink href={weather?.sourceUrls.forecastHourly ?? "https://api.weather.gov/points/30.6954,-88.0399"} label="Hourly forecast" />
-        <WeatherLink href={weather?.sourceUrls.forecast ?? "https://api.weather.gov/points/30.6954,-88.0399"} label="Daily forecast" />
-        <WeatherLink href={weather?.sourceUrls.alerts ?? "https://api.weather.gov/alerts/active?point=30.6954,-88.0399"} label="Active alerts" />
-        <WeatherLink href={weather?.sourceUrls.points ?? "https://api.weather.gov/points/30.6954,-88.0399"} label="NWS downtown point" />
+          <div className="mt-3 flex items-start gap-2 rounded-2xl border border-parade-gold/30 bg-parade-goldSoft p-3 text-amber-950">
+            <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-amber-800" aria-hidden="true" />
+            <p className="text-xs font-semibold leading-5">
+              Weather risk is a planning aid. Parade delays, changes, or cancellations must come from official sources.
+            </p>
+          </div>
+        </div>
       </div>
     </section>
   );
@@ -425,14 +429,6 @@ function WeatherLink({ href, label }: { href: string; label: string }) {
   );
 }
 
-function WeatherHeroStat({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="rounded-2xl border border-white/15 bg-white/10 p-3 shadow-sm backdrop-blur">
-      <p className="text-[0.65rem] font-black uppercase tracking-[0.16em] text-parade-goldBright">{label}</p>
-      <p className="mt-1 text-sm font-black leading-tight text-white sm:text-base">{value}</p>
-    </div>
-  );
-}
 
 function WeatherMetric({ label, value }: { label: string; value: string }) {
   return (
@@ -538,16 +534,6 @@ function formatForecastWindow(periods: HourlyPeriod[]) {
   const first = periods[0];
   const last = periods[periods.length - 1];
   return `${formatDateTime(first.startTime)} to ${formatDateTime(last.endTime)}`;
-}
-
-function getForecastRangeLabel(periods: HourlyPeriod[]) {
-  if (periods.length === 0) {
-    return "NWS pending";
-  }
-
-  const first = periods[0];
-  const last = periods[periods.length - 1];
-  return `${formatDateTime(first.startTime)}-${formatDateTime(last.startTime)}`;
 }
 
 function compactDateLabel(label: string) {
