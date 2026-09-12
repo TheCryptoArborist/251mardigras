@@ -4,6 +4,7 @@ import { SITE_BRAND_NAME, SITE_LOGO_ALT, SITE_LOGO_PATH } from "@/lib/brand";
 
 const navItems = [
   { href: "/", label: "Home" },
+  { href: "/schedule", label: "Schedule" },
   { href: "/watch", label: "Watch" },
   { href: "/events", label: "Events" },
   { href: "/food-drink", label: "Food & Drink" },
@@ -22,7 +23,7 @@ export function SiteHeader() {
           </span>
           <span className="min-w-0">
             <span className="block text-lg font-black leading-tight tracking-tight">{SITE_BRAND_NAME}</span>
-            <span className="block text-xs font-medium text-purple-100">Parade coverage, food, parking, weather, and gear</span>
+            <span className="block text-xs font-medium text-purple-100">Parade schedule, coverage, food, parking, weather, and gear</span>
           </span>
         </Link>
 
