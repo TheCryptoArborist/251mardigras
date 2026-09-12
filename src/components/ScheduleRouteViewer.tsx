@@ -1,6 +1,6 @@
 "use client";
 
-import { CalendarDays, Check, ExternalLink, MapPinned, Share2, ShieldCheck, X } from "lucide-react";
+import { Check, ExternalLink, MapPinned, Share2, ShieldCheck, X } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { StatusPill } from "@/components/StatusPill";
 
@@ -213,24 +213,10 @@ export function ScheduleRouteViewer({ schedule }: ScheduleRouteViewerProps) {
 
           <div className="relative z-10 mt-4 flex flex-wrap gap-2">
             <a
-              href="#quick-parade-schedule"
-              className="inline-flex items-center gap-2 rounded-full border border-parade-gold/55 bg-parade-gold px-4 py-2.5 text-sm font-black text-parade-purpleDark shadow-glow transition hover:-translate-y-0.5 hover:bg-parade-goldBright"
-            >
-              Schedule <CalendarDays className="h-4 w-4" aria-hidden="true" />
-            </a>
-            <a
               href="#all-route-maps"
               className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2.5 text-sm font-black text-white transition hover:-translate-y-0.5 hover:bg-white/15"
             >
               Route maps <MapPinned className="h-4 w-4" aria-hidden="true" />
-            </a>
-            <a
-              href={schedule.source.url}
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2.5 text-sm font-black text-white transition hover:-translate-y-0.5 hover:bg-white/15"
-            >
-              Official source <ExternalLink className="h-4 w-4" aria-hidden="true" />
             </a>
           </div>
         </section>
