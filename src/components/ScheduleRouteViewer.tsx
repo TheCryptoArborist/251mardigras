@@ -271,51 +271,51 @@ export function ScheduleRouteViewer({ schedule, focusParadeId }: ScheduleRouteVi
         )}
 
         <section id="quick-parade-schedule" className="scroll-mt-28 space-y-4" aria-labelledby="quick-parade-schedule-heading">
-          <div className="relative overflow-hidden rounded-[1.35rem] border border-parade-gold/60 bg-gradient-to-br from-parade-purpleDeep via-parade-purpleDark to-parade-purple p-4 text-white shadow-glow sm:p-5">
-            <span className="pointer-events-none absolute right-[-5rem] top-[-5rem] h-44 w-44 rounded-full bg-parade-gold/25 blur-3xl" aria-hidden="true" />
-            <span className="pointer-events-none absolute bottom-[-6rem] left-[-4rem] h-44 w-44 rounded-full bg-white/10 blur-3xl" aria-hidden="true" />
-            <FestiveBeadGarland compact />
+          <div className="relative overflow-hidden rounded-[1.35rem] border-2 border-[#ffd45a] bg-[linear-gradient(120deg,#2b0645_0%,#591284_52%,#7d259f_100%)] text-white shadow-[0_18px_50px_rgba(214,155,22,0.28)]">
+            <span className="pointer-events-none absolute bottom-[-5rem] right-[-3rem] h-44 w-44 rounded-full border-[1.75rem] border-[#ffd45a]/15" aria-hidden="true" />
 
-            <div className="relative z-10 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+            <div className="relative z-10 flex flex-col gap-3 bg-[linear-gradient(100deg,#d69b16_0%,#ffd45a_48%,#fff0a5_100%)] px-4 py-4 text-[#351052] md:flex-row md:items-end md:justify-between sm:px-5">
               <div>
-                <p className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.18em] text-parade-goldBright">
+                <p className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.18em] text-[#591284]">
                   <Sparkles className="h-4 w-4" aria-hidden="true" /> Quick schedule
                 </p>
-                <h2 id="quick-parade-schedule-heading" className="mt-1 text-3xl font-black tracking-tight text-white drop-shadow-lg">Daily parade listings</h2>
+                <h2 id="quick-parade-schedule-heading" className="mt-1 text-3xl font-black tracking-tight text-[#2b0645]">Daily parade listings</h2>
               </div>
-              <p className="max-w-2xl text-sm font-semibold leading-6 text-purple-100">
+              <p className="max-w-2xl text-sm font-bold leading-6 text-[#4a0b70]">
                 Select a date below to jump directly to that day’s lineup.
               </p>
             </div>
 
-            <div className="relative z-10 mt-4 flex gap-2 overflow-x-auto pb-1" aria-label="Jump to a schedule date">
-              {filteredDays.map((day) => (
-                <a
-                  key={day.date}
-                  href={`#${day.date}`}
-                  className="shrink-0 rounded-full border border-parade-gold/55 bg-white/10 px-3 py-2 text-xs font-black uppercase tracking-wide text-white shadow-sm transition hover:-translate-y-0.5 hover:border-parade-gold hover:bg-parade-gold hover:text-parade-purpleDark"
-                >
-                  {compactDateLabel(day.label)}
-                </a>
-              ))}
-            </div>
-
-            <div className="relative z-10 mt-4 border-t border-parade-gold/25 pt-4">
-              <div className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.16em] text-parade-goldBright">
-                <MapPinned className="h-4 w-4" aria-hidden="true" /> Filter by route
-              </div>
-              <div className="mt-3 flex gap-2 overflow-x-auto pb-1" aria-label="Filter schedule by route">
-                {["All routes", ...routeOptions].map((route) => (
-                  <button
-                    key={route}
-                    type="button"
-                    onClick={() => setRouteFilter(route)}
-                    aria-pressed={routeFilter === route}
-                    className={`shrink-0 rounded-full border px-3 py-2 text-xs font-black uppercase tracking-wide transition ${routeFilter === route ? "border-parade-gold bg-parade-gold text-parade-purpleDark shadow-glow" : "border-parade-gold/35 bg-white/10 text-white hover:border-parade-gold hover:bg-white/15"}`}
+            <div className="relative z-10 p-4 sm:p-5">
+              <div className="flex gap-2 overflow-x-auto pb-1" aria-label="Jump to a schedule date">
+                {filteredDays.map((day) => (
+                  <a
+                    key={day.date}
+                    href={`#${day.date}`}
+                    className="shrink-0 rounded-full border border-[#ffd45a]/80 bg-[#fffaf0] px-3 py-2 text-xs font-black uppercase tracking-wide text-[#4a0b70] shadow-sm transition hover:-translate-y-0.5 hover:bg-[#ffd45a]"
                   >
-                    {route}
-                  </button>
+                    {compactDateLabel(day.label)}
+                  </a>
                 ))}
+              </div>
+
+              <div className="mt-4 border-t border-[#ffd45a]/35 pt-4">
+                <div className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.16em] text-[#ffd45a]">
+                  <MapPinned className="h-4 w-4" aria-hidden="true" /> Filter by route
+                </div>
+                <div className="mt-3 flex gap-2 overflow-x-auto pb-1" aria-label="Filter schedule by route">
+                  {["All routes", ...routeOptions].map((route) => (
+                    <button
+                      key={route}
+                      type="button"
+                      onClick={() => setRouteFilter(route)}
+                      aria-pressed={routeFilter === route}
+                      className={`shrink-0 rounded-full border px-3 py-2 text-xs font-black uppercase tracking-wide transition ${routeFilter === route ? "border-[#ffd45a] bg-[#ffd45a] text-[#351052] shadow-glow" : "border-[#fff2b5]/60 bg-[#2b0645]/35 text-[#fffaf0] hover:border-[#ffd45a] hover:bg-[#2b0645]/60"}`}
+                    >
+                      {route}
+                    </button>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
@@ -478,59 +478,44 @@ function FeaturedParadePanel({
   const countdown = now ? formatCountdown(start.getTime() - now.getTime()) : "Calculating…";
 
   return (
-    <section className="relative overflow-hidden rounded-[1.45rem] border border-parade-gold/65 bg-gradient-to-br from-parade-purpleDeep via-parade-purpleDark to-parade-purple p-5 text-white shadow-glow sm:p-6">
-      <span className="pointer-events-none absolute left-[-4rem] top-[-5rem] h-40 w-40 rounded-full bg-parade-gold/25 blur-3xl" aria-hidden="true" />
-      <span className="pointer-events-none absolute bottom-[-5rem] right-[-3rem] h-44 w-44 rounded-full bg-parade-gold/20 blur-3xl" aria-hidden="true" />
-      <FestiveBeadGarland />
-      <div className="relative z-10 grid gap-5 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center">
+    <section className="relative overflow-hidden rounded-[1.45rem] border-2 border-[#ffd45a] bg-[linear-gradient(120deg,#2b0645_0%,#591284_48%,#8a2bad_100%)] p-5 pt-7 text-white shadow-[0_20px_55px_rgba(214,155,22,0.32)] sm:p-6 sm:pt-8">
+      <span className="pointer-events-none absolute inset-x-0 top-0 h-2 bg-[linear-gradient(90deg,#d69b16_0%,#ffd45a_30%,#fff2b5_50%,#ffd45a_70%,#d69b16_100%)]" aria-hidden="true" />
+      <span className="pointer-events-none absolute right-[-3rem] top-[-4rem] h-48 w-48 rounded-full border-[2rem] border-[#ffd45a]/15" aria-hidden="true" />
+      <span className="pointer-events-none absolute bottom-[-6rem] left-[35%] h-44 w-44 rounded-full bg-[#ffd45a]/15 blur-3xl" aria-hidden="true" />
+      <div className="relative z-10 grid gap-6 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center">
         <div className="flex items-start gap-4">
-          <span className="hidden h-16 w-16 shrink-0 place-items-center rounded-full border-4 border-parade-goldBright/70 bg-parade-gold text-parade-purpleDark shadow-glow ring-4 ring-white/10 sm:grid" aria-hidden="true">
+          <span className="hidden h-16 w-16 shrink-0 place-items-center rounded-full border-4 border-[#fff2b5] bg-[#ffd45a] text-[#3b075f] shadow-[0_0_30px_rgba(255,212,90,0.55)] ring-4 ring-[#ffd45a]/20 sm:grid" aria-hidden="true">
             <PartyPopper className="h-8 w-8" />
           </span>
           <div>
-            <p className="inline-flex items-center gap-2 rounded-full border border-parade-gold/45 bg-parade-gold/15 px-3 py-1.5 text-xs font-black uppercase tracking-[0.18em] text-parade-goldBright shadow-sm">
+            <p className="inline-flex items-center gap-2 rounded-full bg-[#ffd45a] px-3 py-1.5 text-xs font-black uppercase tracking-[0.18em] text-[#3b075f] shadow-md">
               <Clock3 className="h-4 w-4" aria-hidden="true" /> {isFocused ? "Shared parade" : "Next parade"}
             </p>
-            <h2 className="mt-3 text-2xl font-black leading-tight text-white drop-shadow-lg sm:text-3xl">{entry.name}</h2>
-            <p className="mt-2 text-sm font-black text-parade-goldBright sm:text-base">
+            <h2 className="mt-3 text-2xl font-black leading-tight text-[#fffaf0] drop-shadow-lg sm:text-3xl">{entry.name}</h2>
+            <p className="mt-2 text-sm font-black text-[#ffd45a] sm:text-base">
               {formatParadeShareDate(entry.day.date)} • {entry.time} • {entry.route}
             </p>
-            {!isFocused ? <p className="mt-2 text-sm font-bold text-purple-100">{countdown}</p> : null}
+            {!isFocused ? <p className="mt-2 text-sm font-bold text-[#fff2d0]">{countdown}</p> : null}
           </div>
         </div>
 
         <div className="flex flex-wrap gap-2 lg:max-w-[28rem] lg:justify-end">
-          <a href={`#${entry.id}`} className="inline-flex items-center justify-center gap-2 rounded-full bg-parade-gold px-4 py-2.5 text-sm font-black text-parade-purpleDark shadow-glow transition hover:-translate-y-0.5 hover:bg-parade-goldBright">
+          <a href={`#${entry.id}`} className="inline-flex items-center justify-center gap-2 rounded-full bg-[#ffd45a] px-4 py-2.5 text-sm font-black text-[#3b075f] shadow-md transition hover:-translate-y-0.5 hover:bg-[#ffe584]">
             View listing <ChevronDown className="h-4 w-4" aria-hidden="true" />
           </a>
-          <button type="button" onClick={() => onMap(entry.route)} className="inline-flex items-center justify-center gap-2 rounded-full border border-parade-gold/45 bg-white/10 px-4 py-2.5 text-sm font-black text-white transition hover:-translate-y-0.5 hover:bg-white/15">
+          <button type="button" onClick={() => onMap(entry.route)} className="inline-flex items-center justify-center gap-2 rounded-full border border-[#fff2b5] bg-[#fffaf0] px-4 py-2.5 text-sm font-black text-[#4a0b70] shadow-sm transition hover:-translate-y-0.5 hover:bg-white">
             {entry.route} map <MapPinned className="h-4 w-4" aria-hidden="true" />
           </button>
-          <button type="button" onClick={() => onCalendar(entry, entry.day)} className="inline-flex items-center justify-center gap-2 rounded-full border border-parade-gold/45 bg-white/10 px-4 py-2.5 text-sm font-black text-white transition hover:-translate-y-0.5 hover:bg-white/15">
+          <button type="button" onClick={() => onCalendar(entry, entry.day)} className="inline-flex items-center justify-center gap-2 rounded-full border border-[#ffd45a]/70 bg-[#2b0645]/35 px-4 py-2.5 text-sm font-black text-[#fffaf0] transition hover:-translate-y-0.5 hover:bg-[#2b0645]/55">
             Calendar <CalendarPlus className="h-4 w-4" aria-hidden="true" />
           </button>
-          <button type="button" onClick={() => onShare(entry, entry.day)} className="inline-flex items-center justify-center gap-2 rounded-full border border-parade-gold/45 bg-white/10 px-4 py-2.5 text-sm font-black text-white transition hover:-translate-y-0.5 hover:bg-white/15">
+          <button type="button" onClick={() => onShare(entry, entry.day)} className="inline-flex items-center justify-center gap-2 rounded-full border border-[#ffd45a]/70 bg-[#2b0645]/35 px-4 py-2.5 text-sm font-black text-[#fffaf0] transition hover:-translate-y-0.5 hover:bg-[#2b0645]/55">
             {shareStatus === "shared" || shareStatus === "copied" ? <Check className="h-4 w-4" aria-hidden="true" /> : <Share2 className="h-4 w-4" aria-hidden="true" />}
             {getShareButtonLabel(shareStatus)}
           </button>
         </div>
       </div>
     </section>
-  );
-}
-
-function FestiveBeadGarland({ compact = false }: { compact?: boolean }) {
-  return (
-    <svg
-      className={`pointer-events-none absolute inset-x-0 top-0 w-full ${compact ? "h-16 opacity-60" : "h-24 opacity-75"}`}
-      viewBox="0 0 1200 100"
-      preserveAspectRatio="none"
-      aria-hidden="true"
-    >
-      <path d="M-20 3 Q 280 105 610 18 T 1220 10" fill="none" stroke="rgba(255,201,40,0.95)" strokeWidth="9" strokeLinecap="round" strokeDasharray="1 17" />
-      <path d="M-20 20 Q 330 82 650 8 T 1220 24" fill="none" stroke="rgba(255,255,255,0.72)" strokeWidth="7" strokeLinecap="round" strokeDasharray="1 16" />
-      <path d="M-20 0 Q 250 62 520 12 T 1220 4" fill="none" stroke="rgba(214,167,255,0.8)" strokeWidth="7" strokeLinecap="round" strokeDasharray="1 15" />
-    </svg>
   );
 }
 
