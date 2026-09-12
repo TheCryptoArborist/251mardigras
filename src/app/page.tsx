@@ -260,7 +260,10 @@ function SocialLinksStrip({ className = "" }: { className?: string }) {
       aria-label="Follow Mardi Gras - Mobile, Alabama on social media"
       className={`rounded-2xl border border-parade-gold/35 bg-white/10 p-4 shadow-civic backdrop-blur ${className}`}
     >
-      <p className="text-xs font-black uppercase tracking-[0.16em] text-parade-goldBright">Follow for updates</p>
+      <div className="flex items-center gap-2.5">
+        <HomepageBannerIcon kind="logo" size="small" />
+        <p className="text-xs font-black uppercase tracking-[0.16em] text-parade-goldBright">Follow for updates</p>
+      </div>
       <div className="mt-3 flex flex-wrap gap-2.5">
         {socialLinks.map((link) => (
           <a
@@ -283,9 +286,12 @@ function SocialLinksStrip({ className = "" }: { className?: string }) {
 function HomepageVideoSpotlight({ className = "" }: { className?: string }) {
   return (
     <section className={`overflow-hidden rounded-[1.5rem] border border-parade-gold/45 bg-white/12 p-3 shadow-glow backdrop-blur ${className}`} aria-label="Every Day is Mardi Gras in Mobile, Alabama video">
-      <h2 className="px-1 pb-3 text-xl font-black text-white sm:text-2xl">
-        Every Day is Mardi Gras in Mobile, Alabama
-      </h2>
+      <div className="flex items-center gap-3 px-1 pb-3">
+        <HomepageBannerIcon kind="jester" size="medium" />
+        <h2 className="text-xl font-black leading-tight text-white sm:text-2xl">
+          Every Day is Mardi Gras in Mobile, Alabama
+        </h2>
+      </div>
       <div className="relative aspect-video overflow-hidden rounded-[1.15rem] border border-parade-gold/35 bg-parade-purpleDark shadow-civic">
         <iframe
           src={HOMEPAGE_FEATURED_VIDEO_EMBED_URL}
@@ -305,9 +311,7 @@ function CommunityEventsCallout({ className = "" }: { className?: string }) {
     <section className={`relative overflow-hidden rounded-[1.5rem] border border-parade-gold/45 bg-gradient-to-br from-parade-purpleDeep via-parade-purpleDark to-parade-purple p-5 text-white shadow-card ${className}`}>
       <span className="pointer-events-none absolute right-[-4rem] top-[-4rem] h-32 w-32 rounded-full bg-parade-gold/20 blur-2xl" aria-hidden="true" />
       <div className="relative z-10">
-        <div className="grid h-12 w-12 place-items-center rounded-2xl bg-parade-gold text-parade-purpleDark shadow-glow">
-          <CalendarDays className="h-6 w-6" aria-hidden="true" />
-        </div>
+        <HomepageBannerIcon kind="king" size="medium" />
         <p className="mt-4 text-xs font-black uppercase tracking-[0.16em] text-parade-goldBright">Community Mardi Gras Events</p>
         <h2 className="mt-1 text-2xl font-black leading-tight text-white">Have a Mardi Gras-related event?</h2>
         <p className="mt-2 text-sm leading-6 text-purple-100">
@@ -332,6 +336,24 @@ function SocialBrandIcon({ platform }: { platform: (typeof socialLinks)[number][
   if (platform === "YouTube") return <YouTubeLogo />;
   if (platform === "TikTok") return <TikTokLogo />;
   return <XLogo />;
+}
+
+function HomepageBannerIcon({ kind, size }: { kind: "jester" | "logo" | "king"; size: "small" | "medium" }) {
+  const sizeClass = size === "medium" ? "h-12 w-12 border-[3px]" : "h-8 w-8 border-2";
+  const source = kind === "jester"
+    ? "/images/schedule/mardi-gras-jester-icon.webp"
+    : kind === "king"
+      ? "/images/schedule/mardi-gras-king-icon.webp"
+      : "/images/mardi-gras-mobile-logo.png";
+
+  return (
+    <span className={`relative block shrink-0 overflow-hidden rounded-full border-[#fff2b5] bg-[#2b0645] shadow-[0_0_20px_rgba(255,212,90,0.42)] ring-2 ring-[#d69b16]/30 ${sizeClass}`} aria-hidden="true">
+      <span
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        style={{ backgroundImage: `url('${source}')` }}
+      />
+    </span>
+  );
 }
 
 function YouTubeLogo() {
