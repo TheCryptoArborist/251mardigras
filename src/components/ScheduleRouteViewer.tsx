@@ -1,6 +1,6 @@
 "use client";
 
-import { CalendarPlus, Check, ChevronDown, Clock3, ExternalLink, MapPinned, PartyPopper, Share2, ShieldCheck, Sparkles, X } from "lucide-react";
+import { CalendarPlus, Check, ChevronDown, Clock3, ExternalLink, MapPinned, Share2, ShieldCheck, Sparkles, X } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { StatusPill } from "@/components/StatusPill";
 
@@ -275,11 +275,14 @@ export function ScheduleRouteViewer({ schedule, focusParadeId }: ScheduleRouteVi
             <span className="pointer-events-none absolute bottom-[-5rem] right-[-3rem] h-44 w-44 rounded-full border-[1.75rem] border-[#ffd45a]/15" aria-hidden="true" />
 
             <div className="relative z-10 flex flex-col gap-3 bg-[linear-gradient(100deg,#d69b16_0%,#ffd45a_48%,#fff0a5_100%)] px-4 py-4 text-[#351052] md:flex-row md:items-end md:justify-between sm:px-5">
-              <div>
-                <p className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.18em] text-[#591284]">
-                  <Sparkles className="h-4 w-4" aria-hidden="true" /> Quick schedule
-                </p>
-                <h2 id="quick-parade-schedule-heading" className="mt-1 text-3xl font-black tracking-tight text-[#2b0645]">Daily parade listings</h2>
+              <div className="flex items-center gap-3">
+                <BannerArtworkIcon kind="jester" size="medium" />
+                <div>
+                  <p className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.18em] text-[#591284]">
+                    <Sparkles className="h-4 w-4" aria-hidden="true" /> Quick schedule
+                  </p>
+                  <h2 id="quick-parade-schedule-heading" className="mt-1 text-3xl font-black tracking-tight text-[#2b0645]">Daily parade listings</h2>
+                </div>
               </div>
               <p className="max-w-2xl text-sm font-bold leading-6 text-[#4a0b70]">
                 Select a date below to jump directly to that day’s lineup.
@@ -301,7 +304,7 @@ export function ScheduleRouteViewer({ schedule, focusParadeId }: ScheduleRouteVi
 
               <div className="mt-4 border-t border-[#ffd45a]/35 pt-4">
                 <div className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.16em] text-[#ffd45a]">
-                  <MapPinned className="h-4 w-4" aria-hidden="true" /> Filter by route
+                  <BannerArtworkIcon kind="logo" size="small" /> Filter by route
                 </div>
                 <div className="mt-3 flex gap-2 overflow-x-auto pb-1" aria-label="Filter schedule by route">
                   {["All routes", ...routeOptions].map((route) => (
@@ -484,9 +487,7 @@ function FeaturedParadePanel({
       <span className="pointer-events-none absolute bottom-[-6rem] left-[35%] h-44 w-44 rounded-full bg-[#ffd45a]/15 blur-3xl" aria-hidden="true" />
       <div className="relative z-10 grid gap-6 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center">
         <div className="flex items-start gap-4">
-          <span className="hidden h-16 w-16 shrink-0 place-items-center rounded-full border-4 border-[#fff2b5] bg-[#ffd45a] text-[#3b075f] shadow-[0_0_30px_rgba(255,212,90,0.55)] ring-4 ring-[#ffd45a]/20 sm:grid" aria-hidden="true">
-            <PartyPopper className="h-8 w-8" />
-          </span>
+          <span className="hidden sm:block"><BannerArtworkIcon kind="king" size="large" /></span>
           <div>
             <p className="inline-flex items-center gap-2 rounded-full bg-[#ffd45a] px-3 py-1.5 text-xs font-black uppercase tracking-[0.18em] text-[#3b075f] shadow-md">
               <Clock3 className="h-4 w-4" aria-hidden="true" /> {isFocused ? "Shared parade" : "Next parade"}
@@ -516,6 +517,26 @@ function FeaturedParadePanel({
         </div>
       </div>
     </section>
+  );
+}
+
+function BannerArtworkIcon({ kind, size }: { kind: "jester" | "logo" | "king"; size: "small" | "medium" | "large" }) {
+  const sizeClass = size === "large" ? "h-16 w-16 border-4" : size === "medium" ? "h-12 w-12 border-[3px]" : "h-7 w-7 border-2";
+  const source = kind === "jester"
+    ? "/images/schedule/mardi-gras-jester-icon.webp"
+    : kind === "king"
+      ? "/images/schedule/mardi-gras-king-icon.webp"
+      : "/images/mardi-gras-mobile-logo.png";
+
+  return (
+    <span className={`relative block shrink-0 overflow-hidden rounded-full border-[#fff2b5] bg-[#2b0645] shadow-[0_0_24px_rgba(255,212,90,0.48)] ring-2 ring-[#d69b16]/35 ${sizeClass}`} aria-hidden="true">
+      <span
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        style={{
+          backgroundImage: `url('${source}')`
+        }}
+      />
+    </span>
   );
 }
 
