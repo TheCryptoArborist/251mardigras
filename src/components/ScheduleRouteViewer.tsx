@@ -1,6 +1,6 @@
 "use client";
 
-import { Check, ExternalLink, MapPinned, Share2, ShieldCheck, X } from "lucide-react";
+import { CalendarPlus, Check, ChevronDown, Clock3, ExternalLink, MapPinned, Share2, ShieldCheck, X } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { StatusPill } from "@/components/StatusPill";
 
@@ -43,9 +43,12 @@ type RouteMap = {
 
 type ScheduleRouteViewerProps = {
   schedule: ParadeSchedule;
+  focusParadeId?: string;
 };
 
 type ShareStatus = "idle" | "shared" | "copied" | "error";
+type CalendarSelection = { parade: ParadeEntry; day: ParadeDay };
+type TimedParade = ParadeEntry & { day: ParadeDay };
 
 const SCHEDULE_SHARE_BASE_URL = "https://mg251.xyz/schedule";
 
@@ -102,15 +105,35 @@ const routeMaps: RouteMap[] = [
 
 const routeMapByName = new Map(routeMaps.map((route) => [route.name, route]));
 
-export function ScheduleRouteViewer({ schedule }: ScheduleRouteViewerProps) {
+export function ScheduleRouteViewer({ schedule, focusParadeId }: ScheduleRouteViewerProps) {
   const [selectedRouteName, setSelectedRouteName] = useState<string | null>(null);
+  const [selectedCalendar, setSelectedCalendar] = useState<CalendarSelection | null>(null);
   const [shareStatusByParadeId, setShareStatusByParadeId] = useState<Record<string, ShareStatus>>({});
+  const [routeFilter, setRouteFilter] = useState("All routes");
+  const [now, setNow] = useState<Date | null>(null);
   const allParades = useMemo(() => schedule.days.flatMap((day) => day.parades.map((parade) => ({ ...parade, day }))), [schedule.days]);
   const firstParade = allParades[0];
   const selectedRoute = selectedRouteName ? routeMapByName.get(selectedRouteName) ?? null : null;
+  const routeOptions = useMemo(() => Array.from(new Set(allParades.map((parade) => parade.route))).sort(), [allParades]);
+  const filteredDays = useMemo(
+    () => schedule.days
+      .map((day) => ({ ...day, parades: routeFilter === "All routes" ? day.parades : day.parades.filter((parade) => parade.route === routeFilter) }))
+      .filter((day) => day.parades.length > 0),
+    [routeFilter, schedule.days]
+  );
+  const currentDateKey = now ? getCentralDateKey(now) : null;
+  const focusedParade = focusParadeId ? allParades.find((parade) => parade.id === focusParadeId) ?? null : null;
+  const nextParade = now ? findNextParade(allParades, now, routeFilter) : firstParade ?? null;
+  const featuredParade = focusedParade ?? nextParade;
 
   useEffect(() => {
-    if (!selectedRouteName) {
+    setNow(new Date());
+    const timer = window.setInterval(() => setNow(new Date()), 60000);
+    return () => window.clearInterval(timer);
+  }, []);
+
+  useEffect(() => {
+    if (!selectedRouteName && !selectedCalendar) {
       return undefined;
     }
 
@@ -120,6 +143,7 @@ export function ScheduleRouteViewer({ schedule }: ScheduleRouteViewerProps) {
     function handleKeyDown(event: KeyboardEvent) {
       if (event.key === "Escape") {
         setSelectedRouteName(null);
+        setSelectedCalendar(null);
       }
     }
 
@@ -129,7 +153,7 @@ export function ScheduleRouteViewer({ schedule }: ScheduleRouteViewerProps) {
       document.body.style.overflow = originalOverflow;
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [selectedRouteName]);
+  }, [selectedCalendar, selectedRouteName]);
 
   function openRouteMap(routeName: string) {
     setSelectedRouteName(routeName);
@@ -137,6 +161,10 @@ export function ScheduleRouteViewer({ schedule }: ScheduleRouteViewerProps) {
 
   function closeRouteMap() {
     setSelectedRouteName(null);
+  }
+
+  function openCalendar(parade: ParadeEntry, day: ParadeDay) {
+    setSelectedCalendar({ parade, day });
   }
 
   function markParadeShareStatus(paradeId: string, status: ShareStatus) {
@@ -218,8 +246,29 @@ export function ScheduleRouteViewer({ schedule }: ScheduleRouteViewerProps) {
             >
               Route maps <MapPinned className="h-4 w-4" aria-hidden="true" />
             </a>
+            <span className="inline-flex items-center gap-2 px-1 py-2.5 text-xs font-bold text-purple-100">
+              <ShieldCheck className="h-4 w-4 text-parade-goldBright" aria-hidden="true" />
+              Last verified {formatVerificationDate(schedule.lastTranscribedAt)}
+            </span>
           </div>
         </section>
+
+        {featuredParade ? (
+          <FeaturedParadePanel
+            entry={featuredParade}
+            now={now}
+            isFocused={Boolean(focusedParade)}
+            shareStatus={shareStatusByParadeId[featuredParade.id] ?? "idle"}
+            onMap={openRouteMap}
+            onCalendar={openCalendar}
+            onShare={shareParade}
+          />
+        ) : (
+          <section className="rounded-[1.35rem] border border-parade-gold/35 bg-white/10 p-5 text-white shadow-civic backdrop-blur">
+            <p className="text-xs font-black uppercase tracking-[0.18em] text-parade-goldBright">Season complete</p>
+            <h2 className="mt-2 text-2xl font-black">All listed 2027 parades have concluded.</h2>
+          </section>
+        )}
 
         <section id="quick-parade-schedule" className="scroll-mt-28 space-y-4" aria-labelledby="quick-parade-schedule-heading">
           <div className="rounded-[1.35rem] border border-parade-gold/35 bg-white/10 p-4 text-white shadow-civic backdrop-blur sm:p-5">
@@ -234,7 +283,7 @@ export function ScheduleRouteViewer({ schedule }: ScheduleRouteViewerProps) {
             </div>
 
             <div className="mt-4 flex gap-2 overflow-x-auto pb-1" aria-label="Jump to a schedule date">
-              {schedule.days.map((day) => (
+              {filteredDays.map((day) => (
                 <a
                   key={day.date}
                   href={`#${day.date}`}
@@ -244,34 +293,63 @@ export function ScheduleRouteViewer({ schedule }: ScheduleRouteViewerProps) {
                 </a>
               ))}
             </div>
+
+            <div className="mt-4 border-t border-white/10 pt-4">
+              <div className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.16em] text-parade-goldBright">
+                <MapPinned className="h-4 w-4" aria-hidden="true" /> Filter by route
+              </div>
+              <div className="mt-3 flex gap-2 overflow-x-auto pb-1" aria-label="Filter schedule by route">
+                {["All routes", ...routeOptions].map((route) => (
+                  <button
+                    key={route}
+                    type="button"
+                    onClick={() => setRouteFilter(route)}
+                    aria-pressed={routeFilter === route}
+                    className={`shrink-0 rounded-full border px-3 py-2 text-xs font-black uppercase tracking-wide transition ${routeFilter === route ? "border-parade-gold bg-parade-gold text-parade-purpleDark shadow-glow" : "border-parade-gold/35 bg-white/10 text-white hover:border-parade-gold hover:bg-white/15"}`}
+                  >
+                    {route}
+                  </button>
+                ))}
+              </div>
+            </div>
           </div>
 
           <div className="space-y-4">
-            {schedule.days.map((day) => (
-              <section key={day.date} id={day.date} className="scroll-mt-28 overflow-hidden rounded-[1.35rem] border border-parade-gold/35 bg-parade-purpleDeep/62 shadow-card backdrop-blur" aria-labelledby={`${day.date}-heading`}>
+            {filteredDays.map((day) => {
+              const isToday = currentDateKey === day.date;
+
+              return (
+              <section key={day.date} id={day.date} className={`scroll-mt-28 overflow-hidden rounded-[1.35rem] bg-parade-purpleDeep/62 shadow-card backdrop-blur ${isToday ? "border-2 border-parade-gold shadow-glow" : "border border-parade-gold/35"}`} aria-labelledby={`${day.date}-heading`}>
                 <div className="border-b border-parade-gold/25 bg-gradient-to-r from-parade-purpleDeep via-parade-purpleDark to-parade-purple px-4 py-3 text-white sm:px-5">
                   <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                     <div>
                       <p className="text-xs font-black uppercase tracking-[0.18em] text-parade-goldBright">{day.parades.length} parade{day.parades.length === 1 ? "" : "s"}</p>
                       <h3 id={`${day.date}-heading`} className="mt-1 text-xl font-black leading-tight text-white sm:text-2xl">{day.label}</h3>
                     </div>
-                    {day.specialLabel ? <StatusPill tone="gold">{day.specialLabel}</StatusPill> : null}
+                    <div className="flex flex-wrap gap-2">
+                      {isToday ? <StatusPill tone="gold">Today</StatusPill> : null}
+                      {day.specialLabel ? <StatusPill tone="gold">{day.specialLabel}</StatusPill> : null}
+                    </div>
                   </div>
                 </div>
 
                 <div className="divide-y divide-parade-gold/20 bg-white/5">
                   {day.parades.map((parade) => {
                     const shareStatus = shareStatusByParadeId[parade.id] ?? "idle";
+                    const paradeStatus = now ? getParadeStatus(parade, day, now) : null;
 
                     return (
-                      <article key={parade.id} id={parade.id} className="scroll-mt-28 px-4 py-3.5 transition hover:bg-white/10 sm:px-5">
+                      <article key={parade.id} id={parade.id} className={`scroll-mt-28 px-4 py-3.5 transition hover:bg-white/10 sm:px-5 ${focusParadeId === parade.id ? "bg-parade-gold/10 ring-1 ring-inset ring-parade-gold/50" : ""}`}>
                         <div className="grid gap-3 md:grid-cols-[7.75rem_minmax(0,1fr)_auto] md:items-center">
                           <div className="inline-flex w-fit items-center rounded-full bg-parade-gold px-3 py-1.5 text-sm font-black uppercase tracking-wide text-parade-purpleDark shadow-glow">
                             {parade.time}
                           </div>
 
                           <div className="min-w-0">
-                            <h4 className="text-lg font-black leading-tight text-white sm:text-xl">{parade.name}</h4>
+                            <div className="flex flex-wrap items-center gap-2">
+                              <h4 className="text-lg font-black leading-tight text-white sm:text-xl">{parade.name}</h4>
+                              {paradeStatus ? <ParadeStatusPill status={paradeStatus} /> : null}
+                            </div>
                             {parade.routeNote ? (
                               <p className="mt-1 text-xs font-bold uppercase tracking-wide text-purple-100">Route exception listed by official schedule</p>
                             ) : null}
@@ -294,6 +372,14 @@ export function ScheduleRouteViewer({ schedule }: ScheduleRouteViewerProps) {
                               {shareStatus === "shared" || shareStatus === "copied" ? <Check className="h-3.5 w-3.5" aria-hidden="true" /> : <Share2 className="h-3.5 w-3.5" aria-hidden="true" />}
                               {getShareButtonLabel(shareStatus)}
                             </button>
+                            <button
+                              type="button"
+                              onClick={() => openCalendar(parade, day)}
+                              className="inline-flex items-center justify-center gap-1.5 rounded-full border border-parade-gold/45 bg-white/10 px-3 py-2 text-xs font-black uppercase tracking-wide text-white transition hover:-translate-y-0.5 hover:border-parade-gold hover:bg-parade-gold hover:text-parade-purpleDark"
+                              aria-label={`Add ${parade.name} to calendar`}
+                            >
+                              <CalendarPlus className="h-3.5 w-3.5" aria-hidden="true" /> Calendar
+                            </button>
                           </div>
                         </div>
                       </article>
@@ -301,7 +387,8 @@ export function ScheduleRouteViewer({ schedule }: ScheduleRouteViewerProps) {
                   })}
                 </div>
               </section>
-            ))}
+              );
+            })}
           </div>
         </section>
 
@@ -350,6 +437,7 @@ export function ScheduleRouteViewer({ schedule }: ScheduleRouteViewerProps) {
       </div>
 
       {selectedRoute ? <RouteMapDialog route={selectedRoute} schedule={schedule} onClose={closeRouteMap} /> : null}
+      {selectedCalendar ? <CalendarDialog selection={selectedCalendar} onClose={() => setSelectedCalendar(null)} /> : null}
     </main>
   );
 }
@@ -359,6 +447,100 @@ function ScheduleStat({ label, value }: { label: string; value: string }) {
     <div className="rounded-2xl border border-white/15 bg-white/10 p-3 shadow-sm backdrop-blur">
       <p className="text-[0.65rem] font-black uppercase tracking-[0.16em] text-parade-goldBright">{label}</p>
       <p className="mt-1 text-sm font-black leading-tight text-white sm:text-base">{value}</p>
+    </div>
+  );
+}
+
+function FeaturedParadePanel({
+  entry,
+  now,
+  isFocused,
+  shareStatus,
+  onMap,
+  onCalendar,
+  onShare
+}: {
+  entry: TimedParade;
+  now: Date | null;
+  isFocused: boolean;
+  shareStatus: ShareStatus;
+  onMap: (routeName: string) => void;
+  onCalendar: (parade: ParadeEntry, day: ParadeDay) => void;
+  onShare: (parade: ParadeEntry, day: ParadeDay) => Promise<void>;
+}) {
+  const start = getParadeStart(entry, entry.day);
+  const countdown = now ? formatCountdown(start.getTime() - now.getTime()) : "Calculating…";
+
+  return (
+    <section className="relative overflow-hidden rounded-[1.45rem] border border-parade-gold/55 bg-gradient-to-r from-parade-goldSoft via-white to-parade-purpleMist p-5 text-parade-ink shadow-glow sm:p-6">
+      <span className="pointer-events-none absolute right-[-3rem] top-[-4rem] h-36 w-36 rounded-full bg-parade-gold/25 blur-2xl" aria-hidden="true" />
+      <div className="relative z-10 grid gap-5 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center">
+        <div>
+          <p className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.18em] text-parade-purple">
+            <Clock3 className="h-4 w-4" aria-hidden="true" /> {isFocused ? "Shared parade" : "Next parade"}
+          </p>
+          <h2 className="mt-2 text-2xl font-black leading-tight text-parade-purpleDark sm:text-3xl">{entry.name}</h2>
+          <p className="mt-2 text-sm font-black text-parade-purple sm:text-base">
+            {formatParadeShareDate(entry.day.date)} • {entry.time} • {entry.route}
+          </p>
+          {!isFocused ? <p className="mt-2 text-sm font-bold text-parade-muted">{countdown}</p> : null}
+        </div>
+
+        <div className="flex flex-wrap gap-2 lg:max-w-[28rem] lg:justify-end">
+          <a href={`#${entry.id}`} className="inline-flex items-center justify-center gap-2 rounded-full bg-parade-purple px-4 py-2.5 text-sm font-black text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-parade-purpleDark">
+            View listing <ChevronDown className="h-4 w-4" aria-hidden="true" />
+          </a>
+          <button type="button" onClick={() => onMap(entry.route)} className="inline-flex items-center justify-center gap-2 rounded-full border border-parade-purple/25 bg-white/70 px-4 py-2.5 text-sm font-black text-parade-purple transition hover:-translate-y-0.5 hover:bg-white">
+            {entry.route} map <MapPinned className="h-4 w-4" aria-hidden="true" />
+          </button>
+          <button type="button" onClick={() => onCalendar(entry, entry.day)} className="inline-flex items-center justify-center gap-2 rounded-full border border-parade-purple/25 bg-white/70 px-4 py-2.5 text-sm font-black text-parade-purple transition hover:-translate-y-0.5 hover:bg-white">
+            Calendar <CalendarPlus className="h-4 w-4" aria-hidden="true" />
+          </button>
+          <button type="button" onClick={() => onShare(entry, entry.day)} className="inline-flex items-center justify-center gap-2 rounded-full border border-parade-purple/25 bg-white/70 px-4 py-2.5 text-sm font-black text-parade-purple transition hover:-translate-y-0.5 hover:bg-white">
+            {shareStatus === "shared" || shareStatus === "copied" ? <Check className="h-4 w-4" aria-hidden="true" /> : <Share2 className="h-4 w-4" aria-hidden="true" />}
+            {getShareButtonLabel(shareStatus)}
+          </button>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function ParadeStatusPill({ status }: { status: "rolling" | "finished" }) {
+  if (status === "rolling") {
+    return <span className="rounded-full bg-parade-gold px-2.5 py-1 text-[0.65rem] font-black uppercase tracking-wide text-parade-purpleDark shadow-glow">Rolling now</span>;
+  }
+
+  return <span className="rounded-full border border-white/15 bg-white/10 px-2.5 py-1 text-[0.65rem] font-black uppercase tracking-wide text-purple-100">Finished</span>;
+}
+
+function CalendarDialog({ selection, onClose }: { selection: CalendarSelection; onClose: () => void }) {
+  const { parade, day } = selection;
+
+  return (
+    <div className="fixed inset-0 z-[110] flex items-center justify-center overflow-y-auto bg-black/75 p-4 backdrop-blur-sm" role="dialog" aria-modal="true" aria-labelledby="calendar-dialog-title">
+      <div className="w-full max-w-lg overflow-hidden rounded-[1.5rem] border border-parade-gold/45 bg-parade-purpleDeep text-white shadow-card">
+        <div className="flex items-start justify-between gap-4 border-b border-parade-gold/25 bg-gradient-to-r from-parade-purpleDeep via-parade-purpleDark to-parade-purple px-5 py-4">
+          <div>
+            <p className="text-xs font-black uppercase tracking-[0.18em] text-parade-goldBright">Add to calendar</p>
+            <h2 id="calendar-dialog-title" className="mt-1 text-2xl font-black">{parade.name}</h2>
+            <p className="mt-2 text-sm font-bold text-purple-100">{formatParadeShareDate(day.date)} • {parade.time}</p>
+          </div>
+          <button type="button" onClick={onClose} className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-white/20 bg-white/10 text-white transition hover:bg-white/15" aria-label="Close calendar options">
+            <X className="h-5 w-5" aria-hidden="true" />
+          </button>
+        </div>
+
+        <div className="grid gap-3 p-5 sm:grid-cols-2">
+          <a href={buildGoogleCalendarUrl(parade, day)} target="_blank" rel="noreferrer" className="inline-flex items-center justify-center gap-2 rounded-full bg-parade-gold px-4 py-3 text-sm font-black text-parade-purpleDark shadow-glow transition hover:-translate-y-0.5 hover:bg-parade-goldBright">
+            Google Calendar <ExternalLink className="h-4 w-4" aria-hidden="true" />
+          </a>
+          <a href={`/api/parades/${parade.id}/ics`} className="inline-flex items-center justify-center gap-2 rounded-full border border-parade-gold/40 bg-white/10 px-4 py-3 text-sm font-black text-white transition hover:-translate-y-0.5 hover:bg-white/15">
+            Apple / Outlook <CalendarPlus className="h-4 w-4" aria-hidden="true" />
+          </a>
+        </div>
+        <p className="px-5 pb-5 text-xs font-semibold leading-5 text-purple-100">Calendar entries use a three-hour planning window. Confirm final times and changes before attending.</p>
+      </div>
     </div>
   );
 }
@@ -477,7 +659,7 @@ function compactDateLabel(label: string) {
 }
 
 function buildParadeShareUrl(paradeId: string) {
-  return `${SCHEDULE_SHARE_BASE_URL}#${paradeId}`;
+  return `${SCHEDULE_SHARE_BASE_URL}/${encodeURIComponent(paradeId)}`;
 }
 
 function buildParadeShareText(parade: ParadeEntry, day: ParadeDay) {
@@ -492,6 +674,96 @@ function formatParadeShareDate(value: string) {
     year: "numeric",
     timeZone: "America/Chicago"
   }).format(new Date(`${value}T12:00:00-06:00`));
+}
+
+function formatVerificationDate(value: string) {
+  return new Intl.DateTimeFormat("en-US", {
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+    timeZone: "America/Chicago"
+  }).format(new Date(`${value}T12:00:00-05:00`));
+}
+
+function getCentralDateKey(date: Date) {
+  const parts = new Intl.DateTimeFormat("en-US", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    timeZone: "America/Chicago"
+  }).formatToParts(date);
+  const part = (type: Intl.DateTimeFormatPartTypes) => parts.find((item) => item.type === type)?.value ?? "";
+  return `${part("year")}-${part("month")}-${part("day")}`;
+}
+
+function getParadeStart(parade: ParadeEntry, day: ParadeDay) {
+  const { hour, minute } = parseParadeTime(parade.time);
+  return new Date(`${day.date}T${String(hour).padStart(2, "0")}:${String(minute).padStart(2, "0")}:00-06:00`);
+}
+
+function parseParadeTime(value: string) {
+  if (value.toLowerCase() === "noon") {
+    return { hour: 12, minute: 0 };
+  }
+
+  const match = value.match(/^(\d{1,2}):(\d{2})\s*(AM|PM)$/i);
+  if (!match) {
+    return { hour: 12, minute: 0 };
+  }
+
+  let hour = Number(match[1]);
+  const minute = Number(match[2]);
+  const period = match[3].toUpperCase();
+  if (period === "AM" && hour === 12) hour = 0;
+  if (period === "PM" && hour !== 12) hour += 12;
+  return { hour, minute };
+}
+
+function findNextParade(parades: TimedParade[], now: Date, routeFilter: string) {
+  return parades
+    .filter((parade) => routeFilter === "All routes" || parade.route === routeFilter)
+    .find((parade) => getParadeStart(parade, parade.day).getTime() + 3 * 60 * 60 * 1000 > now.getTime()) ?? null;
+}
+
+function getParadeStatus(parade: ParadeEntry, day: ParadeDay, now: Date): "rolling" | "finished" | null {
+  const start = getParadeStart(parade, day).getTime();
+  const end = start + 3 * 60 * 60 * 1000;
+  if (now.getTime() >= end) return "finished";
+  if (now.getTime() >= start) return "rolling";
+  return null;
+}
+
+function formatCountdown(milliseconds: number) {
+  if (milliseconds <= 0) {
+    return "Scheduled activity is underway.";
+  }
+
+  const totalMinutes = Math.ceil(milliseconds / 60000);
+  const days = Math.floor(totalMinutes / 1440);
+  const hours = Math.floor((totalMinutes % 1440) / 60);
+  const minutes = totalMinutes % 60;
+
+  if (days > 30) return `${days} days away`;
+  if (days > 0) return `${days} day${days === 1 ? "" : "s"}, ${hours} hour${hours === 1 ? "" : "s"} away`;
+  if (hours > 0) return `${hours} hour${hours === 1 ? "" : "s"}, ${minutes} minute${minutes === 1 ? "" : "s"} away`;
+  return `${minutes} minute${minutes === 1 ? "" : "s"} away`;
+}
+
+function buildGoogleCalendarUrl(parade: ParadeEntry, day: ParadeDay) {
+  const start = getParadeStart(parade, day);
+  const end = new Date(start.getTime() + 3 * 60 * 60 * 1000);
+  const params = new URLSearchParams({
+    action: "TEMPLATE",
+    text: parade.name,
+    dates: `${formatCalendarUtc(start)}/${formatCalendarUtc(end)}`,
+    details: `Mobile Mardi Gras 2027 parade. ${parade.route}. Verify schedule details before attending. ${buildParadeShareUrl(parade.id)}`,
+    location: `Mobile, Alabama — ${parade.route}`
+  });
+  return `https://calendar.google.com/calendar/render?${params.toString()}`;
+}
+
+function formatCalendarUtc(date: Date) {
+  return date.toISOString().replace(/[-:]/g, "").replace(/\.\d{3}Z$/, "Z");
 }
 
 async function copyParadeShareText(shareText: string, shareUrl: string) {
