@@ -1,6 +1,6 @@
 "use client";
 
-import { CalendarPlus, Check, ChevronDown, Clock3, ExternalLink, MapPinned, Share2, ShieldCheck, Sparkles, X } from "lucide-react";
+import { ArrowUp, CalendarPlus, Check, ChevronDown, Clock3, ExternalLink, MapPinned, Share2, ShieldCheck, Sparkles, X } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { StatusPill } from "@/components/StatusPill";
 
@@ -111,6 +111,7 @@ export function ScheduleRouteViewer({ schedule, focusParadeId }: ScheduleRouteVi
   const [shareStatusByParadeId, setShareStatusByParadeId] = useState<Record<string, ShareStatus>>({});
   const [routeFilter, setRouteFilter] = useState("All routes");
   const [now, setNow] = useState<Date | null>(null);
+  const [showBackToTop, setShowBackToTop] = useState(false);
   const allParades = useMemo(() => schedule.days.flatMap((day) => day.parades.map((parade) => ({ ...parade, day }))), [schedule.days]);
   const firstParade = allParades[0];
   const selectedRoute = selectedRouteName ? routeMapByName.get(selectedRouteName) ?? null : null;
@@ -130,6 +131,16 @@ export function ScheduleRouteViewer({ schedule, focusParadeId }: ScheduleRouteVi
     setNow(new Date());
     const timer = window.setInterval(() => setNow(new Date()), 1000);
     return () => window.clearInterval(timer);
+  }, []);
+
+  useEffect(() => {
+    function updateBackToTopVisibility() {
+      setShowBackToTop(window.scrollY > 700);
+    }
+
+    updateBackToTopVisibility();
+    window.addEventListener("scroll", updateBackToTopVisibility, { passive: true });
+    return () => window.removeEventListener("scroll", updateBackToTopVisibility);
   }, []);
 
   useEffect(() => {
@@ -447,6 +458,22 @@ export function ScheduleRouteViewer({ schedule, focusParadeId }: ScheduleRouteVi
 
       {selectedRoute ? <RouteMapDialog route={selectedRoute} schedule={schedule} onClose={closeRouteMap} /> : null}
       {selectedCalendar ? <CalendarDialog selection={selectedCalendar} onClose={() => setSelectedCalendar(null)} /> : null}
+
+      <button
+        type="button"
+        onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+        aria-label="Back to top"
+        aria-hidden={!showBackToTop || Boolean(selectedRoute) || Boolean(selectedCalendar)}
+        tabIndex={showBackToTop && !selectedRoute && !selectedCalendar ? 0 : -1}
+        className={`fixed bottom-[calc(env(safe-area-inset-bottom)+5rem)] right-4 z-40 inline-flex h-12 items-center justify-center gap-2 rounded-full border-2 border-[#fff2b5] bg-parade-goldBright px-3 text-sm font-black text-parade-purpleDark shadow-[0_12px_35px_rgba(43,6,69,0.45)] transition-all duration-200 hover:-translate-y-1 hover:bg-white focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-parade-gold/50 sm:bottom-6 sm:right-6 sm:px-5 ${
+          showBackToTop && !selectedRoute && !selectedCalendar
+            ? "translate-y-0 opacity-100"
+            : "pointer-events-none translate-y-3 opacity-0"
+        }`}
+      >
+        <ArrowUp className="h-5 w-5" aria-hidden="true" />
+        <span className="hidden sm:inline">Back to top</span>
+      </button>
     </main>
   );
 }
