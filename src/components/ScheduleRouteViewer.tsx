@@ -1,6 +1,6 @@
 "use client";
 
-import { CalendarPlus, Check, ChevronDown, Clock3, ExternalLink, MapPinned, Share2, ShieldCheck, X } from "lucide-react";
+import { CalendarPlus, Check, ChevronDown, Clock3, ExternalLink, MapPinned, PartyPopper, Share2, ShieldCheck, Sparkles, X } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { StatusPill } from "@/components/StatusPill";
 
@@ -271,10 +271,16 @@ export function ScheduleRouteViewer({ schedule, focusParadeId }: ScheduleRouteVi
         )}
 
         <section id="quick-parade-schedule" className="scroll-mt-28 space-y-4" aria-labelledby="quick-parade-schedule-heading">
-          <div className="rounded-[1.35rem] border border-parade-gold/35 bg-white/10 p-4 text-white shadow-civic backdrop-blur sm:p-5">
-            <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+          <div className="relative overflow-hidden rounded-[1.35rem] border border-parade-gold/60 bg-gradient-to-br from-parade-purpleDeep via-parade-purpleDark to-parade-purple p-4 text-white shadow-glow sm:p-5">
+            <span className="pointer-events-none absolute right-[-5rem] top-[-5rem] h-44 w-44 rounded-full bg-parade-gold/25 blur-3xl" aria-hidden="true" />
+            <span className="pointer-events-none absolute bottom-[-6rem] left-[-4rem] h-44 w-44 rounded-full bg-white/10 blur-3xl" aria-hidden="true" />
+            <FestiveBeadGarland compact />
+
+            <div className="relative z-10 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
               <div>
-                <p className="text-xs font-black uppercase tracking-[0.18em] text-parade-goldBright">Quick schedule</p>
+                <p className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.18em] text-parade-goldBright">
+                  <Sparkles className="h-4 w-4" aria-hidden="true" /> Quick schedule
+                </p>
                 <h2 id="quick-parade-schedule-heading" className="mt-1 text-3xl font-black tracking-tight text-white drop-shadow-lg">Daily parade listings</h2>
               </div>
               <p className="max-w-2xl text-sm font-semibold leading-6 text-purple-100">
@@ -282,19 +288,19 @@ export function ScheduleRouteViewer({ schedule, focusParadeId }: ScheduleRouteVi
               </p>
             </div>
 
-            <div className="mt-4 flex gap-2 overflow-x-auto pb-1" aria-label="Jump to a schedule date">
+            <div className="relative z-10 mt-4 flex gap-2 overflow-x-auto pb-1" aria-label="Jump to a schedule date">
               {filteredDays.map((day) => (
                 <a
                   key={day.date}
                   href={`#${day.date}`}
-                  className="shrink-0 rounded-full border border-parade-gold/35 bg-white/10 px-3 py-2 text-xs font-black uppercase tracking-wide text-white transition hover:-translate-y-0.5 hover:border-parade-gold hover:bg-parade-gold hover:text-parade-purpleDark"
+                  className="shrink-0 rounded-full border border-parade-gold/55 bg-white/10 px-3 py-2 text-xs font-black uppercase tracking-wide text-white shadow-sm transition hover:-translate-y-0.5 hover:border-parade-gold hover:bg-parade-gold hover:text-parade-purpleDark"
                 >
                   {compactDateLabel(day.label)}
                 </a>
               ))}
             </div>
 
-            <div className="mt-4 border-t border-white/10 pt-4">
+            <div className="relative z-10 mt-4 border-t border-parade-gold/25 pt-4">
               <div className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.16em] text-parade-goldBright">
                 <MapPinned className="h-4 w-4" aria-hidden="true" /> Filter by route
               </div>
@@ -475,26 +481,22 @@ function FeaturedParadePanel({
     <section className="relative overflow-hidden rounded-[1.45rem] border border-parade-gold/65 bg-gradient-to-br from-parade-purpleDeep via-parade-purpleDark to-parade-purple p-5 text-white shadow-glow sm:p-6">
       <span className="pointer-events-none absolute left-[-4rem] top-[-5rem] h-40 w-40 rounded-full bg-parade-gold/25 blur-3xl" aria-hidden="true" />
       <span className="pointer-events-none absolute bottom-[-5rem] right-[-3rem] h-44 w-44 rounded-full bg-parade-gold/20 blur-3xl" aria-hidden="true" />
-      <div className="pointer-events-none absolute inset-x-0 top-0 flex justify-around px-4" aria-hidden="true">
-        {Array.from({ length: 14 }, (_, index) => (
-          <span key={index} className={`h-2.5 w-2.5 rounded-full shadow-glow ${index % 3 === 0 ? "bg-white/75" : "bg-parade-gold"}`} />
-        ))}
-      </div>
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 flex justify-around px-8" aria-hidden="true">
-        {Array.from({ length: 11 }, (_, index) => (
-          <span key={index} className={`h-2 w-2 rounded-full ${index % 3 === 1 ? "bg-white/55" : "bg-parade-gold/85"}`} />
-        ))}
-      </div>
+      <FestiveBeadGarland />
       <div className="relative z-10 grid gap-5 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center">
-        <div>
-          <p className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.18em] text-parade-goldBright">
-            <Clock3 className="h-4 w-4" aria-hidden="true" /> {isFocused ? "Shared parade" : "Next parade"}
-          </p>
-          <h2 className="mt-2 text-2xl font-black leading-tight text-white drop-shadow-lg sm:text-3xl">{entry.name}</h2>
-          <p className="mt-2 text-sm font-black text-parade-goldBright sm:text-base">
-            {formatParadeShareDate(entry.day.date)} • {entry.time} • {entry.route}
-          </p>
-          {!isFocused ? <p className="mt-2 text-sm font-bold text-purple-100">{countdown}</p> : null}
+        <div className="flex items-start gap-4">
+          <span className="hidden h-16 w-16 shrink-0 place-items-center rounded-full border-4 border-parade-goldBright/70 bg-parade-gold text-parade-purpleDark shadow-glow ring-4 ring-white/10 sm:grid" aria-hidden="true">
+            <PartyPopper className="h-8 w-8" />
+          </span>
+          <div>
+            <p className="inline-flex items-center gap-2 rounded-full border border-parade-gold/45 bg-parade-gold/15 px-3 py-1.5 text-xs font-black uppercase tracking-[0.18em] text-parade-goldBright shadow-sm">
+              <Clock3 className="h-4 w-4" aria-hidden="true" /> {isFocused ? "Shared parade" : "Next parade"}
+            </p>
+            <h2 className="mt-3 text-2xl font-black leading-tight text-white drop-shadow-lg sm:text-3xl">{entry.name}</h2>
+            <p className="mt-2 text-sm font-black text-parade-goldBright sm:text-base">
+              {formatParadeShareDate(entry.day.date)} • {entry.time} • {entry.route}
+            </p>
+            {!isFocused ? <p className="mt-2 text-sm font-bold text-purple-100">{countdown}</p> : null}
+          </div>
         </div>
 
         <div className="flex flex-wrap gap-2 lg:max-w-[28rem] lg:justify-end">
@@ -514,6 +516,21 @@ function FeaturedParadePanel({
         </div>
       </div>
     </section>
+  );
+}
+
+function FestiveBeadGarland({ compact = false }: { compact?: boolean }) {
+  return (
+    <svg
+      className={`pointer-events-none absolute inset-x-0 top-0 w-full ${compact ? "h-16 opacity-60" : "h-24 opacity-75"}`}
+      viewBox="0 0 1200 100"
+      preserveAspectRatio="none"
+      aria-hidden="true"
+    >
+      <path d="M-20 3 Q 280 105 610 18 T 1220 10" fill="none" stroke="rgba(255,201,40,0.95)" strokeWidth="9" strokeLinecap="round" strokeDasharray="1 17" />
+      <path d="M-20 20 Q 330 82 650 8 T 1220 24" fill="none" stroke="rgba(255,255,255,0.72)" strokeWidth="7" strokeLinecap="round" strokeDasharray="1 16" />
+      <path d="M-20 0 Q 250 62 520 12 T 1220 4" fill="none" stroke="rgba(214,167,255,0.8)" strokeWidth="7" strokeLinecap="round" strokeDasharray="1 15" />
+    </svg>
   );
 }
 
