@@ -6,14 +6,14 @@ import {
   buildGoogleCalendarUrl,
   formatCommunityEventDate,
   fullEventLocation,
-  getApprovedCommunityEvents,
+  getUpcomingCommunityEvents,
   type CommunityEvent
 } from "@/lib/community-events";
 
 export const dynamic = "force-dynamic";
 
 export default function CommunityEventsPage() {
-  const events = getApprovedCommunityEvents();
+  const events = getUpcomingCommunityEvents();
 
   return (
     <div>
@@ -75,9 +75,9 @@ export default function CommunityEventsPage() {
             <div className="mx-auto grid h-14 w-14 place-items-center rounded-2xl bg-parade-goldSoft text-parade-purple ring-1 ring-parade-gold/40">
               <CalendarDays className="h-7 w-7" aria-hidden="true" />
             </div>
-            <h2 className="mt-4 text-2xl font-black text-parade-purpleDark">No community events are posted yet</h2>
+            <h2 className="mt-4 text-2xl font-black text-parade-purpleDark">No upcoming community events are posted</h2>
             <p className="mx-auto mt-3 max-w-2xl text-sm leading-6 text-parade-muted">
-              Organization-submitted events will appear here after review. If your group has a Mardi Gras or Carnival-related event, submit it for consideration.
+              New organization-submitted events will appear here after review. If your group has a Mardi Gras or Carnival-related event, submit it for consideration.
             </p>
             <Link href="/submit-event" className="mt-5 inline-flex items-center justify-center gap-2 rounded-full bg-parade-purple px-5 py-3 text-sm font-black text-white transition hover:-translate-y-0.5 hover:bg-parade-purpleDark">
               Submit a Community Event <ArrowRight className="h-4 w-4" aria-hidden="true" />

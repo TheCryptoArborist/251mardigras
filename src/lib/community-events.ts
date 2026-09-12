@@ -40,6 +40,11 @@ export function getApprovedCommunityEvents() {
     .sort((a, b) => new Date(a.startDateTime).getTime() - new Date(b.startDateTime).getTime());
 }
 
+export function getUpcomingCommunityEvents(now = new Date()) {
+  const currentTime = now.getTime();
+  return getApprovedCommunityEvents().filter((event) => new Date(event.endDateTime).getTime() >= currentTime);
+}
+
 export function getCommunityEventBySlug(slug: string) {
   return getApprovedCommunityEvents().find((event) => event.slug === slug || event.id === slug) ?? null;
 }
