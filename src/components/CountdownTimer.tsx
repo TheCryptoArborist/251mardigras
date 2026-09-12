@@ -1,6 +1,7 @@
 "use client";
 
-import { Check, Share2 } from "lucide-react";
+import Link from "next/link";
+import { ArrowRight, Check, MapPinned, Share2 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 
 const FIRST_DOWNTOWN_PARADE_TARGET = "2027-01-22T18:30:00-06:00";
@@ -23,7 +24,7 @@ type TimeRemaining = {
 
 type ShareStatus = "idle" | "shared" | "copied" | "error";
 
-export function CountdownTimer() {
+export function CountdownTimer({ mardiGrasDay }: { mardiGrasDay: string }) {
   const targetDate = useMemo(() => new Date(FIRST_DOWNTOWN_PARADE_TARGET), []);
   const progressStartDate = useMemo(() => new Date(COUNTDOWN_PROGRESS_START), []);
   const [timeRemaining, setTimeRemaining] = useState(() => getTimeRemaining(targetDate));
@@ -195,6 +196,21 @@ export function CountdownTimer() {
             </div>
           </>
         ) : null}
+
+        <div className="mt-4 grid gap-3 border-t border-parade-gold/25 pt-4 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center">
+          <div className="rounded-2xl border border-white/15 bg-white/10 px-3 py-2.5 shadow-sm">
+            <p className="text-[0.65rem] font-black uppercase tracking-[0.14em] text-parade-goldBright">Mardi Gras Day</p>
+            <p className="mt-1 text-sm font-black leading-tight text-white">{mardiGrasDay}</p>
+          </div>
+          <div className="grid grid-cols-2 gap-2">
+            <Link href="/schedule" className="inline-flex items-center justify-center gap-1.5 rounded-full bg-parade-gold px-3 py-2.5 text-xs font-black text-parade-purpleDark shadow-glow transition hover:-translate-y-0.5 hover:bg-parade-goldBright sm:text-sm">
+              Full Schedule <ArrowRight className="h-4 w-4" aria-hidden="true" />
+            </Link>
+            <Link href="/schedule#all-route-maps" className="inline-flex items-center justify-center gap-1.5 rounded-full border border-parade-gold/35 bg-white/10 px-3 py-2.5 text-xs font-black text-white transition hover:-translate-y-0.5 hover:bg-white/15 sm:text-sm">
+              Route Maps <MapPinned className="h-4 w-4" aria-hidden="true" />
+            </Link>
+          </div>
+        </div>
 
       </section>
     </div>

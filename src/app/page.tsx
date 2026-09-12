@@ -28,30 +28,11 @@ const HOMEPAGE_VIDEO_POSTER = "/videos/dragon-home-screen-poster.jpg";
 const HOMEPAGE_FEATURED_VIDEO_EMBED_URL = "https://www.youtube.com/embed/vSwxOuydTjU?si=dpUnDxY4bDv-7Gqt";
 const FACEBOOK_SUPPORTER_URL = "https://www.facebook.com/mardigrasmobileal/support/?surface=page_top_cta_button&entrypoint_surface=page_top_cta_button";
 
-type HomepageParadeEntry = {
-  id: string;
-  time: string;
-  name: string;
-  route: string;
-  routeNote?: string;
-};
-
-type HomepageParadeDay = {
-  date: string;
-  label: string;
-  specialLabel?: string;
-  parades: HomepageParadeEntry[];
-};
-
 type HomepageSchedule = {
-  displayDateRange: string;
   mardiGrasDay: string;
-  days: HomepageParadeDay[];
 };
 
 const homepageSchedule = paradeSchedule2027 as HomepageSchedule;
-const homepageParades = homepageSchedule.days.flatMap((day) => day.parades.map((parade) => ({ ...parade, day })));
-const homepageFirstParade = homepageParades[0];
 
 const socialLinks = [
   {
@@ -208,15 +189,13 @@ export default async function HomePage() {
               Dates, start times, route maps, live coverage, replays, and visitor resources for Mobile Mardi Gras.
             </p>
             <HeroScheduleActions />
-            <HomepageScheduleSpotlight className="mt-6 lg:hidden" />
-            <CountdownTimer />
+            <CountdownTimer mardiGrasDay={homepageSchedule.mardiGrasDay} />
             <SocialLinksStrip className="mt-7" />
             <HomepageVideoSpotlight className="mt-7 lg:hidden" />
           </div>
 
           <div className="relative z-10 hidden min-w-0 lg:block">
-            <HomepageScheduleSpotlight />
-            <HomepageVideoSpotlight className="mt-5" />
+            <HomepageVideoSpotlight />
           </div>
 
           <div className="relative z-10 lg:col-span-2">
@@ -287,47 +266,6 @@ function HeroScheduleActions() {
       <Link href="/watch" className="inline-flex items-center justify-center gap-2 rounded-full border border-white/20 bg-white/10 px-5 py-3 text-sm font-black text-white shadow-civic backdrop-blur transition hover:-translate-y-0.5 hover:bg-white/15">
         Watch Live <PlayCircle className="h-4 w-4" aria-hidden="true" />
       </Link>
-    </div>
-  );
-}
-
-function HomepageScheduleSpotlight({ className = "" }: { className?: string }) {
-  const firstParadeDate = homepageFirstParade ? compactHomepageDate(homepageFirstParade.day.label) : "Opening night";
-
-  return (
-    <section className={`relative overflow-hidden rounded-[1.5rem] border border-parade-gold/45 bg-white/12 p-4 text-white shadow-glow backdrop-blur sm:p-5 ${className}`} aria-label="2027 Mardi Gras parade schedule quick access">
-      <span className="pointer-events-none absolute right-[-3rem] top-[-3rem] h-28 w-28 rounded-full bg-parade-gold/25 blur-2xl" aria-hidden="true" />
-      <div className="relative z-10">
-        <p className="text-xs font-black uppercase tracking-[0.18em] text-parade-goldBright">Schedule posted</p>
-        <h2 className="mt-2 text-2xl font-black leading-tight text-white">2027 Parade Lineup</h2>
-        <div className="mt-4 grid gap-3">
-          <div className="rounded-2xl border border-parade-gold/30 bg-parade-purpleDeep/55 p-4 shadow-civic">
-            <p className="text-[0.68rem] font-black uppercase tracking-[0.16em] text-parade-goldBright">First parade</p>
-            <p className="mt-1 text-lg font-black leading-tight text-white">{homepageFirstParade?.name ?? "Posted"}</p>
-            <p className="mt-1 text-sm font-semibold leading-5 text-purple-100">
-              {firstParadeDate}{homepageFirstParade ? ` • ${homepageFirstParade.time} • ${homepageFirstParade.route}` : null}
-            </p>
-          </div>
-          <ScheduleMiniStat label="Mardi Gras Day" value={homepageSchedule.mardiGrasDay} />
-        </div>
-        <div className="mt-4 grid gap-2 sm:grid-cols-2">
-          <Link href="/schedule" className="inline-flex items-center justify-center gap-2 rounded-full bg-parade-gold px-4 py-2.5 text-sm font-black text-parade-purpleDark shadow-glow transition hover:-translate-y-0.5 hover:bg-parade-goldBright">
-            Full Schedule <ArrowRight className="h-4 w-4" aria-hidden="true" />
-          </Link>
-          <Link href="/schedule#all-route-maps" className="inline-flex items-center justify-center gap-2 rounded-full border border-parade-gold/35 bg-white/10 px-4 py-2.5 text-sm font-black text-white transition hover:-translate-y-0.5 hover:bg-white/15">
-            Route Maps <MapPinned className="h-4 w-4" aria-hidden="true" />
-          </Link>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function ScheduleMiniStat({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="rounded-2xl border border-white/15 bg-white/10 p-3 shadow-sm">
-      <p className="text-[0.65rem] font-black uppercase tracking-[0.14em] text-parade-goldBright">{label}</p>
-      <p className="mt-1 text-sm font-black leading-tight text-white">{value}</p>
     </div>
   );
 }
@@ -679,8 +617,4 @@ function PrimaryActionCard({
       {content}
     </Link>
   );
-}
-
-function compactHomepageDate(label: string) {
-  return label.replace("January", "Jan.").replace("February", "Feb.");
 }
