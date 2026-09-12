@@ -128,7 +128,7 @@ export function ScheduleRouteViewer({ schedule, focusParadeId }: ScheduleRouteVi
 
   useEffect(() => {
     setNow(new Date());
-    const timer = window.setInterval(() => setNow(new Date()), 60000);
+    const timer = window.setInterval(() => setNow(new Date()), 1000);
     return () => window.clearInterval(timer);
   }, []);
 
@@ -478,7 +478,7 @@ function FeaturedParadePanel({
   onShare: (parade: ParadeEntry, day: ParadeDay) => Promise<void>;
 }) {
   const start = getParadeStart(entry, entry.day);
-  const countdown = now ? formatCountdown(start.getTime() - now.getTime()) : "Calculating…";
+  const countdownMilliseconds = now ? start.getTime() - now.getTime() : null;
 
   return (
     <section className="relative overflow-hidden rounded-[1.45rem] border-2 border-[#ffd45a] bg-[linear-gradient(120deg,#2b0645_0%,#591284_48%,#8a2bad_100%)] p-5 pt-7 text-white shadow-[0_20px_55px_rgba(214,155,22,0.32)] sm:p-6 sm:pt-8">
@@ -492,11 +492,11 @@ function FeaturedParadePanel({
             <p className="inline-flex items-center gap-2 rounded-full bg-[#ffd45a] px-3 py-1.5 text-xs font-black uppercase tracking-[0.18em] text-[#3b075f] shadow-md">
               <Clock3 className="h-4 w-4" aria-hidden="true" /> {isFocused ? "Shared parade" : "Next parade"}
             </p>
-            <h2 className="mt-3 text-2xl font-black leading-tight text-[#fffaf0] drop-shadow-lg sm:text-3xl">{entry.name}</h2>
-            <p className="mt-2 text-sm font-black text-[#ffd45a] sm:text-base">
+            <h2 className="mt-2 text-2xl font-black leading-tight text-[#fffaf0] drop-shadow-lg sm:text-3xl">{entry.name}</h2>
+            <p className="mt-1 text-sm font-black text-[#ffd45a] sm:text-base">
               {formatParadeShareDate(entry.day.date)} • {entry.time} • {entry.route}
             </p>
-            {!isFocused ? <p className="mt-2 text-sm font-bold text-[#fff2d0]">{countdown}</p> : null}
+            {!isFocused ? <NextParadeCountdown milliseconds={countdownMilliseconds} /> : null}
           </div>
         </div>
 
@@ -517,6 +517,33 @@ function FeaturedParadePanel({
         </div>
       </div>
     </section>
+  );
+}
+
+function NextParadeCountdown({ milliseconds }: { milliseconds: number | null }) {
+  if (milliseconds !== null && milliseconds <= 0) {
+    return <p className="mt-2 text-sm font-bold text-[#fff2d0]">Scheduled activity is underway.</p>;
+  }
+
+  const totalSeconds = milliseconds === null ? null : Math.floor(milliseconds / 1000);
+  const values = [
+    { label: "Days", value: totalSeconds === null ? null : Math.floor(totalSeconds / 86400) },
+    { label: "Hours", value: totalSeconds === null ? null : Math.floor((totalSeconds % 86400) / 3600) },
+    { label: "Min", value: totalSeconds === null ? null : Math.floor((totalSeconds % 3600) / 60) },
+    { label: "Sec", value: totalSeconds === null ? null : totalSeconds % 60 }
+  ];
+
+  return (
+    <div className="mt-2 flex max-w-[19rem] gap-1.5" aria-label="Live countdown to the next parade" aria-live="polite">
+      {values.map(({ label, value }) => (
+        <div key={label} className="min-w-0 flex-1 rounded-lg border border-[#ffd45a]/40 bg-[#2b0645]/55 px-1.5 py-1 text-center shadow-sm ring-1 ring-white/5">
+          <p className="text-base font-black leading-none tabular-nums text-[#ffd45a]">
+            {value === null ? "--" : String(value).padStart(2, "0")}
+          </p>
+          <p className="mt-0.5 text-[0.52rem] font-black uppercase leading-none tracking-[0.12em] text-[#fff2d0]">{label}</p>
+        </div>
+      ))}
+    </div>
   );
 }
 
@@ -765,22 +792,6 @@ function getParadeStatus(parade: ParadeEntry, day: ParadeDay, now: Date): "rolli
   if (now.getTime() >= end) return "finished";
   if (now.getTime() >= start) return "rolling";
   return null;
-}
-
-function formatCountdown(milliseconds: number) {
-  if (milliseconds <= 0) {
-    return "Scheduled activity is underway.";
-  }
-
-  const totalMinutes = Math.ceil(milliseconds / 60000);
-  const days = Math.floor(totalMinutes / 1440);
-  const hours = Math.floor((totalMinutes % 1440) / 60);
-  const minutes = totalMinutes % 60;
-
-  if (days > 30) return `${days} days away`;
-  if (days > 0) return `${days} day${days === 1 ? "" : "s"}, ${hours} hour${hours === 1 ? "" : "s"} away`;
-  if (hours > 0) return `${hours} hour${hours === 1 ? "" : "s"}, ${minutes} minute${minutes === 1 ? "" : "s"} away`;
-  return `${minutes} minute${minutes === 1 ? "" : "s"} away`;
 }
 
 function buildGoogleCalendarUrl(parade: ParadeEntry, day: ParadeDay) {
