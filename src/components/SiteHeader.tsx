@@ -1,6 +1,9 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import { Menu } from "lucide-react";
+import { useEffect, useRef } from "react";
 import { SITE_BRAND_NAME, SITE_LOGO_ALT, SITE_LOGO_PATH } from "@/lib/brand";
 
 const navItems = [
@@ -15,6 +18,40 @@ const navItems = [
 ];
 
 export function SiteHeader() {
+  const mobileMenuRef = useRef<HTMLDetailsElement>(null);
+
+  function closeMobileMenu({ restoreFocus = false } = {}) {
+    const menu = mobileMenuRef.current;
+    if (!menu?.open) return;
+
+    menu.open = false;
+    if (restoreFocus) {
+      menu.querySelector<HTMLElement>("summary")?.focus();
+    }
+  }
+
+  useEffect(() => {
+    function handlePointerDown(event: PointerEvent) {
+      const menu = mobileMenuRef.current;
+      if (menu?.open && event.target instanceof Node && !menu.contains(event.target)) {
+        closeMobileMenu();
+      }
+    }
+
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        closeMobileMenu({ restoreFocus: true });
+      }
+    }
+
+    document.addEventListener("pointerdown", handlePointerDown);
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("pointerdown", handlePointerDown);
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
+
   return (
     <header className="sticky top-0 z-30 border-b border-parade-gold/30 bg-gradient-to-r from-parade-purpleDeep via-parade-purpleDark to-parade-purple text-white shadow-lg shadow-purple-950/20">
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-3 sm:px-6 lg:px-8">
@@ -28,7 +65,7 @@ export function SiteHeader() {
           </span>
         </Link>
 
-        <details className="group relative shrink-0 xl:hidden">
+        <details ref={mobileMenuRef} className="group relative shrink-0 xl:hidden">
           <summary className="flex cursor-pointer list-none items-center gap-2 rounded-full border border-parade-gold/40 bg-white/10 px-3 py-2 text-sm font-black text-white transition hover:bg-white/15 focus:outline-none focus:ring-2 focus:ring-parade-gold [&::-webkit-details-marker]:hidden">
             <Menu className="h-4 w-4" aria-hidden="true" /> Menu
           </summary>
@@ -37,6 +74,7 @@ export function SiteHeader() {
               <Link
                 key={item.href}
                 href={item.href}
+                onClick={() => closeMobileMenu()}
                 className="rounded-xl px-3 py-2.5 text-purple-50 transition hover:bg-white/10 hover:text-parade-goldBright focus:outline-none focus:ring-2 focus:ring-parade-gold"
               >
                 {item.label}
