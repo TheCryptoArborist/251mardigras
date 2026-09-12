@@ -230,22 +230,26 @@ export function ScheduleRouteViewer({ schedule, focusParadeId }: ScheduleRouteVi
       <div className="pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(circle_at_18%_8%,rgba(255,201,40,0.18),transparent_28%),radial-gradient(circle_at_78%_22%,rgba(255,255,255,0.10),transparent_32%),linear-gradient(180deg,rgba(23,4,47,0.05),rgba(23,4,47,0.34))]" aria-hidden="true" />
 
       <div className="relative z-10 mx-auto max-w-7xl space-y-6 px-4 py-6 sm:px-6 lg:px-8">
-        <section className="relative overflow-hidden rounded-[1.55rem] border border-parade-gold/50 bg-white/10 p-4 text-white shadow-card backdrop-blur sm:p-5">
-          <span className="pointer-events-none absolute right-[-4rem] top-[-5rem] h-44 w-44 rounded-full bg-parade-gold/20 blur-3xl" aria-hidden="true" />
-          <span className="pointer-events-none absolute bottom-[-5rem] left-[-5rem] h-40 w-40 rounded-full bg-white/10 blur-3xl" aria-hidden="true" />
+        <section className="relative overflow-hidden rounded-[1.55rem] border-2 border-[#ffd45a] bg-[radial-gradient(circle_at_86%_16%,rgba(255,212,90,0.22),transparent_25%),linear-gradient(118deg,#2b0645_0%,#4a0b70_48%,#7d259f_100%)] p-4 text-white shadow-[0_20px_55px_rgba(43,6,69,0.42)] sm:p-5">
+          <span className="pointer-events-none absolute inset-x-0 top-0 h-2 bg-[linear-gradient(90deg,#d69b16,#ffd45a,#fff2b5,#ffd45a,#d69b16)]" aria-hidden="true" />
+          <span className="pointer-events-none absolute right-[-3.5rem] top-[-4.5rem] h-48 w-48 rounded-full border-[1.75rem] border-[#ffd45a]/15" aria-hidden="true" />
+          <span className="pointer-events-none absolute bottom-[-5.5rem] right-[5rem] h-36 w-36 rounded-full border-[1.25rem] border-white/5" aria-hidden="true" />
+          <span className="pointer-events-none absolute bottom-[-4rem] left-[-3rem] h-36 w-36 rounded-full bg-[#ffd45a]/10 blur-2xl" aria-hidden="true" />
 
           <div className="relative z-10 flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
-            <div className="min-w-0">
-              <p className="text-xs font-black uppercase tracking-[0.18em] text-parade-goldBright">2027 parade schedule</p>
-              <h1 className="mt-2 text-3xl font-black leading-tight tracking-tight text-white drop-shadow-lg sm:text-4xl">2027 Mobile Mardi Gras Parade Schedule</h1>
-              <p className="mt-2 text-base font-black text-parade-goldBright">{schedule.displayDateRange}</p>
-              <p className="mt-2 max-w-3xl text-sm font-semibold leading-6 text-purple-100">
-                Dates, start times, and route-map access for the Mobile Mardi Gras season.
-              </p>
+            <div className="flex min-w-0 items-start gap-3 sm:gap-4">
+              <div className="mt-1 hidden sm:block"><BannerArtworkIcon kind="king" size="medium" /></div>
+              <div>
+                <p className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.18em] text-parade-goldBright"><Sparkles className="h-4 w-4" aria-hidden="true" /> 2027 parade schedule</p>
+                <h1 className="mt-2 text-3xl font-black leading-tight tracking-tight text-white drop-shadow-lg sm:text-4xl">2027 Mobile Mardi Gras Parade Schedule</h1>
+                <p className="mt-2 text-base font-black text-parade-goldBright">{schedule.displayDateRange}</p>
+                <p className="mt-2 max-w-3xl text-sm font-semibold leading-6 text-purple-100">
+                  Dates, start times, and route-map access for the Mobile Mardi Gras season.
+                </p>
+              </div>
             </div>
 
-            <div className="grid shrink-0 gap-2 sm:grid-cols-2 lg:min-w-[20rem] lg:grid-cols-1 xl:grid-cols-2">
-              <ScheduleStat label="Total parades" value={`${allParades.length}`} />
+            <div className="shrink-0 lg:min-w-[17rem]">
               <ScheduleStat label="First parade" value={firstParade ? `${firstParade.day.label} • ${firstParade.time}` : "Posted"} />
             </div>
           </div>
@@ -253,7 +257,7 @@ export function ScheduleRouteViewer({ schedule, focusParadeId }: ScheduleRouteVi
           <div className="relative z-10 mt-4 flex flex-wrap gap-2">
             <a
               href="#all-route-maps"
-              className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2.5 text-sm font-black text-white transition hover:-translate-y-0.5 hover:bg-white/15"
+              className="inline-flex items-center gap-2 rounded-full border border-[#fff2b5]/65 bg-[#ffd45a] px-4 py-2.5 text-sm font-black text-[#351052] shadow-glow transition hover:-translate-y-0.5 hover:bg-[#fff2b5]"
             >
               Route maps <MapPinned className="h-4 w-4" aria-hidden="true" />
             </a>
@@ -480,9 +484,9 @@ export function ScheduleRouteViewer({ schedule, focusParadeId }: ScheduleRouteVi
 
 function ScheduleStat({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-2xl border border-white/15 bg-white/10 p-3 shadow-sm backdrop-blur">
-      <p className="text-[0.65rem] font-black uppercase tracking-[0.16em] text-parade-goldBright">{label}</p>
-      <p className="mt-1 text-sm font-black leading-tight text-white sm:text-base">{value}</p>
+    <div className="rounded-2xl border border-[#fff2b5]/70 bg-[linear-gradient(120deg,rgba(255,212,90,0.24),rgba(255,255,255,0.10))] p-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.18),0_10px_25px_rgba(31,3,55,0.24)] backdrop-blur">
+      <p className="text-[0.65rem] font-black uppercase tracking-[0.16em] text-[#ffd45a]">{label}</p>
+      <p className="mt-1 text-sm font-black leading-tight text-[#fffaf0] sm:text-base">{value}</p>
     </div>
   );
 }
