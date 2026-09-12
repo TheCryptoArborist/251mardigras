@@ -481,7 +481,7 @@ function FeaturedParadePanel({
   const countdownMilliseconds = now ? start.getTime() - now.getTime() : null;
 
   return (
-    <section className="relative overflow-hidden rounded-[1.45rem] border-2 border-[#ffd45a] bg-[linear-gradient(120deg,#2b0645_0%,#591284_48%,#8a2bad_100%)] p-5 pt-7 text-white shadow-[0_20px_55px_rgba(214,155,22,0.32)] sm:p-6 sm:pt-8">
+    <section className="relative overflow-hidden rounded-[1.45rem] border-2 border-[#ffd45a] bg-[linear-gradient(120deg,#2b0645_0%,#591284_48%,#8a2bad_100%)] p-5 text-white shadow-[0_20px_55px_rgba(214,155,22,0.32)] sm:p-6">
       <span className="pointer-events-none absolute inset-x-0 top-0 h-2 bg-[linear-gradient(90deg,#d69b16_0%,#ffd45a_30%,#fff2b5_50%,#ffd45a_70%,#d69b16_100%)]" aria-hidden="true" />
       <span className="pointer-events-none absolute right-[-3rem] top-[-4rem] h-48 w-48 rounded-full border-[2rem] border-[#ffd45a]/15" aria-hidden="true" />
       <span className="pointer-events-none absolute bottom-[-6rem] left-[35%] h-44 w-44 rounded-full bg-[#ffd45a]/15 blur-3xl" aria-hidden="true" />
