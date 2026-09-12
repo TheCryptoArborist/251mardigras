@@ -1,6 +1,6 @@
 "use client";
 
-import { CalendarDays, ExternalLink, MapPinned, ShieldCheck, X } from "lucide-react";
+import { CalendarDays, Check, ExternalLink, MapPinned, Share2, ShieldCheck, X } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { StatusPill } from "@/components/StatusPill";
 
@@ -44,6 +44,10 @@ type RouteMap = {
 type ScheduleRouteViewerProps = {
   schedule: ParadeSchedule;
 };
+
+type ShareStatus = "idle" | "shared" | "copied" | "error";
+
+const SCHEDULE_SHARE_BASE_URL = "https://mg251.xyz/schedule";
 
 const routeMaps: RouteMap[] = [
   {
@@ -100,6 +104,7 @@ const routeMapByName = new Map(routeMaps.map((route) => [route.name, route]));
 
 export function ScheduleRouteViewer({ schedule }: ScheduleRouteViewerProps) {
   const [selectedRouteName, setSelectedRouteName] = useState<string | null>(null);
+  const [shareStatusByParadeId, setShareStatusByParadeId] = useState<Record<string, ShareStatus>>({});
   const allParades = useMemo(() => schedule.days.flatMap((day) => day.parades.map((parade) => ({ ...parade, day }))), [schedule.days]);
   const firstParade = allParades[0];
   const selectedRoute = selectedRouteName ? routeMapByName.get(selectedRouteName) ?? null : null;
@@ -132,6 +137,50 @@ export function ScheduleRouteViewer({ schedule }: ScheduleRouteViewerProps) {
 
   function closeRouteMap() {
     setSelectedRouteName(null);
+  }
+
+  function markParadeShareStatus(paradeId: string, status: ShareStatus) {
+    setShareStatusByParadeId((current) => ({ ...current, [paradeId]: status }));
+
+    window.setTimeout(() => {
+      setShareStatusByParadeId((current) => {
+        if (current[paradeId] !== status) {
+          return current;
+        }
+
+        const next = { ...current };
+        delete next[paradeId];
+        return next;
+      });
+    }, 2800);
+  }
+
+  async function shareParade(parade: ParadeEntry, day: ParadeDay) {
+    const shareUrl = buildParadeShareUrl(parade.id);
+    const shareText = buildParadeShareText(parade, day);
+    const shareData = {
+      title: `${parade.name} | Mobile Mardi Gras 2027`,
+      text: shareText,
+      url: shareUrl
+    };
+
+    try {
+      if (navigator.share) {
+        await navigator.share(shareData);
+        markParadeShareStatus(parade.id, "shared");
+        return;
+      }
+
+      const copied = await copyParadeShareText(shareText, shareUrl);
+      markParadeShareStatus(parade.id, copied ? "copied" : "error");
+    } catch (error) {
+      if (error instanceof DOMException && error.name === "AbortError") {
+        return;
+      }
+
+      const copied = await copyParadeShareText(shareText, shareUrl).catch(() => false);
+      markParadeShareStatus(parade.id, copied ? "copied" : "error");
+    }
   }
 
   return (
@@ -225,32 +274,45 @@ export function ScheduleRouteViewer({ schedule }: ScheduleRouteViewerProps) {
                 </div>
 
                 <div className="divide-y divide-parade-gold/20 bg-white/5">
-                  {day.parades.map((parade) => (
-                    <article key={parade.id} id={parade.id} className="scroll-mt-28 px-4 py-3.5 transition hover:bg-white/10 sm:px-5">
-                      <div className="grid gap-3 md:grid-cols-[7.75rem_minmax(0,1fr)_auto] md:items-center">
-                        <div className="inline-flex w-fit items-center rounded-full bg-parade-gold px-3 py-1.5 text-sm font-black uppercase tracking-wide text-parade-purpleDark shadow-glow">
-                          {parade.time}
-                        </div>
+                  {day.parades.map((parade) => {
+                    const shareStatus = shareStatusByParadeId[parade.id] ?? "idle";
 
-                        <div className="min-w-0">
-                          <h4 className="text-lg font-black leading-tight text-white sm:text-xl">{parade.name}</h4>
-                          {parade.routeNote ? (
-                            <p className="mt-1 text-xs font-bold uppercase tracking-wide text-purple-100">Route exception listed by official schedule</p>
-                          ) : null}
-                        </div>
+                    return (
+                      <article key={parade.id} id={parade.id} className="scroll-mt-28 px-4 py-3.5 transition hover:bg-white/10 sm:px-5">
+                        <div className="grid gap-3 md:grid-cols-[7.75rem_minmax(0,1fr)_auto] md:items-center">
+                          <div className="inline-flex w-fit items-center rounded-full bg-parade-gold px-3 py-1.5 text-sm font-black uppercase tracking-wide text-parade-purpleDark shadow-glow">
+                            {parade.time}
+                          </div>
 
-                        <div className="flex flex-wrap gap-2 md:justify-end">
-                          <button
-                            type="button"
-                            onClick={() => openRouteMap(parade.route)}
-                            className="inline-flex items-center justify-center gap-1.5 rounded-full border border-parade-gold/45 bg-white/10 px-3 py-2 text-xs font-black uppercase tracking-wide text-white transition hover:-translate-y-0.5 hover:border-parade-gold hover:bg-parade-gold hover:text-parade-purpleDark"
-                          >
-                            {parade.route} map <MapPinned className="h-3.5 w-3.5" aria-hidden="true" />
-                          </button>
+                          <div className="min-w-0">
+                            <h4 className="text-lg font-black leading-tight text-white sm:text-xl">{parade.name}</h4>
+                            {parade.routeNote ? (
+                              <p className="mt-1 text-xs font-bold uppercase tracking-wide text-purple-100">Route exception listed by official schedule</p>
+                            ) : null}
+                          </div>
+
+                          <div className="flex flex-wrap gap-2 md:justify-end">
+                            <button
+                              type="button"
+                              onClick={() => openRouteMap(parade.route)}
+                              className="inline-flex items-center justify-center gap-1.5 rounded-full border border-parade-gold/45 bg-white/10 px-3 py-2 text-xs font-black uppercase tracking-wide text-white transition hover:-translate-y-0.5 hover:border-parade-gold hover:bg-parade-gold hover:text-parade-purpleDark"
+                            >
+                              {parade.route} map <MapPinned className="h-3.5 w-3.5" aria-hidden="true" />
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => shareParade(parade, day)}
+                              className="inline-flex items-center justify-center gap-1.5 rounded-full border border-parade-gold/45 bg-white/10 px-3 py-2 text-xs font-black uppercase tracking-wide text-white transition hover:-translate-y-0.5 hover:border-parade-gold hover:bg-parade-gold hover:text-parade-purpleDark"
+                              aria-label={`Share ${parade.name}`}
+                            >
+                              {shareStatus === "shared" || shareStatus === "copied" ? <Check className="h-3.5 w-3.5" aria-hidden="true" /> : <Share2 className="h-3.5 w-3.5" aria-hidden="true" />}
+                              {getShareButtonLabel(shareStatus)}
+                            </button>
+                          </div>
                         </div>
-                      </div>
-                    </article>
-                  ))}
+                      </article>
+                    );
+                  })}
                 </div>
               </section>
             ))}
@@ -428,11 +490,45 @@ function compactDateLabel(label: string) {
   return label.replace(/^\w+,\s*/, "").replace("January", "Jan.").replace("February", "Feb.");
 }
 
-function formatTranscribedDate(value: string) {
+function buildParadeShareUrl(paradeId: string) {
+  return `${SCHEDULE_SHARE_BASE_URL}#${paradeId}`;
+}
+
+function buildParadeShareText(parade: ParadeEntry, day: ParadeDay) {
+  return `${parade.name}\n${formatParadeShareDate(day.date)} • ${parade.time}\n${parade.route}\n\nView the Mobile Mardi Gras schedule and route:`;
+}
+
+function formatParadeShareDate(value: string) {
   return new Intl.DateTimeFormat("en-US", {
+    weekday: "long",
     month: "long",
     day: "numeric",
     year: "numeric",
     timeZone: "America/Chicago"
-  }).format(new Date(`${value}T12:00:00-05:00`));
+  }).format(new Date(`${value}T12:00:00-06:00`));
+}
+
+async function copyParadeShareText(shareText: string, shareUrl: string) {
+  if (!navigator.clipboard?.writeText) {
+    return false;
+  }
+
+  await navigator.clipboard.writeText(`${shareText}\n${shareUrl}`);
+  return true;
+}
+
+function getShareButtonLabel(status: ShareStatus) {
+  if (status === "shared") {
+    return "Shared";
+  }
+
+  if (status === "copied") {
+    return "Copied";
+  }
+
+  if (status === "error") {
+    return "Copy failed";
+  }
+
+  return "Share";
 }
