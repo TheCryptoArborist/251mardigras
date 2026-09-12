@@ -175,20 +175,19 @@ export default async function HomePage() {
         <div className="absolute inset-0 z-0 bg-[radial-gradient(circle_at_18%_8%,rgba(255,201,40,0.24),transparent_30%),radial-gradient(circle_at_82%_30%,rgba(255,255,255,0.12),transparent_35%),linear-gradient(180deg,rgba(23,4,47,0.10),rgba(23,4,47,0.46))]" aria-hidden="true" />
         <div className="absolute left-[-6rem] top-[-8rem] z-0 h-72 w-72 rounded-full bg-parade-gold/20 blur-3xl" aria-hidden="true" />
         <div className="absolute bottom-[-10rem] right-[-8rem] z-0 h-96 w-96 rounded-full bg-white/10 blur-3xl" aria-hidden="true" />
-        <div className="relative z-10 mx-auto grid max-w-7xl gap-8 px-4 py-9 sm:px-6 lg:grid-cols-[minmax(0,1fr)_minmax(20rem,0.82fr)] lg:items-start lg:px-8 lg:py-12">
+        <div className="relative z-10 mx-auto grid max-w-7xl gap-6 px-4 py-6 sm:gap-8 sm:px-6 sm:py-9 lg:grid-cols-[minmax(0,1fr)_minmax(20rem,0.82fr)] lg:items-start lg:px-8 lg:py-12">
           <div className="relative z-10 min-w-0">
             <div className="inline-flex items-center gap-2 rounded-full border border-parade-gold/40 bg-white/10 px-4 py-2 text-xs font-black uppercase tracking-wide text-parade-goldBright shadow-glow backdrop-blur">
               2027 Mobile Mardi Gras schedule is live
             </div>
-            <h1 className="mt-5 max-w-4xl text-4xl font-black leading-[0.98] tracking-tight text-white drop-shadow-lg sm:text-6xl lg:text-7xl">
+            <h1 className="mt-4 max-w-4xl text-[2.4rem] font-black leading-[0.98] tracking-tight text-white drop-shadow-lg sm:mt-5 sm:text-6xl lg:text-7xl">
               <span className="block">Plan the parades</span>
               <span className="block">Know the route</span>
               <span className="block">Watch it live</span>
             </h1>
-            <p className="mt-5 max-w-3xl text-base font-semibold leading-7 text-purple-100 sm:text-lg">
+            <p className="mt-4 max-w-3xl text-base font-semibold leading-6 text-purple-100 sm:mt-5 sm:text-lg sm:leading-7">
               Dates, start times, route maps, live coverage, replays, and visitor resources for Mobile Mardi Gras.
             </p>
-            <HeroScheduleActions />
             <CountdownTimer mardiGrasDay={homepageSchedule.mardiGrasDay} />
             <SocialLinksStrip className="mt-7" />
             <HomepageVideoSpotlight className="mt-7 lg:hidden" />
@@ -250,22 +249,6 @@ export default async function HomePage() {
 
         <VisitorCounter />
       </div>
-    </div>
-  );
-}
-
-function HeroScheduleActions() {
-  return (
-    <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-      <Link href="/schedule" className="inline-flex items-center justify-center gap-2 rounded-full bg-parade-gold px-5 py-3 text-sm font-black text-parade-purpleDark shadow-glow transition hover:-translate-y-0.5 hover:bg-parade-goldBright">
-        View 2027 Schedule <CalendarDays className="h-4 w-4" aria-hidden="true" />
-      </Link>
-      <Link href="/schedule#all-route-maps" className="inline-flex items-center justify-center gap-2 rounded-full border border-parade-gold/45 bg-white/10 px-5 py-3 text-sm font-black text-white shadow-civic backdrop-blur transition hover:-translate-y-0.5 hover:bg-white/15">
-        Route Maps <MapPinned className="h-4 w-4" aria-hidden="true" />
-      </Link>
-      <Link href="/watch" className="inline-flex items-center justify-center gap-2 rounded-full border border-white/20 bg-white/10 px-5 py-3 text-sm font-black text-white shadow-civic backdrop-blur transition hover:-translate-y-0.5 hover:bg-white/15">
-        Watch Live <PlayCircle className="h-4 w-4" aria-hidden="true" />
-      </Link>
     </div>
   );
 }

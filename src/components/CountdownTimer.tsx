@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight, Check, MapPinned, Share2 } from "lucide-react";
+import { ArrowRight, Check, MapPinned, PlayCircle, Share2 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 
 const FIRST_DOWNTOWN_PARADE_TARGET = "2027-01-22T18:30:00-06:00";
@@ -202,12 +202,15 @@ export function CountdownTimer({ mardiGrasDay }: { mardiGrasDay: string }) {
             <p className="text-[0.65rem] font-black uppercase tracking-[0.14em] text-parade-goldBright">Mardi Gras Day</p>
             <p className="mt-1 text-sm font-black leading-tight text-white">{mardiGrasDay}</p>
           </div>
-          <div className="grid grid-cols-2 gap-2">
-            <Link href="/schedule" className="inline-flex items-center justify-center gap-1.5 rounded-full bg-parade-gold px-3 py-2.5 text-xs font-black text-parade-purpleDark shadow-glow transition hover:-translate-y-0.5 hover:bg-parade-goldBright sm:text-sm">
+          <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+            <Link href="/schedule" className="col-span-2 inline-flex items-center justify-center gap-1.5 rounded-full bg-parade-gold px-3 py-2.5 text-xs font-black text-parade-purpleDark shadow-glow transition hover:-translate-y-0.5 hover:bg-parade-goldBright sm:col-span-1 sm:text-sm">
               Full Schedule <ArrowRight className="h-4 w-4" aria-hidden="true" />
             </Link>
             <Link href="/schedule#all-route-maps" className="inline-flex items-center justify-center gap-1.5 rounded-full border border-parade-gold/35 bg-white/10 px-3 py-2.5 text-xs font-black text-white transition hover:-translate-y-0.5 hover:bg-white/15 sm:text-sm">
               Route Maps <MapPinned className="h-4 w-4" aria-hidden="true" />
+            </Link>
+            <Link href="/watch" className="inline-flex items-center justify-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-3 py-2.5 text-xs font-black text-white transition hover:-translate-y-0.5 hover:bg-white/15 sm:text-sm">
+              Watch Live <PlayCircle className="h-4 w-4" aria-hidden="true" />
             </Link>
           </div>
         </div>
