@@ -189,16 +189,17 @@ export default async function HomePage() {
               Dates, start times, route maps, live coverage, replays, and visitor resources for Mobile Mardi Gras.
             </p>
             <CountdownTimer mardiGrasDay={homepageSchedule.mardiGrasDay} />
-            <SocialLinksStrip className="mt-7" />
-            <HomepageVideoSpotlight className="mt-7 lg:hidden" />
+            <div className="lg:hidden">
+              <HomepageVideoSpotlight className="mt-7" />
+              <CommunityEventsCallout className="mt-5" />
+              <SocialLinksStrip className="mt-5" />
+            </div>
           </div>
 
           <div className="relative z-10 hidden min-w-0 lg:block">
             <HomepageVideoSpotlight />
-          </div>
-
-          <div className="relative z-10 lg:col-span-2">
-            <CommunityEventsCallout />
+            <CommunityEventsCallout className="mt-5" />
+            <SocialLinksStrip className="mt-5" />
           </div>
 
           <div className="relative z-10 lg:col-span-2">
@@ -257,20 +258,21 @@ function SocialLinksStrip({ className = "" }: { className?: string }) {
   return (
     <section
       aria-label="Follow Mardi Gras - Mobile, Alabama on social media"
-      className={`rounded-2xl border border-parade-gold/35 bg-white/10 p-3 shadow-civic backdrop-blur sm:inline-flex sm:items-center sm:gap-3 ${className}`}
+      className={`rounded-2xl border border-parade-gold/35 bg-white/10 p-4 shadow-civic backdrop-blur ${className}`}
     >
-      <p className="text-xs font-black uppercase tracking-[0.16em] text-parade-goldBright sm:shrink-0">Follow for updates</p>
-      <div className="mt-3 flex flex-wrap gap-2 sm:mt-0">
+      <p className="text-xs font-black uppercase tracking-[0.16em] text-parade-goldBright">Follow for updates</p>
+      <div className="mt-3 flex flex-wrap gap-2.5">
         {socialLinks.map((link) => (
           <a
             key={link.label}
             href={link.href}
             target="_blank"
             rel="noreferrer"
-            className="inline-flex items-center justify-center gap-1.5 rounded-full border border-white/15 bg-white/12 px-3 py-2 text-xs font-black text-white transition hover:-translate-y-0.5 hover:bg-parade-gold hover:text-parade-purpleDark"
+            className="grid h-11 w-11 place-items-center rounded-full border border-parade-gold/35 bg-parade-purpleDeep/70 text-white shadow-sm transition hover:-translate-y-0.5 hover:border-parade-gold hover:bg-parade-gold hover:text-parade-purpleDark hover:shadow-glow focus:outline-none focus:ring-2 focus:ring-parade-gold"
+            aria-label={`Follow on ${link.label}`}
+            title={link.label}
           >
-            {link.label}
-            <ExternalLink className="h-3.5 w-3.5" aria-hidden="true" />
+            <SocialBrandIcon platform={link.label} />
           </a>
         ))}
       </div>
@@ -298,33 +300,79 @@ function HomepageVideoSpotlight({ className = "" }: { className?: string }) {
   );
 }
 
-function CommunityEventsCallout() {
+function CommunityEventsCallout({ className = "" }: { className?: string }) {
   return (
-    <section className="relative overflow-hidden rounded-[1.5rem] border border-parade-gold/45 bg-gradient-to-br from-parade-purpleDeep via-parade-purpleDark to-parade-purple p-5 text-white shadow-card">
+    <section className={`relative overflow-hidden rounded-[1.5rem] border border-parade-gold/45 bg-gradient-to-br from-parade-purpleDeep via-parade-purpleDark to-parade-purple p-5 text-white shadow-card ${className}`}>
       <span className="pointer-events-none absolute right-[-4rem] top-[-4rem] h-32 w-32 rounded-full bg-parade-gold/20 blur-2xl" aria-hidden="true" />
-      <div className="relative z-10 flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
-        <div className="flex items-start gap-3">
-          <div className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-parade-gold text-parade-purpleDark shadow-glow">
-            <CalendarDays className="h-6 w-6" aria-hidden="true" />
-          </div>
-          <div>
-            <p className="text-xs font-black uppercase tracking-[0.16em] text-parade-goldBright">Community Mardi Gras Events</p>
-            <h2 className="mt-1 text-2xl font-black text-white">Have a Mardi Gras-related event?</h2>
-            <p className="mt-2 max-w-3xl text-sm leading-6 text-purple-100">
-              Submit Mardi Gras balls, fundraisers, watch parties, socials, and Carnival-related events for review. Approved events may appear on the Community Mardi Gras Events calendar.
-            </p>
-          </div>
+      <div className="relative z-10">
+        <div className="grid h-12 w-12 place-items-center rounded-2xl bg-parade-gold text-parade-purpleDark shadow-glow">
+          <CalendarDays className="h-6 w-6" aria-hidden="true" />
         </div>
-        <div className="flex flex-col gap-2 sm:flex-row lg:shrink-0">
+        <p className="mt-4 text-xs font-black uppercase tracking-[0.16em] text-parade-goldBright">Community Mardi Gras Events</p>
+        <h2 className="mt-1 text-2xl font-black leading-tight text-white">Have a Mardi Gras-related event?</h2>
+        <p className="mt-2 text-sm leading-6 text-purple-100">
+          Submit Mardi Gras balls, fundraisers, watch parties, socials, and Carnival-related events for review. Approved events may appear on the community calendar.
+        </p>
+        <div className="mt-5 grid gap-2 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
           <Link href="/events" className="inline-flex items-center justify-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-black text-parade-purpleDark shadow-civic transition hover:-translate-y-0.5 hover:bg-parade-goldSoft">
-            View event calendar <ArrowRight className="h-4 w-4" aria-hidden="true" />
+            Event calendar <ArrowRight className="h-4 w-4" aria-hidden="true" />
           </Link>
           <Link href="/submit-event" className="inline-flex items-center justify-center gap-2 rounded-full bg-parade-gold px-5 py-3 text-sm font-black text-parade-purpleDark shadow-glow transition hover:-translate-y-0.5 hover:bg-parade-goldBright">
-            Submit your event <PlusCircle className="h-4 w-4" aria-hidden="true" />
+            Submit event <PlusCircle className="h-4 w-4" aria-hidden="true" />
           </Link>
         </div>
       </div>
     </section>
+  );
+}
+
+function SocialBrandIcon({ platform }: { platform: (typeof socialLinks)[number]["label"] }) {
+  if (platform === "Facebook") return <FacebookLogo />;
+  if (platform === "Instagram") return <InstagramLogo />;
+  if (platform === "YouTube") return <YouTubeLogo />;
+  if (platform === "TikTok") return <TikTokLogo />;
+  return <XLogo />;
+}
+
+function YouTubeLogo() {
+  return (
+    <svg viewBox="0 0 24 24" className="h-5 w-5" fill="currentColor" aria-hidden="true">
+      <path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8ZM9.6 15.6V8.4l6.3 3.6-6.3 3.6Z" />
+    </svg>
+  );
+}
+
+function FacebookLogo() {
+  return (
+    <svg viewBox="0 0 24 24" className="h-5 w-5" fill="currentColor" aria-hidden="true">
+      <path d="M24 12.1C24 5.4 18.6 0 12 0S0 5.4 0 12.1c0 6 4.4 11 10.1 11.9v-8.4h-3v-3.5h3V9.4c0-3 1.8-4.7 4.5-4.7 1.3 0 2.7.2 2.7.2v3h-1.5c-1.5 0-2 .9-2 1.9v2.3h3.4l-.5 3.5h-2.9V24c5.8-.9 10.2-5.9 10.2-11.9Z" />
+    </svg>
+  );
+}
+
+function InstagramLogo() {
+  return (
+    <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <rect x="3" y="3" width="18" height="18" rx="5" />
+      <circle cx="12" cy="12" r="4" />
+      <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none" />
+    </svg>
+  );
+}
+
+function TikTokLogo() {
+  return (
+    <svg viewBox="0 0 24 24" className="h-5 w-5" fill="currentColor" aria-hidden="true">
+      <path d="M16.7 1.8c.4 3.1 2.1 5 5.1 5.2v3.5a8.7 8.7 0 0 1-5.1-1.6v7.1c0 4.5-3.1 6.7-6.3 6.7-3.6 0-6.4-2.5-6.4-5.9 0-3.6 3-6.1 6.9-5.9v3.7c-1.7-.2-3 .7-3 2.1 0 1.3 1.1 2.1 2.4 2.1 1.4 0 2.5-.8 2.5-2.8V1.8h3.9Z" />
+    </svg>
+  );
+}
+
+function XLogo() {
+  return (
+    <svg viewBox="0 0 24 24" className="h-4 w-4" fill="currentColor" aria-hidden="true">
+      <path d="M18.9 2h3.3l-7.2 8.2L23.5 22h-6.7l-5.2-6.8L5.6 22H2.3l7.7-8.8L1.8 2h6.8l4.7 6.2L18.9 2Zm-1.2 18h1.8L7.6 3.9H5.7L17.7 20Z" />
+    </svg>
   );
 }
 
