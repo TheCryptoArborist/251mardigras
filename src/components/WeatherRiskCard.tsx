@@ -1,6 +1,7 @@
 import { CloudRain, Droplets, Wind } from "lucide-react";
 import type { WeatherPreview } from "@/services/weather";
 import { formatDateTime } from "@/lib/format";
+import { MardiGrasFeatureIcon } from "./MardiGrasFeatureIcon";
 import { StatusPill } from "./StatusPill";
 
 const riskTone = {
@@ -28,9 +29,7 @@ export function WeatherRiskCard({ weather, error }: WeatherRiskCardProps) {
           <p className="text-xs font-black uppercase tracking-[0.16em] text-parade-goldBright">Downtown weather check</p>
           <h2 className="mt-1 text-2xl font-black text-white">Current conditions</h2>
         </div>
-        <div className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-parade-gold text-parade-purpleDark ring-1 ring-white/20 shadow-glow">
-          <CloudRain className="h-6 w-6" aria-hidden="true" />
-        </div>
+        <MardiGrasFeatureIcon artwork="jester" badge={<CloudRain className="h-3.5 w-3.5" />} />
       </div>
 
       {error ? (

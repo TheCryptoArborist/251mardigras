@@ -12,6 +12,7 @@ import {
   Wind
 } from "lucide-react";
 import { StatusPill } from "@/components/StatusPill";
+import { MardiGrasFeatureIcon } from "@/components/MardiGrasFeatureIcon";
 import { WeatherRiskCard } from "@/components/WeatherRiskCard";
 import { formatDateTime } from "@/lib/format";
 import { getWeatherPreview, scoreWeatherRisk, type WeatherPreview } from "@/services/weather";
@@ -135,9 +136,7 @@ function ActiveAlertsCard({ weather }: { weather: WeatherPreview | null }) {
     <section className="relative overflow-hidden rounded-[1.5rem] border border-parade-gold/35 bg-parade-purpleDeep/65 p-5 text-white shadow-card backdrop-blur">
       <span className="pointer-events-none absolute right-[-3rem] top-[-3rem] h-28 w-28 rounded-full bg-parade-gold/20 blur-2xl" aria-hidden="true" />
       <div className="relative z-10 mb-5 flex items-start gap-3">
-        <div className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-parade-gold text-parade-purpleDark ring-1 ring-white/20 shadow-glow">
-          <AlertTriangle className="h-6 w-6" aria-hidden="true" />
-        </div>
+        <MardiGrasFeatureIcon artwork="king" badge={<AlertTriangle className="h-3.5 w-3.5" />} />
         <div>
           <p className="text-xs font-black uppercase tracking-[0.16em] text-parade-goldBright">NWS alerts</p>
           <h2 className="mt-1 text-2xl font-black text-white">Active weather alerts</h2>
@@ -185,9 +184,7 @@ function ParadeWeatherRiskPanel({
       <span className="pointer-events-none absolute right-[-3rem] top-[-3rem] h-28 w-28 rounded-full bg-parade-gold/20 blur-2xl" aria-hidden="true" />
       <div className="relative z-10 flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
         <div className="flex items-start gap-3">
-          <div className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-parade-gold text-parade-purpleDark ring-1 ring-white/20 shadow-glow">
-            <CalendarDays className="h-6 w-6" aria-hidden="true" />
-          </div>
+          <MardiGrasFeatureIcon artwork="logo" badge={<CalendarDays className="h-3.5 w-3.5" />} />
           <div>
             <p className="text-xs font-black uppercase tracking-[0.16em] text-parade-goldBright">Parade weather outlook</p>
             <h2 className="mt-1 text-2xl font-black text-white">Weather for upcoming parades</h2>
@@ -375,9 +372,7 @@ function BeforeYouGo({ weather }: { weather: WeatherPreview | null }) {
       <div className="relative z-10 grid gap-6 lg:grid-cols-[1.15fr_0.85fr]">
         <div>
           <div className="flex items-start gap-3">
-            <div className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-parade-gold text-parade-purpleDark ring-1 ring-white/20 shadow-glow">
-              <Umbrella className="h-6 w-6" aria-hidden="true" />
-            </div>
+            <MardiGrasFeatureIcon artwork="jester" badge={<Umbrella className="h-3.5 w-3.5" />} />
             <div>
               <p className="text-xs font-black uppercase tracking-[0.16em] text-parade-goldBright">Before you go</p>
               <h2 className="mt-1 text-2xl font-black text-white">Parade-day weather checklist</h2>
