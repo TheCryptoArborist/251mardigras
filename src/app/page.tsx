@@ -153,9 +153,6 @@ export default async function HomePage() {
       variant: "gear"
     }
   ];
-  const featuredActions = primaryActions.filter((action) => action.featured);
-  const planningActions = primaryActions.filter((action) => !action.featured);
-
   return (
     <div>
       <section className="relative isolate overflow-hidden border-b border-parade-line bg-gradient-to-br from-parade-purpleDeep via-parade-purpleDark to-parade-purple text-white">
@@ -204,26 +201,18 @@ export default async function HomePage() {
 
           <div className="relative z-10 lg:col-span-2">
             <section aria-labelledby="plan-day-heading" className="space-y-4">
-              <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
-                <div>
-                  <p className="text-xs font-black uppercase tracking-[0.18em] text-parade-goldBright">Visitor tools</p>
-                  <h2 id="plan-day-heading" className="mt-1 text-2xl font-black leading-tight text-white sm:text-3xl">
-                    Start Here for Parade Day
-                  </h2>
-                </div>
-                <p className="max-w-2xl text-sm font-semibold leading-6 text-purple-100 md:text-right">
+              <div className="max-w-3xl">
+                <p className="text-xs font-black uppercase tracking-[0.18em] text-parade-goldBright">Visitor tools</p>
+                <h2 id="plan-day-heading" className="mt-1 text-2xl font-black leading-tight text-white sm:text-3xl">
+                  Start Here for Parade Day
+                </h2>
+                <p className="mt-2 text-sm font-semibold leading-6 text-purple-100">
                   Start with the schedule and route maps, then plan live coverage, parking, food, weather, and gear.
                 </p>
               </div>
 
-              <div className="grid gap-4 lg:grid-cols-3">
-                {featuredActions.map((action) => (
-                  <PrimaryActionCard key={action.title} {...action} />
-                ))}
-              </div>
-
-              <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-5">
-                {planningActions.map((action) => (
+              <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+                {primaryActions.map((action) => (
                   <PrimaryActionCard key={action.title} {...action} />
                 ))}
               </div>
