@@ -1,6 +1,10 @@
 import type { MetadataRoute } from "next";
+import paradeSchedule2027 from "../../data/parade-schedule-2027.json";
+import type { ParadeSchedule } from "@/components/ScheduleRouteViewer";
 import { getApprovedCommunityEvents } from "@/lib/community-events";
 import { absoluteUrl } from "@/lib/seo";
+
+const paradeSchedule = paradeSchedule2027 as ParadeSchedule;
 
 const staticRoutes: MetadataRoute.Sitemap = [
   { url: absoluteUrl("/"), changeFrequency: "daily", priority: 1 },
@@ -34,6 +38,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     changeFrequency: "weekly" as const,
     priority: 0.72
   }));
+  const paradeRoutes = paradeSchedule.days.flatMap((day) => day.parades.map((parade) => ({
+    url: absoluteUrl(`/schedule/${parade.id}`),
+    lastModified: new Date(`${paradeSchedule.lastTranscribedAt}T12:00:00-05:00`),
+    changeFrequency: "weekly" as const,
+    priority: 0.7
+  })));
 
-  return [...staticRoutes.map((route) => ({ ...route, lastModified: now })), ...eventRoutes];
+  return [...staticRoutes.map((route) => ({ ...route, lastModified: now })), ...eventRoutes, ...paradeRoutes];
 }
