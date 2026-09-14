@@ -660,20 +660,22 @@ function RouteMapCard({ route, onOpen }: { route: RouteMap; onOpen: (routeName: 
             onClick={() => onOpen(route.name)}
             className="inline-flex shrink-0 items-center justify-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-3 py-2 text-xs font-black uppercase tracking-wide text-white transition hover:bg-white/15"
           >
-            Open <MapPinned className="h-3.5 w-3.5" aria-hidden="true" />
+            Enlarge <MapPinned className="h-3.5 w-3.5" aria-hidden="true" />
           </button>
         </div>
       </div>
       <button type="button" onClick={() => onOpen(route.name)} className="block w-full bg-white/10 p-2 text-left" aria-label={`Open ${route.name} map`}>
-        <div className="relative grid min-h-56 place-items-center overflow-hidden rounded-2xl border border-parade-gold/40 bg-[radial-gradient(circle_at_78%_18%,rgba(255,212,90,0.30),transparent_28%),linear-gradient(135deg,#2b0645_0%,#591284_58%,#7d259f_100%)] p-5 text-center shadow-civic sm:h-64">
-          <span className="pointer-events-none absolute -bottom-16 -right-12 h-44 w-44 rounded-full border-[1.5rem] border-parade-gold/15" aria-hidden="true" />
-          <span className="relative z-10 flex flex-col items-center">
-            <BannerArtworkIcon kind="logo" size="medium" />
-            <span className="mt-3 text-xs font-black uppercase tracking-[0.18em] text-parade-goldBright">Official City of Mobile GIS map</span>
-            <span className="mt-1 text-4xl font-black text-white">{route.name}</span>
-            <span className="mt-3 inline-flex items-center gap-2 rounded-full bg-parade-gold px-4 py-2 text-xs font-black uppercase tracking-wide text-parade-purpleDark shadow-glow">
-              View route <MapPinned className="h-4 w-4" aria-hidden="true" />
-            </span>
+        <div className="relative h-56 overflow-hidden rounded-2xl border border-parade-gold/40 bg-white shadow-civic sm:h-64">
+          <iframe
+            src={`${route.officialMapUrl}#toolbar=0&navpanes=0&scrollbar=0&view=FitH`}
+            title={`${route.name} map preview`}
+            className="pointer-events-none h-full w-full border-0 bg-white"
+            loading="lazy"
+            tabIndex={-1}
+            aria-hidden="true"
+          />
+          <span className="pointer-events-none absolute bottom-3 right-3 grid h-10 w-10 place-items-center rounded-full border border-parade-gold/55 bg-parade-purpleDark/95 text-parade-goldBright shadow-glow" aria-hidden="true">
+            <MapPinned className="h-5 w-5" />
           </span>
         </div>
       </button>
@@ -721,13 +723,20 @@ function RouteMapDialog({ route, schedule, onClose }: { route: RouteMap; schedul
             />
             <div className="flex flex-wrap items-center justify-between gap-2 border-t border-parade-gold/35 bg-parade-purpleDark px-3 py-2 text-white">
               <span className="inline-flex items-center gap-2 text-xs font-black uppercase tracking-[0.14em] text-parade-goldBright">
-                <BannerArtworkIcon kind="logo" size="small" /> MG251 Route Viewer
+                <BannerArtworkIcon kind="logo" size="small" /> MG251 Route Map
               </span>
-              <span className="text-xs font-semibold text-purple-100">Map source: City of Mobile GIS</span>
+              <a
+                href={route.officialSourceUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-1 text-xs font-semibold text-purple-100 underline decoration-white/30 underline-offset-2 transition hover:text-white"
+              >
+                Source: City of Mobile GIS <ExternalLink className="h-3 w-3" aria-hidden="true" />
+              </a>
             </div>
           </div>
 
-          <div className="mt-4 grid gap-4 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-start">
+          <div className="mt-4">
             <div>
               <p className="text-sm font-bold leading-6 text-purple-100">{route.note}</p>
               {routeParades.length > 0 ? (
@@ -746,25 +755,6 @@ function RouteMapDialog({ route, schedule, onClose }: { route: RouteMap; schedul
                   No parade in this 2027 MG251 transcription currently uses {route.name}, but the map remains available for reference.
                 </p>
               )}
-            </div>
-
-            <div className="flex flex-col gap-2 sm:flex-row lg:flex-col">
-              <a
-                href={route.officialMapUrl}
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-parade-gold/45 bg-parade-gold/20 px-4 py-2.5 text-sm font-black text-parade-goldBright transition hover:-translate-y-0.5 hover:bg-parade-gold hover:text-parade-purpleDark sm:w-auto"
-              >
-                Open City map <MapPinned className="h-4 w-4" aria-hidden="true" />
-              </a>
-              <a
-                href={route.officialSourceUrl}
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-parade-gold px-4 py-2.5 text-sm font-black text-parade-purpleDark shadow-sm transition hover:-translate-y-0.5 hover:bg-parade-goldBright sm:w-auto"
-              >
-                City GIS source <ExternalLink className="h-4 w-4" aria-hidden="true" />
-              </a>
             </div>
           </div>
         </div>
