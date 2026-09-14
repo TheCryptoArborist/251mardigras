@@ -1,11 +1,11 @@
 import Image from "next/image";
-import { Mail, MapPinned, MessageSquare, Phone } from "lucide-react";
+import { ExternalLink, Mail, MapPinned, MessageSquare, Phone } from "lucide-react";
 import { CategoryResourcePage } from "@/components/CategoryResourcePage";
 import { getResources } from "@/lib/data-access";
 
 export const dynamic = "force-dynamic";
 
-const PARKING_ACCESS_MAP_EMBED_URL = "https://www.google.com/maps/d/embed?mid=1C22zB6qJUbU4fOUCpCeDGanJZstzmKs&ehbc=2E312F";
+const PARKING_ACCESS_MAP_URL = "https://experience.arcgis.com/experience/f88d505ba3894e7ab1115d162d62839b";
 const MOB_CITY_RIDES_LOGO_PATH = "/images/parking-access/mob%20city%20rides.jpg";
 const MOB_CITY_RIDES_PHONE_DISPLAY = "251-367-7433";
 const MOB_CITY_RIDES_PHONE_LINK = "2513677433";
@@ -43,10 +43,10 @@ function ParkingAccessMap() {
             <MapPinned className="h-5 w-5" aria-hidden="true" />
           </div>
           <div>
-            <p className="text-xs font-black uppercase tracking-[0.16em] text-parade-purple">Downtown parking map</p>
-            <h2 className="mt-1 text-2xl font-black text-parade-purpleDark">Parking and access at a glance</h2>
+            <p className="text-xs font-black uppercase tracking-[0.16em] text-parade-purple">Official City parking map</p>
+            <h2 className="mt-1 text-2xl font-black text-parade-purpleDark">Downtown parking at a glance</h2>
             <p className="mt-2 max-w-3xl text-sm leading-6 text-parade-muted">
-              Use this embedded map to preview downtown parking and access before heading to the parade route. The Downtown Parking Map link below opens the full map when needed.
+              Explore the City of Mobile&apos;s official map of downtown street parking, public lots, and garages. Open the full map for the best experience on a phone.
             </p>
           </div>
         </div>
@@ -54,12 +54,24 @@ function ParkingAccessMap() {
 
       <div className="border-t border-parade-gold/25 bg-white p-2">
         <iframe
-          src={PARKING_ACCESS_MAP_EMBED_URL}
-          title="Downtown Mobile parking and access map"
+          src={PARKING_ACCESS_MAP_URL}
+          title="Official City of Mobile downtown public parking map"
           className="h-[26rem] w-full rounded-[1.15rem] border-0 sm:h-[32rem]"
           loading="lazy"
           referrerPolicy="no-referrer-when-downgrade"
+          allowFullScreen
         />
+        <div className="flex justify-center px-2 pb-2 pt-4">
+          <a
+            href={PARKING_ACCESS_MAP_URL}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-parade-gold px-5 py-3 text-sm font-black text-parade-purpleDark shadow-sm transition hover:-translate-y-0.5 hover:bg-parade-goldBright sm:w-auto"
+          >
+            Open Full Parking Map
+            <ExternalLink className="h-4 w-4" aria-hidden="true" />
+          </a>
+        </div>
       </div>
     </section>
   );
