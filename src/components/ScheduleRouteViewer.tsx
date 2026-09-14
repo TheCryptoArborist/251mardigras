@@ -37,7 +37,8 @@ export type ParadeSchedule = {
 type RouteMap = {
   name: string;
   anchor: string;
-  imageUrl: string;
+  officialMapUrl: string;
+  officialSourceUrl: string;
   note: string;
 };
 
@@ -56,49 +57,57 @@ const routeMaps: RouteMap[] = [
   {
     name: "Route A",
     anchor: "route-map-a",
-    imageUrl: "https://assets.mobilebaymag.com/2025/01/ROUTE-A.jpg",
+    officialMapUrl: "/api/route-maps/a",
+    officialSourceUrl: "https://open-government-cityofmobile.hub.arcgis.com/documents/3482a62f130040138c7d0cdc21e1607b/explore",
     note: "Primary downtown loop used by most listed downtown parades."
   },
   {
     name: "Route B",
     anchor: "route-map-b",
-    imageUrl: "https://assets.mobilebaymag.com/2025/01/ROUTE-B-scaled.jpg",
+    officialMapUrl: "/api/route-maps/b",
+    officialSourceUrl: "https://open-government-cityofmobile.hub.arcgis.com/documents/124f95240da640e38439f1682bf21f22/explore",
     note: "Used when the official schedule lists Route B."
   },
   {
     name: "Route C",
     anchor: "route-map-c",
-    imageUrl: "https://assets.mobilebaymag.com/2025/01/ROUTE-C-scaled.jpg",
+    officialMapUrl: "/api/route-maps/c",
+    officialSourceUrl: "https://open-government-cityofmobile.hub.arcgis.com/documents/bb83c5525849406898e48a15182ef747/explore",
     note: "Used when the official schedule lists Route C."
   },
   {
     name: "Route D",
     anchor: "route-map-d",
-    imageUrl: "https://assets.mobilebaymag.com/2025/01/ROUTE-D.jpg",
+    officialMapUrl: "/api/route-maps/d",
+    officialSourceUrl: "https://open-government-cityofmobile.hub.arcgis.com/documents/a30125a0882c4e72a14609f3f766a303/explore",
     note: "Used when the official schedule lists Route D."
   },
   {
     name: "Route E",
     anchor: "route-map-e",
-    imageUrl: "https://assets.mobilebaymag.com/2025/01/ROUTE-E.jpg",
+    officialMapUrl: "/api/route-maps/e",
+    officialSourceUrl: "https://open-government-cityofmobile.hub.arcgis.com/documents/e1f05fce9a4b417cb8e8692c6f352604/explore",
     note: "Used when the official schedule lists Route E."
   },
   {
     name: "Route F",
     anchor: "route-map-f",
-    imageUrl: "https://assets.mobilebaymag.com/2025/01/ROUTE-F-scaled.jpg",
+    officialMapUrl: "/api/route-maps/f",
+    officialSourceUrl: "https://open-government-cityofmobile.hub.arcgis.com/documents/33b04ccc972a4db98a33b4cc74a29212/explore",
     note: "Used when the official schedule lists Route F."
   },
   {
     name: "Route G",
     anchor: "route-map-g",
-    imageUrl: "https://assets.mobilebaymag.com/2025/01/ROUTE-G-scaled.jpg",
+    officialMapUrl: "/api/route-maps/g",
+    officialSourceUrl: "https://open-government-cityofmobile.hub.arcgis.com/documents/c62292635da0426b8df80dd5cb86fe84/explore",
     note: "Included with the route map set; not currently assigned in this 2027 transcription."
   },
   {
     name: "Route H",
     anchor: "route-map-h",
-    imageUrl: "https://assets.mobilebaymag.com/2025/01/ROUTE-H-scaled.jpg",
+    officialMapUrl: "/api/route-maps/h",
+    officialSourceUrl: "https://open-government-cityofmobile.hub.arcgis.com/documents/31f62f9dd54641abac517a299d1d0934/explore",
     note: "Used when the official schedule lists Route H."
   }
 ];
@@ -656,8 +665,16 @@ function RouteMapCard({ route, onOpen }: { route: RouteMap; onOpen: (routeName: 
         </div>
       </div>
       <button type="button" onClick={() => onOpen(route.name)} className="block w-full bg-white/10 p-2 text-left" aria-label={`Open ${route.name} map`}>
-        <div className="overflow-hidden rounded-2xl border border-parade-gold/25 bg-white shadow-civic">
-          <img src={route.imageUrl} alt={`${route.name} Mardi Gras parade route map`} className="h-auto w-full object-contain sm:h-64" loading="lazy" />
+        <div className="relative grid min-h-56 place-items-center overflow-hidden rounded-2xl border border-parade-gold/40 bg-[radial-gradient(circle_at_78%_18%,rgba(255,212,90,0.30),transparent_28%),linear-gradient(135deg,#2b0645_0%,#591284_58%,#7d259f_100%)] p-5 text-center shadow-civic sm:h-64">
+          <span className="pointer-events-none absolute -bottom-16 -right-12 h-44 w-44 rounded-full border-[1.5rem] border-parade-gold/15" aria-hidden="true" />
+          <span className="relative z-10 flex flex-col items-center">
+            <BannerArtworkIcon kind="logo" size="medium" />
+            <span className="mt-3 text-xs font-black uppercase tracking-[0.18em] text-parade-goldBright">Official City of Mobile GIS map</span>
+            <span className="mt-1 text-4xl font-black text-white">{route.name}</span>
+            <span className="mt-3 inline-flex items-center gap-2 rounded-full bg-parade-gold px-4 py-2 text-xs font-black uppercase tracking-wide text-parade-purpleDark shadow-glow">
+              View route <MapPinned className="h-4 w-4" aria-hidden="true" />
+            </span>
+          </span>
         </div>
       </button>
       <p className="px-4 pb-4 text-sm font-semibold leading-6 text-purple-100">{route.note}</p>
@@ -696,8 +713,18 @@ function RouteMapDialog({ route, schedule, onClose }: { route: RouteMap; schedul
         </div>
 
         <div className="max-h-[calc(100dvh-7rem)] overflow-y-auto p-3 text-white sm:p-5">
-          <div className="overflow-hidden rounded-2xl border border-parade-gold/25 bg-white p-1 shadow-civic sm:p-2">
-            <img src={route.imageUrl} alt={`${route.name} Mardi Gras parade route map`} className="h-auto max-h-[52dvh] w-full object-contain sm:max-h-[68vh]" />
+          <div className="overflow-hidden rounded-2xl border border-parade-gold/35 bg-white shadow-civic">
+            <iframe
+              src={`${route.officialMapUrl}#view=FitH`}
+              title={`${route.name} official City of Mobile Mardi Gras parade route map`}
+              className="h-[52dvh] min-h-[24rem] w-full bg-white sm:h-[68vh]"
+            />
+            <div className="flex flex-wrap items-center justify-between gap-2 border-t border-parade-gold/35 bg-parade-purpleDark px-3 py-2 text-white">
+              <span className="inline-flex items-center gap-2 text-xs font-black uppercase tracking-[0.14em] text-parade-goldBright">
+                <BannerArtworkIcon kind="logo" size="small" /> MG251 Route Viewer
+              </span>
+              <span className="text-xs font-semibold text-purple-100">Map source: City of Mobile GIS</span>
+            </div>
           </div>
 
           <div className="mt-4 grid gap-4 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-start">
@@ -723,20 +750,20 @@ function RouteMapDialog({ route, schedule, onClose }: { route: RouteMap; schedul
 
             <div className="flex flex-col gap-2 sm:flex-row lg:flex-col">
               <a
-                href={route.imageUrl}
+                href={route.officialMapUrl}
                 target="_blank"
                 rel="noreferrer"
                 className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-parade-gold/45 bg-parade-gold/20 px-4 py-2.5 text-sm font-black text-parade-goldBright transition hover:-translate-y-0.5 hover:bg-parade-gold hover:text-parade-purpleDark sm:w-auto"
               >
-                Open full map <MapPinned className="h-4 w-4" aria-hidden="true" />
+                Open City map <MapPinned className="h-4 w-4" aria-hidden="true" />
               </a>
               <a
-                href={schedule.source.url}
+                href={route.officialSourceUrl}
                 target="_blank"
                 rel="noreferrer"
                 className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-parade-gold px-4 py-2.5 text-sm font-black text-parade-purpleDark shadow-sm transition hover:-translate-y-0.5 hover:bg-parade-goldBright sm:w-auto"
               >
-                Official source <ExternalLink className="h-4 w-4" aria-hidden="true" />
+                City GIS source <ExternalLink className="h-4 w-4" aria-hidden="true" />
               </a>
             </div>
           </div>
