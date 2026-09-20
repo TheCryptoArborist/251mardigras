@@ -337,5 +337,25 @@
     "accessibilityNotes": "Reach out if accommodations are needed.",
     "parkingNotes": "Parking available.",
     "organizationLogoUrl": "https://www.jotform.com/uploads/PeterToler/262217749749067/6627232038361478720/IMG_8843.png"
+  },
+  {
+    "id": "mobile-mystics-halloween-party-2026",
+    "slug": "mobile-mystics-halloween-party-2026",
+    "status": "approved",
+    "title": "Mobile Mystics Halloween Party",
+    "organization": "Mobile Mystics",
+    "eventType": "Fundraiser",
+    "startDateTime": "2026-10-17T18:00:00-05:00",
+    "endDateTime": "2026-10-18T00:00:00-05:00",
+    "dateLabel": "Sat, Oct 17, 2026 • 6:00 PM–Midnight CT",
+    "venueName": "The Grand Hall",
+    "venueAddress": "3556 Halls Mill Road",
+    "cityStateZip": "Mobile, AL 36693",
+    "description": "Join the Mobile Mystics for their Halloween Party at The Grand Hall. Doors open at 6:00 PM. Enjoy a costume contest with more than $1,000 in cash prizes. Admission is $30 per couple or $20 per person, with tickets available at the door. This is a BYOB event for adults ages 21 and older.",
+    "mapUrl": "https://maps.app.goo.gl/cBRLHjSPKdXTnrTS9",
+    "cost": "$30 per couple / $20 per person • Tickets available at the door",
+    "audience": "Adults only, 21+",
+    "flyerUrl": "https://www.jotform.com/uploads/PeterToler/262217749749067/6657537338325577888/mobile%20mystics%20halloween.jpg",
+    "organizationLogoUrl": "https://www.jotform.com/uploads/PeterToler/262217749749067/6657537338325577888/mobile%20mystics%20logo.jpg"
   }
 ]
