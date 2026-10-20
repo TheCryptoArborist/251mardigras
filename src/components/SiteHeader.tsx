@@ -9,6 +9,7 @@ import { SITE_BRAND_NAME, SITE_LOGO_ALT, SITE_LOGO_PATH } from "@/lib/brand";
 const navItems = [
   { href: "/", label: "Home" },
   { href: "/schedule", label: "Schedule" },
+  { href: "/schedule#all-route-maps", label: "Routes" },
   { href: "/watch", label: "Watch" },
   { href: "/events", label: "Events" },
   { href: "/food-drink", label: "Food & Drink" },
