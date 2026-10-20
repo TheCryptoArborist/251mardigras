@@ -22,7 +22,7 @@ export default async function ParkingAccessPage() {
   return (
     <CategoryResourcePage
       eyebrow="Get downtown"
-      title="Parking and Access"
+      title="Parking"
       description="Find downtown parking maps, transportation contacts, and official sources to plan your Mardi Gras visit. Check the season status below before relying on parade-day details."
       resources={resources}
       primaryHref="/resources"

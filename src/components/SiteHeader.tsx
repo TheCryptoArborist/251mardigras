@@ -13,7 +13,7 @@ const navItems = [
   { href: "/watch", label: "Watch" },
   { href: "/events", label: "Events" },
   { href: "/food-drink", label: "Food & Drink" },
-  { href: "/parking-access", label: "Parking & Access" },
+  { href: "/parking-access", label: "Parking" },
   { href: "/weather", label: "Weather" },
   { href: "/mardi-gras-gear", label: "Mardi Gras Gear" }
 ];

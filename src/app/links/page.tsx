@@ -42,7 +42,7 @@ const quickLinkGroups = [
     action: "Find a downtown stop"
   },
   {
-    title: "Parking and Access",
+    title: "Parking",
     description: "Parking, transportation, downtown access, and mobility-friendly planning resources.",
     href: "/parking-access",
     categories: ["Downtown Transportation", "Mobility-Friendly Access"],
