@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowRight, CalendarCheck, Download, ExternalLink, MapPinned, ShieldCheck } from "lucide-react";
+import { EventFlyerImage } from "@/components/EventFlyerImage";
 import {
   buildGoogleCalendarUrl,
   formatCommunityEventDate,
@@ -101,17 +102,16 @@ export default async function CommunityEventDetailPage({ params }: CommunityEven
             {event.flyerUrl ? (
               <a href="#event-flyer" className="relative block overflow-hidden rounded-[1.5rem] border border-parade-gold/35 bg-white/10 p-2 shadow-glow backdrop-blur transition hover:-translate-y-0.5 hover:bg-white/15">
                 <div className="relative aspect-[4/5] overflow-hidden rounded-[1.1rem] bg-parade-purpleDark">
-                  <Image
+                  <EventFlyerImage
                     src={event.flyerUrl}
                     alt={`${event.title} flyer preview`}
-                    fill
                     sizes="(min-width: 1024px) 360px, 100vw"
                     className="object-cover"
                     priority
                   />
                 </div>
                 <span className="mt-2 block text-center text-xs font-black uppercase tracking-wide text-parade-goldBright">
-                  Tap to view full flyer
+                  Event flyer and details
                 </span>
               </a>
             ) : null}
@@ -192,18 +192,16 @@ function EventFlyerSection({ event }: { event: ApprovedEvent }) {
           <p className="text-xs font-black uppercase tracking-[0.16em] text-parade-goldBright">Event flyer</p>
           <h2 className="mt-1 text-2xl font-black text-white">{event.title}</h2>
         </div>
-        <p className="text-xs font-bold text-purple-100">Displayed on this page — no download required.</p>
+        <p className="text-xs font-bold text-purple-100">Flyer provided by the event organizer.</p>
       </div>
       <div className="overflow-hidden rounded-[1.25rem] border border-parade-gold/35 bg-white p-2 shadow-glow">
-        <div className="relative aspect-[4/5] w-full overflow-hidden rounded-[1rem] bg-white sm:aspect-[3/4]">
-          <Image
-            src={event.flyerUrl!}
-            alt={`${event.title} flyer`}
-            fill
-            sizes="(min-width: 1024px) 760px, 100vw"
-            className="object-contain"
-          />
-        </div>
+        <EventFlyerImage
+          src={event.flyerUrl!}
+          alt={`${event.title} flyer`}
+          fullSize
+          sizes="(min-width: 1024px) 760px, 100vw"
+          className="object-contain"
+        />
       </div>
     </section>
   );

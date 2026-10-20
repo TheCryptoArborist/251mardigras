@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { EventFlyerImage } from "@/components/EventFlyerImage";
 import Link from "next/link";
 import { ArrowRight, CalendarDays, Download, ExternalLink, PlusCircle, ShieldCheck } from "lucide-react";
 import { CommunityEventsMonthCalendar } from "@/components/CommunityEventsMonthCalendar";
@@ -146,10 +147,9 @@ function EventCardMedia({ event }: { event: CommunityEvent }) {
 
   return (
     <Link href={`/events/${event.slug}#event-flyer`} className="relative block h-56 overflow-hidden border-b border-parade-line bg-parade-purpleDark sm:h-64">
-      <Image
+      <EventFlyerImage
         src={event.flyerUrl}
         alt={`${event.title} flyer`}
-        fill
         sizes="(min-width: 1024px) 50vw, 100vw"
         className="object-cover transition duration-300 hover:scale-105"
       />
