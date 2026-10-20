@@ -157,7 +157,7 @@ export default async function HomePage() {
     }
   ];
   return (
-    <div>
+    <div className="bg-gradient-to-br from-parade-purpleDeep via-parade-purpleDark to-parade-purple text-white">
       <section className="relative isolate overflow-hidden border-b border-parade-line bg-gradient-to-br from-parade-purpleDeep via-parade-purpleDark to-parade-purple text-white">
         <video
           className="absolute inset-0 z-0 h-full w-full object-cover opacity-70 motion-reduce:hidden"
@@ -207,8 +207,8 @@ export default async function HomePage() {
 
       <div className="mx-auto max-w-7xl space-y-8 px-4 py-7 sm:space-y-10 sm:px-6 sm:py-10 lg:px-8">
         <section aria-labelledby="plan-day-heading">
-          <p className="text-xs font-black uppercase tracking-[0.18em] text-parade-purple">Visitor tools</p>
-          <h2 id="plan-day-heading" className="mt-1 text-2xl font-black leading-tight text-parade-purpleDark sm:text-3xl">
+          <p className="text-xs font-black uppercase tracking-[0.18em] text-parade-goldBright">Visitor tools</p>
+          <h2 id="plan-day-heading" className="mt-1 text-2xl font-black leading-tight text-white sm:text-3xl">
             Make the most of parade day
           </h2>
           <div className="mt-5 grid grid-cols-2 gap-3 lg:grid-cols-4">
@@ -295,42 +295,42 @@ function HomepageVideoSpotlight({ className = "" }: { className?: string }) {
 
 function UpcomingCommunityEvents({ events }: { events: CommunityEvent[] }) {
   return (
-    <section aria-labelledby="upcoming-events-heading" className="overflow-hidden rounded-[1.5rem] border border-parade-gold/50 bg-parade-cream text-parade-purpleDark shadow-glow">
-      <div className="flex items-center gap-3 border-b border-parade-line px-5 py-4">
+    <section aria-labelledby="upcoming-events-heading" className="overflow-hidden rounded-[1.5rem] border border-[#ffd45a] bg-[linear-gradient(120deg,#2b0645_0%,#591284_52%,#7d259f_100%)] text-white shadow-glow">
+      <div className="flex items-center gap-3 border-b border-parade-gold/25 px-5 py-4">
         <HomepageBannerIcon kind="king" size="small" />
         <div>
-          <p className="text-[0.65rem] font-black uppercase tracking-[0.16em] text-parade-purple">Around the community</p>
+          <p className="text-[0.65rem] font-black uppercase tracking-[0.16em] text-parade-goldBright">Around the community</p>
           <h2 id="upcoming-events-heading" className="text-xl font-black sm:text-2xl">Coming up next</h2>
         </div>
       </div>
       {events.length ? (
-        <ul className="divide-y divide-parade-line">
+        <ul className="divide-y divide-parade-gold/20">
           {events.map((event) => {
             const start = new Date(event.startDateTime);
             const dateOptions = { timeZone: "America/Chicago" } as const;
             return (
               <li key={event.id}>
-                <Link href={`/events/${event.slug}`} className="group flex min-h-28 items-center gap-3 px-4 py-4 transition hover:bg-parade-goldSoft focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-4px] focus-visible:outline-parade-purple sm:gap-4 sm:px-5">
-                  <time dateTime={event.startDateTime} className="flex w-16 shrink-0 flex-col items-center rounded-xl border border-parade-gold/40 bg-white py-2 text-center shadow-sm">
+                <Link href={`/events/${event.slug}`} className="group flex min-h-28 items-center gap-3 px-4 py-4 transition hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-4px] focus-visible:outline-parade-goldBright sm:gap-4 sm:px-5">
+                  <time dateTime={event.startDateTime} className="flex w-16 shrink-0 flex-col items-center rounded-xl border border-parade-gold/40 bg-parade-goldBright py-2 text-center text-parade-purpleDark shadow-sm">
                     <span className="text-[0.65rem] font-black uppercase tracking-wide text-parade-purple">{new Intl.DateTimeFormat("en-US", { ...dateOptions, month: "short" }).format(start)}</span>
                     <span className="text-3xl font-black leading-tight">{new Intl.DateTimeFormat("en-US", { ...dateOptions, day: "numeric" }).format(start)}</span>
-                    <span className="text-[0.6rem] font-bold text-parade-muted">{new Intl.DateTimeFormat("en-US", { ...dateOptions, year: "numeric" }).format(start)}</span>
+                    <span className="text-[0.6rem] font-bold text-parade-purple">{new Intl.DateTimeFormat("en-US", { ...dateOptions, year: "numeric" }).format(start)}</span>
                   </time>
                   <div className="min-w-0 flex-1">
                     <h3 className="text-sm font-black leading-5 group-hover:underline sm:text-base">{event.title}</h3>
-                    <p className="mt-1 text-xs font-bold text-parade-purple">{new Intl.DateTimeFormat("en-US", { ...dateOptions, weekday: "short", hour: "numeric", minute: "2-digit" }).format(start)} CT</p>
-                    <p className="mt-1 text-xs leading-5 text-parade-muted">{event.venueName || event.locationLabel}</p>
+                    <p className="mt-1 text-xs font-bold text-parade-goldBright">{new Intl.DateTimeFormat("en-US", { ...dateOptions, weekday: "short", hour: "numeric", minute: "2-digit" }).format(start)} CT</p>
+                    <p className="mt-1 text-xs leading-5 text-purple-100">{event.venueName || event.locationLabel}</p>
                   </div>
-                  <ArrowRight className="h-4 w-4 shrink-0 text-parade-purple" aria-hidden="true" />
+                  <ArrowRight className="h-4 w-4 shrink-0 text-parade-goldBright" aria-hidden="true" />
                 </Link>
               </li>
             );
           })}
         </ul>
-      ) : <p className="px-5 py-7 text-sm leading-6 text-parade-muted">More community events are on the way. Check the calendar or submit your event for review.</p>}
-      <div className="flex flex-wrap items-center justify-between gap-2 border-t border-parade-line bg-white px-5 py-3">
-        <Link href="/events" className="inline-flex min-h-11 items-center gap-2 text-sm font-black text-parade-purple hover:underline">Full event calendar <ArrowRight className="h-4 w-4" aria-hidden="true" /></Link>
-        <Link href="/submit-event" className="inline-flex min-h-11 items-center gap-1 text-xs font-bold text-parade-purple hover:underline"><PlusCircle className="h-4 w-4" aria-hidden="true" /> Submit event</Link>
+      ) : <p className="px-5 py-7 text-sm leading-6 text-purple-100">More community events are on the way. Check the calendar or submit your event for review.</p>}
+      <div className="flex flex-wrap items-center justify-between gap-2 border-t border-parade-gold/25 bg-parade-purpleDeep/35 px-5 py-3">
+        <Link href="/events" className="inline-flex min-h-11 items-center gap-2 text-sm font-black text-parade-goldBright hover:underline">Full event calendar <ArrowRight className="h-4 w-4" aria-hidden="true" /></Link>
+        <Link href="/submit-event" className="inline-flex min-h-11 items-center gap-1 text-xs font-bold text-purple-100 hover:underline"><PlusCircle className="h-4 w-4" aria-hidden="true" /> Submit event</Link>
       </div>
     </section>
   );
@@ -630,7 +630,7 @@ const actionCardStyles: Record<
 
 function PrimaryActionCard({ icon, title, body, href, action, external, variant }: PrimaryAction) {
   const styles = actionCardStyles[variant];
-  const className = `group relative flex h-full min-w-0 overflow-hidden rounded-2xl border p-3 text-left transition hover:-translate-y-1 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-parade-purple sm:p-5 ${styles.card}`;
+  const className = `group relative flex h-full min-w-0 overflow-hidden rounded-2xl border p-3 text-left transition hover:-translate-y-1 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-parade-goldBright sm:p-5 ${styles.card}`;
   const content = (
     <span className="relative z-10 flex h-full w-full min-w-0 flex-col">
       <span className="flex items-center justify-between gap-2">
