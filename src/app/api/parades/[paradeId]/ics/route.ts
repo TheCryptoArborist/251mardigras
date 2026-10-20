@@ -1,11 +1,21 @@
 import { NextResponse } from "next/server";
 import paradeSchedule2027 from "../../../../../../data/parade-schedule-2027.json";
 import type { ParadeSchedule } from "@/components/ScheduleRouteViewer";
+import { LEGACY_PARADE_REDIRECTS } from "@/lib/parade-redirects";
 
 const schedule = paradeSchedule2027 as ParadeSchedule;
 
 export async function GET(_request: Request, { params }: { params: Promise<{ paradeId: string }> }) {
   const { paradeId } = await params;
+  if (paradeId === "floral-parade-february-8-2027") {
+    return NextResponse.redirect(new URL("/api/parades/king-felix-iii-lundi-gras-2027/ics", _request.url), 308);
+  }
+  if (LEGACY_PARADE_REDIRECTS[paradeId]) {
+    return NextResponse.json({
+      error: "This older calendar listing is no longer in the current official schedule. Review the latest lineup before adding a parade.",
+      scheduleUrl: `https://mg251.xyz${LEGACY_PARADE_REDIRECTS[paradeId]}`
+    }, { status: 410 });
+  }
   const match = schedule.days.flatMap((day) => day.parades.map((parade) => ({ parade, day }))).find(({ parade }) => parade.id === paradeId);
 
   if (!match) {
@@ -27,7 +37,7 @@ export async function GET(_request: Request, { params }: { params: Promise<{ par
     `DTSTART:${formatUtc(start)}`,
     `DTEND:${formatUtc(end)}`,
     `SUMMARY:${escapeIcs(match.parade.name)}`,
-    `DESCRIPTION:${escapeIcs(`Mobile Mardi Gras 2027 parade. ${match.parade.route}. Verify schedule details before attending. ${paradeUrl}`)}`,
+    `DESCRIPTION:${escapeIcs(`Mobile Mardi Gras 2027 parade. ${match.parade.route}. The three-hour calendar block is a planning estimate, not an official end time. Verify schedule details before attending. ${paradeUrl}`)}`,
     `LOCATION:${escapeIcs(`Mobile, Alabama — ${match.parade.route}`)}`,
     `URL:${paradeUrl}`,
     "END:VEVENT",

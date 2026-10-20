@@ -27,7 +27,7 @@ export function WeatherRiskCard({ weather, error }: WeatherRiskCardProps) {
       <div className="relative z-10 flex items-start justify-between gap-3">
         <div>
           <p className="text-xs font-black uppercase tracking-[0.16em] text-parade-goldBright">Downtown weather check</p>
-          <h2 className="mt-1 text-2xl font-black text-white">Current conditions</h2>
+          <h2 className="mt-1 text-2xl font-black text-white">{weather?.isStoredFallback ? "Stored conditions" : "Current conditions"}</h2>
         </div>
         <MardiGrasFeatureIcon artwork="jester" badge={<CloudRain className="h-3.5 w-3.5" />} />
       </div>
@@ -46,12 +46,12 @@ export function WeatherRiskCard({ weather, error }: WeatherRiskCardProps) {
 
       <div className="relative z-10 mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
         <div className="rounded-2xl border border-parade-gold/30 bg-parade-purpleDeep/55 p-4 shadow-sm">
-          <p className="text-xs font-black uppercase tracking-wide text-parade-goldBright">Now</p>
+          <p className="text-xs font-black uppercase tracking-wide text-parade-goldBright">{weather?.isStoredFallback ? "Saved" : "Now"}</p>
           <p className="mt-1 text-3xl font-black text-white">{current ? `${current.temperature}°` : "--"}</p>
           <p className="mt-1 text-sm font-semibold leading-5 text-purple-100">{current?.shortForecast ?? "Not checked"}</p>
         </div>
         <div className="rounded-2xl border border-parade-gold/30 bg-parade-purpleDeep/55 p-4 shadow-sm">
-          <p className="text-xs font-black uppercase tracking-wide text-parade-goldBright">Risk</p>
+          <p className="text-xs font-black uppercase tracking-wide text-parade-goldBright">{weather?.isStoredFallback ? "Saved risk" : "Risk"}</p>
           <div className="mt-3">
             <StatusPill tone={risk ? riskTone[risk.riskLevel] : "gray"}>{risk?.riskLevel ?? "Pending"}</StatusPill>
           </div>
@@ -76,7 +76,7 @@ export function WeatherRiskCard({ weather, error }: WeatherRiskCardProps) {
 
       <div className="relative z-10 mt-3 flex items-center gap-2 text-xs font-semibold text-purple-100">
         <Wind className="h-4 w-4 text-parade-goldBright" aria-hidden="true" />
-        Last refresh: {formatDateTime(weather?.checkedAt)}
+        {weather?.isStoredFallback ? "Snapshot saved" : "Last refresh"}: {formatDateTime(weather?.checkedAt)}
       </div>
     </section>
   );

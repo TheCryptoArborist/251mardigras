@@ -9,12 +9,15 @@ export function formatDateTime(value?: string | Date | null) {
     return "Not checked yet";
   }
 
-  return new Intl.DateTimeFormat("en-US", {
+  const formatted = new Intl.DateTimeFormat("en-US", {
+    timeZone: "America/Chicago",
     month: "short",
     day: "numeric",
     hour: "numeric",
     minute: "2-digit"
   }).format(date);
+
+  return `${formatted} CT`;
 }
 
 export function groupBy<T>(items: T[], getKey: (item: T) => string) {

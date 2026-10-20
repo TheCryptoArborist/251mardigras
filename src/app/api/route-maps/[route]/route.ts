@@ -8,7 +8,8 @@ const CITY_ROUTE_MAP_ITEMS: Record<string, string> = {
   e: "e1f05fce9a4b417cb8e8692c6f352604",
   f: "33b04ccc972a4db98a33b4cc74a29212",
   g: "c62292635da0426b8df80dd5cb86fe84",
-  h: "31f62f9dd54641abac517a299d1d0934"
+  h: "31f62f9dd54641abac517a299d1d0934",
+  i: "3f498871baf14712813cec3448537294"
 };
 
 type RouteMapRequestProps = {

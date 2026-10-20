@@ -1,12 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight, Check, MapPinned, PlayCircle, Share2 } from "lucide-react";
+import { ArrowRight, Check, Share2 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 
 const FIRST_DOWNTOWN_PARADE_TARGET = "2027-01-22T18:30:00-06:00";
 const COUNTDOWN_PROGRESS_START = "2026-02-17T00:00:00-06:00";
-const COUNTDOWN_PROGRESS_START_LABEL = "Feb. 17, 2026";
 const TARGET_EVENT_NAME = "Conde Cavaliers";
 const TARGET_FULL_DATE_LABEL = "January 22, 2027 • 6:30 PM CT";
 const TARGET_SHORT_DATE_LABEL = "Jan. 22, 2027 • 6:30 PM CT";
@@ -27,7 +26,7 @@ type ShareStatus = "idle" | "shared" | "copied" | "error";
 export function CountdownTimer({ mardiGrasDay }: { mardiGrasDay: string }) {
   const targetDate = useMemo(() => new Date(FIRST_DOWNTOWN_PARADE_TARGET), []);
   const progressStartDate = useMemo(() => new Date(COUNTDOWN_PROGRESS_START), []);
-  const [timeRemaining, setTimeRemaining] = useState(() => getTimeRemaining(targetDate));
+  const [timeRemaining, setTimeRemaining] = useState<TimeRemaining | null>(null);
   const [shareStatus, setShareStatus] = useState<ShareStatus>("idle");
 
   useEffect(() => {
@@ -39,205 +38,74 @@ export function CountdownTimer({ mardiGrasDay }: { mardiGrasDay: string }) {
   }, [targetDate]);
 
   useEffect(() => {
-    if (shareStatus === "idle") {
-      return undefined;
-    }
-
+    if (shareStatus === "idle") return;
     const timeout = window.setTimeout(() => setShareStatus("idle"), 2800);
-
     return () => window.clearTimeout(timeout);
   }, [shareStatus]);
 
-  const countdownExpired = timeRemaining.totalMilliseconds <= 0;
-  const countdownProgress = getCountdownProgress(progressStartDate, targetDate, timeRemaining.totalMilliseconds);
-  const countdownProgressLabel = `${Math.round(countdownProgress)}% complete`;
-  const daysRemainingLabel = timeRemaining.days === 1 ? "1 day remaining" : `${timeRemaining.days} days remaining`;
+  const countdownExpired = timeRemaining !== null && timeRemaining.totalMilliseconds <= 0;
+  const countdownProgress = timeRemaining ? getCountdownProgress(progressStartDate, targetDate, timeRemaining.totalMilliseconds) : 0;
   const shareButtonLabel = getShareButtonLabel(shareStatus);
   const shareStatusMessage = getShareStatusMessage(shareStatus);
-  const currentShareText = buildCountdownShareText(timeRemaining);
+  const currentShareText = timeRemaining ? buildCountdownShareText(timeRemaining) : `${TARGET_EVENT_NAME} — ${TARGET_FULL_DATE_LABEL}.`;
   const xShareUrl = buildXIntentUrl(currentShareText);
 
   async function handleShareCountdown() {
-    const shareText = buildCountdownShareText(timeRemaining);
-    const shareData = {
-      title: COUNTDOWN_SHARE_TITLE,
-      text: shareText,
-      url: COUNTDOWN_SHARE_URL
-    };
-
+    const shareText = buildCountdownShareText(getTimeRemaining(targetDate));
     try {
       if (navigator.share) {
-        await navigator.share(shareData);
+        await navigator.share({ title: COUNTDOWN_SHARE_TITLE, text: shareText, url: COUNTDOWN_SHARE_URL });
         setShareStatus("shared");
         return;
       }
-
-      const copied = await copyCountdownShareText(shareText);
-      setShareStatus(copied ? "copied" : "error");
+      setShareStatus(await copyCountdownShareText(shareText) ? "copied" : "error");
     } catch (error) {
-      if (error instanceof DOMException && error.name === "AbortError") {
-        return;
-      }
-
+      if (error instanceof DOMException && error.name === "AbortError") return;
       const copied = await copyCountdownShareText(shareText).catch(() => false);
       setShareStatus(copied ? "copied" : "error");
     }
   }
 
   return (
-    <div className="mt-7 max-w-4xl">
-      <section
-        id="mardi-gras-countdown"
-        className="scroll-mt-28 overflow-hidden rounded-[1.55rem] border border-parade-gold/40 bg-gradient-to-br from-parade-purpleDeep/72 via-parade-purpleDark/62 to-parade-purple/48 p-4 shadow-glow backdrop-blur sm:rounded-[1.75rem] sm:p-5"
-        aria-label="Countdown to the first downtown Mobile parade"
-      >
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-          <div className="min-w-0">
-            <div className="flex flex-wrap items-center gap-2">
-              <p className="text-xs font-black uppercase tracking-[0.18em] text-parade-goldBright">Parade season countdown</p>
-              {!countdownExpired ? (
-                <span className="inline-flex items-center gap-1.5 rounded-full border border-parade-gold/35 bg-parade-purpleDeep/45 px-2.5 py-1 text-[0.65rem] font-black uppercase tracking-wide text-purple-50 shadow-sm">
-                  <span className="relative flex h-2 w-2">
-                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-parade-gold opacity-75" aria-hidden="true" />
-                    <span className="relative inline-flex h-2 w-2 rounded-full bg-parade-gold" aria-hidden="true" />
-                  </span>
-                  <span className="sm:hidden">Live</span>
-                  <span className="hidden sm:inline">Live countdown</span>
-                </span>
-              ) : null}
-            </div>
-            <h2 className="mt-2 text-2xl font-black leading-tight text-white sm:text-3xl">First Downtown Parade</h2>
-            <p className="mt-1 text-sm font-bold leading-6 text-purple-100 sm:text-base">
-              <span>{TARGET_EVENT_NAME}</span>
-              <span className="hidden sm:inline"> • {TARGET_FULL_DATE_LABEL}</span>
-              <span className="block sm:hidden">{TARGET_SHORT_DATE_LABEL}</span>
-            </p>
-          </div>
-          <div className="flex shrink-0 flex-wrap gap-2 sm:justify-end">
-            <button
-              type="button"
-              onClick={handleShareCountdown}
-              className="inline-flex w-fit items-center justify-center gap-1.5 rounded-full border border-parade-gold/55 bg-parade-gold px-3 py-2 text-xs font-black text-parade-purpleDark shadow-glow transition hover:-translate-y-0.5 hover:bg-parade-goldBright"
-              aria-label="Share the Mobile Mardi Gras countdown with the current countdown numbers"
-            >
-              {shareStatus === "shared" || shareStatus === "copied" ? <Check className="h-3.5 w-3.5" aria-hidden="true" /> : <Share2 className="h-3.5 w-3.5" aria-hidden="true" />}
-              {shareButtonLabel}
-            </button>
-            <a
-              href={xShareUrl}
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex w-fit items-center justify-center gap-1.5 rounded-full border border-parade-gold/30 bg-parade-purpleDeep/45 px-3 py-2 text-xs font-black text-white shadow-sm transition hover:-translate-y-0.5 hover:border-parade-gold/55 hover:bg-parade-purpleDeep/65"
-              aria-label="Post the current Mobile Mardi Gras countdown to X"
-            >
-              Post to X
-            </a>
-            {countdownExpired ? (
-              <p className="basis-full rounded-2xl bg-parade-gold px-4 py-3 text-sm font-black text-parade-purpleDark shadow-glow sm:text-right">
-                Parade season is underway.
-              </p>
-            ) : null}
-          </div>
+    <section id="mardi-gras-countdown" className="mt-5 scroll-mt-28 rounded-2xl border border-parade-gold/35 bg-parade-purpleDeep/55 p-4 backdrop-blur sm:mt-6 sm:p-5" aria-label="Countdown to the first downtown Mobile parade">
+      <div className="flex items-start justify-between gap-3">
+        <div>
+          <h2 className="text-sm font-black text-parade-goldBright sm:text-base">First downtown parade</h2>
+          <p className="mt-1 text-xs font-semibold leading-5 text-purple-100">{TARGET_EVENT_NAME} • {TARGET_SHORT_DATE_LABEL}</p>
         </div>
-
-        <p className="sr-only" aria-live="polite">
-          {shareStatusMessage}
-        </p>
-
-        {!countdownExpired ? (
-          <>
-            <div className="mt-5 sm:hidden" aria-live="polite">
-              <div className="relative overflow-hidden rounded-[1.35rem] border border-parade-gold/45 bg-gradient-to-br from-parade-purpleDeep/95 via-parade-purpleDark/90 to-parade-purple/75 px-4 py-5 text-center shadow-civic ring-1 ring-parade-gold/25">
-                <span className="pointer-events-none absolute right-[-2.5rem] top-[-2.5rem] h-24 w-24 rounded-full bg-parade-gold/25 blur-2xl" aria-hidden="true" />
-                <span className="pointer-events-none absolute left-[-2rem] bottom-[-2rem] h-20 w-20 rounded-full bg-white/8 blur-2xl" aria-hidden="true" />
-                <p className="relative z-10 text-6xl font-black leading-none tabular-nums tracking-tight text-parade-goldBright drop-shadow-lg">
-                  {timeRemaining.days}
-                </p>
-                <p className="relative z-10 mt-2 text-xs font-black uppercase tracking-[0.22em] text-purple-100">
-                  Days
-                </p>
-              </div>
-              <div className="mt-2 grid grid-cols-3 gap-2">
-                <CountdownMiniValue label="Hrs" value={timeRemaining.hours} />
-                <CountdownMiniValue label="Min" value={timeRemaining.minutes} />
-                <CountdownMiniValue label="Sec" value={timeRemaining.seconds} />
-              </div>
-            </div>
-
-            <div className="mt-5 hidden grid-cols-4 gap-2 sm:grid" aria-live="polite">
-              <CountdownValue label="Days" value={timeRemaining.days} />
-              <CountdownValue label="Hours" value={timeRemaining.hours} />
-              <CountdownValue label="Minutes" value={timeRemaining.minutes} />
-              <CountdownValue label="Seconds" value={timeRemaining.seconds} />
-            </div>
-
-            <div className="mt-3 rounded-2xl border border-parade-gold/30 bg-parade-purpleDeep/55 p-3 shadow-sm sm:mt-4">
-              <div className="flex flex-wrap items-center justify-between gap-2 text-[0.72rem] font-black uppercase tracking-wide text-purple-100">
-                <span>Progress since {COUNTDOWN_PROGRESS_START_LABEL}</span>
-                <span className="text-parade-goldBright">{countdownProgressLabel}</span>
-              </div>
-              <p className="mt-1 text-xs font-bold leading-5 text-purple-100/90">
-                {daysRemainingLabel} until the first downtown parade.
-              </p>
-              <div
-                className="mt-2 h-2 overflow-hidden rounded-full bg-black/20 ring-1 ring-parade-gold/15"
-                aria-label={`Countdown progress from ${COUNTDOWN_PROGRESS_START_LABEL} to ${TARGET_SHORT_DATE_LABEL}: ${countdownProgressLabel}, ${daysRemainingLabel}`}
-              >
-                <span
-                  className="block h-full rounded-full bg-gradient-to-r from-parade-gold via-parade-goldBright to-parade-goldSoft shadow-glow transition-[width] duration-700 ease-out"
-                  style={{ width: `${countdownProgress}%` }}
-                  aria-hidden="true"
-                />
-              </div>
-              <div className="mt-2 hidden items-center justify-between text-[0.65rem] font-black uppercase tracking-wide text-purple-100/70 sm:flex">
-                <span>{COUNTDOWN_PROGRESS_START_LABEL}</span>
-                <span>{TARGET_SHORT_DATE_LABEL}</span>
-              </div>
-            </div>
-          </>
-        ) : null}
-
-        <div className="mt-4 grid gap-3 border-t border-parade-gold/25 pt-4 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center">
-          <div className="rounded-2xl border border-white/15 bg-white/10 px-3 py-2.5 shadow-sm">
-            <p className="text-[0.65rem] font-black uppercase tracking-[0.14em] text-parade-goldBright">Mardi Gras Day</p>
-            <p className="mt-1 text-sm font-black leading-tight text-white">{mardiGrasDay}</p>
+        <button type="button" onClick={handleShareCountdown} className="inline-flex min-h-11 shrink-0 items-center justify-center gap-1.5 rounded-full border border-parade-gold/50 bg-white/10 px-3 text-xs font-black text-white transition hover:bg-white/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-parade-goldBright" aria-label="Share the Mobile Mardi Gras countdown">
+          {shareStatus === "shared" || shareStatus === "copied" ? <Check className="h-3.5 w-3.5" aria-hidden="true" /> : <Share2 className="h-3.5 w-3.5" aria-hidden="true" />}
+          {shareButtonLabel}
+        </button>
+      </div>
+      <p className="sr-only" role="status">{shareStatusMessage}</p>
+      {!countdownExpired ? (
+        <>
+          <p className="sr-only">Counting down to {TARGET_EVENT_NAME}, {TARGET_FULL_DATE_LABEL}.</p>
+          <div className="mt-3 grid grid-cols-4 gap-2" aria-hidden="true">
+            <CountdownValue label="Days" value={timeRemaining?.days} />
+            <CountdownValue label="Hours" value={timeRemaining?.hours} />
+            <CountdownValue label="Minutes" value={timeRemaining?.minutes} />
+            <CountdownValue label="Seconds" value={timeRemaining?.seconds} />
           </div>
-          <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
-            <Link href="/schedule" className="col-span-2 inline-flex items-center justify-center gap-1.5 rounded-full bg-parade-gold px-3 py-2.5 text-xs font-black text-parade-purpleDark shadow-glow transition hover:-translate-y-0.5 hover:bg-parade-goldBright sm:col-span-1 sm:text-sm">
-              Full Schedule <ArrowRight className="h-4 w-4" aria-hidden="true" />
-            </Link>
-            <Link href="/schedule#all-route-maps" className="inline-flex items-center justify-center gap-1.5 rounded-full border border-parade-gold/35 bg-white/10 px-3 py-2.5 text-xs font-black text-white transition hover:-translate-y-0.5 hover:bg-white/15 sm:text-sm">
-              Route Maps <MapPinned className="h-4 w-4" aria-hidden="true" />
-            </Link>
-            <Link href="/watch" className="inline-flex items-center justify-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-3 py-2.5 text-xs font-black text-white transition hover:-translate-y-0.5 hover:bg-white/15 sm:text-sm">
-              Watch Live <PlayCircle className="h-4 w-4" aria-hidden="true" />
-            </Link>
+          <div className="mt-3 h-1 overflow-hidden rounded-full bg-white/15" aria-hidden="true">
+            <span className="block h-full rounded-full bg-parade-goldBright" style={{ width: `${countdownProgress}%` }} />
           </div>
-        </div>
-
-      </section>
-    </div>
+        </>
+      ) : <p className="mt-4 text-sm font-bold text-white">The first parade date has arrived. <Link className="underline" href="/schedule">Check the current schedule.</Link></p>}
+      <div className="mt-3 flex flex-wrap items-center justify-between gap-x-3 gap-y-1 text-xs leading-5 text-purple-100">
+        <p><span className="font-bold text-parade-goldBright">Mardi Gras Day:</span> {mardiGrasDay}</p>
+        <a href={xShareUrl} target="_blank" rel="noreferrer" className="inline-flex min-h-8 items-center gap-1 font-bold text-white hover:underline" aria-label="Post the Mobile Mardi Gras countdown to X">Post to X <ArrowRight className="h-3 w-3" aria-hidden="true" /></a>
+      </div>
+    </section>
   );
 }
 
-function CountdownValue({ label, value }: { label: string; value: number }) {
+function CountdownValue({ label, value }: { label: string; value?: number }) {
   return (
-    <div className="relative overflow-hidden rounded-2xl border border-parade-gold/35 bg-gradient-to-br from-parade-purpleDeep/95 via-parade-purpleDark/90 to-parade-purple/72 px-2 py-4 text-center shadow-civic ring-1 ring-parade-gold/25">
-      <span className="pointer-events-none absolute right-[-1.75rem] top-[-1.75rem] h-16 w-16 rounded-full bg-parade-gold/25 blur-2xl" aria-hidden="true" />
-      <span className="pointer-events-none absolute left-[-1.5rem] bottom-[-1.5rem] h-14 w-14 rounded-full bg-white/8 blur-2xl" aria-hidden="true" />
-      <p className="relative z-10 text-4xl font-black tabular-nums tracking-tight text-parade-goldBright drop-shadow-lg">
-        {String(value).padStart(2, "0")}
-      </p>
-      <p className="relative z-10 mt-1 text-[0.65rem] font-black uppercase tracking-[0.14em] text-purple-100">{label}</p>
-    </div>
-  );
-}
-
-function CountdownMiniValue({ label, value }: { label: string; value: number }) {
-  return (
-    <div className="rounded-2xl border border-parade-gold/30 bg-parade-purpleDeep/55 px-2 py-2.5 text-center shadow-sm ring-1 ring-parade-gold/10">
-      <p className="text-xl font-black tabular-nums text-parade-goldBright">{String(value).padStart(2, "0")}</p>
-      <p className="mt-0.5 text-[0.62rem] font-black uppercase tracking-[0.14em] text-purple-100">{label}</p>
+    <div className="rounded-xl border border-parade-gold/25 bg-parade-purpleDeep/65 px-1 py-2 text-center">
+      <p className="text-3xl font-black leading-tight tabular-nums tracking-tight text-parade-goldBright sm:text-4xl">{value === undefined ? "–" : String(value).padStart(2, "0")}</p>
+      <p className="mt-0.5 text-[0.6rem] font-black uppercase tracking-wide text-purple-100">{label}</p>
     </div>
   );
 }
@@ -269,7 +137,7 @@ function getCountdownProgress(startDate: Date, targetDate: Date, remainingMillis
 
 function buildCountdownShareText(timeRemaining: TimeRemaining) {
   if (timeRemaining.totalMilliseconds <= 0) {
-    return `Mobile Mardi Gras parade season is underway. The countdown was tracking the first downtown parade: ${TARGET_EVENT_NAME} — ${TARGET_FULL_DATE_LABEL}.`;
+    return `The first downtown parade date has arrived. Check the latest Mobile Mardi Gras schedule. This countdown tracked: ${TARGET_EVENT_NAME} — ${TARGET_FULL_DATE_LABEL}.`;
   }
 
   return `Current countdown: ${formatTimeRemainingForShare(timeRemaining)} until the first downtown Mobile Mardi Gras parade — ${TARGET_EVENT_NAME}, ${TARGET_FULL_DATE_LABEL}.`;

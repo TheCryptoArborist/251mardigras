@@ -1,14 +1,18 @@
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, Download, ExternalLink, MapPinned, ShieldCheck } from "lucide-react";
+import { ArrowLeft, ArrowRight, CalendarCheck, Download, ExternalLink, MapPinned, ShieldCheck } from "lucide-react";
 import {
   buildGoogleCalendarUrl,
   formatCommunityEventDate,
   fullEventLocation,
   getApprovedCommunityEvents,
-  getCommunityEventBySlug
+  getCommunityEventBySlug,
+  hasCommunityEventEnded
 } from "@/lib/community-events";
+
+// Refresh the archived/upcoming state automatically after the event ends.
+export const revalidate = 300;
 
 type CommunityEventDetailPageProps = {
   params: Promise<{ slug: string }>;
@@ -29,6 +33,7 @@ export default async function CommunityEventDetailPage({ params }: CommunityEven
   }
 
   const locationDetails = [event.venueAddress, event.cityStateZip].filter(Boolean).join(", ");
+  const hasEnded = hasCommunityEventEnded(event);
 
   return (
     <div>
@@ -41,6 +46,21 @@ export default async function CommunityEventDetailPage({ params }: CommunityEven
             Back to Events
           </Link>
 
+          {hasEnded ? (
+            <div className="mt-6 rounded-2xl border border-parade-gold/50 bg-parade-goldSoft p-4 text-parade-purpleDark sm:p-5">
+              <div className="flex items-start gap-3">
+                <CalendarCheck className="mt-0.5 h-5 w-5 shrink-0" aria-hidden="true" />
+                <div>
+                  <p className="text-base font-black">This event has ended</p>
+                  <p className="mt-1 text-sm leading-6">This page is saved for reference. Find the next parties, fundraisers, and community events on our calendar.</p>
+                  <Link href="/events" className="mt-3 inline-flex min-h-11 items-center gap-2 rounded-full bg-parade-purple px-4 py-2 text-sm font-black text-white hover:bg-parade-purpleDark">
+                    Browse upcoming events <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                  </Link>
+                </div>
+              </div>
+            </div>
+          ) : null}
+
           <div className="mt-7 grid gap-6 lg:grid-cols-[1fr_0.42fr] lg:items-start">
             <div>
               <p className="inline-flex rounded-full border border-parade-gold/40 bg-white/10 px-3 py-1 text-xs font-black uppercase tracking-wide text-parade-goldBright">
@@ -52,13 +72,15 @@ export default async function CommunityEventDetailPage({ params }: CommunityEven
                 <p className="text-base font-bold text-purple-100">Hosted by {event.organization}</p>
               </div>
               <div className="mt-6 flex flex-wrap gap-3">
-                <a href={`/api/events/${event.id}/ics`} className="inline-flex items-center justify-center gap-2 rounded-full bg-parade-gold px-5 py-3 text-sm font-black text-parade-purpleDark shadow-glow transition hover:bg-parade-goldBright">
-                  Add to Calendar <Download className="h-4 w-4" aria-hidden="true" />
-                </a>
-                <a href={buildGoogleCalendarUrl(event)} target="_blank" rel="noreferrer" className="inline-flex items-center justify-center gap-2 rounded-full border border-white/25 bg-white/10 px-5 py-3 text-sm font-black text-white transition hover:bg-white/15">
-                  Google Calendar <ExternalLink className="h-4 w-4" aria-hidden="true" />
-                </a>
-                {event.ticketUrl ? (
+                {!hasEnded ? <>
+                  <a href={`/api/events/${event.id}/ics`} className="inline-flex items-center justify-center gap-2 rounded-full bg-parade-gold px-5 py-3 text-sm font-black text-parade-purpleDark shadow-glow transition hover:bg-parade-goldBright">
+                    Add to Calendar <Download className="h-4 w-4" aria-hidden="true" />
+                  </a>
+                  <a href={buildGoogleCalendarUrl(event)} target="_blank" rel="noreferrer" className="inline-flex items-center justify-center gap-2 rounded-full border border-white/25 bg-white/10 px-5 py-3 text-sm font-black text-white transition hover:bg-white/15">
+                    Google Calendar <ExternalLink className="h-4 w-4" aria-hidden="true" />
+                  </a>
+                </> : null}
+                {event.ticketUrl && !hasEnded ? (
                   <a href={event.ticketUrl} target="_blank" rel="noreferrer" className="inline-flex items-center justify-center gap-2 rounded-full border border-white/25 bg-white/10 px-5 py-3 text-sm font-black text-white transition hover:bg-white/15">
                     {event.ticketLabel ?? "Event / RSVP Link"} <ExternalLink className="h-4 w-4" aria-hidden="true" />
                   </a>

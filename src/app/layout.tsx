@@ -21,12 +21,14 @@ export const metadata: Metadata = {
     url: SITE_URL,
     siteName: SITE_NAME,
     type: "website",
-    locale: "en_US"
+    locale: "en_US",
+    images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: "MG251 — Mobile Mardi Gras 2027 visitor guide" }]
   },
   twitter: {
     card: "summary_large_image",
     title: DEFAULT_SITE_TITLE,
-    description: DEFAULT_SITE_DESCRIPTION
+    description: DEFAULT_SITE_DESCRIPTION,
+    images: ["/opengraph-image"]
   },
   robots: {
     index: true,

@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import {
@@ -16,6 +17,8 @@ import {
   ShoppingBag,
   Utensils
 } from "lucide-react";
+import { FeaturedVideo } from "@/components/FeaturedVideo";
+import { getUpcomingCommunityEvents, type CommunityEvent } from "@/lib/community-events";
 import { CountdownTimer } from "@/components/CountdownTimer";
 import { VisitorCounter } from "@/components/VisitorCounter";
 import { BUY_ME_COFFEE_URL, PATREON_SUPPORT_URL, YOUTUBE_SUPPORTER_URL } from "@/lib/seed-data";
@@ -25,7 +28,6 @@ export const dynamic = "force-dynamic";
 
 const HOMEPAGE_VIDEO_SRC = "/videos/dragon-home-screen-bg.mp4";
 const HOMEPAGE_VIDEO_POSTER = "/videos/dragon-home-screen-poster.jpg";
-const HOMEPAGE_FEATURED_VIDEO_EMBED_URL = "https://www.youtube.com/embed/vSwxOuydTjU?si=dpUnDxY4bDv-7Gqt";
 const FACEBOOK_SUPPORTER_URL = "https://www.facebook.com/mardigrasmobileal/support/?surface=page_top_cta_button&entrypoint_surface=page_top_cta_button";
 
 type HomepageSchedule = {
@@ -71,6 +73,7 @@ type PrimaryAction = {
 };
 
 export default async function HomePage() {
+  const upcomingEvents = getUpcomingCommunityEvents().slice(0, 3);
   const primaryActions: PrimaryAction[] = [
     {
       icon: <CalendarDays className="h-5 w-5" aria-hidden="true" />,
@@ -85,7 +88,7 @@ export default async function HomePage() {
     {
       icon: <MapPinned className="h-5 w-5" aria-hidden="true" />,
       title: "Route Maps",
-      body: "Open Route A through Route H maps from the schedule page without leaving the lineup.",
+      body: "Open Route A through Route I maps from the schedule page without leaving the lineup.",
       href: "/schedule#all-route-maps",
       action: "Open Route Maps",
       external: false,
@@ -172,56 +175,60 @@ export default async function HomePage() {
         <div className="absolute inset-0 z-0 bg-[radial-gradient(circle_at_18%_8%,rgba(255,201,40,0.24),transparent_30%),radial-gradient(circle_at_82%_30%,rgba(255,255,255,0.12),transparent_35%),linear-gradient(180deg,rgba(23,4,47,0.10),rgba(23,4,47,0.46))]" aria-hidden="true" />
         <div className="absolute left-[-6rem] top-[-8rem] z-0 h-72 w-72 rounded-full bg-parade-gold/20 blur-3xl" aria-hidden="true" />
         <div className="absolute bottom-[-10rem] right-[-8rem] z-0 h-96 w-96 rounded-full bg-white/10 blur-3xl" aria-hidden="true" />
-        <div className="relative z-10 mx-auto grid max-w-7xl gap-6 px-4 py-6 sm:gap-8 sm:px-6 sm:py-9 lg:grid-cols-[minmax(0,1fr)_minmax(20rem,0.82fr)] lg:items-start lg:px-8 lg:py-12">
-          <div className="relative z-10 min-w-0">
-            <div className="inline-flex items-center gap-2 rounded-full border border-parade-gold/40 bg-white/10 px-4 py-2 text-xs font-black uppercase tracking-wide text-parade-goldBright shadow-glow backdrop-blur">
-              2027 Mobile Mardi Gras schedule is live
-            </div>
-            <h1 className="mt-4 max-w-4xl text-[2.4rem] font-black leading-[0.98] tracking-tight text-white drop-shadow-lg sm:mt-5 sm:text-6xl lg:text-7xl">
+        <div className="relative z-10 mx-auto grid max-w-7xl gap-7 px-4 py-6 sm:px-6 sm:py-9 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:items-center lg:gap-10 lg:px-8 lg:py-12">
+          <div className="min-w-0">
+            <p className="text-xs font-black uppercase tracking-[0.14em] text-parade-goldBright">
+              Your guide to Mobile Mardi Gras • 2027
+            </p>
+            <h1 className="mt-3 text-[2.25rem] font-black leading-[1.02] tracking-tight text-white drop-shadow-lg sm:text-5xl lg:text-6xl">
               <span className="block">Plan the parades</span>
               <span className="block">Know the route</span>
               <span className="block">Watch it live</span>
             </h1>
-            <p className="mt-4 max-w-3xl text-base font-semibold leading-6 text-purple-100 sm:mt-5 sm:text-lg sm:leading-7">
-              Dates, start times, route maps, live coverage, replays, and visitor resources for Mobile Mardi Gras.
+            <p className="mt-3 max-w-xl text-sm font-semibold leading-6 text-purple-100 sm:text-base">
+              Dates, route maps, community events, and local tips for your next trip downtown.
             </p>
+            <nav aria-label="Start planning" className="mt-5 grid grid-cols-2 gap-2 sm:grid-cols-3">
+              <Link href="/schedule" className="col-span-2 inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-parade-goldBright px-4 py-3 text-sm font-black text-parade-purpleDark shadow-glow transition hover:bg-parade-goldSoft focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white sm:col-span-1">
+                <CalendarDays className="h-4 w-4" aria-hidden="true" /> Full Schedule
+              </Link>
+              <Link href="/schedule#all-route-maps" className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-parade-gold/50 bg-white/10 px-3 py-3 text-sm font-black text-white transition hover:bg-white/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-parade-goldBright">
+                <MapPinned className="h-4 w-4" aria-hidden="true" /> Route Maps
+              </Link>
+              <Link href="/events" className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-white/35 bg-white/10 px-3 py-3 text-sm font-black text-white transition hover:bg-white/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-parade-goldBright">
+                Events <ArrowRight className="h-4 w-4" aria-hidden="true" />
+              </Link>
+            </nav>
             <CountdownTimer mardiGrasDay={homepageSchedule.mardiGrasDay} />
-            <div className="lg:hidden">
-              <HomepageVideoSpotlight className="mt-7" />
-              <CommunityEventsCallout className="mt-5" />
-              <SocialLinksStrip className="mt-5" />
-            </div>
           </div>
-
-          <div className="relative z-10 hidden min-w-0 lg:block">
-            <HomepageVideoSpotlight />
-            <CommunityEventsCallout className="mt-5" />
-            <SocialLinksStrip className="mt-5" />
-          </div>
-
-          <div className="relative z-10 lg:col-span-2">
-            <section aria-labelledby="plan-day-heading" className="space-y-4">
-              <div className="max-w-3xl">
-                <p className="text-xs font-black uppercase tracking-[0.18em] text-parade-goldBright">Visitor tools</p>
-                <h2 id="plan-day-heading" className="mt-1 text-2xl font-black leading-tight text-white sm:text-3xl">
-                  Start Here for Parade Day
-                </h2>
-                <p className="mt-2 text-sm font-semibold leading-6 text-purple-100">
-                  Start with the schedule and route maps, then plan live coverage, parking, food, weather, and gear.
-                </p>
-              </div>
-
-              <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-                {primaryActions.map((action) => (
-                  <PrimaryActionCard key={action.title} {...action} />
-                ))}
-              </div>
-            </section>
-          </div>
+          <UpcomingCommunityEvents events={upcomingEvents} />
         </div>
       </section>
 
-      <div className="mx-auto max-w-7xl space-y-10 px-4 py-8 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl space-y-8 px-4 py-7 sm:space-y-10 sm:px-6 sm:py-10 lg:px-8">
+        <section aria-labelledby="plan-day-heading">
+          <p className="text-xs font-black uppercase tracking-[0.18em] text-parade-purple">Visitor tools</p>
+          <h2 id="plan-day-heading" className="mt-1 text-2xl font-black leading-tight text-parade-purpleDark sm:text-3xl">
+            Make the most of parade day
+          </h2>
+          <div className="mt-5 grid grid-cols-2 gap-3 lg:grid-cols-4">
+            {primaryActions.map((action) => <PrimaryActionCard key={action.title} {...action} />)}
+          </div>
+        </section>
+
+        <div className="grid gap-5 rounded-[1.5rem] bg-gradient-to-br from-parade-purpleDeep to-parade-purple p-4 text-white shadow-civic sm:p-6 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)] lg:items-center">
+          <HomepageVideoSpotlight />
+          <div className="space-y-4">
+            <SocialLinksStrip />
+            <div className="rounded-2xl border border-parade-gold/30 bg-white/10 p-4">
+              <h2 className="text-lg font-black">Have a Mardi Gras event to share?</h2>
+              <p className="mt-1 text-sm leading-6 text-purple-100">Send us your ball, fundraiser, social, or watch party for calendar review.</p>
+              <Link href="/submit-event" className="mt-3 inline-flex min-h-11 items-center gap-2 rounded-full bg-parade-goldBright px-5 py-2 text-sm font-black text-parade-purpleDark hover:bg-parade-goldSoft">
+                <PlusCircle className="h-4 w-4" aria-hidden="true" /> Submit an event
+              </Link>
+            </div>
+          </div>
+        </div>
         <HomepageHistoryCallout />
         <SupportSection />
 
@@ -281,39 +288,49 @@ function HomepageVideoSpotlight({ className = "" }: { className?: string }) {
           Every Day is Mardi Gras in Mobile, Alabama
         </h2>
       </div>
-      <div className="relative aspect-video overflow-hidden rounded-[1.15rem] border border-parade-gold/35 bg-parade-purpleDark shadow-civic">
-        <iframe
-          src={HOMEPAGE_FEATURED_VIDEO_EMBED_URL}
-          title="Every Day is Mardi Gras in Mobile, Alabama"
-          className="absolute inset-0 h-full w-full border-0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          referrerPolicy="strict-origin-when-cross-origin"
-          allowFullScreen
-        />
-      </div>
+      <FeaturedVideo videoId="vSwxOuydTjU" title="Every Day is Mardi Gras in Mobile, Alabama" />
     </section>
   );
 }
 
-function CommunityEventsCallout({ className = "" }: { className?: string }) {
+function UpcomingCommunityEvents({ events }: { events: CommunityEvent[] }) {
   return (
-    <section className={`relative overflow-hidden rounded-[1.5rem] border border-parade-gold/45 bg-gradient-to-br from-parade-purpleDeep via-parade-purpleDark to-parade-purple p-5 text-white shadow-card ${className}`}>
-      <span className="pointer-events-none absolute right-[-4rem] top-[-4rem] h-32 w-32 rounded-full bg-parade-gold/20 blur-2xl" aria-hidden="true" />
-      <div className="relative z-10">
-        <HomepageBannerIcon kind="king" size="medium" />
-        <p className="mt-4 text-xs font-black uppercase tracking-[0.16em] text-parade-goldBright">Community Mardi Gras Events</p>
-        <h2 className="mt-1 text-2xl font-black leading-tight text-white">Have a Mardi Gras-related event?</h2>
-        <p className="mt-2 text-sm leading-6 text-purple-100">
-          Submit Mardi Gras balls, fundraisers, watch parties, socials, and Carnival-related events for review. Approved events may appear on the community calendar.
-        </p>
-        <div className="mt-5 grid gap-2 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
-          <Link href="/events" className="inline-flex items-center justify-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-black text-parade-purpleDark shadow-civic transition hover:-translate-y-0.5 hover:bg-parade-goldSoft">
-            Event calendar <ArrowRight className="h-4 w-4" aria-hidden="true" />
-          </Link>
-          <Link href="/submit-event" className="inline-flex items-center justify-center gap-2 rounded-full bg-parade-gold px-5 py-3 text-sm font-black text-parade-purpleDark shadow-glow transition hover:-translate-y-0.5 hover:bg-parade-goldBright">
-            Submit event <PlusCircle className="h-4 w-4" aria-hidden="true" />
-          </Link>
+    <section aria-labelledby="upcoming-events-heading" className="overflow-hidden rounded-[1.5rem] border border-parade-gold/50 bg-parade-cream text-parade-purpleDark shadow-glow">
+      <div className="flex items-center gap-3 border-b border-parade-line px-5 py-4">
+        <HomepageBannerIcon kind="king" size="small" />
+        <div>
+          <p className="text-[0.65rem] font-black uppercase tracking-[0.16em] text-parade-purple">Around the community</p>
+          <h2 id="upcoming-events-heading" className="text-xl font-black sm:text-2xl">Coming up next</h2>
         </div>
+      </div>
+      {events.length ? (
+        <ul className="divide-y divide-parade-line">
+          {events.map((event) => {
+            const start = new Date(event.startDateTime);
+            const dateOptions = { timeZone: "America/Chicago" } as const;
+            return (
+              <li key={event.id}>
+                <Link href={`/events/${event.slug}`} className="group flex min-h-28 items-center gap-3 px-4 py-4 transition hover:bg-parade-goldSoft focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-4px] focus-visible:outline-parade-purple sm:gap-4 sm:px-5">
+                  <time dateTime={event.startDateTime} className="flex w-16 shrink-0 flex-col items-center rounded-xl border border-parade-gold/40 bg-white py-2 text-center shadow-sm">
+                    <span className="text-[0.65rem] font-black uppercase tracking-wide text-parade-purple">{new Intl.DateTimeFormat("en-US", { ...dateOptions, month: "short" }).format(start)}</span>
+                    <span className="text-3xl font-black leading-tight">{new Intl.DateTimeFormat("en-US", { ...dateOptions, day: "numeric" }).format(start)}</span>
+                    <span className="text-[0.6rem] font-bold text-parade-muted">{new Intl.DateTimeFormat("en-US", { ...dateOptions, year: "numeric" }).format(start)}</span>
+                  </time>
+                  <div className="min-w-0 flex-1">
+                    <h3 className="text-sm font-black leading-5 group-hover:underline sm:text-base">{event.title}</h3>
+                    <p className="mt-1 text-xs font-bold text-parade-purple">{new Intl.DateTimeFormat("en-US", { ...dateOptions, weekday: "short", hour: "numeric", minute: "2-digit" }).format(start)} CT</p>
+                    <p className="mt-1 text-xs leading-5 text-parade-muted">{event.venueName || event.locationLabel}</p>
+                  </div>
+                  <ArrowRight className="h-4 w-4 shrink-0 text-parade-purple" aria-hidden="true" />
+                </Link>
+              </li>
+            );
+          })}
+        </ul>
+      ) : <p className="px-5 py-7 text-sm leading-6 text-parade-muted">More community events are on the way. Check the calendar or submit your event for review.</p>}
+      <div className="flex flex-wrap items-center justify-between gap-2 border-t border-parade-line bg-white px-5 py-3">
+        <Link href="/events" className="inline-flex min-h-11 items-center gap-2 text-sm font-black text-parade-purple hover:underline">Full event calendar <ArrowRight className="h-4 w-4" aria-hidden="true" /></Link>
+        <Link href="/submit-event" className="inline-flex min-h-11 items-center gap-1 text-xs font-bold text-parade-purple hover:underline"><PlusCircle className="h-4 w-4" aria-hidden="true" /> Submit event</Link>
       </div>
     </section>
   );
@@ -337,10 +354,7 @@ function HomepageBannerIcon({ kind, size }: { kind: "jester" | "logo" | "king"; 
 
   return (
     <span className={`relative block shrink-0 overflow-hidden rounded-full border-[#fff2b5] bg-[#2b0645] shadow-[0_0_20px_rgba(255,212,90,0.42)] ring-2 ring-[#d69b16]/30 ${sizeClass}`} aria-hidden="true">
-      <span
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-        style={{ backgroundImage: `url('${source}')` }}
-      />
+      <Image src={source} alt="" fill sizes={size === "medium" ? "48px" : "32px"} className="object-cover" />
     </span>
   );
 }
@@ -471,14 +485,14 @@ function SupportSection() {
           </div>
         </div>
 
-        <div className="grid gap-3 sm:grid-cols-2">
+        <div className="grid grid-cols-2 gap-3">
           {supportOptions.map((option) => (
             <a
               key={option.platform}
               href={option.href}
               target="_blank"
               rel="noreferrer"
-              className={`group relative flex min-h-[9.4rem] min-w-0 flex-col overflow-hidden rounded-2xl border p-4 text-left transition hover:-translate-y-1 ${
+              className={`group relative flex min-w-0 flex-col overflow-hidden rounded-2xl border p-3 sm:min-h-[9.4rem] sm:p-4 text-left transition hover:-translate-y-1 ${
                 option.featured
                   ? "border-parade-gold/70 bg-gradient-to-br from-parade-goldSoft via-white to-parade-purpleMist text-parade-purpleDark shadow-glow"
                   : "border-white/15 bg-white/10 text-white shadow-civic backdrop-blur hover:bg-white/15"
@@ -487,23 +501,23 @@ function SupportSection() {
               <span className="pointer-events-none absolute right-[-1.5rem] top-[-1.5rem] h-16 w-16 rounded-full bg-parade-gold/20 blur-2xl" aria-hidden="true" />
               <span className="relative z-10 flex items-start justify-between gap-3">
                 <span className="min-w-0">
-                  <span className={`block text-xs font-black uppercase tracking-[0.14em] ${option.featured ? "text-parade-purple" : "text-parade-goldBright"}`}>
+                  <span className={`block text-[0.6rem] font-black uppercase tracking-wide sm:text-xs ${option.featured ? "text-parade-purple" : "text-parade-goldBright"}`}>
                     {option.eyebrow}
                   </span>
-                  <span className={`mt-1 block text-lg font-black leading-tight ${option.featured ? "text-parade-purpleDark" : "text-white"}`}>
+                  <span className={`mt-1 block text-base font-black leading-tight sm:text-lg ${option.featured ? "text-parade-purpleDark" : "text-white"}`}>
                     {option.platform}
                   </span>
                 </span>
                 {option.featured ? (
-                  <span className="rounded-full bg-parade-purple px-2.5 py-1 text-[0.65rem] font-black uppercase tracking-wide text-white">
+                  <span className="hidden rounded-full bg-parade-purple px-2.5 py-1 text-[0.65rem] font-black uppercase tracking-wide text-white sm:inline">
                     Featured
                   </span>
                 ) : null}
               </span>
-              <span className={`relative z-10 mt-2 flex-1 text-sm font-semibold leading-5 ${option.featured ? "text-parade-ink/75" : "text-purple-100"}`}>
+              <span className={`relative z-10 mt-2 hidden flex-1 text-sm font-semibold leading-5 sm:block ${option.featured ? "text-parade-ink/75" : "text-purple-100"}`}>
                 {option.body}
               </span>
-              <span className={`relative z-10 mt-4 inline-flex w-full items-center justify-center gap-2 rounded-full px-4 py-2.5 text-sm font-black shadow-sm transition group-hover:-translate-y-0.5 ${
+              <span className={`relative z-10 mt-3 inline-flex min-h-11 w-full items-center justify-center gap-1 rounded-full px-2 py-2 text-xs sm:gap-2 sm:px-4 sm:text-sm font-black shadow-sm transition group-hover:-translate-y-0.5 ${
                 option.featured
                   ? "bg-parade-purple text-white group-hover:bg-parade-purpleDark"
                   : "bg-parade-gold text-parade-purpleDark group-hover:bg-parade-goldBright"
@@ -614,49 +628,24 @@ const actionCardStyles: Record<
   }
 };
 
-function PrimaryActionCard({
-  icon,
-  title,
-  body,
-  href,
-  action,
-  external,
-  featured,
-  variant
-}: PrimaryAction) {
+function PrimaryActionCard({ icon, title, body, href, action, external, variant }: PrimaryAction) {
   const styles = actionCardStyles[variant];
-  const className = `group relative flex h-full min-h-[14.5rem] min-w-0 overflow-hidden rounded-[1.6rem] border p-5 text-left transition duration-200 hover:-translate-y-1 ${styles.card} ${
-    featured ? "lg:min-h-[13.5rem]" : ""
-  }`;
+  const className = `group relative flex h-full min-w-0 overflow-hidden rounded-2xl border p-3 text-left transition hover:-translate-y-1 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-parade-purple sm:p-5 ${styles.card}`;
   const content = (
-    <>
-      <span className={`pointer-events-none absolute right-[-2.25rem] top-[-2.25rem] h-28 w-28 rounded-full blur-2xl ${styles.glow}`} aria-hidden="true" />
-      <span className="relative z-10 flex h-full min-w-0 flex-col">
-        <span className={`inline-flex w-fit rounded-full border px-3 py-1 text-[0.62rem] font-black uppercase tracking-wide ${styles.labelClass}`}>
-          {styles.label}
-        </span>
-        <span className={`mt-4 grid h-12 w-12 place-items-center rounded-2xl ring-1 ${styles.badge}`}>{icon}</span>
-        <h2 className={`mt-4 text-lg font-black ${styles.title}`}>{title}</h2>
-        <p className={`mt-2 flex-1 text-sm leading-6 ${styles.body}`}>{body}</p>
-        <span className={`mt-5 inline-flex w-fit items-center gap-2 rounded-full px-4 py-2 text-sm font-black transition group-hover:-translate-y-0.5 ${styles.action}`}>
-          {action}
-          {external ? <ExternalLink className="h-4 w-4" aria-hidden="true" /> : <ArrowRight className="h-4 w-4" aria-hidden="true" />}
-        </span>
+    <span className="relative z-10 flex h-full w-full min-w-0 flex-col">
+      <span className="flex items-center justify-between gap-2">
+        <span className={`grid h-9 w-9 shrink-0 place-items-center rounded-xl ring-1 sm:h-11 sm:w-11 ${styles.badge}`}>{icon}</span>
+        <ArrowRight className={`h-4 w-4 sm:hidden ${styles.title}`} aria-hidden="true" />
       </span>
-    </>
+      <h3 className={`mt-3 text-sm font-black leading-5 sm:text-lg sm:leading-6 ${styles.title}`}>{title}</h3>
+      <p className={`mt-2 hidden flex-1 text-sm leading-6 sm:block ${styles.body}`}>{body}</p>
+      <span className={`mt-4 hidden w-fit items-center gap-2 rounded-full px-4 py-2 text-sm font-black sm:inline-flex ${styles.action}`}>
+        {action}
+        {external ? <ExternalLink className="h-4 w-4" aria-hidden="true" /> : <ArrowRight className="h-4 w-4" aria-hidden="true" />}
+      </span>
+    </span>
   );
-
-  if (external) {
-    return (
-      <a href={href} target="_blank" rel="noreferrer" className={className}>
-        {content}
-      </a>
-    );
-  }
-
-  return (
-    <Link href={href} className={className}>
-      {content}
-    </Link>
-  );
+  return external
+    ? <a href={href} target="_blank" rel="noreferrer" className={className}>{content}</a>
+    : <Link href={href} className={className}>{content}</Link>;
 }

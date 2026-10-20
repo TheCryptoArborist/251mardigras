@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
-import { getCommunityEventBySlug, fullEventLocation } from "@/lib/community-events";
+import { getCommunityEventBySlug, fullEventLocation, communityEventSummary, hasCommunityEventEnded } from "@/lib/community-events";
 import { absoluteUrl, breadcrumbJsonLd, createPageMetadata, jsonLdScript } from "@/lib/seo";
 
 type EventLayoutProps = {
@@ -23,9 +23,10 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
   return createPageMetadata({
     title: event.title,
-    description: `${event.title} hosted by ${event.organization}. ${event.description}`.slice(0, 155),
+    description: communityEventSummary(event),
     path: `/events/${event.slug}`,
-    image: event.flyerUrl
+    image: event.flyerUrl,
+    imageAlt: event.flyerUrl ? `${event.title} event flyer` : undefined
   });
 }
 
@@ -88,12 +89,10 @@ function communityEventJsonLd(event: ApprovedEvent) {
       "@type": "Organization",
       name: event.organization
     },
-    offers: event.ticketUrl
+    offers: event.ticketUrl && /^https?:\/\//i.test(event.ticketUrl) && !hasCommunityEventEnded(event)
       ? {
           "@type": "Offer",
-          url: event.ticketUrl,
-          availability: "https://schema.org/InStock",
-          validFrom: event.startDateTime
+          url: event.ticketUrl
         }
       : undefined,
     about: "Mobile Mardi Gras community event",
