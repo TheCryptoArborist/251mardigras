@@ -12,7 +12,7 @@ export async function GET(request: Request) {
   const url = new URL(request.url);
   const format = url.searchParams.get("format") ?? "feed";
   if (!FORMATS.includes(format as CardFormat)) {
-    return Response.json({ error: "Choose a card format: feed, story, or preview." }, { status: 400, headers: { "Cache-Control": "no-store", "Netlify-Vary": NETLIFY_VARY } });
+    return Response.json({ error: "Choose a card format: feed, story, or preview." }, { status: 400, headers: { "Cache-Control": "no-store", "Netlify-CDN-Cache-Control": "no-store", "Netlify-Vary": NETLIFY_VARY } });
   }
 
   const now = Date.now();
@@ -21,7 +21,8 @@ export async function GET(request: Request) {
   const frozenSnapshot = isValidCountdownSnapshotTimestamp(value, now);
   const headers: HeadersInit = {
     "Content-Type": "image/png",
-    "Cache-Control": frozenSnapshot ? "public, max-age=3600, s-maxage=3600, immutable" : "no-store",
+    "Cache-Control": frozenSnapshot ? "public, max-age=3600, immutable" : "no-store",
+    "Netlify-CDN-Cache-Control": frozenSnapshot ? "public, durable, s-maxage=3600" : "no-store",
     "Netlify-Vary": NETLIFY_VARY,
     "X-Content-Type-Options": "nosniff"
   };
