@@ -2,7 +2,7 @@
 
 import { ExternalLink, HeartHandshake } from "lucide-react";
 import { usePathname } from "next/navigation";
-import { BUY_ME_COFFEE_URL, PATREON_SUPPORT_URL, YOUTUBE_SUPPORTER_URL } from "@/lib/seed-data";
+import { BUY_ME_COFFEE_URL, MOBILE_CARNIVAL_MUSEUM_URL, PATREON_SUPPORT_URL, YOUTUBE_SUPPORTER_URL } from "@/lib/seed-data";
 
 const FACEBOOK_SUPPORTER_URL =
   "https://www.facebook.com/mardigrasmobileal/support/?surface=page_top_cta_button&entrypoint_surface=page_top_cta_button";
@@ -49,6 +49,42 @@ const supportLinks = [
   }
 ];
 
+const dataSources = [
+  {
+    category: "Parade schedules & route maps",
+    description: "MG251 transcribes the published City schedule and displays route maps supplied by City GIS.",
+    links: [{ label: "City of Mobile schedule & maps", href: "https://storymaps.arcgis.com/stories/aa1969cf3b68462a8676acdfb4839ad4" }]
+  },
+  {
+    category: "Traffic, parking & public safety",
+    description: "City parking guidance and Mobile Police Department parade information.",
+    links: [
+      { label: "City parking & transportation", href: "https://www.cityofmobile.gov/mardi-gras-parade-parking/" },
+      { label: "Mobile Police Department", href: "https://www.mobilepd.org/mardi-gras/" }
+    ]
+  },
+  {
+    category: "Weather",
+    description: "National Weather Service forecasts and alerts. Parade-weather planning summaries are prepared by MG251.",
+    links: [{ label: "NWS Mobile / Pensacola", href: "https://www.weather.gov/mob/" }]
+  },
+  {
+    category: "Community events",
+    description: "Host announcements, submitted flyers and details provided by event organizers. Event listings include the available host and ticket links.",
+    links: []
+  },
+  {
+    category: "History & visitor resources",
+    description: "MG251 editorial content and curated links to the Mobile Carnival Museum, local venues, businesses and service providers.",
+    links: [{ label: "Mobile Carnival Museum", href: MOBILE_CARNIVAL_MUSEUM_URL }]
+  },
+  {
+    category: "Parade coverage",
+    description: "Videos and live coverage from Mobile Mardi Gras / MG251 and its social channels.",
+    links: []
+  }
+];
+
 export function SiteFooter() {
   const pathname = usePathname();
   const showSupportLinks = pathname !== "/";
@@ -59,7 +95,7 @@ export function SiteFooter() {
         <div className="min-w-0">
           <p className="font-black text-parade-ink">Mardi Gras - Mobile, AL</p>
           <p className="mt-2 max-w-4xl leading-6">
-            Unofficial public-source monitor and visitor hub. Verify parade, route, traffic, public safety, emergency, and weather decisions with official agencies.
+            Independent parade coverage, community events, and local information for Mobile Mardi Gras.
           </p>
           <nav className="mt-4 flex flex-wrap gap-2" aria-label="Mardi Gras - Mobile, Alabama social media links">
             {socialLinks.map((link) => (
@@ -105,6 +141,46 @@ export function SiteFooter() {
             </div>
           </section>
         ) : null}
+
+        <section aria-labelledby="footer-disclaimer-heading" className="min-w-0 border-t border-parade-purple/15 pt-4 text-xs leading-5 lg:col-span-2">
+          <h2 id="footer-disclaimer-heading" className="font-bold text-parade-ink">Information disclaimer</h2>
+          <p className="mt-1 max-w-6xl">
+            MG251 is an independent guide to Mobile Mardi Gras. Parade schedules, routes, cancellations and weather-related changes are determined by parade organizers and local authorities. Road closures, parking rules, towing and public-safety instructions are managed by the City of Mobile and responsible agencies. Weather forecasts and alerts are provided by the National Weather Service. Information may change; posted restrictions and directions from officials on site take precedence.
+          </p>
+          <details id="data-sources" className="mt-2">
+            <summary className="min-h-11 w-fit cursor-pointer rounded px-1 py-3 font-bold text-parade-purple focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-parade-purple">
+              Data sources
+            </summary>
+            <dl className="mt-2 grid gap-x-8 gap-y-5 sm:grid-cols-2 lg:grid-cols-3">
+              {dataSources.map((source) => (
+                <div key={source.category} className="min-w-0">
+                  <dt className="font-bold text-parade-ink">{source.category}</dt>
+                  <dd className="mt-1">
+                    <p>{source.description}</p>
+                    {source.links.length > 0 ? (
+                      <ul className="mt-1">
+                        {source.links.map((link) => (
+                          <li key={link.href}>
+                            <a
+                              href={link.href}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex min-h-11 max-w-full items-center gap-1.5 rounded py-2 font-semibold text-parade-purple underline decoration-parade-purple/30 underline-offset-4 hover:decoration-parade-purple focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-parade-purple"
+                            >
+                              <span>{link.label}</span>
+                              <ExternalLink className="h-3 w-3 shrink-0" aria-hidden="true" />
+                              <span className="sr-only"> (opens in a new tab)</span>
+                            </a>
+                          </li>
+                        ))}
+                      </ul>
+                    ) : null}
+                  </dd>
+                </div>
+              ))}
+            </dl>
+          </details>
+        </section>
       </div>
     </footer>
   );
