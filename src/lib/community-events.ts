@@ -27,6 +27,7 @@ export type CommunityEvent = {
   accessibilityNotes?: string;
   parkingNotes?: string;
   flyerUrl?: string;
+  flyerDimensions?: { width: number; height: number };
   organizationLogoUrl?: string;
 };
 

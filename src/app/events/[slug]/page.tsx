@@ -101,12 +101,15 @@ export default async function CommunityEventDetailPage({ params }: CommunityEven
 
             {event.flyerUrl ? (
               <a href="#event-flyer" className="relative block overflow-hidden rounded-[1.5rem] border border-parade-gold/35 bg-white/10 p-2 shadow-glow backdrop-blur transition hover:-translate-y-0.5 hover:bg-white/15">
-                <div className="relative aspect-[4/5] overflow-hidden rounded-[1.1rem] bg-parade-purpleDark">
+                <div
+                  className={`relative overflow-hidden rounded-[1.1rem] bg-parade-purpleDark ${event.flyerDimensions ? "" : "aspect-[4/5]"}`}
+                  style={event.flyerDimensions ? { aspectRatio: `${event.flyerDimensions.width} / ${event.flyerDimensions.height}` } : undefined}
+                >
                   <EventFlyerImage
                     src={event.flyerUrl}
                     alt={`${event.title} flyer preview`}
                     sizes="(min-width: 1024px) 360px, 100vw"
-                    className="object-cover"
+                    className={event.flyerDimensions ? "object-contain" : "object-cover"}
                     priority
                   />
                 </div>
@@ -199,6 +202,7 @@ function EventFlyerSection({ event }: { event: ApprovedEvent }) {
           src={event.flyerUrl!}
           alt={`${event.title} flyer`}
           fullSize
+          dimensions={event.flyerDimensions}
           sizes="(min-width: 1024px) 760px, 100vw"
           className="object-contain"
         />

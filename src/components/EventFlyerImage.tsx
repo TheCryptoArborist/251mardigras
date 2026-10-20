@@ -11,9 +11,10 @@ type EventFlyerImageProps = {
   className?: string;
   priority?: boolean;
   fullSize?: boolean;
+  dimensions?: { width: number; height: number };
 };
 
-export function EventFlyerImage({ src, alt, sizes, className, priority = false, fullSize = false }: EventFlyerImageProps) {
+export function EventFlyerImage({ src, alt, sizes, className, priority = false, fullSize = false, dimensions }: EventFlyerImageProps) {
   const [unavailableSource, setUnavailableSource] = useState<string | null>(null);
 
   if (unavailableSource === src) {
@@ -32,6 +33,13 @@ export function EventFlyerImage({ src, alt, sizes, className, priority = false, 
   );
 
   return fullSize
-    ? <div className="relative aspect-[4/5] w-full overflow-hidden rounded-[1rem] bg-white sm:aspect-[3/4]">{image}</div>
+    ? (
+      <div
+        className={`relative w-full overflow-hidden rounded-[1rem] bg-white ${dimensions ? "" : "aspect-[4/5] sm:aspect-[3/4]"}`}
+        style={dimensions ? { aspectRatio: `${dimensions.width} / ${dimensions.height}` } : undefined}
+      >
+        {image}
+      </div>
+    )
     : image;
 }
