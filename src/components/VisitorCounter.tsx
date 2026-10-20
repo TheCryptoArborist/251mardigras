@@ -54,8 +54,8 @@ export function VisitorCounter() {
   }
 
   return (
-    <section aria-label="Homepage visitor counter" className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 border-t border-parade-line py-4 text-center text-xs text-parade-muted">
-      <p><strong className="text-sm font-black tabular-nums text-parade-purple">{counter.total.toLocaleString()}</strong> homepage visits counted</p>
+    <section aria-label="Homepage visitor counter" className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 border-t border-parade-gold/25 py-4 text-center text-xs text-purple-100">
+      <p><strong className="text-sm font-black tabular-nums text-parade-goldBright">{counter.total.toLocaleString()}</strong> homepage visits counted</p>
       <p>Once per browser session. Thanks for following Mobile Mardi Gras.</p>
     </section>
   );
