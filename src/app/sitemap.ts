@@ -8,6 +8,7 @@ const paradeSchedule = paradeSchedule2027 as ParadeSchedule;
 
 const staticRoutes: MetadataRoute.Sitemap = [
   { url: absoluteUrl("/"), changeFrequency: "daily", priority: 1 },
+  { url: absoluteUrl("/countdown"), changeFrequency: "daily", priority: 0.85 },
   { url: absoluteUrl("/links"), changeFrequency: "daily", priority: 0.95 },
   { url: absoluteUrl("/links/support"), changeFrequency: "weekly", priority: 0.82 },
   { url: absoluteUrl("/links/history-culture"), changeFrequency: "weekly", priority: 0.8 },

@@ -6,7 +6,8 @@ export default function robots(): MetadataRoute.Robots {
     rules: [
       {
         userAgent: "*",
-        allow: "/",
+        // Social crawlers need the public countdown PNG for link previews.
+        allow: ["/", "/api/countdown-card"],
         disallow: ["/admin", "/admin/", "/api", "/api/"]
       }
     ],
