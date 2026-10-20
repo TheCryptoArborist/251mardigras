@@ -1,33 +1,28 @@
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import type { Metadata } from "next";
+import { notFound, permanentRedirect } from "next/navigation";
 import {
   ArrowLeft,
   ArrowRight,
-  Car,
   ExternalLink,
   HeartHandshake,
   Landmark,
   MapPinned,
-  PlayCircle,
-  Share2,
-  ShoppingBag,
-  Utensils
+  Share2
 } from "lucide-react";
 import { getResources, type ResourceItem } from "@/lib/data-access";
+import { createPageMetadata } from "@/lib/seo";
 
 export const dynamic = "force-dynamic";
 
+const consolidatedCategories: Record<string, string> = {
+  "parade-coverage": "/watch",
+  "food-drink": "/food-drink",
+  "parking-access": "/parking-access",
+  "gear-throws": "/mardi-gras-gear"
+};
+
 const categoryPages = [
-  {
-    slug: "parade-coverage",
-    title: "Parade Coverage",
-    eyebrow: "Watch first",
-    description: "Live coverage, YouTube channel access, and previous parade-season replays.",
-    categories: ["Live Coverage / Channel Support", "Previous Parade Seasons"],
-    icon: <PlayCircle className="h-5 w-5" aria-hidden="true" />,
-    primaryHref: "/watch",
-    primaryAction: "Open Watch Live page"
-  },
   {
     slug: "support",
     title: "Support",
@@ -37,26 +32,6 @@ const categoryPages = [
     icon: <HeartHandshake className="h-5 w-5" aria-hidden="true" />,
     primaryHref: "/",
     primaryAction: "Back to homepage"
-  },
-  {
-    slug: "food-drink",
-    title: "Food and Drink",
-    eyebrow: "Downtown stops",
-    description: "Restaurants, coffee, bakeries, breweries, dessert stops, and direct map or venue links for people walking or driving downtown.",
-    categories: ["Food and Drink"],
-    icon: <Utensils className="h-5 w-5" aria-hidden="true" />,
-    primaryHref: "/resources#food-and-drink-navigator",
-    primaryAction: "Open food navigator"
-  },
-  {
-    slug: "parking-access",
-    title: "Parking and Access",
-    eyebrow: "Get downtown",
-    description: "Parking, transportation, downtown access, and mobility-friendly visitor resources. Verify official rules before travel.",
-    categories: ["Downtown Transportation", "Mobility-Friendly Access"],
-    icon: <Car className="h-5 w-5" aria-hidden="true" />,
-    primaryHref: "/resources",
-    primaryAction: "Open visitor guide"
   },
   {
     slug: "history-culture",
@@ -78,24 +53,30 @@ const categoryPages = [
     primaryHref: "/watch",
     primaryAction: "Open coverage hub"
   },
-  {
-    slug: "gear-throws",
-    title: "Gear and Throws",
-    eyebrow: "Mardi Gras shopping",
-    description: "Throws, gear, and selected shopping resources for Mobile Mardi Gras visitors.",
-    categories: ["Mardi Gras Gear / Throws"],
-    icon: <ShoppingBag className="h-5 w-5" aria-hidden="true" />,
-    primaryHref: "/resources",
-    primaryAction: "Open full guide"
-  }
 ];
 
 type LinksCategoryPageProps = {
   params: Promise<{ category: string }>;
 };
 
+export async function generateMetadata({ params }: LinksCategoryPageProps): Promise<Metadata> {
+  const { category } = await params;
+  const destination = consolidatedCategories[category];
+  if (destination) permanentRedirect(destination);
+  const page = categoryPages.find((item) => item.slug === category);
+  if (!page) notFound();
+
+  return createPageMetadata({
+    title: `${page.title} | Mobile Mardi Gras`,
+    description: page.description,
+    path: `/links/${category}`
+  });
+}
+
 export default async function LinksCategoryPage({ params }: LinksCategoryPageProps) {
   const { category } = await params;
+  const destination = consolidatedCategories[category];
+  if (destination) permanentRedirect(destination);
   const page = categoryPages.find((item) => item.slug === category);
 
   if (!page) {

@@ -5,7 +5,7 @@
     "name": "City of Mobile Parade Schedule and Routes StoryMap",
     "url": "https://storymaps.arcgis.com/stories/aa1969cf3b68462a8676acdfb4839ad4"
   },
-  "lastTranscribedAt": "2026-09-11",
+  "lastTranscribedAt": "2026-10-20",
   "displayDateRange": "January 22 – February 9, 2027",
   "mardiGrasDay": "February 9, 2027",
   "defaultRouteNote": "The official source notes that downtown Mobile parades roll on Route A unless otherwise noted.",
@@ -18,7 +18,7 @@
         {
           "id": "conde-cavaliers-2027",
           "time": "6:30 PM",
-          "name": "Conde Cavaliers Parade",
+          "name": "Conde Cavaliers",
           "route": "Route A"
         }
       ]
@@ -30,7 +30,7 @@
         {
           "id": "bayport-parading-society-2027",
           "time": "2:00 PM",
-          "name": "Bayport Parading Society Parade",
+          "name": "Bayport Parading Society",
           "route": "Route A"
         },
         {
@@ -42,13 +42,13 @@
         {
           "id": "pharaohs-2027",
           "time": "6:30 PM",
-          "name": "Pharaohs Parade",
+          "name": "Pharaohs’ Mystic Society",
           "route": "Route A"
         },
         {
           "id": "conde-explorers-2027",
           "time": "7:00 PM",
-          "name": "Conde Explorers Parade",
+          "name": "Conde Explorers",
           "route": "Route A"
         }
       ]
@@ -60,7 +60,7 @@
         {
           "id": "order-of-polka-dots-2027",
           "time": "6:30 PM",
-          "name": "Order of Polka Dots Parade",
+          "name": "Order of Polka Dots",
           "route": "Route A"
         }
       ]
@@ -72,7 +72,7 @@
         {
           "id": "order-of-inca-2027",
           "time": "6:30 PM",
-          "name": "Order of Inca Parade",
+          "name": "Order of Inca",
           "route": "Route A"
         }
       ]
@@ -84,13 +84,13 @@
         {
           "id": "mobile-mystics-2027",
           "time": "1:00 PM",
-          "name": "Mobile Mystics Parade",
+          "name": "Mobile Mystics",
           "route": "Route A"
         },
         {
           "id": "mobile-mystical-revelers-2027",
           "time": "1:30 PM",
-          "name": "Mobile Mystical Revelers Parade",
+          "name": "Mobile Mystical Revelers",
           "route": "Route A"
         },
         {
@@ -102,19 +102,20 @@
         {
           "id": "maids-of-mirth-2027",
           "time": "6:30 PM",
-          "name": "Maids of Mirth Parade",
-          "route": "Route A"
+          "name": "Maids of Mirth",
+          "route": "Route G",
+          "routeNote": "Route G"
         },
         {
           "id": "order-of-butterfly-maidens-2027",
-          "time": "7:00 PM",
-          "name": "Order of Butterfly Maidens Parade",
+          "time": "6:30 PM",
+          "name": "Order of Butterfly Maidens",
           "route": "Route A"
         },
         {
           "id": "krewe-of-marry-mates-2027",
           "time": "7:30 PM",
-          "name": "Krewe of Marry Mates Parade",
+          "name": "Krewe of Marry Mates",
           "route": "Route A"
         }
       ]
@@ -126,7 +127,7 @@
         {
           "id": "neptunes-daughters-2027",
           "time": "6:30 PM",
-          "name": "Neptune’s Daughters Parade",
+          "name": "Neptune’s Daughters",
           "route": "Route A"
         },
         {
@@ -144,13 +145,13 @@
         {
           "id": "order-of-venus-2027",
           "time": "6:30 PM",
-          "name": "Order of Venus Parade",
+          "name": "Order of Venus",
           "route": "Route A"
         },
         {
           "id": "order-of-many-faces-2027",
           "time": "7:30 PM",
-          "name": "Order of Many Faces Parade",
+          "name": "Order of Many Faces",
           "route": "Route A"
         }
       ]
@@ -162,7 +163,7 @@
         {
           "id": "order-of-lashes-2027",
           "time": "6:30 PM",
-          "name": "Order of LaShe’s Parade",
+          "name": "Order of LaShe’s",
           "route": "Route A"
         },
         {
@@ -180,7 +181,7 @@
         {
           "id": "mystic-stripers-society-2027",
           "time": "6:30 PM",
-          "name": "Mystic Stripers Society Parade",
+          "name": "Mystic Stripers Society",
           "route": "Route A"
         }
       ]
@@ -192,13 +193,7 @@
         {
           "id": "crewe-of-columbus-2027",
           "time": "6:30 PM",
-          "name": "Crewe of Columbus Parade",
-          "route": "Route A"
-        },
-        {
-          "id": "krewe-de-secondline-february-5-2027",
-          "time": "7:00 PM",
-          "name": "Krewe de Secondline",
+          "name": "Crewe of Columbus",
           "route": "Route A"
         }
       ]
@@ -211,18 +206,19 @@
           "id": "floral-parade-february-6-2027",
           "time": "Noon",
           "name": "Floral Parade",
-          "route": "Route A"
+          "route": "Route I",
+          "routeNote": "Route I"
         },
         {
           "id": "knights-of-mobile-2027",
           "time": "12:30 PM",
-          "name": "Knights of Mobile Parade",
+          "name": "Knights of Mobile",
           "route": "Route A"
         },
         {
           "id": "mobile-mystical-ladies-2027",
           "time": "1:00 PM",
-          "name": "Mobile Mystical Ladies Parade",
+          "name": "Mobile Mystical Ladies",
           "route": "Route A"
         },
         {
@@ -232,15 +228,15 @@
           "route": "Route A"
         },
         {
-          "id": "krewe-of-saint-jude-2027",
+          "id": "joy-of-life-2027",
           "time": "2:00 PM",
-          "name": "Krewe of Saint Judé",
+          "name": "Joy of Life",
           "route": "Route A"
         },
         {
           "id": "mystics-of-time-2027",
           "time": "5:45 PM",
-          "name": "Mystics of Time Parade",
+          "name": "Mystics of Time",
           "route": "Route H",
           "routeNote": "Route H"
         }
@@ -254,32 +250,38 @@
         {
           "id": "king-elexis-i-motorcade-2027",
           "time": "2:00 PM",
-          "name": "King Elexis I Motorcade",
+          "name": "King Elexis I",
           "route": "Route E",
           "routeNote": "Route E"
         },
         {
           "id": "joe-cain-procession-2027",
           "time": "2:30 PM",
-          "name": "Joe Cain Procession",
+          "name": "Joe Cain Marchers",
+          "route": "Route A"
+        },
+        {
+          "id": "joe-cain-society-2027",
+          "time": "3:00 PM",
+          "name": "Joe Cain Society",
           "route": "Route A"
         },
         {
           "id": "le-krewe-de-bienville-2027",
-          "time": "5:00 PM",
-          "name": "Le Krewe de Bienville",
-          "route": "Route A"
-        },
-        {
-          "id": "order-of-khaos-february-7-2027",
-          "time": "5:00 PM",
-          "name": "Order of Khaos",
+          "time": "4:00 PM",
+          "name": "Krewe de Bienville",
           "route": "Route A"
         },
         {
           "id": "krewe-de-secondline-february-7-2027",
           "time": "5:00 PM",
           "name": "Krewe de Secondline",
+          "route": "Route A"
+        },
+        {
+          "id": "order-of-khaos-february-7-2027",
+          "time": "6:00 PM",
+          "name": "Order of Kahos",
           "route": "Route A"
         }
       ]
@@ -292,14 +294,9 @@
         {
           "id": "king-felix-iii-lundi-gras-2027",
           "time": "11:30 AM",
-          "name": "King Felix III Parade",
-          "route": "Route A"
-        },
-        {
-          "id": "floral-parade-february-8-2027",
-          "time": "Noon",
-          "name": "Floral Parade",
-          "route": "Route A"
+          "name": "King Felix III & Floral Parade",
+          "route": "Route I",
+          "routeNote": "Route I"
         },
         {
           "id": "mlk-business-civic-organization-2027",
@@ -311,28 +308,28 @@
         {
           "id": "mlk-monday-mystics-2027",
           "time": "2:30 PM",
-          "name": "MLK Monday Mystics Parade",
+          "name": "Monday Mystics",
           "route": "Route D",
           "routeNote": "Route D"
         },
         {
           "id": "northside-merchants-2027",
           "time": "3:00 PM",
-          "name": "Northside Merchants Parade",
+          "name": "Northside Merchants",
           "route": "Route D",
           "routeNote": "Route D"
         },
         {
           "id": "infant-mystics-2027",
           "time": "6:30 PM",
-          "name": "Infant Mystics Parade",
+          "name": "Infant Mystics",
           "route": "Route F",
           "routeNote": "Route F"
         },
         {
           "id": "order-of-doves-2027",
           "time": "7:00 PM",
-          "name": "Order of Doves Parade",
+          "name": "Order of Doves",
           "route": "Route F",
           "routeNote": "Route F"
         }
@@ -346,13 +343,13 @@
         {
           "id": "order-of-athena-2027",
           "time": "10:30 AM",
-          "name": "Order of Athena Parade",
+          "name": "Order of Athena",
           "route": "Route A"
         },
         {
           "id": "knights-of-revelry-2027",
           "time": "12:30 PM",
-          "name": "Knights of Revelry Parade",
+          "name": "Knights of Revelry",
           "route": "Route A"
         },
         {
@@ -364,20 +361,20 @@
         {
           "id": "comic-cowboys-2027",
           "time": "1:30 PM",
-          "name": "Comic Cowboys Parade",
+          "name": "Comic Cowboys",
           "route": "Route A"
         },
         {
           "id": "mamga-mammoth-2027",
           "time": "2:00 PM",
-          "name": "MAMGA Mammoth Parade",
+          "name": "MAMGA Mammoth",
           "route": "Route B",
           "routeNote": "Route B"
         },
         {
           "id": "order-of-myths-2027",
           "time": "6:00 PM",
-          "name": "Order of Myths Parade",
+          "name": "Order of Myths",
           "route": "Route C",
           "routeNote": "Route C"
         }

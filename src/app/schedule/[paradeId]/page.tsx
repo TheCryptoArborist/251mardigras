@@ -55,7 +55,6 @@ function paradeJsonLd(parade: (typeof parades)[number]["parade"], date: string) 
     "@type": "Event",
     name: parade.name,
     startDate: start.toISOString(),
-    endDate: new Date(start.getTime() + 3 * 60 * 60 * 1000).toISOString(),
     eventStatus: "https://schema.org/EventScheduled",
     eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
     url: absoluteUrl(`/schedule/${parade.id}`),

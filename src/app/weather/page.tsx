@@ -15,6 +15,7 @@ import { StatusPill } from "@/components/StatusPill";
 import { MardiGrasFeatureIcon } from "@/components/MardiGrasFeatureIcon";
 import { WeatherRiskCard } from "@/components/WeatherRiskCard";
 import { formatDateTime } from "@/lib/format";
+import { findAlertsForParade, findHourlyPeriodsForParade, getWeatherAlertState, NWS_VISITOR_URLS } from "@/lib/weather-display";
 import { getWeatherPreview, scoreWeatherRisk, type WeatherPreview } from "@/services/weather";
 import paradeSchedule2027 from "../../../data/parade-schedule-2027.json";
 
@@ -68,6 +69,7 @@ export default async function WeatherPage() {
     }));
 
   const weather = weatherResult.weather;
+  const liveForecastError = weatherResult.error ?? (weather?.isStoredFallback ? "Live forecast refresh is unavailable" : null);
   const paradeOutlooks = buildParadeWeatherOutlooks(schedule, weather, 8);
   const forecastReadyOutlooks = paradeOutlooks.filter((outlook) => outlook.status === "available");
   const nextParadeOutlook = paradeOutlooks[0] ?? null;
@@ -113,17 +115,17 @@ export default async function WeatherPage() {
           <ActiveAlertsCard weather={weather} />
         </section>
 
-        <ForecastWindow weather={weather} error={weatherResult.error} />
+        <ForecastWindow weather={weather} />
 
         <ParadeWeatherRiskPanel
-          error={weatherResult.error}
+          error={liveForecastError}
           outlooks={forecastReadyOutlooks}
           nextOutlook={nextParadeOutlook}
         />
 
         <RiskMethod weather={weather} />
 
-        <BeforeYouGo weather={weather} />
+        <BeforeYouGo />
       </div>
     </main>
   );
@@ -131,6 +133,7 @@ export default async function WeatherPage() {
 
 function ActiveAlertsCard({ weather }: { weather: WeatherPreview | null }) {
   const alerts = weather?.alerts ?? [];
+  const alertState = getWeatherAlertState(weather);
 
   return (
     <section className="relative overflow-hidden rounded-[1.5rem] border border-parade-gold/35 bg-parade-purpleDeep/65 p-5 text-white shadow-card backdrop-blur">
@@ -139,12 +142,20 @@ function ActiveAlertsCard({ weather }: { weather: WeatherPreview | null }) {
         <MardiGrasFeatureIcon artwork="king" badge={<AlertTriangle className="h-3.5 w-3.5" />} />
         <div>
           <p className="text-xs font-black uppercase tracking-[0.16em] text-parade-goldBright">NWS alerts</p>
-          <h2 className="mt-1 text-2xl font-black text-white">Active weather alerts</h2>
+          <h2 className="mt-1 text-2xl font-black text-white">{alertState === "stored" ? "Last stored weather alerts" : "Active weather alerts"}</h2>
           <p className="mt-2 text-sm font-semibold leading-6 text-purple-100">
-            Alerts returned for the downtown Mobile forecast point.
+            NWS alert information for downtown Mobile. Times are shown in Central time.
           </p>
         </div>
       </div>
+
+      {alertState === "unavailable" || alertState === "stored" ? (
+        <div className="relative z-10 mb-3 rounded-2xl border border-parade-gold/35 bg-parade-goldSoft p-4 text-sm font-semibold leading-6 text-amber-950">
+          {alertState === "unavailable"
+            ? "Alert status could not be checked. Verify current alerts directly with the National Weather Service before heading downtown."
+            : `Live alert checks are unavailable. Showing saved information${weather?.checkedAt ? ` from ${formatDateTime(weather.checkedAt)}` : " with no recorded check time"}. Verify current alerts with the National Weather Service.`}
+        </div>
+      ) : null}
 
       {alerts.length > 0 ? (
         <div className="relative z-10 space-y-3">
@@ -161,11 +172,19 @@ function ActiveAlertsCard({ weather }: { weather: WeatherPreview | null }) {
             </article>
           ))}
         </div>
-      ) : (
+      ) : alertState === "clear" || alertState === "stored" ? (
         <div className="relative z-10 rounded-2xl border border-parade-gold/30 bg-white/10 p-4 text-sm font-semibold leading-6 text-purple-100">
-          No active NWS alerts returned for the downtown Mobile point at the last refresh.
+          {alertState === "stored"
+            ? "The saved snapshot contained no alerts. Current alert status has not been confirmed."
+            : `No active NWS alerts were reported for downtown Mobile at ${formatDateTime(weather?.checkedAt)}.`}
         </div>
-      )}
+      ) : null}
+      {alertState === "active" ? (
+        <p className="relative z-10 mt-3 text-xs font-semibold text-purple-100">Last checked: {formatDateTime(weather?.checkedAt)}</p>
+      ) : null}
+      <a href={NWS_VISITOR_URLS.alerts} target="_blank" rel="noreferrer" className="relative z-10 mt-4 inline-flex items-center gap-2 text-sm font-black text-parade-goldBright underline underline-offset-4">
+        NWS regional watches, warnings & advisories <ExternalLink className="h-4 w-4 shrink-0" aria-hidden="true" />
+      </a>
     </section>
   );
 }
@@ -213,9 +232,13 @@ function ParadeWeatherRiskPanel({
       ) : (
         <div className="relative z-10 mt-5 flex flex-col gap-3 rounded-2xl border border-parade-gold/30 bg-parade-purpleDeep/55 p-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <StatusPill tone="gray">Outside forecast window</StatusPill>
+            <StatusPill tone="gray">{error ? "Forecast unavailable" : nextOutlook ? "Outside forecast window" : "No upcoming parades"}</StatusPill>
             <p className="mt-3 text-sm font-semibold leading-6 text-purple-100">
-              No scheduled parades are currently within the NWS forecast window.
+              {error
+                ? "A current forecast is needed to match weather to a parade. Check the official NWS forecast below."
+                : nextOutlook
+                  ? "No scheduled parades are currently within the NWS forecast window."
+                  : "All currently listed parade start times have passed. Check the schedule for updates."}
             </p>
           </div>
           {nextOutlook ? (
@@ -279,14 +302,18 @@ function ParadeWeatherCard({ outlook }: { outlook: ParadeWeatherOutlook }) {
   );
 }
 
-function ForecastWindow({ weather, error }: { weather: WeatherPreview | null; error: string | null }) {
+function ForecastWindow({ weather }: { weather: WeatherPreview | null }) {
   const hourly = (weather?.hourly ?? []).slice(0, 6);
 
   return (
     <section id="downtown-forecast" className="scroll-mt-28">
       <SectionTitle
-        title="Compact downtown forecast"
-        description={`Next few hours from NWS data. Last refresh: ${formatDateTime(weather?.checkedAt)}`}
+        title={weather?.isStoredFallback ? "Stored downtown forecast" : "Compact downtown forecast"}
+        description={weather?.isStoredFallback
+          ? `Saved NWS forecast from ${formatDateTime(weather.checkedAt)}. Live refresh is currently unavailable.`
+          : weather
+            ? `Next few hours from NWS data. Last refresh: ${formatDateTime(weather.checkedAt)}`
+            : "Live forecast data is currently unavailable."}
       />
       {hourly.length > 0 ? (
         <div className="mt-4 grid snap-x snap-mandatory grid-flow-col auto-cols-[minmax(10rem,1fr)] gap-2 overflow-x-auto pb-2 sm:grid-flow-row sm:grid-cols-2 sm:overflow-visible sm:pb-0 lg:grid-cols-3 xl:grid-cols-6">
@@ -296,8 +323,7 @@ function ForecastWindow({ weather, error }: { weather: WeatherPreview | null; er
         </div>
       ) : (
         <div className="mt-4 rounded-[1.5rem] border border-parade-gold/35 bg-parade-goldSoft p-5 text-sm font-semibold leading-6 text-amber-950 shadow-civic">
-          Weather could not be refreshed in this environment. Use the official National Weather Service links below.
-          {error ? <span className="mt-2 block text-xs">Refresh note: {error}</span> : null}
+          Weather could not be refreshed right now. Use the official National Weather Service forecast below.
         </div>
       )}
     </section>
@@ -340,25 +366,25 @@ function RiskMethod({ weather }: { weather: WeatherPreview | null }) {
         <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-parade-gold text-xl font-black text-parade-purpleDark transition group-open:rotate-45" aria-hidden="true">+</span>
       </summary>
       <div className="grid gap-2 border-t border-white/10 p-4 sm:grid-cols-2 sm:p-5 lg:grid-cols-4">
-        <RiskSignal icon={<Wind className="h-4 w-4" aria-hidden="true" />} label="Wind" value={risk?.windScore ?? 0} />
-        <RiskSignal icon={<Umbrella className="h-4 w-4" aria-hidden="true" />} label="Rain and storms" value={(risk?.rainScore ?? 0) + (risk?.lightningScore ?? 0)} />
-        <RiskSignal icon={<Thermometer className="h-4 w-4" aria-hidden="true" />} label="Warm weather" value={risk?.heatScore ?? 0} />
-        <RiskSignal icon={<Thermometer className="h-4 w-4" aria-hidden="true" />} label="Cold weather" value={risk?.coldScore ?? 0} />
+        <RiskSignal icon={<Wind className="h-4 w-4" aria-hidden="true" />} label="Wind" value={risk?.windScore ?? null} />
+        <RiskSignal icon={<Umbrella className="h-4 w-4" aria-hidden="true" />} label="Rain and storms" value={risk ? risk.rainScore + risk.lightningScore : null} />
+        <RiskSignal icon={<Thermometer className="h-4 w-4" aria-hidden="true" />} label="Warm weather" value={risk?.heatScore ?? null} />
+        <RiskSignal icon={<Thermometer className="h-4 w-4" aria-hidden="true" />} label="Cold weather" value={risk?.coldScore ?? null} />
       </div>
     </details>
   );
 }
 
-function RiskSignal({ icon, label, value }: { icon: ReactNode; label: string; value: number }) {
+function RiskSignal({ icon, label, value }: { icon: ReactNode; label: string; value: number | null }) {
   return (
     <div className="flex items-center justify-between gap-3 rounded-xl border border-parade-gold/25 bg-parade-purpleDeep/55 px-3 py-2.5">
       <span className="flex items-center gap-2 text-sm font-black text-white">{icon}{label}</span>
-      <span className="text-xs font-black uppercase tracking-wide text-parade-goldBright">Score {value}</span>
+      <span className="text-xs font-black uppercase tracking-wide text-parade-goldBright">{value === null ? "Unavailable" : `Score ${value}`}</span>
     </div>
   );
 }
 
-function BeforeYouGo({ weather }: { weather: WeatherPreview | null }) {
+function BeforeYouGo() {
   const items = [
     "Check active NWS alerts before leaving for downtown.",
     "Treat thunder, lightning, and strong wind as high-priority planning signals.",
@@ -391,9 +417,9 @@ function BeforeYouGo({ weather }: { weather: WeatherPreview | null }) {
           <p className="text-xs font-black uppercase tracking-[0.16em] text-parade-goldBright">National Weather Service</p>
           <h2 className="mt-1 text-xl font-black text-white">Official weather links</h2>
           <div className="mt-4 grid gap-2 sm:grid-cols-2 lg:grid-cols-1">
-            <WeatherLink href={weather?.sourceUrls.forecastHourly ?? "https://api.weather.gov/points/30.6954,-88.0399"} label="Hourly forecast" />
-            <WeatherLink href={weather?.sourceUrls.forecast ?? "https://api.weather.gov/points/30.6954,-88.0399"} label="Daily forecast" />
-            <WeatherLink href={weather?.sourceUrls.alerts ?? "https://api.weather.gov/alerts/active?point=30.6954,-88.0399"} label="Active alerts" />
+            <WeatherLink href={NWS_VISITOR_URLS.hourly} label="Hourly forecast" />
+            <WeatherLink href={NWS_VISITOR_URLS.forecast} label="Daily forecast" />
+            <WeatherLink href={NWS_VISITOR_URLS.alerts} label="Regional watches & warnings" />
           </div>
           <div className="mt-3 flex items-start gap-2 rounded-2xl border border-parade-gold/30 bg-parade-goldSoft p-3 text-amber-950">
             <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-amber-800" aria-hidden="true" />
@@ -447,28 +473,18 @@ function buildParadeWeatherOutlooks(scheduleData: ParadeSchedule, weather: Weath
     .sort((a, b) => a.startDate.getTime() - b.startDate.getTime());
 
   const upcoming = scheduled.filter((entry) => entry.startDate.getTime() >= now);
-  const selected = (upcoming.length > 0 ? upcoming : scheduled).slice(0, limit);
+  const selected = upcoming.slice(0, limit);
 
   return selected.map((entry) => {
-    const periods = findHourlyPeriodsForParade(weather?.hourly ?? [], entry.startDate);
-    const status = !weather ? "unavailable" : periods.length > 0 ? "available" : "pending";
+    const periods = findHourlyPeriodsForParade(weather?.isStoredFallback ? [] : weather?.hourly ?? [], entry.startDate);
+    const status = !weather || weather.isStoredFallback ? "unavailable" : periods.length > 0 ? "available" : "pending";
 
     return {
       ...entry,
       periods,
       status,
-      risk: periods.length > 0 ? scoreWeatherRisk(periods, weather?.alerts ?? []) : null
+      risk: periods.length > 0 ? scoreWeatherRisk(periods, findAlertsForParade(weather?.alerts ?? [], entry.startDate)) : null
     } satisfies ParadeWeatherOutlook;
-  });
-}
-
-function findHourlyPeriodsForParade(periods: HourlyPeriod[], startDate: Date) {
-  const windowStart = startDate.getTime() - 60 * 60 * 1000;
-  const windowEnd = startDate.getTime() + 3 * 60 * 60 * 1000;
-
-  return periods.filter((period) => {
-    const periodStart = new Date(period.startTime).getTime();
-    return Number.isFinite(periodStart) && periodStart >= windowStart && periodStart <= windowEnd;
   });
 }
 

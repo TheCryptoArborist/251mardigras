@@ -23,10 +23,11 @@ type PageMetadataInput = {
   description: string;
   path: string;
   image?: string;
+  imageAlt?: string;
   noIndex?: boolean;
 };
 
-export function createPageMetadata({ title, description, path, image = SITE_LOGO_PATH, noIndex = false }: PageMetadataInput): Metadata {
+export function createPageMetadata({ title, description, path, image = "/opengraph-image", imageAlt, noIndex = false }: PageMetadataInput): Metadata {
   const canonicalUrl = absoluteUrl(path);
   const imageUrl = absoluteUrl(image);
 
@@ -45,7 +46,7 @@ export function createPageMetadata({ title, description, path, image = SITE_LOGO
       images: [
         {
           url: imageUrl,
-          alt: `${SITE_NAME} logo`
+          alt: imageAlt ?? (image === SITE_LOGO_PATH ? `${SITE_NAME} logo` : title)
         }
       ]
     },

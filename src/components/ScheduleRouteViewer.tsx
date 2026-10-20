@@ -1,7 +1,8 @@
 "use client";
 
 import { ArrowUp, CalendarPlus, Check, ChevronDown, Clock3, ExternalLink, MapPinned, Share2, ShieldCheck, Sparkles, X } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import Image from "next/image";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { StatusPill } from "@/components/StatusPill";
 
 export type ParadeEntry = {
@@ -50,6 +51,7 @@ type ScheduleRouteViewerProps = {
 type ShareStatus = "idle" | "shared" | "copied" | "error";
 type CalendarSelection = { parade: ParadeEntry; day: ParadeDay };
 type TimedParade = ParadeEntry & { day: ParadeDay };
+type ParadeTimeStatus = "start-passed" | "past-date";
 
 const SCHEDULE_SHARE_BASE_URL = "https://mg251.xyz/schedule";
 
@@ -101,7 +103,7 @@ const routeMaps: RouteMap[] = [
     anchor: "route-map-g",
     officialMapUrl: "/api/route-maps/g",
     officialSourceUrl: "https://open-government-cityofmobile.hub.arcgis.com/documents/c62292635da0426b8df80dd5cb86fe84/explore",
-    note: "Included with the route map set; not currently assigned in this 2027 transcription."
+    note: "Used by Maids of Mirth in the official 2027 schedule."
   },
   {
     name: "Route H",
@@ -109,6 +111,13 @@ const routeMaps: RouteMap[] = [
     officialMapUrl: "/api/route-maps/h",
     officialSourceUrl: "https://open-government-cityofmobile.hub.arcgis.com/documents/31f62f9dd54641abac517a299d1d0934/explore",
     note: "Used when the official schedule lists Route H."
+  },
+  {
+    name: "Route I",
+    anchor: "route-map-i",
+    officialMapUrl: "/api/route-maps/i",
+    officialSourceUrl: "https://cityofmobile.maps.arcgis.com/sharing/rest/content/items/3f498871baf14712813cec3448537294/data",
+    note: "Used by the February 6 Floral Parade and the combined King Felix III & Floral Parade on Lundi Gras."
   }
 ];
 
@@ -160,18 +169,8 @@ export function ScheduleRouteViewer({ schedule, focusParadeId }: ScheduleRouteVi
     const originalOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
 
-    function handleKeyDown(event: KeyboardEvent) {
-      if (event.key === "Escape") {
-        setSelectedRouteName(null);
-        setSelectedCalendar(null);
-      }
-    }
-
-    window.addEventListener("keydown", handleKeyDown);
-
     return () => {
       document.body.style.overflow = originalOverflow;
-      window.removeEventListener("keydown", handleKeyDown);
     };
   }, [selectedCalendar, selectedRouteName]);
 
@@ -253,7 +252,7 @@ export function ScheduleRouteViewer({ schedule, focusParadeId }: ScheduleRouteVi
                 <h1 className="mt-2 text-3xl font-black leading-tight tracking-tight text-white drop-shadow-lg sm:text-4xl">2027 Mobile Mardi Gras Parade Schedule</h1>
                 <p className="mt-2 text-base font-black text-parade-goldBright">{schedule.displayDateRange}</p>
                 <p className="mt-2 max-w-3xl text-sm font-semibold leading-6 text-purple-100">
-                  Dates, start times, and route-map access for the Mobile Mardi Gras season.
+                  Parade start times in Central Time, with official route maps for the 2027 season.
                 </p>
               </div>
             </div>
@@ -289,8 +288,9 @@ export function ScheduleRouteViewer({ schedule, focusParadeId }: ScheduleRouteVi
           />
         ) : (
           <section className="rounded-[1.35rem] border border-parade-gold/35 bg-white/10 p-5 text-white shadow-civic backdrop-blur">
-            <p className="text-xs font-black uppercase tracking-[0.18em] text-parade-goldBright">Season complete</p>
-            <h2 className="mt-2 text-2xl font-black">All listed 2027 parades have concluded.</h2>
+            <p className="text-xs font-black uppercase tracking-[0.18em] text-parade-goldBright">No later starts listed{routeFilter === "All routes" ? "" : ` for ${routeFilter}`}</p>
+            <h2 className="mt-2 text-2xl font-black">The listed start times have passed.</h2>
+            <p className="mt-2 text-sm font-semibold text-purple-100">Check the City’s updates for current parade activity. This schedule does not track live progress or finishing times.</p>
           </section>
         )}
 
@@ -369,7 +369,7 @@ export function ScheduleRouteViewer({ schedule, focusParadeId }: ScheduleRouteVi
                 <div className="divide-y divide-parade-gold/20 bg-white/5">
                   {day.parades.map((parade) => {
                     const shareStatus = shareStatusByParadeId[parade.id] ?? "idle";
-                    const paradeStatus = now ? getParadeStatus(parade, day, now) : null;
+                    const paradeStatus = now ? getParadeStatus(parade, day, now, currentDateKey) : null;
 
                     return (
                       <article key={parade.id} id={parade.id} className={`scroll-mt-28 px-4 py-3.5 transition hover:bg-white/10 sm:px-5 ${focusParadeId === parade.id ? "bg-parade-gold/10 ring-1 ring-inset ring-parade-gold/50" : ""}`}>
@@ -530,13 +530,13 @@ function FeaturedParadePanel({
           <span className="hidden sm:block"><BannerArtworkIcon kind="king" size="large" /></span>
           <div>
             <p className="inline-flex items-center gap-2 rounded-full bg-[#ffd45a] px-3 py-1.5 text-xs font-black uppercase tracking-[0.18em] text-[#3b075f] shadow-md">
-              <Clock3 className="h-4 w-4" aria-hidden="true" /> {isFocused ? "Shared parade" : "Next parade"}
+              <Clock3 className="h-4 w-4" aria-hidden="true" /> {isFocused ? "Shared parade" : "Next scheduled parade"}
             </p>
             <h2 className="mt-2 text-2xl font-black leading-tight text-[#fffaf0] drop-shadow-lg sm:text-3xl">{entry.name}</h2>
             <p className="mt-1 text-sm font-black text-[#ffd45a] sm:text-base">
               {formatParadeShareDate(entry.day.date)} • {entry.time} • {entry.route}
             </p>
-            {!isFocused ? <NextParadeCountdown milliseconds={countdownMilliseconds} /> : null}
+            {!isFocused ? <NextParadeCountdown milliseconds={countdownMilliseconds} scheduledStart={`${formatParadeShareDate(entry.day.date)} at ${entry.time} Central Time`} /> : null}
           </div>
         </div>
 
@@ -560,9 +560,9 @@ function FeaturedParadePanel({
   );
 }
 
-function NextParadeCountdown({ milliseconds }: { milliseconds: number | null }) {
+function NextParadeCountdown({ milliseconds, scheduledStart }: { milliseconds: number | null; scheduledStart: string }) {
   if (milliseconds !== null && milliseconds <= 0) {
-    return <p className="mt-2 text-sm font-bold text-[#fff2d0]">Scheduled activity is underway.</p>;
+    return <p className="mt-2 text-sm font-bold text-[#fff2d0]">The scheduled start time has passed. Check official updates for current activity.</p>;
   }
 
   const totalSeconds = milliseconds === null ? null : Math.floor(milliseconds / 1000);
@@ -574,16 +574,19 @@ function NextParadeCountdown({ milliseconds }: { milliseconds: number | null }) 
   ];
 
   return (
-    <div className="mt-2 flex max-w-[19rem] gap-1.5" aria-label="Live countdown to the next parade" aria-live="polite">
-      {values.map(({ label, value }) => (
-        <div key={label} className="min-w-0 flex-1 rounded-lg border border-[#ffd45a]/40 bg-[#2b0645]/55 px-1.5 py-1 text-center shadow-sm ring-1 ring-white/5">
-          <p className="text-base font-black leading-none tabular-nums text-[#ffd45a]">
-            {value === null ? "--" : String(value).padStart(2, "0")}
-          </p>
-          <p className="mt-0.5 text-[0.52rem] font-black uppercase leading-none tracking-[0.12em] text-[#fff2d0]">{label}</p>
-        </div>
-      ))}
-    </div>
+    <>
+      <p className="sr-only">Countdown to the scheduled start: {scheduledStart}. Live parade progress is not tracked.</p>
+      <div className="mt-2 flex max-w-[19rem] gap-1.5" aria-hidden="true">
+        {values.map(({ label, value }) => (
+          <div key={label} className="min-w-0 flex-1 rounded-lg border border-[#ffd45a]/40 bg-[#2b0645]/55 px-1.5 py-1 text-center shadow-sm ring-1 ring-white/5">
+            <p className="text-base font-black leading-none tabular-nums text-[#ffd45a]">
+              {value === null ? "--" : String(value).padStart(2, "0")}
+            </p>
+            <p className="mt-0.5 text-[0.52rem] font-black uppercase leading-none tracking-[0.12em] text-[#fff2d0]">{label}</p>
+          </div>
+        ))}
+      </div>
+    </>
   );
 }
 
@@ -597,37 +600,45 @@ function BannerArtworkIcon({ kind, size }: { kind: "jester" | "logo" | "king"; s
 
   return (
     <span className={`relative block shrink-0 overflow-hidden rounded-full border-[#fff2b5] bg-[#2b0645] shadow-[0_0_24px_rgba(255,212,90,0.48)] ring-2 ring-[#d69b16]/35 ${sizeClass}`} aria-hidden="true">
-      <span
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-        style={{
-          backgroundImage: `url('${source}')`
-        }}
+      <Image
+        src={source}
+        alt=""
+        fill
+        sizes={size === "large" ? "64px" : size === "medium" ? "48px" : "28px"}
+        className="object-cover"
       />
     </span>
   );
 }
 
-function ParadeStatusPill({ status }: { status: "rolling" | "finished" }) {
-  if (status === "rolling") {
-    return <span className="rounded-full bg-parade-gold px-2.5 py-1 text-[0.65rem] font-black uppercase tracking-wide text-parade-purpleDark shadow-glow">Rolling now</span>;
+function ParadeStatusPill({ status }: { status: ParadeTimeStatus }) {
+  if (status === "start-passed") {
+    return <span className="rounded-full bg-parade-gold px-2.5 py-1 text-[0.65rem] font-black uppercase tracking-wide text-parade-purpleDark shadow-glow">Scheduled start passed</span>;
   }
 
-  return <span className="rounded-full border border-white/15 bg-white/10 px-2.5 py-1 text-[0.65rem] font-black uppercase tracking-wide text-purple-100">Finished</span>;
+  return <span className="rounded-full border border-white/15 bg-white/10 px-2.5 py-1 text-[0.65rem] font-black uppercase tracking-wide text-purple-100">Past scheduled date</span>;
 }
 
 function CalendarDialog({ selection, onClose }: { selection: CalendarSelection; onClose: () => void }) {
   const { parade, day } = selection;
+  const dialogRef = useScheduleDialog();
 
   return (
-    <div className="fixed inset-0 z-[110] flex items-center justify-center overflow-y-auto bg-black/75 p-4 backdrop-blur-sm" role="dialog" aria-modal="true" aria-labelledby="calendar-dialog-title">
+    <dialog
+      ref={dialogRef}
+      className="fixed inset-0 m-0 h-[100dvh] max-h-none w-screen max-w-none items-center justify-center overflow-y-auto border-0 bg-black/75 p-4 text-white backdrop-blur-sm backdrop:bg-transparent open:flex"
+      aria-labelledby="calendar-dialog-title"
+      onCancel={(event) => { event.preventDefault(); onClose(); }}
+      onClick={(event) => { if (event.target === event.currentTarget) onClose(); }}
+    >
       <div className="w-full max-w-lg overflow-hidden rounded-[1.5rem] border border-parade-gold/45 bg-parade-purpleDeep text-white shadow-card">
         <div className="flex items-start justify-between gap-4 border-b border-parade-gold/25 bg-gradient-to-r from-parade-purpleDeep via-parade-purpleDark to-parade-purple px-5 py-4">
           <div>
             <p className="text-xs font-black uppercase tracking-[0.18em] text-parade-goldBright">Add to calendar</p>
             <h2 id="calendar-dialog-title" className="mt-1 text-2xl font-black">{parade.name}</h2>
-            <p className="mt-2 text-sm font-bold text-purple-100">{formatParadeShareDate(day.date)} • {parade.time}</p>
+            <p className="mt-2 text-sm font-bold text-purple-100">{formatParadeShareDate(day.date)} • {parade.time} CT</p>
           </div>
-          <button type="button" onClick={onClose} className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-white/20 bg-white/10 text-white transition hover:bg-white/15" aria-label="Close calendar options">
+          <button type="button" onClick={onClose} data-dialog-initial-focus className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-white/20 bg-white/10 text-white transition hover:bg-white/15" aria-label="Close calendar options">
             <X className="h-5 w-5" aria-hidden="true" />
           </button>
         </div>
@@ -642,7 +653,7 @@ function CalendarDialog({ selection, onClose }: { selection: CalendarSelection; 
         </div>
         <p className="px-5 pb-5 text-xs font-semibold leading-5 text-purple-100">Calendar entries use a three-hour planning window. Confirm final times and changes before attending.</p>
       </div>
-    </div>
+    </dialog>
   );
 }
 
@@ -685,6 +696,7 @@ function RouteMapCard({ route, onOpen }: { route: RouteMap; onOpen: (routeName: 
 }
 
 function RouteMapDialog({ route, schedule, onClose }: { route: RouteMap; schedule: ParadeSchedule; onClose: () => void }) {
+  const dialogRef = useScheduleDialog();
   const routeParades = schedule.days.flatMap((day) =>
     day.parades
       .filter((parade) => parade.route === route.name)
@@ -692,11 +704,12 @@ function RouteMapDialog({ route, schedule, onClose }: { route: RouteMap; schedul
   );
 
   return (
-    <div
-      className="fixed inset-0 z-[100] flex items-start justify-center overflow-y-auto bg-black/75 px-3 pt-[calc(env(safe-area-inset-top)+0.75rem)] pb-[calc(env(safe-area-inset-bottom)+1rem)] backdrop-blur-sm sm:items-center sm:p-4"
-      role="dialog"
-      aria-modal="true"
+    <dialog
+      ref={dialogRef}
+      className="fixed inset-0 m-0 h-[100dvh] max-h-none w-screen max-w-none items-start justify-center overflow-y-auto border-0 bg-black/75 px-3 pt-[calc(env(safe-area-inset-top)+0.75rem)] pb-[calc(env(safe-area-inset-bottom)+1rem)] text-white backdrop-blur-sm backdrop:bg-transparent open:flex sm:items-center sm:p-4"
       aria-labelledby="route-map-dialog-title"
+      onCancel={(event) => { event.preventDefault(); onClose(); }}
+      onClick={(event) => { if (event.target === event.currentTarget) onClose(); }}
     >
       <div className="max-h-[calc(100dvh-2rem)] w-full overflow-hidden rounded-[1.5rem] border border-parade-gold/40 bg-parade-purpleDeep shadow-card sm:max-w-5xl">
         <div className="flex items-start justify-between gap-4 border-b border-parade-gold/25 bg-gradient-to-r from-parade-purpleDeep via-parade-purpleDark to-parade-purple px-4 py-3 text-white sm:px-5 sm:py-4">
@@ -707,6 +720,7 @@ function RouteMapDialog({ route, schedule, onClose }: { route: RouteMap; schedul
           <button
             type="button"
             onClick={onClose}
+            data-dialog-initial-focus
             className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-white/20 bg-white/10 text-white transition hover:bg-white/15"
             aria-label="Close route map"
           >
@@ -759,8 +773,30 @@ function RouteMapDialog({ route, schedule, onClose }: { route: RouteMap; schedul
           </div>
         </div>
       </div>
-    </div>
+    </dialog>
   );
+}
+
+function useScheduleDialog() {
+  const dialogRef = useRef<HTMLDialogElement>(null);
+
+  useEffect(() => {
+    const dialog = dialogRef.current;
+    if (!dialog) return;
+
+    const trigger = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    // A native modal puts the rest of the page in the browser's inert layer and
+    // keeps keyboard focus inside the dialog, including the embedded map.
+    dialog.showModal();
+    dialog.querySelector<HTMLElement>("[data-dialog-initial-focus]")?.focus({ preventScroll: true });
+
+    return () => {
+      if (dialog.open) dialog.close();
+      if (trigger?.isConnected) trigger.focus({ preventScroll: true });
+    };
+  }, []);
+
+  return dialogRef;
 }
 
 function compactDateLabel(label: string) {
@@ -831,14 +867,13 @@ function parseParadeTime(value: string) {
 function findNextParade(parades: TimedParade[], now: Date, routeFilter: string) {
   return parades
     .filter((parade) => routeFilter === "All routes" || parade.route === routeFilter)
-    .find((parade) => getParadeStart(parade, parade.day).getTime() + 3 * 60 * 60 * 1000 > now.getTime()) ?? null;
+    .find((parade) => getParadeStart(parade, parade.day).getTime() > now.getTime()) ?? null;
 }
 
-function getParadeStatus(parade: ParadeEntry, day: ParadeDay, now: Date): "rolling" | "finished" | null {
+function getParadeStatus(parade: ParadeEntry, day: ParadeDay, now: Date, currentDateKey: string | null): ParadeTimeStatus | null {
   const start = getParadeStart(parade, day).getTime();
-  const end = start + 3 * 60 * 60 * 1000;
-  if (now.getTime() >= end) return "finished";
-  if (now.getTime() >= start) return "rolling";
+  if (currentDateKey && currentDateKey > day.date) return "past-date";
+  if (now.getTime() >= start) return "start-passed";
   return null;
 }
 

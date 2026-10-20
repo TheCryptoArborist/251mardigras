@@ -129,7 +129,7 @@ async function getLiveWeatherPreview(): Promise<WeatherPreview> {
   return {
     current,
     daily: daily.properties.periods.slice(0, 7),
-    hourly: nextSixHours,
+    hourly: hourly.properties.periods,
     alerts: activeAlerts,
     point: point.properties,
     risk: scoreWeatherRisk(nextSixHours, activeAlerts),
@@ -401,7 +401,10 @@ async function getStoredWeatherPreview(): Promise<WeatherPreview | null> {
   const current = parsedPreview?.current ?? buildCurrentPeriodFromSnapshot(snapshot);
   const hourly = parsedPreview?.hourly?.length ? parsedPreview.hourly : current ? [current] : [];
   const alerts = filterPublicAlerts(storedAlerts.length ? storedAlerts : parsedPreview?.alerts ?? []);
-  const risk = scoreWeatherRisk(hourly, alerts);
+  const risk = scoreWeatherRisk(hourly.slice(0, 6), alerts);
+  const lastStoredCheck = snapshot?.checkedAt ?? activeAlerts
+    .map((alert) => alert.lastSeenAt)
+    .sort((a, b) => b.getTime() - a.getTime())[0];
 
   return {
     current,
@@ -410,7 +413,7 @@ async function getStoredWeatherPreview(): Promise<WeatherPreview | null> {
     alerts,
     point: parsedPreview?.point ?? null,
     risk,
-    checkedAt: snapshot?.checkedAt.toISOString() ?? new Date().toISOString(),
+    checkedAt: lastStoredCheck?.toISOString() ?? "",
     sourceUrls: parsedPreview?.sourceUrls ?? {
       points: NWS_POINTS_URL,
       alerts: NWS_ALERTS_URL

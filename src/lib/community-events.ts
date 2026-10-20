@@ -32,7 +32,10 @@ export type CommunityEvent = {
 export const COMMUNITY_EVENT_SUBMISSION_FORM_URL = "https://form.jotform.com/262217749749067";
 export const COMMUNITY_EVENTS_CALENDAR_TITLE = "Community Mardi Gras Events";
 
-const communityEvents = communityEventsJson as CommunityEvent[];
+const communityEvents: CommunityEvent[] = (communityEventsJson as CommunityEvent[]).map((event) => ({
+  ...event,
+  cost: event.cost?.trim().toLowerCase() === "paid" ? "Contact organizer for pricing" : event.cost
+}));
 
 export function getApprovedCommunityEvents() {
   return communityEvents
@@ -41,8 +44,21 @@ export function getApprovedCommunityEvents() {
 }
 
 export function getUpcomingCommunityEvents(now = new Date()) {
-  const currentTime = now.getTime();
-  return getApprovedCommunityEvents().filter((event) => new Date(event.endDateTime).getTime() >= currentTime);
+  return getApprovedCommunityEvents().filter((event) => !hasCommunityEventEnded(event, now));
+}
+
+export function hasCommunityEventEnded(event: CommunityEvent, now = new Date()) {
+  return new Date(event.endDateTime).getTime() < now.getTime();
+}
+
+export function communityEventSummary(event: CommunityEvent) {
+  const venue = event.locationLabel ?? event.venueName;
+  const summary = `${event.title}. ${formatCommunityEventDate(event)}${venue ? ` at ${venue}` : ""}. Hosted by ${event.organization}.`;
+  if (summary.length <= 160) return summary;
+
+  const clipped = summary.slice(0, 157);
+  const boundary = clipped.lastIndexOf(" ");
+  return `${clipped.slice(0, boundary > 0 ? boundary : clipped.length).replace(/[.,;:–—-]+$/, "")}…`;
 }
 
 export function getCommunityEventBySlug(slug: string) {

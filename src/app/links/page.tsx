@@ -20,7 +20,7 @@ const quickLinkGroups = [
   {
     title: "Parade Coverage",
     description: "Live coverage, YouTube channel, and parade replays.",
-    href: "/links/parade-coverage",
+    href: "/watch",
     categories: ["Live Coverage / Channel Support", "Previous Parade Seasons"],
     icon: <PlayCircle className="h-5 w-5" aria-hidden="true" />,
     action: "Open coverage links"
@@ -36,7 +36,7 @@ const quickLinkGroups = [
   {
     title: "Food and Drink",
     description: "Downtown restaurants, coffee, bakeries, breweries, dessert stops, and map links.",
-    href: "/links/food-drink",
+    href: "/food-drink",
     categories: ["Food and Drink"],
     icon: <Utensils className="h-5 w-5" aria-hidden="true" />,
     action: "Find a downtown stop"
@@ -44,7 +44,7 @@ const quickLinkGroups = [
   {
     title: "Parking and Access",
     description: "Parking, transportation, downtown access, and mobility-friendly planning resources.",
-    href: "/links/parking-access",
+    href: "/parking-access",
     categories: ["Downtown Transportation", "Mobility-Friendly Access"],
     icon: <Car className="h-5 w-5" aria-hidden="true" />,
     action: "Plan your arrival"
@@ -76,7 +76,7 @@ const quickLinkGroups = [
   {
     title: "Gear and Throws",
     description: "Mardi Gras gear, throws, and shopping resources selected for visitor planning.",
-    href: "/links/gear-throws",
+    href: "/mardi-gras-gear",
     categories: ["Mardi Gras Gear / Throws"],
     icon: <ShoppingBag className="h-5 w-5" aria-hidden="true" />,
     action: "Shop Mardi Gras"
@@ -95,7 +95,7 @@ export default async function LinksPage() {
             Choose what you need.
           </h1>
           <p className="mx-auto mt-4 max-w-2xl text-base leading-7 text-parade-muted sm:text-lg">
-            This page replaces the old Linktree-style list with separated paths for parade coverage, support, food, parking, access, weather, history and culture, social channels, and gear.
+            Find parade coverage, community resources, food, parking, weather, history, social channels, and gear in one place.
           </p>
           <div className="mt-6 flex flex-wrap justify-center gap-3">
             <Link href="/watch" className="inline-flex items-center justify-center gap-2 rounded bg-parade-purple px-5 py-3 text-sm font-bold text-white hover:bg-parade-purpleDark">

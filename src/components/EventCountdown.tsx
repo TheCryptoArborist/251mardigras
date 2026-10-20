@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
 
 type CountdownParts = {
@@ -74,7 +75,7 @@ export function EventCountdown({
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
             {logoSrc ? (
               <span className="grid h-20 w-20 shrink-0 place-items-center rounded-[1.25rem] border border-parade-gold/40 bg-white p-2 shadow-glow ring-1 ring-white/20">
-                <img src={logoSrc} alt={logoAlt ?? ""} className="max-h-full max-w-full object-contain" />
+                <Image src={logoSrc} alt={logoAlt ?? ""} width={64} height={64} className="max-h-full max-w-full object-contain" />
               </span>
             ) : null}
             <div>

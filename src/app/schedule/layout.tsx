@@ -2,10 +2,11 @@ import type { ReactNode } from "react";
 import { breadcrumbJsonLd, createPageMetadata, jsonLdScript } from "@/lib/seo";
 
 export const metadata = createPageMetadata({
-  title: "Mobile Mardi Gras Parade Schedule",
-  description: "View Mobile Mardi Gras parade schedule information and verify official parade details before making plans.",
+  title: "2027 Mobile Mardi Gras Parade Schedule & Route Maps",
+  description: "Plan Mobile Mardi Gras from January 22 to February 9, 2027. Browse parade times and Routes A–I, with listings checked against the City of Mobile on October 20, 2026.",
   path: "/schedule",
-  image: "/schedule/opengraph-image"
+  image: "/schedule/opengraph-image",
+  imageAlt: "2027 Mobile Mardi Gras Parade Schedule on MG251.xyz"
 });
 
 export default function ScheduleLayout({ children }: { children: ReactNode }) {
