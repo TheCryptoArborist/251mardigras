@@ -69,101 +69,54 @@ const socialLinks = [
   }
 ] as const;
 
-type PrimaryActionVariant = "schedule" | "routes" | "live" | "replays" | "food" | "parking" | "weather" | "gear";
-
-type PrimaryAction = {
+type VisitorLink = {
   icon: ReactNode;
   title: string;
-  body: string;
   href: string;
-  action: string;
-  external: boolean;
-  featured: boolean;
-  variant: PrimaryActionVariant;
 };
 
 export default async function HomePage() {
   const upcomingEvents = getUpcomingCommunityEvents().slice(0, 3);
-  const primaryActions: PrimaryAction[] = [
+  const visitorLinks: VisitorLink[] = [
     {
       icon: <CalendarDays className="h-5 w-5" aria-hidden="true" />,
-      title: "2027 Parade Schedule",
-      body: "Browse dates, start times, and route badges for the full Mobile Mardi Gras season.",
-      href: "/schedule",
-      action: "View Schedule",
-      external: false,
-      featured: true,
-      variant: "schedule"
+      title: "Parade Schedule",
+      href: "/schedule"
     },
     {
       icon: <MapPinned className="h-5 w-5" aria-hidden="true" />,
       title: "Route Maps",
-      body: "Open Route A through Route I maps from the schedule page without leaving the lineup.",
-      href: "/schedule#all-route-maps",
-      action: "Open Route Maps",
-      external: false,
-      featured: true,
-      variant: "routes"
+      href: "/schedule#all-route-maps"
     },
     {
       icon: <PlayCircle className="h-5 w-5" aria-hidden="true" />,
-      title: "Watch Live Coverage",
-      body: "Open the live parade coverage page and current player.",
-      href: "/watch",
-      action: "Open Live Coverage",
-      external: false,
-      featured: true,
-      variant: "live"
+      title: "Watch Live",
+      href: "/watch"
     },
     {
       icon: <Archive className="h-5 w-5" aria-hidden="true" />,
-      title: "Watch Parade Replays",
-      body: "Choose previous parade seasons from 2023–2026.",
-      href: "/replays",
-      action: "Watch Replays",
-      external: false,
-      featured: false,
-      variant: "replays"
+      title: "Parade Replays",
+      href: "/replays"
     },
     {
       icon: <Utensils className="h-5 w-5" aria-hidden="true" />,
-      title: "Food and Drink",
-      body: "Find downtown restaurants, coffee, bakeries, breweries, and dessert stops.",
-      href: "/food-drink",
-      action: "Find Food & Drink",
-      external: false,
-      featured: false,
-      variant: "food"
+      title: "Food & Drink",
+      href: "/food-drink"
     },
     {
       icon: <Car className="h-5 w-5" aria-hidden="true" />,
-      title: "Parking and Access",
-      body: "Find parking, transportation, and access planning resources.",
-      href: "/parking-access",
-      action: "Plan Parking",
-      external: false,
-      featured: false,
-      variant: "parking"
+      title: "Parking & Access",
+      href: "/parking-access"
     },
     {
       icon: <CloudSun className="h-5 w-5" aria-hidden="true" />,
       title: "Weather",
-      body: "Check weather conditions before heading downtown.",
-      href: "/weather",
-      action: "Check Weather",
-      external: false,
-      featured: false,
-      variant: "weather"
+      href: "/weather"
     },
     {
       icon: <ShoppingBag className="h-5 w-5" aria-hidden="true" />,
       title: "Mardi Gras Gear",
-      body: "Find throws, shirts, drink holders, and Mardi Gras gear.",
-      href: "/mardi-gras-gear",
-      action: "Shop Gear",
-      external: false,
-      featured: false,
-      variant: "gear"
+      href: "/mardi-gras-gear"
     }
   ];
   return (
@@ -188,25 +141,24 @@ export default async function HomePage() {
         <div className="relative z-10 mx-auto grid max-w-7xl gap-7 px-4 py-6 sm:px-6 sm:py-9 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:items-center lg:gap-10 lg:px-8 lg:py-12">
           <div className="min-w-0">
             <p className="text-xs font-black uppercase tracking-[0.14em] text-parade-goldBright">
-              Your guide to Mobile Mardi Gras • 2027
+              Mobile, Alabama • 2027
             </p>
-            <h1 className="mt-3 text-[2.25rem] font-black leading-[1.02] tracking-tight text-white drop-shadow-lg sm:text-5xl lg:text-6xl">
-              <span className="block">Plan the parades</span>
-              <span className="block">Know the route</span>
-              <span className="block">Watch it live</span>
+            <h1 className="mt-3 text-[2rem] font-black leading-[1.08] tracking-tight text-white drop-shadow-lg sm:text-5xl xl:text-6xl">
+              <span className="block">Your guide to</span>
+              <span className="block">Mobile Mardi Gras</span>
             </h1>
             <p className="mt-3 max-w-xl text-sm font-semibold leading-6 text-purple-100 sm:text-base">
-              Dates, route maps, community events, and local tips for your next trip downtown.
+              Find parade schedules, route maps, local events, and live coverage.
             </p>
             <nav aria-label="Start planning" className="mt-5 grid grid-cols-2 gap-2 sm:grid-cols-3">
               <Link href="/schedule" className="col-span-2 inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-parade-goldBright px-4 py-3 text-sm font-black text-parade-purpleDark shadow-glow transition hover:bg-parade-goldSoft focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white sm:col-span-1">
-                <CalendarDays className="h-4 w-4" aria-hidden="true" /> Full Schedule
+                <CalendarDays className="h-4 w-4" aria-hidden="true" /> Parade Schedule
               </Link>
               <Link href="/schedule#all-route-maps" className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-parade-gold/50 bg-white/10 px-3 py-3 text-sm font-black text-white transition hover:bg-white/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-parade-goldBright">
                 <MapPinned className="h-4 w-4" aria-hidden="true" /> Route Maps
               </Link>
-              <Link href="/events" className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-white/35 bg-white/10 px-3 py-3 text-sm font-black text-white transition hover:bg-white/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-parade-goldBright">
-                Events <ArrowRight className="h-4 w-4" aria-hidden="true" />
+              <Link href="/watch" className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-white/35 bg-white/10 px-3 py-3 text-sm font-black text-white transition hover:bg-white/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-parade-goldBright">
+                <PlayCircle className="h-4 w-4" aria-hidden="true" /> Watch Live
               </Link>
             </nav>
             <SocialLinksStrip />
@@ -217,14 +169,19 @@ export default async function HomePage() {
       </section>
 
       <div className="mx-auto max-w-7xl space-y-8 px-4 py-7 sm:space-y-10 sm:px-6 sm:py-10 lg:px-8">
-        <section aria-labelledby="plan-day-heading">
-          <p className="text-xs font-black uppercase tracking-[0.18em] text-parade-goldBright">Visitor tools</p>
-          <h2 id="plan-day-heading" className="mt-1 text-2xl font-black leading-tight text-white sm:text-3xl">
-            Make the most of parade day
+        <section aria-labelledby="explore-heading">
+          <h2 id="explore-heading" className="text-xl font-bold leading-tight text-white sm:text-2xl">
+            Explore Mobile Mardi Gras
           </h2>
-          <div className="mt-5 grid grid-cols-2 gap-3 lg:grid-cols-4">
-            {primaryActions.map((action) => <PrimaryActionCard key={action.title} {...action} />)}
-          </div>
+          <nav aria-labelledby="explore-heading" className="mt-4 overflow-hidden rounded-2xl border border-parade-gold/25">
+            <ul className="grid grid-cols-2 gap-px bg-parade-gold/20 lg:grid-cols-4">
+              {visitorLinks.map((link) => (
+                <li key={link.href} className="min-w-0 bg-parade-purpleDeep">
+                  <VisitorQuickLink {...link} />
+                </li>
+              ))}
+            </ul>
+          </nav>
         </section>
 
         <div className="grid gap-5 rounded-[1.5rem] bg-gradient-to-br from-parade-purpleDeep to-parade-purple p-4 text-white shadow-civic sm:p-6 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)] lg:items-center">
@@ -560,119 +517,15 @@ function SupportSection() {
   );
 }
 
-const actionCardStyles: Record<
-  PrimaryActionVariant,
-  {
-    label: string;
-    card: string;
-    badge: string;
-    title: string;
-    body: string;
-    labelClass: string;
-    action: string;
-    glow: string;
-  }
-> = {
-  schedule: {
-    label: "2027 lineup",
-    card: "border-parade-gold/85 bg-gradient-to-br from-parade-gold via-parade-goldSoft to-white shadow-glow",
-    badge: "bg-parade-purple text-parade-goldBright ring-parade-purple/25 shadow-civic",
-    title: "text-parade-purpleDark",
-    body: "text-parade-ink/75",
-    labelClass: "border-parade-purple/20 bg-white/70 text-parade-purple",
-    action: "bg-parade-purple text-white shadow-civic group-hover:bg-parade-purpleDark",
-    glow: "bg-parade-purple/16"
-  },
-  routes: {
-    label: "Route maps",
-    card: "border-parade-gold/70 bg-gradient-to-br from-[#f3e8ff] via-white to-parade-goldSoft shadow-glow",
-    badge: "bg-parade-gold text-parade-purpleDark ring-parade-goldBright/60 shadow-sm",
-    title: "text-parade-purpleDark",
-    body: "text-parade-ink/75",
-    labelClass: "border-parade-gold/40 bg-white/65 text-parade-purple",
-    action: "bg-parade-gold text-parade-purpleDark shadow-glow group-hover:bg-parade-goldBright",
-    glow: "bg-parade-gold/25"
-  },
-  live: {
-    label: "Live coverage",
-    card: "border-parade-gold/80 bg-gradient-to-br from-parade-goldSoft via-white to-[#e6d4ff] shadow-glow",
-    badge: "bg-parade-gold text-parade-purpleDark ring-parade-goldBright/60 shadow-sm",
-    title: "text-parade-purpleDark",
-    body: "text-parade-ink/75",
-    labelClass: "border-parade-gold/40 bg-white/65 text-parade-purple",
-    action: "bg-parade-gold text-parade-purpleDark shadow-glow group-hover:bg-parade-goldBright",
-    glow: "bg-parade-purple/16"
-  },
-  replays: {
-    label: "Replay archive",
-    card: "border-parade-gold/70 bg-gradient-to-br from-[#ffe38a] via-parade-cream to-[#e9d8ff] shadow-glow",
-    badge: "bg-parade-purple text-parade-goldBright ring-parade-gold/40 shadow-civic",
-    title: "text-parade-purpleDark",
-    body: "text-parade-ink/75",
-    labelClass: "border-parade-gold/40 bg-white/65 text-parade-purple",
-    action: "bg-parade-purple text-white shadow-civic group-hover:bg-parade-purpleDark",
-    glow: "bg-parade-gold/25"
-  },
-  food: {
-    label: "Downtown stops",
-    card: "border-parade-gold/45 bg-gradient-to-br from-parade-cream via-white to-[#fff0b8] shadow-card hover:shadow-glow",
-    badge: "bg-parade-purple text-parade-goldBright ring-parade-gold/45 shadow-sm",
-    title: "text-parade-purpleDark",
-    body: "text-parade-ink/75",
-    labelClass: "border-parade-gold/30 bg-white/60 text-parade-purple",
-    action: "bg-parade-purple text-white shadow-sm group-hover:bg-parade-purpleDark",
-    glow: "bg-parade-gold/18"
-  },
-  parking: {
-    label: "Access planning",
-    card: "border-parade-purple/25 bg-gradient-to-br from-white via-parade-purpleMist to-parade-goldSoft shadow-card hover:shadow-glow",
-    badge: "bg-parade-gold text-parade-purpleDark ring-parade-purple/20 shadow-sm",
-    title: "text-parade-purpleDark",
-    body: "text-parade-ink/75",
-    labelClass: "border-parade-purple/15 bg-white/60 text-parade-purple",
-    action: "bg-parade-gold text-parade-purpleDark shadow-sm group-hover:bg-parade-goldBright",
-    glow: "bg-parade-purple/10"
-  },
-  weather: {
-    label: "Planning tool",
-    card: "border-parade-gold/40 bg-gradient-to-br from-[#f0e4ff] via-parade-cream to-white shadow-card hover:shadow-glow",
-    badge: "bg-parade-purpleDark text-parade-goldBright ring-parade-gold/40 shadow-sm",
-    title: "text-parade-purpleDark",
-    body: "text-parade-ink/75",
-    labelClass: "border-parade-gold/30 bg-white/60 text-parade-purple",
-    action: "bg-parade-purple text-white shadow-sm group-hover:bg-parade-purpleDark",
-    glow: "bg-parade-gold/16"
-  },
-  gear: {
-    label: "Throws & gear",
-    card: "border-parade-gold/55 bg-gradient-to-br from-[#ffdc73] via-parade-goldSoft to-parade-purpleMist shadow-card hover:shadow-glow",
-    badge: "bg-parade-purpleDark text-parade-goldBright ring-parade-gold/45 shadow-civic",
-    title: "text-parade-purpleDark",
-    body: "text-parade-ink/75",
-    labelClass: "border-parade-gold/35 bg-white/60 text-parade-purple",
-    action: "bg-parade-gold text-parade-purpleDark shadow-sm group-hover:bg-parade-goldBright",
-    glow: "bg-parade-purple/12"
-  }
-};
-
-function PrimaryActionCard({ icon, title, body, href, action, external, variant }: PrimaryAction) {
-  const styles = actionCardStyles[variant];
-  const className = `group relative flex h-full min-w-0 overflow-hidden rounded-2xl border p-3 text-left transition hover:-translate-y-1 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-parade-goldBright sm:p-5 ${styles.card}`;
-  const content = (
-    <span className="relative z-10 flex h-full w-full min-w-0 flex-col">
-      <span className="flex items-center justify-between gap-2">
-        <span className={`grid h-9 w-9 shrink-0 place-items-center rounded-xl ring-1 sm:h-11 sm:w-11 ${styles.badge}`}>{icon}</span>
-        <ArrowRight className={`h-4 w-4 sm:hidden ${styles.title}`} aria-hidden="true" />
-      </span>
-      <h3 className={`mt-3 text-sm font-black leading-5 sm:text-lg sm:leading-6 ${styles.title}`}>{title}</h3>
-      <p className={`mt-2 hidden flex-1 text-sm leading-6 sm:block ${styles.body}`}>{body}</p>
-      <span className={`mt-4 hidden w-fit items-center gap-2 rounded-full px-4 py-2 text-sm font-black sm:inline-flex ${styles.action}`}>
-        {action}
-        {external ? <ExternalLink className="h-4 w-4" aria-hidden="true" /> : <ArrowRight className="h-4 w-4" aria-hidden="true" />}
-      </span>
-    </span>
+function VisitorQuickLink({ icon, title, href }: VisitorLink) {
+  return (
+    <Link
+      href={href}
+      className="group flex h-full min-h-20 min-w-0 items-center gap-2 px-3 py-4 text-white transition-colors hover:bg-white/10 focus-visible:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-parade-goldBright sm:gap-3 sm:px-5"
+    >
+      <span className="shrink-0 text-parade-goldBright">{icon}</span>
+      <span className="min-w-0 flex-1 text-sm font-semibold leading-5 sm:text-base sm:leading-6">{title}</span>
+      <ArrowRight className="hidden h-3.5 w-3.5 shrink-0 text-parade-gold/70 transition-colors group-hover:text-parade-goldBright group-focus-visible:text-parade-goldBright sm:block" aria-hidden="true" />
+    </Link>
   );
-  return external
-    ? <a href={href} target="_blank" rel="noreferrer" className={className}>{content}</a>
-    : <Link href={href} className={className}>{content}</Link>;
 }
