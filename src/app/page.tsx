@@ -38,24 +38,34 @@ const homepageSchedule = paradeSchedule2027 as HomepageSchedule;
 
 const socialLinks = [
   {
+    label: "YouTube",
+    href: "https://www.youtube.com/@MobileMardiGras?sub_confirmation=1",
+    action: "Subscribe",
+    featured: true
+  },
+  {
     label: "Facebook",
-    href: "https://m.facebook.com/mardigrasmobileal/"
+    href: "https://m.facebook.com/mardigrasmobileal/",
+    action: "Follow",
+    featured: true
   },
   {
     label: "Instagram",
-    href: "https://www.instagram.com/mardi_gras_mobile_alabama"
-  },
-  {
-    label: "YouTube",
-    href: "https://www.youtube.com/@MobileMardiGras?sub_confirmation=1"
+    href: "https://www.instagram.com/mardi_gras_mobile_alabama",
+    action: "Follow",
+    featured: false
   },
   {
     label: "TikTok",
-    href: "https://www.tiktok.com/@mobilemardigras"
+    href: "https://www.tiktok.com/@mobilemardigras",
+    action: "Follow",
+    featured: false
   },
   {
     label: "X",
-    href: "https://x.com/MobMardiGras"
+    href: "https://x.com/MobMardiGras",
+    action: "Follow",
+    featured: false
   }
 ] as const;
 
@@ -199,6 +209,7 @@ export default async function HomePage() {
                 Events <ArrowRight className="h-4 w-4" aria-hidden="true" />
               </Link>
             </nav>
+            <SocialLinksStrip />
             <CountdownTimer mardiGrasDay={homepageSchedule.mardiGrasDay} />
           </div>
           <UpcomingCommunityEvents events={upcomingEvents} />
@@ -219,7 +230,6 @@ export default async function HomePage() {
         <div className="grid gap-5 rounded-[1.5rem] bg-gradient-to-br from-parade-purpleDeep to-parade-purple p-4 text-white shadow-civic sm:p-6 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)] lg:items-center">
           <HomepageVideoSpotlight />
           <div className="space-y-4">
-            <SocialLinksStrip />
             <div className="rounded-2xl border border-parade-gold/30 bg-white/10 p-4">
               <h2 className="text-lg font-black">Have a Mardi Gras event to share?</h2>
               <p className="mt-1 text-sm leading-6 text-purple-100">Send us your ball, fundraiser, social, or watch party for calendar review.</p>
@@ -250,28 +260,45 @@ export default async function HomePage() {
   );
 }
 
-function SocialLinksStrip({ className = "" }: { className?: string }) {
+function SocialLinksStrip() {
   return (
-    <section
-      aria-label="Follow Mardi Gras - Mobile, Alabama on social media"
-      className={`rounded-2xl border border-parade-gold/35 bg-white/10 p-4 shadow-civic backdrop-blur ${className}`}
-    >
-      <div className="flex items-center justify-center gap-2.5 text-center">
-        <HomepageBannerIcon kind="logo" size="small" />
-        <p className="text-xs font-black uppercase tracking-[0.16em] text-parade-goldBright">Follow for updates</p>
-      </div>
-      <div className="mt-3 flex flex-wrap justify-center gap-2.5">
-        {socialLinks.map((link) => (
+    <section aria-labelledby="homepage-follow-heading" className="mt-5 sm:mt-6">
+      <h2 id="homepage-follow-heading" className="text-sm font-black text-parade-goldBright sm:text-base">
+        Follow Mobile Mardi Gras
+      </h2>
+      <p className="mt-1 text-xs leading-5 text-purple-100">
+        Parade videos, live coverage, and updates on your favorite platform.
+      </p>
+      <div className="mt-3 grid grid-cols-2 gap-2">
+        {socialLinks.filter((link) => link.featured).map((link) => (
           <a
             key={link.label}
             href={link.href}
             target="_blank"
-            rel="noreferrer"
-            className="grid h-11 w-11 place-items-center rounded-full border border-parade-gold/35 bg-parade-purpleDeep/70 text-white shadow-sm transition hover:-translate-y-0.5 hover:border-parade-gold hover:bg-parade-gold hover:text-parade-purpleDark hover:shadow-glow focus:outline-none focus:ring-2 focus:ring-parade-gold"
-            aria-label={`Follow on ${link.label}`}
-            title={link.label}
+            rel="noopener noreferrer"
+            className="group flex min-h-14 items-center justify-center gap-2.5 rounded-xl border border-parade-gold/60 bg-parade-gold/15 px-3 py-2.5 text-parade-goldBright transition hover:border-parade-goldBright hover:bg-parade-goldBright hover:text-parade-purpleDark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-parade-goldBright"
+            aria-label={`${link.label} ${link.action} (opens in a new tab)`}
+          >
+            <span className="shrink-0"><SocialBrandIcon platform={link.label} /></span>
+            <span className="text-left">
+              <span className="block text-sm font-black">{link.label}</span>
+              <span className="block text-xs font-semibold text-purple-100 group-hover:text-parade-purpleDark">{link.action}</span>
+            </span>
+          </a>
+        ))}
+      </div>
+      <div className="mt-2 flex flex-wrap gap-2">
+        {socialLinks.filter((link) => !link.featured).map((link) => (
+          <a
+            key={link.label}
+            href={link.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex min-h-11 items-center justify-center gap-1.5 rounded-full border border-parade-gold/35 bg-parade-purpleDeep/70 px-3 py-2 text-xs font-bold text-white transition hover:border-parade-goldBright hover:bg-parade-goldBright hover:text-parade-purpleDark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-parade-goldBright"
+            aria-label={`${link.action} on ${link.label} (opens in a new tab)`}
           >
             <SocialBrandIcon platform={link.label} />
+            <span>{link.label}</span>
           </a>
         ))}
       </div>
