@@ -5,12 +5,14 @@ export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 const FORMATS: CardFormat[] = ["feed", "story", "preview"];
+// OpenNext otherwise varies Netlify's cache only by framework query parameters.
+const NETLIFY_VARY = "query=at|format|download";
 
 export async function GET(request: Request) {
   const url = new URL(request.url);
   const format = url.searchParams.get("format") ?? "feed";
   if (!FORMATS.includes(format as CardFormat)) {
-    return Response.json({ error: "Choose a card format: feed, story, or preview." }, { status: 400, headers: { "Cache-Control": "no-store" } });
+    return Response.json({ error: "Choose a card format: feed, story, or preview." }, { status: 400, headers: { "Cache-Control": "no-store", "Netlify-Vary": NETLIFY_VARY } });
   }
 
   const now = Date.now();
@@ -20,6 +22,7 @@ export async function GET(request: Request) {
   const headers: HeadersInit = {
     "Content-Type": "image/png",
     "Cache-Control": frozenSnapshot ? "public, max-age=3600, s-maxage=3600, immutable" : "no-store",
+    "Netlify-Vary": NETLIFY_VARY,
     "X-Content-Type-Options": "nosniff"
   };
 
