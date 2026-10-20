@@ -13,7 +13,6 @@ import {
   MapPinned,
   PlayCircle,
   PlusCircle,
-  ShieldCheck,
   ShoppingBag,
   Utensils
 } from "lucide-react";
@@ -198,18 +197,6 @@ export default async function HomePage() {
         </div>
         <HomepageHistoryCallout />
         <SupportSection />
-
-        <section className="rounded-[1.5rem] border border-amber-200 bg-parade-goldSoft p-5 shadow-civic">
-          <div className="flex items-start gap-3">
-            <ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-amber-800" aria-hidden="true" />
-            <div>
-              <h2 className="text-lg font-black text-amber-950">Official-source reminder</h2>
-              <p className="mt-2 text-sm leading-6 text-amber-950">
-                This is an unofficial visitor resource and coverage hub. Parade schedules, routes, cancellations, road closures, parking rules, towing, public-safety instructions, and weather impacts should be verified through official City, public-safety, parade organization, and National Weather Service sources.
-              </p>
-            </div>
-          </div>
-        </section>
 
         <VisitorCounter />
       </div>
