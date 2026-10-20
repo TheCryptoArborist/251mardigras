@@ -294,7 +294,7 @@ function SocialLinksStrip() {
             href={link.href}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex min-h-11 items-center justify-center gap-1.5 rounded-full border border-parade-gold/35 bg-parade-purpleDeep/70 px-3 py-2 text-xs font-bold text-white transition hover:border-parade-goldBright hover:bg-parade-goldBright hover:text-parade-purpleDark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-parade-goldBright"
+            className="inline-flex min-h-11 items-center justify-center gap-1.5 rounded-full border border-parade-gold/35 bg-parade-purpleDeep/70 px-2.5 py-2 text-xs font-bold text-white transition hover:border-parade-goldBright hover:bg-parade-goldBright hover:text-parade-purpleDark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-parade-goldBright"
             aria-label={`${link.action} on ${link.label} (opens in a new tab)`}
           >
             <SocialBrandIcon platform={link.label} />
