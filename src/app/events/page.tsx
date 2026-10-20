@@ -145,13 +145,15 @@ function EventCardMedia({ event }: { event: CommunityEvent }) {
     return null;
   }
 
+  const hasLandscapeFlyer = event.flyerDimensions && event.flyerDimensions.width > event.flyerDimensions.height;
+
   return (
     <Link href={`/events/${event.slug}#event-flyer`} className="relative block h-56 overflow-hidden border-b border-parade-line bg-parade-purpleDark sm:h-64">
       <EventFlyerImage
         src={event.flyerUrl}
         alt={`${event.title} flyer`}
         sizes="(min-width: 1024px) 50vw, 100vw"
-        className="object-cover transition duration-300 hover:scale-105"
+        className={hasLandscapeFlyer ? "object-contain" : "object-cover transition duration-300 hover:scale-105"}
       />
       <span className="absolute inset-0 bg-gradient-to-t from-parade-purpleDeep/55 via-transparent to-transparent" aria-hidden="true" />
       <span className="absolute bottom-3 left-3 rounded-full bg-parade-gold px-3 py-1 text-xs font-black uppercase tracking-wide text-parade-purpleDark shadow-glow">
