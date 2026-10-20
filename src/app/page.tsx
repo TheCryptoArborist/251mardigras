@@ -104,7 +104,7 @@ export default async function HomePage() {
     },
     {
       icon: <Car className="h-5 w-5" aria-hidden="true" />,
-      title: "Parking & Access",
+      title: "Parking",
       href: "/parking-access"
     },
     {
