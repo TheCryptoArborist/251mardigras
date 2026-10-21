@@ -3,6 +3,7 @@ import { EventFlyerImage } from "@/components/EventFlyerImage";
 import Link from "next/link";
 import { ArrowRight, CalendarDays, Download, ExternalLink, PlusCircle, ShieldCheck } from "lucide-react";
 import { CommunityEventsMonthCalendar } from "@/components/CommunityEventsMonthCalendar";
+import { CommunityEventShareButton } from "@/components/CommunityEventShareButton";
 import {
   buildGoogleCalendarUrl,
   formatCommunityEventDate,
@@ -61,7 +62,7 @@ export default function CommunityEventsPage() {
               <div className="mb-4">
                 <h2 className="text-2xl font-black text-parade-purpleDark">Community event listings</h2>
                 <p className="mt-2 max-w-3xl text-sm leading-6 text-parade-muted">
-                  Browse the posted events and open any listing for its flyer, venue, map, RSVP link, public contact, and add-to-calendar options.
+                  Browse the posted events, share one with friends, or open a listing for its flyer, venue, map, RSVP link, and add-to-calendar options.
                 </p>
               </div>
               <div className="grid gap-4 lg:grid-cols-2">
@@ -118,6 +119,7 @@ function EventCard({ event }: { event: CommunityEvent }) {
           <Link href={`/events/${event.slug}`} className="inline-flex items-center gap-2 rounded-full bg-parade-purple px-4 py-2 text-sm font-black text-white hover:bg-parade-purpleDark">
             Event details <ArrowRight className="h-4 w-4" aria-hidden="true" />
           </Link>
+          <CommunityEventShareButton event={event} />
           <a href={`/api/events/${event.id}/ics`} className="inline-flex items-center gap-2 rounded-full border border-parade-line bg-white px-4 py-2 text-sm font-black text-parade-purple hover:bg-parade-purpleSoft">
             Add to Calendar <Download className="h-4 w-4" aria-hidden="true" />
           </a>

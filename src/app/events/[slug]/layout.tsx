@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { getCommunityEventBySlug, fullEventLocation, communityEventSummary, hasCommunityEventEnded } from "@/lib/community-events";
 import { absoluteUrl, breadcrumbJsonLd, createPageMetadata, jsonLdScript } from "@/lib/seo";
+import { buildCommunityEventCardUrl, EVENT_CARD_SIZES } from "@/lib/community-event-share";
 
 type EventLayoutProps = {
   children: ReactNode;
@@ -21,13 +22,22 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     });
   }
 
-  return createPageMetadata({
+  const image = absoluteUrl(buildCommunityEventCardUrl(event, "preview"));
+  const imageAlt = `${event.title}, hosted by ${event.organization}. Event details on MG251.`;
+  const metadata = createPageMetadata({
     title: event.title,
     description: communityEventSummary(event),
     path: `/events/${event.slug}`,
-    image: event.flyerUrl,
-    imageAlt: event.flyerUrl ? `${event.title} event flyer` : undefined
+    image,
+    imageAlt
   });
+  return {
+    ...metadata,
+    openGraph: {
+      ...metadata.openGraph,
+      images: [{ url: image, ...EVENT_CARD_SIZES.preview, alt: imageAlt }]
+    }
+  };
 }
 
 export default async function EventLayout({ children, params }: EventLayoutProps) {

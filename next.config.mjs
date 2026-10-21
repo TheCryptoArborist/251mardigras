@@ -1,6 +1,12 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  outputFileTracingIncludes: {
+    "/api/events/*/share-card": [
+      "./public/images/event-flyers/**/*",
+      "./public/images/mardi-gras-mobile-logo.png"
+    ]
+  },
   async redirects() {
     return [
       {
