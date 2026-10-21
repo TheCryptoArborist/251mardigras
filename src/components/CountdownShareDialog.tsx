@@ -9,14 +9,13 @@ import {
   COUNTDOWN_CARD_SIZES,
   COUNTDOWN_PLATFORM_PRESETS,
   COUNTDOWN_SHARE_PLATFORMS,
-  COUNTDOWN_SHARE_TITLE,
-  TARGET_EVENT_NAME,
-  TARGET_FULL_DATE_LABEL,
   buildCountdownCaption,
   buildCountdownCardUrl,
   buildCountdownShareUrl,
   createCountdownSnapshot,
   formatCountdownRemaining,
+  getCountdownCardFilename,
+  getCountdownShareTitle,
   type CardFormat,
   type CountdownSnapshot,
   type SharePlatform
@@ -57,12 +56,21 @@ export function CountdownShareDialog({ snapshot: initialSnapshot, onClose }: { s
   const [copied, setCopied] = useState<"caption" | "link" | null>(null);
   const draft = drafts[platform];
   const { snapshot, caption } = draft;
+  const { event } = snapshot;
+  const isParadeShare = Boolean(event.paradeId);
   const preset = COUNTDOWN_PLATFORM_PRESETS[platform];
   const size = COUNTDOWN_CARD_SIZES[format];
-  const cardKey = `${platform}-${snapshot.at}-${format}`;
+  const eventKey = event.paradeId ?? "first-downtown";
+  const cardKey = `${eventKey}-${platform}-${snapshot.at}-${format}`;
   const card = preparedCard?.key === cardKey ? preparedCard : null;
   const shareUrl = buildCountdownShareUrl(snapshot, platform);
   const remaining = formatCountdownRemaining(snapshot);
+  const eventDetails = `${event.fullDateLabel}${event.route ? ` • ${event.route}` : ""}`;
+  const cardAlt = !snapshot.hasScheduledTime
+    ? `${event.name}. ${eventDetails}. ${remaining}. Captured ${snapshot.dateLabel}. MG251.xyz.`
+    : snapshot.expired
+      ? `MG251: ${event.name}. ${eventDetails}. The scheduled start has arrived. Check the current schedule.`
+      : `${remaining} until ${isParadeShare ? event.name : "Mobile’s first downtown parade"}. ${isParadeShare ? eventDetails : `${event.name}, ${eventDetails}`}. Captured ${snapshot.dateLabel}. MG251.xyz.`;
   const facebookLinkShare = platform === "facebook" && format === "preview";
   const facebookUrl = `https://www.facebook.com/sharer/sharer.php?${new URLSearchParams({ u: shareUrl })}`;
   // The caption already contains its snapshot URL, so do not append it twice.
@@ -100,10 +108,13 @@ export function CountdownShareDialog({ snapshot: initialSnapshot, onClose }: { s
         if (response.headers.get("X-Countdown-Snapshot-At") !== String(snapshot.at)) {
           throw new RangeError("The card time doesn’t match your device. Check your device’s clock, then choose Update time.");
         }
+        if (response.headers.get("X-Countdown-Parade-Id") !== eventKey) {
+          throw new Error("The card doesn’t match the selected parade.");
+        }
         const blob = await response.blob();
         if (!blob.type.startsWith("image/png") || !blob.size) throw new Error("Invalid card");
         if (!active) return;
-        const file = new File([blob], `mg251-${platform}-${format}-${snapshot.dateKey}-${snapshot.at}.png`, { type: "image/png" });
+        const file = new File([blob], getCountdownCardFilename(snapshot, format), { type: "image/png" });
         objectUrl = URL.createObjectURL(blob);
         setPreparedCard({ file, url: objectUrl, key: cardKey });
         try {
@@ -128,7 +139,7 @@ export function CountdownShareDialog({ snapshot: initialSnapshot, onClose }: { s
       window.clearTimeout(timeout);
       if (objectUrl) URL.revokeObjectURL(objectUrl);
     };
-  }, [snapshot, platform, format, cardKey, retry]);
+  }, [snapshot, platform, format, eventKey, cardKey, retry]);
 
   useEffect(() => {
     if (!copied) return;
@@ -139,7 +150,7 @@ export function CountdownShareDialog({ snapshot: initialSnapshot, onClose }: { s
   function choosePlatform(value: SharePlatform) {
     if (value === platform) return;
     actionVersion.current += 1;
-    const freshSnapshot = createCountdownSnapshot();
+    const freshSnapshot = createCountdownSnapshot(Date.now(), snapshot.event);
     setDrafts((values) => values[value].edited ? values : { ...values, [value]: makeDraft(freshSnapshot, value) });
     setPlatform(value);
     setFormat(COUNTDOWN_PLATFORM_PRESETS[value].defaultFormat);
@@ -149,10 +160,10 @@ export function CountdownShareDialog({ snapshot: initialSnapshot, onClose }: { s
 
   function refreshDraft() {
     actionVersion.current += 1;
-    const freshSnapshot = createCountdownSnapshot();
+    const freshSnapshot = createCountdownSnapshot(Date.now(), snapshot.event);
     setDrafts((values) => ({ ...values, [platform]: makeDraft(freshSnapshot, platform) }));
     setCopied(null);
-    setStatus("Card and post updated to the current countdown.");
+    setStatus(snapshot.hasScheduledTime ? "Card and post updated to the current countdown." : "Card and post updated.");
   }
 
   async function copyText(kind: "caption" | "link", download = false) {
@@ -182,7 +193,7 @@ export function CountdownShareDialog({ snapshot: initialSnapshot, onClose }: { s
     // before navigator.share can lose the browser's required user activation.
     const copyPromise = writeClipboard(caption);
     try {
-      await navigator.share({ files: [card.file], title: COUNTDOWN_SHARE_TITLE });
+      await navigator.share({ files: [card.file], title: getCountdownShareTitle(snapshot) });
       const didCopy = await copyPromise;
       if (version !== actionVersion.current) return;
       if (didCopy) setCopied("caption");
@@ -227,10 +238,10 @@ export function CountdownShareDialog({ snapshot: initialSnapshot, onClose }: { s
       <div className="flex max-h-[calc(100dvh-1rem)] w-full max-w-5xl flex-col overflow-hidden rounded-3xl border border-parade-gold/40 bg-parade-purpleDeep text-white shadow-card sm:max-h-[calc(100dvh-2.5rem)]">
         <header className="flex shrink-0 items-start justify-between gap-3 border-b border-white/15 bg-gradient-to-r from-parade-purpleDeep to-parade-purple px-4 py-4 sm:px-6">
           <div>
-            <h2 id="countdown-share-heading" className="text-xl font-black leading-tight sm:text-2xl">Share the countdown</h2>
+            <h2 id="countdown-share-heading" className="text-xl font-black leading-tight sm:text-2xl">{isParadeShare ? "Share this parade" : "Share the countdown"}</h2>
             <p id="countdown-share-description" className="mt-1.5 text-sm leading-5 text-purple-100">Pick a platform for your card and ready-to-post text.</p>
           </div>
-          <button type="button" onClick={onClose} data-dialog-initial-focus aria-label="Close countdown sharing" className={`grid h-11 w-11 shrink-0 place-items-center rounded-full border border-white/25 bg-white/10 hover:bg-white/20 ${focusStyle}`}>
+          <button type="button" onClick={onClose} data-dialog-initial-focus aria-label={isParadeShare ? "Close parade sharing" : "Close countdown sharing"} className={`grid h-11 w-11 shrink-0 place-items-center rounded-full border border-white/25 bg-white/10 hover:bg-white/20 ${focusStyle}`}>
             <X className="h-5 w-5" aria-hidden="true" />
           </button>
         </header>
@@ -244,6 +255,13 @@ export function CountdownShareDialog({ snapshot: initialSnapshot, onClose }: { s
               </button>
             ))}
           </div>
+
+          {isParadeShare ? (
+            <div className="mt-3 rounded-xl border border-parade-gold/25 bg-white/5 px-3 py-2.5">
+              <p className="break-words text-sm font-black text-parade-goldBright">{event.name}</p>
+              <p className="mt-1 text-xs leading-5 text-purple-100">{eventDetails}</p>
+            </div>
+          ) : null}
 
           <div className="my-3 flex items-center justify-between gap-3">
             <p className="min-w-0 flex-1 text-xs leading-5 text-purple-200">As of {snapshot.dateLabel}.{draft.edited ? " Your edited post is saved." : ""}</p>
@@ -269,7 +287,7 @@ export function CountdownShareDialog({ snapshot: initialSnapshot, onClose }: { s
                     width={size.width}
                     height={size.height}
                     unoptimized
-                    alt={snapshot.expired ? "MG251: the first downtown parade’s scheduled start has arrived. Check the current schedule." : `${remaining} until Mobile’s first downtown parade. ${TARGET_EVENT_NAME}, ${TARGET_FULL_DATE_LABEL}. Captured ${snapshot.dateLabel}. MG251.xyz.`}
+                    alt={cardAlt}
                     className="h-full w-full rounded-lg object-contain"
                     onError={() => { setCardError(true); setPreparedCard(null); }}
                   />
@@ -280,7 +298,7 @@ export function CountdownShareDialog({ snapshot: initialSnapshot, onClose }: { s
                   </div>
                 ) : <p className="flex items-center gap-2 text-sm text-purple-100" role="status"><LoaderCircle className="h-4 w-4 animate-spin motion-reduce:animate-none" aria-hidden="true" /> Preparing your {preset.label} card…</p>}
               </div>
-              <p className="mt-2 text-center text-xs leading-5 text-purple-200">{size.width} × {size.height} PNG • {snapshot.expired ? "Parade planning" : `${remaining} to go`}</p>
+              <p className="mt-2 text-center text-xs leading-5 text-purple-200">{size.width} × {size.height} PNG • {!snapshot.hasScheduledTime ? remaining : snapshot.expired ? "Parade planning" : `${remaining} to go`}</p>
             </section>
 
             <section aria-labelledby="countdown-caption-heading" className="min-w-0">
@@ -294,8 +312,8 @@ export function CountdownShareDialog({ snapshot: initialSnapshot, onClose }: { s
                 setStatus("");
               }} rows={8} className="mt-2 block w-full resize-y rounded-xl border border-white/25 bg-white p-3 text-base leading-6 text-parade-ink outline-none focus:border-parade-goldBright focus:ring-2 focus:ring-parade-goldBright sm:text-sm" />
               <p className="mt-3 text-xs leading-5 text-purple-100">
-                {facebookLinkShare ? "Facebook opens with this countdown’s link card. Paste the copied post before publishing."
-                  : platform === "x" ? "X opens with your text and countdown link. To attach the PNG itself, save the card and add it in X."
+                {facebookLinkShare ? `Facebook opens with this ${isParadeShare ? "parade’s" : "countdown’s"} link card. Paste the copied post before publishing.`
+                  : platform === "x" ? `X opens with your text and ${isParadeShare ? "parade" : "countdown"} link. To attach the PNG itself, save the card and add it in X.`
                     : platform === "youtube" ? "Use the square card in a YouTube image post and paste the copied text."
                       : platform === "tiktok" ? "Use this vertical card in a TikTok photo post and paste the copied text."
                         : canShareCard ? `Choose ${platform === "other" ? "an app" : preset.label} in your device’s share menu, then paste the copied post.`

@@ -44,6 +44,10 @@ function defaultXCaptionWeight(caption: string) {
 
 test("the live countdown uses the actual first parade instant and floors partial days", () => {
   assert.equal(Date.parse(FIRST_DOWNTOWN_PARADE_TARGET), target);
+  const snapshot = createCountdownSnapshot(now);
+  assert.equal(snapshot.event.name, "Conde Cavaliers");
+  assert.equal(snapshot.event.startsAt, target);
+  assert.equal(snapshot.hasScheduledTime, true);
   assert.deepEqual(getTimeRemaining(target - day), {
     totalMilliseconds: day,
     days: 1,
@@ -208,7 +212,8 @@ test("all platform captions and card formats preserve the captured countdown", (
     assert.equal(card.pathname, "/api/countdown-card");
     assert.equal(card.searchParams.get("at"), String(snapshot.at));
     assert.equal(card.searchParams.get("format"), format);
-    assert.equal(card.searchParams.get("v"), "3");
+    assert.equal(card.searchParams.get("v"), "4");
+    assert.equal(card.searchParams.has("parade"), false);
     assert.deepEqual(parseCountdownSnapshot(card.searchParams.get("at") ?? undefined, now), snapshot);
   }
 });
@@ -272,7 +277,8 @@ test("share URLs preserve attribution and downloaded cards retain the same captu
     const download = new URL(buildCountdownCardUrl(snapshot, format, true), "https://mg251.xyz");
     assert.equal(download.searchParams.get("at"), String(snapshot.at));
     assert.equal(download.searchParams.get("format"), format);
-    assert.equal(download.searchParams.get("v"), "3");
+    assert.equal(download.searchParams.get("v"), "4");
+    assert.equal(download.searchParams.has("parade"), false);
     assert.ok(download.searchParams.has("download"));
     assert.equal(new URL(buildCountdownCardUrl(snapshot, format), "https://mg251.xyz").searchParams.has("download"), false);
   }
