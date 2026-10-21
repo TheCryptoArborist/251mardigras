@@ -187,39 +187,72 @@ test("the last partial minute stays upcoming in the formatter and every platform
     for (const platform of platforms) {
       const caption = buildCountdownCaption(snapshot, platform);
       assert.ok(caption.includes(platform === "x" ? "<1m until" : "Less than a minute until"), platform);
-      assert.ok(caption.includes(buildCountdownShareUrl(snapshot, platform)), platform);
       assert.doesNotMatch(caption, /scheduled start[^\n]*(?:arrived|passed|reached)/i);
     }
   }
 });
 
-test("all platform captions return visitors to the exact snapshot used by every card format", () => {
+test("all platform captions and card formats preserve the captured countdown", () => {
   const snapshot = createCountdownSnapshot(now);
   for (const platform of platforms) {
-    const returnUrl = new URL(buildCountdownShareUrl(snapshot, platform));
-    assert.equal(returnUrl.origin, "https://mg251.xyz");
-    assert.equal(returnUrl.pathname, "/countdown");
-    assert.equal(returnUrl.searchParams.get("at"), String(snapshot.at));
-    assert.equal(returnUrl.searchParams.get("utm_source"), platform);
-    assert.equal(returnUrl.searchParams.get("utm_medium"), "social");
-    assert.equal(returnUrl.searchParams.get("utm_campaign"), "mardi_gras_countdown");
-
     const caption = buildCountdownCaption(snapshot, platform);
-    assert.ok(caption.includes(returnUrl.toString()));
     assert.ok(caption.includes(platform === "x" ? "94d 9h 5m" : "94 days, 9 hours, 5 minutes"), platform);
     assert.ok(caption.includes(snapshot.dateLabel), platform);
     assert.match(caption, /first downtown/i);
     assert.match(caption, /Conde Cavaliers/i);
     assert.match(caption, /Jan(?:uary|\.)?\s+22,?\s+2027/);
     assert.match(caption, /6:30\s*PM\s*CT/i);
+  }
+  for (const format of formats) {
+    const card = new URL(buildCountdownCardUrl(snapshot, format), "https://mg251.xyz");
+    assert.equal(card.pathname, "/api/countdown-card");
+    assert.equal(card.searchParams.get("at"), String(snapshot.at));
+    assert.equal(card.searchParams.get("format"), format);
+    assert.equal(card.searchParams.get("v"), "3");
+    assert.deepEqual(parseCountdownSnapshot(card.searchParams.get("at") ?? undefined, now), snapshot);
+  }
+});
 
-    for (const format of formats) {
-      const card: URL = new URL(buildCountdownCardUrl(snapshot, format), returnUrl.origin);
-      assert.equal(card.pathname, "/api/countdown-card");
-      assert.equal(card.searchParams.get("at"), returnUrl.searchParams.get("at"));
-      assert.equal(card.searchParams.get("format"), format);
-      assert.equal(card.searchParams.get("v"), "2");
-      assert.deepEqual(parseCountdownSnapshot(card.searchParams.get("at") ?? undefined, now), snapshot);
+test("captions use platform-specific accounts and link policies before, near, and after the target", () => {
+  const accountMentions: Partial<Record<SharePlatform, string>> = {
+    instagram: "@mardi_gras_mobile_alabama",
+    tiktok: "@mobilemardigras",
+    youtube: "@MobileMardiGras"
+  };
+  for (const capturedAt of [now, target - minute + 1000, target - 1, target, target + day]) {
+    const snapshot = createCountdownSnapshot(capturedAt);
+    for (const platform of platforms) {
+      const caption = buildCountdownCaption(snapshot, platform);
+      const context = `${platform} at ${snapshot.dateLabel}`;
+      const mention = accountMentions[platform];
+      const urls = caption.match(/https?:\/\/\S+/gu) ?? [];
+      assert.deepEqual(caption.match(/@[A-Za-z0-9_]+/gu) ?? [], mention ? [mention] : [], context);
+      assert.doesNotMatch(caption, /\blink(?:s)?[\s-]+in[\s-]+(?:(?:my|our|the|your)[\s-]+)?bio\b/i, context);
+
+      if (mention) {
+        assert.deepEqual(urls, [], context);
+        assert.doesNotMatch(caption, /[?&]at=|utm_/i, context);
+        assert.match(caption, /\bMG251\.xyz\b/, context);
+      } else {
+        assert.deepEqual(urls, [buildCountdownShareUrl(snapshot, platform)], context);
+      }
+
+      if (platform === "instagram") {
+        assert.match(caption, /\bsave\b/i, context);
+        assert.match(caption, /\btag\b[^\n.!?]*\bcrew\b/i, context);
+      } else if (platform === "tiktok") {
+        assert.match(caption, /\bsend\b[^\n.!?]*\bcrew\b/i, context);
+        assert.match(caption, /\bfirst throws\b/i, context);
+      } else if (platform === "youtube") {
+        assert.match(caption, /\bfavorite parade\b/i, context);
+        assert.match(caption, /\bcomments?\b/i, context);
+        assert.match(caption, /\bsubscribe\b/i, context);
+      }
+
+      assert.ok(caption.includes(snapshot.dateLabel), context);
+      assert.match(caption, /Conde Cavaliers/i, context);
+      assert.match(caption, /Jan(?:uary|\.)?\s+22,?\s+2027/, context);
+      assert.match(caption, /6:30\s*PM\s*CT/i, context);
     }
   }
 });
@@ -228,14 +261,18 @@ test("share URLs preserve attribution and downloaded cards retain the same captu
   const snapshot = createCountdownSnapshot(now);
   for (const source of ["share", ...platforms] as const) {
     const url = new URL(buildCountdownShareUrl(snapshot, source));
+    assert.equal(url.origin, "https://mg251.xyz");
+    assert.equal(url.pathname, "/countdown");
     assert.equal(url.searchParams.get("utm_source"), source);
+    assert.equal(url.searchParams.get("utm_medium"), "social");
+    assert.equal(url.searchParams.get("utm_campaign"), "mardi_gras_countdown");
     assert.equal(url.searchParams.get("at"), String(snapshot.at));
   }
   for (const format of formats) {
     const download = new URL(buildCountdownCardUrl(snapshot, format, true), "https://mg251.xyz");
     assert.equal(download.searchParams.get("at"), String(snapshot.at));
     assert.equal(download.searchParams.get("format"), format);
-    assert.equal(download.searchParams.get("v"), "2");
+    assert.equal(download.searchParams.get("v"), "3");
     assert.ok(download.searchParams.has("download"));
     assert.equal(new URL(buildCountdownCardUrl(snapshot, format), "https://mg251.xyz").searchParams.has("download"), false);
   }
@@ -252,7 +289,6 @@ test("captions stop promising a future parade once the scheduled start has arriv
       assert.match(caption, /arrived|passed|schedule/i);
       assert.match(caption, /Conde Cavaliers/i);
       assert.ok(caption.includes(snapshot.dateLabel), platform);
-      assert.ok(caption.includes(buildCountdownShareUrl(snapshot, platform)), platform);
     }
   }
 });
