@@ -60,7 +60,7 @@ const quickLinkGroups = [
   {
     title: "History & Culture",
     description: "Mobile Carnival Museum and visitor resources for Mobile Mardi Gras history and culture.",
-    href: "/links/history-culture",
+    href: "/history",
     categories: ["History & Culture"],
     icon: <Landmark className="h-5 w-5" aria-hidden="true" />,
     action: "Explore history"
@@ -101,8 +101,8 @@ export default async function LinksPage() {
             <Link href="/watch" className="inline-flex items-center justify-center gap-2 rounded bg-parade-purple px-5 py-3 text-sm font-bold text-white hover:bg-parade-purpleDark">
               Watch Live <ArrowRight className="h-4 w-4" aria-hidden="true" />
             </Link>
-            <Link href="/resources" className="inline-flex items-center justify-center gap-2 rounded border border-parade-line bg-white px-5 py-3 text-sm font-bold text-parade-purple hover:bg-parade-purpleSoft">
-              Open Visitor Guide <ArrowRight className="h-4 w-4" aria-hidden="true" />
+            <Link href="/" className="inline-flex items-center justify-center gap-2 rounded border border-parade-line bg-white px-5 py-3 text-sm font-bold text-parade-purple hover:bg-parade-purpleSoft">
+              Home <ArrowRight className="h-4 w-4" aria-hidden="true" />
             </Link>
           </div>
         </div>

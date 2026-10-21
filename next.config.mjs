@@ -4,6 +4,11 @@ const nextConfig = {
   async redirects() {
     return [
       {
+        source: "/resources",
+        destination: "/",
+        permanent: true
+      },
+      {
         source: "/schedule/krewe-of-saint-jude-2027",
         destination: "/schedule#2027-02-06",
         permanent: true

@@ -25,8 +25,8 @@ export default async function ParkingAccessPage() {
       title="Parking"
       description="Find downtown parking maps, transportation contacts, and official sources to plan your Mardi Gras visit. Check the season status below before relying on parade-day details."
       resources={resources}
-      primaryHref="/resources"
-      primaryAction="Open Visitor Guide"
+      primaryHref="/"
+      primaryAction="Back to Home"
       resourceActionLabel="Open link"
       officialReminder="Parking, towing, road closures, public-safety instructions, and parade-day access should be verified through official City and public-safety sources before travel."
       showHeroQuickView={false}

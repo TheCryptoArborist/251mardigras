@@ -21,7 +21,7 @@ const staticRoutes: MetadataRoute.Sitemap = [
   { url: absoluteUrl("/parking-access"), changeFrequency: "weekly", priority: 0.85 },
   { url: absoluteUrl("/weather"), changeFrequency: "daily", priority: 0.8 },
   { url: absoluteUrl("/mardi-gras-gear"), changeFrequency: "weekly", priority: 0.75 },
-  { url: absoluteUrl("/resources"), changeFrequency: "weekly", priority: 0.8 },
+  { url: absoluteUrl("/history"), changeFrequency: "monthly", priority: 0.8 },
   { url: absoluteUrl("/mystic-societies/etruscans"), changeFrequency: "monthly", priority: 0.72 },
   { url: absoluteUrl("/schedule"), changeFrequency: "weekly", priority: 0.8 }
 ];
