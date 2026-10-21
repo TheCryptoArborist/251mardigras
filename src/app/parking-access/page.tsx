@@ -5,7 +5,8 @@ import { getResources } from "@/lib/data-access";
 
 export const dynamic = "force-dynamic";
 
-const PARKING_ACCESS_MAP_URL = "https://experience.arcgis.com/experience/f88d505ba3894e7ab1115d162d62839b";
+const PARKING_ACCESS_MAP_URL =
+  "https://www.arcgis.com/apps/mapviewer/index.html?configurableview=true&webmap=df7b15dc21af4150acf48e0ae01b7020&theme=light&heading=false&legend=true";
 const MOB_CITY_RIDES_LOGO_PATH = "/images/parking-access/mob%20city%20rides.jpg";
 const MOB_CITY_RIDES_PHONE_DISPLAY = "251-367-7433";
 const MOB_CITY_RIDES_PHONE_LINK = "2513677433";
@@ -48,7 +49,7 @@ function ParkingAccessMap() {
             <p className="text-xs font-black uppercase tracking-[0.16em] text-parade-purple">General downtown map • City of Mobile</p>
             <h2 className="mt-1 text-2xl font-black text-parade-purpleDark">Downtown parking at a glance</h2>
             <p className="mt-2 max-w-3xl text-sm leading-6 text-parade-muted">
-              Explore the City of Mobile&apos;s official map of downtown street parking, public lots, and garages. Open the full map for the best experience on a phone.
+              Explore the City of Mobile&apos;s downtown parking map. Zoom in for street-level details, or open the full map for more room.
             </p>
             <p className="mt-2 max-w-3xl text-sm leading-6 text-parade-muted">
               This map shows general parking locations; parade-day access and availability may vary.
