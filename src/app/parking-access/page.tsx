@@ -124,7 +124,6 @@ function FeaturedVendor() {
         <div className="min-w-0 flex-1">
           <h2 className="text-3xl font-black text-white">MOB City Rides</h2>
           <p className="mt-1 text-base font-black text-parade-goldBright">Golf Cart Shuttle</p>
-          <p className="mt-3 inline-flex rounded-full border border-parade-gold/40 bg-white/10 px-3 py-1.5 text-xs font-bold text-parade-goldBright">2027 service and fares: confirm with vendor</p>
           <p className="mt-3 max-w-3xl text-sm leading-6 text-purple-100">
             Contact MOB City Rides by text or call at {MOB_CITY_RIDES_PHONE_DISPLAY} for current fares, service dates, pickup points, and availability. Ask the vendor directly about vehicle accessibility and accommodations before booking.
           </p>
