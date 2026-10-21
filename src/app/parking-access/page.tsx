@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { Accessibility, CalendarCheck, ExternalLink, Mail, MapPinned, MessageSquare, Phone } from "lucide-react";
+import { Accessibility, ExternalLink, Mail, MapPinned, MessageSquare, Phone } from "lucide-react";
 import { CategoryResourcePage } from "@/components/CategoryResourcePage";
 import { getResources } from "@/lib/data-access";
 
@@ -10,7 +10,6 @@ const MOB_CITY_RIDES_LOGO_PATH = "/images/parking-access/mob%20city%20rides.jpg"
 const MOB_CITY_RIDES_PHONE_DISPLAY = "251-367-7433";
 const MOB_CITY_RIDES_PHONE_LINK = "2513677433";
 const MOB_CITY_RIDES_EMAIL = "mobcityrides@gmail.com";
-const CITY_PARKING_GUIDE_URL = "https://www.cityofmobile.gov/mardi-gras-parade-parking/";
 const CITY_GENERAL_GUIDE_URL = "https://www.cityofmobile.gov/mardi-gras-general-information/";
 const CITY_HELP_URL = "https://www.cityofmobile.gov/services/311/";
 
@@ -23,41 +22,17 @@ export default async function ParkingAccessPage() {
     <CategoryResourcePage
       eyebrow="Get downtown"
       title="Parking"
-      description="Find downtown parking maps, transportation contacts, and official sources to plan your Mardi Gras visit. Check the season status below before relying on parade-day details."
+      description="Find downtown parking, explore the map, and connect with local transportation services for your Mardi Gras visit."
       resources={resources}
       primaryHref="/"
       primaryAction="Back to Home"
       resourceActionLabel="Open link"
-      officialReminder="Parking, towing, road closures, public-safety instructions, and parade-day access should be verified through official City and public-safety sources before travel."
       showHeroQuickView={false}
     >
-      <SeasonPlanningStatus />
       <ParkingAccessMap />
       <AccessibilityPlanning />
       <FeaturedVendor />
     </CategoryResourcePage>
-  );
-}
-
-function SeasonPlanningStatus() {
-  return (
-    <section className="rounded-[1.5rem] border border-parade-gold/50 bg-parade-goldSoft p-5 shadow-card">
-      <div className="flex items-start gap-3">
-        <CalendarCheck className="mt-0.5 h-6 w-6 shrink-0 text-parade-purple" aria-hidden="true" />
-        <div>
-          <p className="text-xs font-black uppercase tracking-[0.14em] text-parade-purple">2027 season • verification pending</p>
-          <h2 className="mt-1 text-xl font-black text-parade-purpleDark">Plan locations now; recheck parade-day rules before you go</h2>
-          <p className="mt-3 text-sm leading-6 text-parade-ink">
-            The City parking page still included dates from the previous season when we reviewed it on October 20, 2026. MG251 has not yet verified 2027 road closures, towing arrangements, seasonal parking rates, or shuttle service.
-          </p>
-          <p className="mt-2 text-sm leading-6 text-parade-muted">The map below is a general downtown parking resource. It does not confirm that a space will be open or accessible during a particular parade.</p>
-          <a href={CITY_PARKING_GUIDE_URL} target="_blank" rel="noreferrer" className="mt-4 inline-flex min-h-11 items-center gap-2 rounded-full bg-parade-purple px-4 py-2 text-sm font-black text-white hover:bg-parade-purpleDark">
-            Check City parking updates <ExternalLink className="h-4 w-4" aria-hidden="true" />
-          </a>
-          <p className="mt-3 text-xs font-semibold text-parade-muted">Source reviewed <time dateTime="2026-10-20">October 20, 2026</time></p>
-        </div>
-      </div>
-    </section>
   );
 }
 
@@ -74,6 +49,9 @@ function ParkingAccessMap() {
             <h2 className="mt-1 text-2xl font-black text-parade-purpleDark">Downtown parking at a glance</h2>
             <p className="mt-2 max-w-3xl text-sm leading-6 text-parade-muted">
               Explore the City of Mobile&apos;s official map of downtown street parking, public lots, and garages. Open the full map for the best experience on a phone.
+            </p>
+            <p className="mt-2 max-w-3xl text-sm leading-6 text-parade-muted">
+              This map shows general parking locations; parade-day access and availability may vary.
             </p>
           </div>
         </div>
