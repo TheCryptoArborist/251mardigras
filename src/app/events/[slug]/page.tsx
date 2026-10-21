@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowRight, CalendarCheck, Download, ExternalLink, MapPinned, ShieldCheck } from "lucide-react";
 import { EventFlyerImage } from "@/components/EventFlyerImage";
+import { CommunityEventShareButton } from "@/components/CommunityEventShareButton";
 import {
   buildGoogleCalendarUrl,
   formatCommunityEventDate,
@@ -73,6 +74,7 @@ export default async function CommunityEventDetailPage({ params }: CommunityEven
                 <p className="text-base font-bold text-purple-100">Hosted by {event.organization}</p>
               </div>
               <div className="mt-6 flex flex-wrap gap-3">
+                <CommunityEventShareButton event={event} variant="dark" />
                 {!hasEnded ? <>
                   <a href={`/api/events/${event.id}/ics`} className="inline-flex items-center justify-center gap-2 rounded-full bg-parade-gold px-5 py-3 text-sm font-black text-parade-purpleDark shadow-glow transition hover:bg-parade-goldBright">
                     Add to Calendar <Download className="h-4 w-4" aria-hidden="true" />

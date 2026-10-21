@@ -1,5 +1,8 @@
 import communityEventsJson from "../../data/community-events.json";
 import { absoluteUrl } from "@/lib/seo";
+import { formatCommunityEventDate, fullEventLocation } from "@/lib/community-event-format";
+
+export { formatCommunityEventDate, fullEventLocation } from "@/lib/community-event-format";
 
 export type CommunityEventStatus = "pending" | "approved" | "rejected" | "needs_info" | "archived";
 
@@ -71,31 +74,6 @@ export function getCommunityEventById(eventId: string) {
   return getApprovedCommunityEvents().find((event) => event.id === eventId || event.slug === eventId) ?? null;
 }
 
-export function formatCommunityEventDate(event: CommunityEvent) {
-  if (event.dateLabel) {
-    return event.dateLabel;
-  }
-
-  const start = new Date(event.startDateTime);
-  const end = new Date(event.endDateTime);
-
-  const dateFormatter = new Intl.DateTimeFormat("en-US", {
-    weekday: "short",
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-    timeZone: "America/Chicago"
-  });
-
-  const timeFormatter = new Intl.DateTimeFormat("en-US", {
-    hour: "numeric",
-    minute: "2-digit",
-    timeZone: "America/Chicago"
-  });
-
-  return `${dateFormatter.format(start)} • ${timeFormatter.format(start)}–${timeFormatter.format(end)} CT`;
-}
-
 export function buildGoogleCalendarUrl(event: CommunityEvent) {
   const url = new URL("https://calendar.google.com/calendar/render");
   url.searchParams.set("action", "TEMPLATE");
@@ -162,14 +140,6 @@ export function buildCommunityCalendarIcs(events = getApprovedCommunityEvents())
     ...eventBlocks,
     "END:VCALENDAR"
   ].join("\r\n");
-}
-
-export function fullEventLocation(event: CommunityEvent) {
-  if (event.locationLabel) {
-    return event.locationLabel;
-  }
-
-  return [event.venueName, event.venueAddress, event.cityStateZip].filter(Boolean).join(", ");
 }
 
 function buildCalendarDescription(event: CommunityEvent) {

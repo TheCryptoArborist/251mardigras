@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { CalendarDays, ChevronLeft, ChevronRight } from "lucide-react";
 import type { CommunityEvent } from "@/lib/community-events";
+import { CommunityEventShareButton } from "@/components/CommunityEventShareButton";
 
 const CENTRAL_TIME_ZONE = "America/Chicago";
 const weekdayLabels = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
@@ -70,7 +71,7 @@ export function CommunityEventsMonthCalendar({ events }: { events: CommunityEven
               <p className="text-xs font-black uppercase tracking-[0.16em] text-parade-goldBright">Monthly view</p>
               <h2 className="mt-1 text-2xl font-black text-white">Community Events</h2>
               <p className="mt-2 max-w-3xl text-sm leading-6 text-purple-100">
-                Browse approved Mardi Gras-related events by month. Tap an event to open its full details, flyer, map, and calendar options.
+                Browse approved Mardi Gras-related events by month. Open an event for details or share it with your friends.
               </p>
             </div>
           </div>
@@ -147,17 +148,19 @@ export function CommunityEventsMonthCalendar({ events }: { events: CommunityEven
 
                   <div className="mt-2 space-y-1.5">
                     {dayEvents.slice(0, 2).map((event) => (
-                      <Link
-                        key={event.id}
-                        href={`/events/${event.slug}`}
-                        className="block rounded-xl bg-parade-purple px-2 py-1.5 text-left text-[0.68rem] font-black leading-4 text-white transition hover:bg-parade-purpleDark"
-                      >
-                        <span className="block truncate">{event.title}</span>
-                        <span className="mt-0.5 block truncate text-[0.62rem] font-bold text-parade-goldBright">{formatEventTime(event.startDateTime)} CT</span>
-                      </Link>
+                      <div key={event.id} className="space-y-1">
+                        <Link
+                          href={`/events/${event.slug}`}
+                          className="block rounded-xl bg-parade-purple px-2 py-1.5 text-left text-[0.68rem] font-black leading-4 text-white transition hover:bg-parade-purpleDark"
+                        >
+                          <span className="block truncate">{event.title}</span>
+                          <span className="mt-0.5 block truncate text-[0.62rem] font-bold text-parade-goldBright">{formatEventTime(event.startDateTime)} CT</span>
+                        </Link>
+                        <CommunityEventShareButton event={event} variant="compact" className="w-full" />
+                      </div>
                     ))}
                     {dayEvents.length > 2 ? (
-                      <Link href="#approved-event-details" className="block text-[0.68rem] font-black text-parade-purple hover:underline">
+                      <Link href="#community-event-listings" className="block text-[0.68rem] font-black text-parade-purple hover:underline">
                         +{dayEvents.length - 2} more
                       </Link>
                     ) : null}
@@ -200,15 +203,17 @@ function MobileAgenda({ events }: { events: CommunityEvent[] }) {
   return (
     <div className="mt-3 space-y-3">
       {events.map((event) => (
-        <Link
+        <article
           key={event.id}
-          href={`/events/${event.slug}`}
           className="block rounded-2xl border border-parade-gold/30 bg-white/85 p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-civic"
         >
-          <p className="text-xs font-black uppercase tracking-wide text-parade-purple">{formatAgendaDate(event.startDateTime)}</p>
-          <h4 className="mt-1 text-base font-black text-parade-purpleDark">{event.title}</h4>
-          <p className="mt-1 text-sm font-semibold text-parade-muted">{event.eventType} • {formatEventTime(event.startDateTime)} CT</p>
-        </Link>
+          <Link href={`/events/${event.slug}`} className="block rounded-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-parade-purple">
+            <p className="text-xs font-black uppercase tracking-wide text-parade-purple">{formatAgendaDate(event.startDateTime)}</p>
+            <h4 className="mt-1 text-base font-black text-parade-purpleDark">{event.title}</h4>
+            <p className="mt-1 text-sm font-semibold text-parade-muted">{event.eventType} • {formatEventTime(event.startDateTime)} CT</p>
+          </Link>
+          <CommunityEventShareButton event={event} className="mt-3" />
+        </article>
       ))}
     </div>
   );
