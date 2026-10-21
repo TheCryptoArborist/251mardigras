@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useMemo, useState } from "react";
 import { ExternalLink, Navigation, Search, X } from "lucide-react";
 import type { ResourceItem } from "@/lib/data-access";
+import { getFoodStopMapLinks } from "@/lib/food-stop-maps";
 
 const stopFilters = [
   { id: "all", label: "All stops" },
@@ -79,7 +80,7 @@ export function FoodStopSelector({ resources }: { resources: ResourceItem[] }) {
           <p className="text-sm font-black uppercase tracking-[0.16em] text-parade-goldBright">Food and drink navigator</p>
           <h2 className="mt-2 text-2xl font-black text-white">Find a downtown stop fast</h2>
           <p className="mt-2 max-w-3xl text-sm leading-6 text-purple-100">
-            Choose a restaurant, coffee shop, bakery, brewery, barbecue stop, dessert stop, or direct venue link while you are walking downtown or planning your parade day.
+            Find a food or drink stop, then choose Apple Maps or Google Maps to view the location and get directions.
           </p>
         </div>
       </div>
@@ -103,19 +104,7 @@ export function FoodStopSelector({ resources }: { resources: ResourceItem[] }) {
           </label>
 
           {selectedResource ? (
-            <a
-              href={selectedResource.url}
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex items-center justify-center gap-2 rounded-full bg-parade-gold px-5 py-3 text-sm font-black text-parade-purpleDark shadow-glow transition hover:-translate-y-0.5 hover:bg-parade-goldBright lg:self-end"
-            >
-              {actionLabelForStop(selectedResource.title)}
-              {isWebsiteStop(selectedResource.title) ? (
-                <ExternalLink className="h-4 w-4" aria-hidden="true" />
-              ) : (
-                <Navigation className="h-4 w-4" aria-hidden="true" />
-              )}
-            </a>
+            <FoodStopActions resource={selectedResource} prominent />
           ) : (
             <button
               type="button"
@@ -189,23 +178,55 @@ export function FoodStopSelector({ resources }: { resources: ResourceItem[] }) {
 
 function FoodStopCard({ resource }: { resource: ResourceItem }) {
   return (
-    <a
-      href={resource.url}
-      target="_blank"
-      rel="noreferrer"
-      className="group relative flex min-w-0 items-center gap-3 overflow-hidden rounded-2xl border border-parade-gold/30 bg-gradient-to-br from-white via-parade-cream to-parade-purpleMist p-3 text-left shadow-sm transition hover:-translate-y-0.5 hover:shadow-civic"
+    <article
+      className="relative flex min-w-0 flex-col overflow-hidden rounded-2xl border border-parade-gold/30 bg-gradient-to-br from-white via-parade-cream to-parade-purpleMist p-3 text-left shadow-sm"
     >
       <span className="pointer-events-none absolute right-[-1.75rem] top-[-1.75rem] h-16 w-16 rounded-full bg-parade-gold/20 blur-xl" aria-hidden="true" />
-      <FoodStopLogo title={resource.title} />
-      <span className="relative z-10 min-w-0 flex-1">
-        <span className="block truncate text-sm font-black text-parade-purpleDark">{resource.title}</span>
-        <span className="mt-1 block text-xs font-black uppercase text-parade-muted">{labelForStop(resource.title)}</span>
-        <span className="mt-2 inline-flex items-center gap-1 rounded-full bg-parade-purple px-3 py-1.5 text-xs font-black uppercase text-white transition group-hover:bg-parade-purpleDark">
-          {actionLabelForStop(resource.title)}
-          <ExternalLink className="h-3.5 w-3.5" aria-hidden="true" />
-        </span>
-      </span>
-    </a>
+      <div className="relative z-10 flex items-center gap-3">
+        <FoodStopLogo title={resource.title} />
+        <div className="min-w-0 flex-1">
+          <h3 className="text-sm font-black leading-5 text-parade-purpleDark">{resource.title}</h3>
+          <p className="mt-1 text-xs font-black uppercase text-parade-muted">{labelForStop(resource.title)}</p>
+        </div>
+      </div>
+      <FoodStopActions resource={resource} />
+    </article>
+  );
+}
+
+function FoodStopActions({ resource, prominent = false }: { resource: ResourceItem; prominent?: boolean }) {
+  const maps = getFoodStopMapLinks(resource);
+  const actions = maps
+    ? [
+        { label: "Apple Maps", href: maps.appleMapsUrl, isMap: true },
+        { label: "Google Maps", href: maps.googleMapsUrl, isMap: true }
+      ]
+    : [{ label: actionLabelForStop(resource.title), href: resource.url, isMap: !isWebsiteStop(resource.title) }];
+
+  return (
+    <div
+      role="group"
+      aria-label={`Links for ${resource.title}`}
+      className={`relative z-10 grid gap-2 ${maps ? "grid-cols-2" : "grid-cols-1"} ${prominent ? "lg:self-end" : "mt-auto pt-3"}`}
+    >
+      {actions.map((action) => (
+        <a
+          key={action.label}
+          href={action.href}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={`${action.label} for ${resource.title} (opens in a new tab)`}
+          className={`inline-flex min-h-11 min-w-0 items-center justify-center gap-1.5 whitespace-nowrap rounded-full px-2 py-2 text-xs font-black transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-parade-purple focus-visible:ring-offset-2 ${
+            prominent
+              ? "bg-parade-gold text-parade-purpleDark shadow-glow hover:bg-parade-goldBright sm:px-4 sm:text-sm"
+              : "bg-parade-purple text-white hover:bg-parade-purpleDark"
+          }`}
+        >
+          {action.isMap ? <Navigation className="h-3.5 w-3.5 shrink-0" aria-hidden="true" /> : <ExternalLink className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />}
+          {action.label}
+        </a>
+      ))}
+    </div>
   );
 }
 
