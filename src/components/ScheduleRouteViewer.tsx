@@ -1,9 +1,13 @@
 "use client";
 
-import { ArrowUp, CalendarPlus, Check, ChevronDown, Clock3, ExternalLink, MapPinned, Share2, ShieldCheck, Sparkles, X } from "lucide-react";
+import { ArrowUp, CalendarPlus, ChevronDown, Clock3, ExternalLink, MapPinned, Share2, ShieldCheck, Sparkles, X } from "lucide-react";
+import dynamic from "next/dynamic";
 import Image from "next/image";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { StatusPill } from "@/components/StatusPill";
+import { createCountdownSnapshot, createParadeShareEvent, type CountdownSnapshot } from "@/lib/countdown-share";
+
+const CountdownShareDialog = dynamic(() => import("@/components/CountdownShareDialog").then((module) => module.CountdownShareDialog), { ssr: false });
 
 export type ParadeEntry = {
   id: string;
@@ -48,7 +52,6 @@ type ScheduleRouteViewerProps = {
   focusParadeId?: string;
 };
 
-type ShareStatus = "idle" | "shared" | "copied" | "error";
 type CalendarSelection = { parade: ParadeEntry; day: ParadeDay };
 type TimedParade = ParadeEntry & { day: ParadeDay };
 type ParadeTimeStatus = "start-passed" | "past-date";
@@ -126,7 +129,7 @@ const routeMapByName = new Map(routeMaps.map((route) => [route.name, route]));
 export function ScheduleRouteViewer({ schedule, focusParadeId }: ScheduleRouteViewerProps) {
   const [selectedRouteName, setSelectedRouteName] = useState<string | null>(null);
   const [selectedCalendar, setSelectedCalendar] = useState<CalendarSelection | null>(null);
-  const [shareStatusByParadeId, setShareStatusByParadeId] = useState<Record<string, ShareStatus>>({});
+  const [selectedShare, setSelectedShare] = useState<CountdownSnapshot | null>(null);
   const [routeFilter, setRouteFilter] = useState("All routes");
   const [now, setNow] = useState<Date | null>(null);
   const [showBackToTop, setShowBackToTop] = useState(false);
@@ -186,48 +189,8 @@ export function ScheduleRouteViewer({ schedule, focusParadeId }: ScheduleRouteVi
     setSelectedCalendar({ parade, day });
   }
 
-  function markParadeShareStatus(paradeId: string, status: ShareStatus) {
-    setShareStatusByParadeId((current) => ({ ...current, [paradeId]: status }));
-
-    window.setTimeout(() => {
-      setShareStatusByParadeId((current) => {
-        if (current[paradeId] !== status) {
-          return current;
-        }
-
-        const next = { ...current };
-        delete next[paradeId];
-        return next;
-      });
-    }, 2800);
-  }
-
-  async function shareParade(parade: ParadeEntry, day: ParadeDay) {
-    const shareUrl = buildParadeShareUrl(parade.id);
-    const shareText = buildParadeShareText(parade, day);
-    const shareData = {
-      title: `${parade.name} | Mobile Mardi Gras 2027`,
-      text: shareText,
-      url: shareUrl
-    };
-
-    try {
-      if (navigator.share) {
-        await navigator.share(shareData);
-        markParadeShareStatus(parade.id, "shared");
-        return;
-      }
-
-      const copied = await copyParadeShareText(shareText, shareUrl);
-      markParadeShareStatus(parade.id, copied ? "copied" : "error");
-    } catch (error) {
-      if (error instanceof DOMException && error.name === "AbortError") {
-        return;
-      }
-
-      const copied = await copyParadeShareText(shareText, shareUrl).catch(() => false);
-      markParadeShareStatus(parade.id, copied ? "copied" : "error");
-    }
+  function shareParade(parade: ParadeEntry, day: ParadeDay) {
+    setSelectedShare(createCountdownSnapshot(Date.now(), createParadeShareEvent(parade, day)));
   }
 
   return (
@@ -281,7 +244,6 @@ export function ScheduleRouteViewer({ schedule, focusParadeId }: ScheduleRouteVi
             entry={featuredParade}
             now={now}
             isFocused={Boolean(focusedParade)}
-            shareStatus={shareStatusByParadeId[featuredParade.id] ?? "idle"}
             onMap={openRouteMap}
             onCalendar={openCalendar}
             onShare={shareParade}
@@ -368,7 +330,6 @@ export function ScheduleRouteViewer({ schedule, focusParadeId }: ScheduleRouteVi
 
                 <div className="divide-y divide-parade-gold/20 bg-white/5">
                   {day.parades.map((parade) => {
-                    const shareStatus = shareStatusByParadeId[parade.id] ?? "idle";
                     const paradeStatus = now ? getParadeStatus(parade, day, now, currentDateKey) : null;
 
                     return (
@@ -399,11 +360,11 @@ export function ScheduleRouteViewer({ schedule, focusParadeId }: ScheduleRouteVi
                             <button
                               type="button"
                               onClick={() => shareParade(parade, day)}
-                              className="inline-flex items-center justify-center gap-1.5 rounded-full border border-parade-gold/45 bg-white/10 px-3 py-2 text-xs font-black uppercase tracking-wide text-white transition hover:-translate-y-0.5 hover:border-parade-gold hover:bg-parade-gold hover:text-parade-purpleDark"
+                              className="inline-flex min-h-11 items-center justify-center gap-1.5 rounded-full border border-parade-gold/45 bg-white/10 px-3 py-2 text-xs font-black uppercase tracking-wide text-white transition hover:-translate-y-0.5 hover:border-parade-gold hover:bg-parade-gold hover:text-parade-purpleDark"
                               aria-label={`Share ${parade.name}`}
+                              aria-haspopup="dialog"
                             >
-                              {shareStatus === "shared" || shareStatus === "copied" ? <Check className="h-3.5 w-3.5" aria-hidden="true" /> : <Share2 className="h-3.5 w-3.5" aria-hidden="true" />}
-                              {getShareButtonLabel(shareStatus)}
+                              <Share2 className="h-3.5 w-3.5" aria-hidden="true" /> Share
                             </button>
                             <button
                               type="button"
@@ -471,15 +432,16 @@ export function ScheduleRouteViewer({ schedule, focusParadeId }: ScheduleRouteVi
 
       {selectedRoute ? <RouteMapDialog route={selectedRoute} schedule={schedule} onClose={closeRouteMap} /> : null}
       {selectedCalendar ? <CalendarDialog selection={selectedCalendar} onClose={() => setSelectedCalendar(null)} /> : null}
+      {selectedShare ? <CountdownShareDialog key={`${selectedShare.event.paradeId}-${selectedShare.at}`} snapshot={selectedShare} onClose={() => setSelectedShare(null)} /> : null}
 
       <button
         type="button"
         onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
         aria-label="Back to top"
-        aria-hidden={!showBackToTop || Boolean(selectedRoute) || Boolean(selectedCalendar)}
-        tabIndex={showBackToTop && !selectedRoute && !selectedCalendar ? 0 : -1}
+        aria-hidden={!showBackToTop || Boolean(selectedRoute) || Boolean(selectedCalendar) || Boolean(selectedShare)}
+        tabIndex={showBackToTop && !selectedRoute && !selectedCalendar && !selectedShare ? 0 : -1}
         className={`fixed bottom-[calc(env(safe-area-inset-bottom)+5rem)] right-4 z-40 inline-flex h-12 items-center justify-center gap-2 rounded-full border-2 border-[#fff2b5] bg-parade-goldBright px-3 text-sm font-black text-parade-purpleDark shadow-[0_12px_35px_rgba(43,6,69,0.45)] transition-all duration-200 hover:-translate-y-1 hover:bg-white focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-parade-gold/50 sm:bottom-6 sm:right-6 sm:px-5 ${
-          showBackToTop && !selectedRoute && !selectedCalendar
+          showBackToTop && !selectedRoute && !selectedCalendar && !selectedShare
             ? "translate-y-0 opacity-100"
             : "pointer-events-none translate-y-3 opacity-0"
         }`}
@@ -504,7 +466,6 @@ function FeaturedParadePanel({
   entry,
   now,
   isFocused,
-  shareStatus,
   onMap,
   onCalendar,
   onShare
@@ -512,10 +473,9 @@ function FeaturedParadePanel({
   entry: TimedParade;
   now: Date | null;
   isFocused: boolean;
-  shareStatus: ShareStatus;
   onMap: (routeName: string) => void;
   onCalendar: (parade: ParadeEntry, day: ParadeDay) => void;
-  onShare: (parade: ParadeEntry, day: ParadeDay) => Promise<void>;
+  onShare: (parade: ParadeEntry, day: ParadeDay) => void;
 }) {
   const start = getParadeStart(entry, entry.day);
   const countdownMilliseconds = now ? start.getTime() - now.getTime() : null;
@@ -550,9 +510,8 @@ function FeaturedParadePanel({
           <button type="button" onClick={() => onCalendar(entry, entry.day)} className="inline-flex items-center justify-center gap-2 rounded-full border border-[#ffd45a]/70 bg-[#2b0645]/35 px-4 py-2.5 text-sm font-black text-[#fffaf0] transition hover:-translate-y-0.5 hover:bg-[#2b0645]/55">
             Calendar <CalendarPlus className="h-4 w-4" aria-hidden="true" />
           </button>
-          <button type="button" onClick={() => onShare(entry, entry.day)} className="inline-flex items-center justify-center gap-2 rounded-full border border-[#ffd45a]/70 bg-[#2b0645]/35 px-4 py-2.5 text-sm font-black text-[#fffaf0] transition hover:-translate-y-0.5 hover:bg-[#2b0645]/55">
-            {shareStatus === "shared" || shareStatus === "copied" ? <Check className="h-4 w-4" aria-hidden="true" /> : <Share2 className="h-4 w-4" aria-hidden="true" />}
-            {getShareButtonLabel(shareStatus)}
+          <button type="button" onClick={() => onShare(entry, entry.day)} className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-[#ffd45a]/70 bg-[#2b0645]/35 px-4 py-2.5 text-sm font-black text-[#fffaf0] transition hover:-translate-y-0.5 hover:bg-[#2b0645]/55" aria-label={`Share ${entry.name}`} aria-haspopup="dialog">
+            <Share2 className="h-4 w-4" aria-hidden="true" /> Share
           </button>
         </div>
       </div>
@@ -807,10 +766,6 @@ function buildParadeShareUrl(paradeId: string) {
   return `${SCHEDULE_SHARE_BASE_URL}/${encodeURIComponent(paradeId)}`;
 }
 
-function buildParadeShareText(parade: ParadeEntry, day: ParadeDay) {
-  return `${parade.name}\n${formatParadeShareDate(day.date)} • ${parade.time}\n${parade.route}\n\nView the Mobile Mardi Gras schedule and route:`;
-}
-
 function formatParadeShareDate(value: string) {
   return new Intl.DateTimeFormat("en-US", {
     weekday: "long",
@@ -892,29 +847,4 @@ function buildGoogleCalendarUrl(parade: ParadeEntry, day: ParadeDay) {
 
 function formatCalendarUtc(date: Date) {
   return date.toISOString().replace(/[-:]/g, "").replace(/\.\d{3}Z$/, "Z");
-}
-
-async function copyParadeShareText(shareText: string, shareUrl: string) {
-  if (!navigator.clipboard?.writeText) {
-    return false;
-  }
-
-  await navigator.clipboard.writeText(`${shareText}\n${shareUrl}`);
-  return true;
-}
-
-function getShareButtonLabel(status: ShareStatus) {
-  if (status === "shared") {
-    return "Shared";
-  }
-
-  if (status === "copied") {
-    return "Copied";
-  }
-
-  if (status === "error") {
-    return "Copy failed";
-  }
-
-  return "Share";
 }

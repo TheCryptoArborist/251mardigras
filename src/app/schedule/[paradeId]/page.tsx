@@ -3,19 +3,28 @@ import { notFound } from "next/navigation";
 import paradeSchedule2027 from "../../../../data/parade-schedule-2027.json";
 import { ScheduleRouteViewer, type ParadeSchedule } from "@/components/ScheduleRouteViewer";
 import { absoluteUrl, createPageMetadata, jsonLdScript } from "@/lib/seo";
+import { COUNTDOWN_CARD_SIZES, buildCountdownCardUrl, createParadeShareEvent, formatCountdownRemaining, parseCountdownSnapshot } from "@/lib/countdown-share";
+import { getParadeShareEvent } from "@/lib/parade-share";
 
 const schedule = paradeSchedule2027 as ParadeSchedule;
 const parades = schedule.days.flatMap((day) => day.parades.map((parade) => ({ parade, day })));
+
+export const dynamic = "force-dynamic";
 
 export function generateStaticParams() {
   return parades.map(({ parade }) => ({ paradeId: parade.id }));
 }
 
-export async function generateMetadata({ params }: { params: Promise<{ paradeId: string }> }): Promise<Metadata> {
-  const { paradeId } = await params;
-  const match = parades.find(({ parade }) => parade.id === paradeId);
+type ParadePageProps = {
+  params: Promise<{ paradeId: string }>;
+  searchParams: Promise<{ at?: string | string[] }>;
+};
 
-  if (!match) {
+export async function generateMetadata({ params, searchParams }: ParadePageProps): Promise<Metadata> {
+  const [{ paradeId }, query] = await Promise.all([params, searchParams]);
+  const event = getParadeShareEvent(paradeId);
+
+  if (!event) {
     return createPageMetadata({
       title: "Mobile Mardi Gras Parade",
       description: "Mobile Mardi Gras parade schedule details.",
@@ -24,11 +33,27 @@ export async function generateMetadata({ params }: { params: Promise<{ paradeId:
     });
   }
 
-  return createPageMetadata({
-    title: `${match.parade.name} — ${match.day.label}`,
-    description: `${match.parade.name} rolls ${match.day.label}, 2027 at ${match.parade.time} on ${match.parade.route}. View the schedule and route map on MG251.`,
-    path: `/schedule/${match.parade.id}`
+  const snapshot = parseCountdownSnapshot(typeof query.at === "string" ? query.at : undefined, Date.now(), event);
+  const remaining = formatCountdownRemaining(snapshot);
+  const description = `${event.name} — ${event.weekdayDateLabel} • ${event.timeLabel} • ${event.route}. ${remaining}${!snapshot.expired && snapshot.hasScheduledTime ? " until the scheduled start" : ""}. View this parade’s schedule and route map on MG251. As of ${snapshot.dateLabel}.`;
+  const imageAlt = `${event.name} — ${event.fullDateLabel} — ${event.route} — ${remaining}`;
+  const imageUrl = absoluteUrl(buildCountdownCardUrl(snapshot, "preview"));
+  const metadata = createPageMetadata({
+    title: `${event.name} — ${event.dateLabel}`,
+    description,
+    path: `/schedule/${event.paradeId}`,
+    image: imageUrl,
+    imageAlt
   });
+
+  return {
+    ...metadata,
+    openGraph: {
+      ...metadata.openGraph,
+      url: absoluteUrl(`/schedule/${event.paradeId}?at=${snapshot.at}`),
+      images: [{ url: imageUrl, ...COUNTDOWN_CARD_SIZES.preview, type: "image/png", alt: imageAlt }]
+    }
+  };
 }
 
 export default async function ParadeScheduleDetailPage({ params }: { params: Promise<{ paradeId: string }> }) {
@@ -48,13 +73,13 @@ export default async function ParadeScheduleDetailPage({ params }: { params: Pro
 }
 
 function paradeJsonLd(parade: (typeof parades)[number]["parade"], date: string) {
-  const start = getParadeStart(date, parade.time);
+  const event = createParadeShareEvent(parade, { date });
 
   return {
     "@context": "https://schema.org",
     "@type": "Event",
     name: parade.name,
-    startDate: start.toISOString(),
+    startDate: event.startsAt === null ? event.date : new Date(event.startsAt).toISOString(),
     eventStatus: "https://schema.org/EventScheduled",
     eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
     url: absoluteUrl(`/schedule/${parade.id}`),
@@ -69,14 +94,4 @@ function paradeJsonLd(parade: (typeof parades)[number]["parade"], date: string) 
       }
     }
   };
-}
-
-function getParadeStart(date: string, time: string) {
-  if (time.toLowerCase() === "noon") return new Date(`${date}T12:00:00-06:00`);
-  const match = time.match(/^(\d{1,2}):(\d{2})\s*(AM|PM)$/i);
-  if (!match) return new Date(`${date}T12:00:00-06:00`);
-  let hour = Number(match[1]);
-  if (match[3].toUpperCase() === "AM" && hour === 12) hour = 0;
-  if (match[3].toUpperCase() === "PM" && hour !== 12) hour += 12;
-  return new Date(`${date}T${String(hour).padStart(2, "0")}:${match[2]}:00-06:00`);
 }
