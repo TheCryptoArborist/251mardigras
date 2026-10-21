@@ -27,16 +27,28 @@ function originalLogo() {
   return logoDataPromise;
 }
 
-function allowedRemoteFlyer(url: URL) {
-  return url.protocol === "https:" && url.hostname === "www.jotform.com" && !url.port
-    && !url.username && !url.password && url.pathname.startsWith("/uploads/");
+function allowedRemoteFlyer(url: URL, uploadPath?: string) {
+  if (url.protocol !== "https:" || url.port || url.username || url.password) return false;
+  const prefix = url.hostname === "www.jotform.com" ? "/uploads/"
+    : uploadPath && url.hostname === "files.jotform.com" ? "/jufs/" : null;
+  if (!prefix || !url.pathname.startsWith(prefix)) return false;
+  if (uploadPath === undefined) return true;
+  try {
+    return decodeURIComponent(url.pathname.slice(prefix.length)) === uploadPath;
+  } catch {
+    return false;
+  }
 }
 
 async function readRemoteFlyer(source: string) {
   let url = new URL(source);
+  if (!allowedRemoteFlyer(url)) throw new Error("Flyer source is not allowed");
+  // Jotform redirects uploads to its file host with an encoded copy of the
+  // same path. A redirect may never select another upload or another host.
+  const uploadPath = decodeURIComponent(url.pathname.slice("/uploads/".length));
   const signal = AbortSignal.timeout(FLYER_TIMEOUT_MS);
   for (let redirects = 0; redirects <= 2; redirects++) {
-    if (!allowedRemoteFlyer(url)) throw new Error("Flyer source is not allowed");
+    if (!allowedRemoteFlyer(url, uploadPath)) throw new Error("Flyer source is not allowed");
     const response = await fetch(url, { signal, redirect: "manual", cache: "no-store" });
     if ([301, 302, 303, 307, 308].includes(response.status)) {
       const location = response.headers.get("location");
@@ -238,7 +250,7 @@ function EventDetails({ event, format, withFlyer, sideBySide, landscapeFlyer }: 
   const centered = !sideBySide;
   const titleSize = withFlyer
     ? preview ? (landscapeFlyer ? (event.title.length > 40 ? 38 : 44) : 50) : sideBySide ? (square ? 50 : 56) : story ? (landscapeFlyer ? 74 : 64) : square ? 48 : 60
-    : preview ? (event.title.length > 40 ? 56 : 72) : story ? 102 : square ? 82 : 94;
+    : preview ? (event.title.length > 28 ? 56 : 72) : story ? 102 : square ? 82 : 94;
   const bodySize = withFlyer ? (preview ? 27 : story ? 34 : 30) : preview ? 31 : story ? 46 : square ? 37 : 42;
   const dateLines = formatCommunityEventShareDate(event).split(" • ");
   const venue = event.locationLabel || event.venueName || event.cityStateZip;
