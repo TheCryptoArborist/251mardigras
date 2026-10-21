@@ -162,7 +162,7 @@ export function CountdownShareDialog({ snapshot: initialSnapshot, onClose }: { s
     if (success) {
       setCopied(kind);
       setStatus(kind === "link"
-        ? "Website link copied. You can also use it in a Story link sticker."
+        ? platform === "instagram" ? "Story link copied. Add it with Instagram’s Link sticker." : "Website link copied."
         : download ? "Post copied and card download requested. Upload the saved card, then paste your post."
           : `${preset.label} post copied. Paste it before publishing.`);
     } else {
@@ -205,6 +205,15 @@ export function CountdownShareDialog({ snapshot: initialSnapshot, onClose }: { s
 
   const primaryStyle = `inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-parade-goldBright px-4 py-2.5 text-sm font-black text-parade-purpleDark hover:bg-parade-goldSoft disabled:opacity-50 ${focusStyle}`;
   const secondaryStyle = `inline-flex min-h-11 items-center justify-center gap-1.5 rounded-full border border-white/25 px-3 py-2 text-xs font-bold text-white hover:bg-white/10 disabled:opacity-50 ${focusStyle}`;
+  const linkControl = (
+    <>
+      <label htmlFor="countdown-share-link" className="flex items-center gap-1.5 text-xs font-bold text-purple-100"><Link2 className="h-3.5 w-3.5" aria-hidden="true" /> {platform === "instagram" ? "Story sticker URL" : "Website link"}</label>
+      <div className="mt-1.5 flex gap-2">
+        <input ref={linkRef} id="countdown-share-link" type="text" value={shareUrl} readOnly onFocus={(event) => event.currentTarget.select()} className="min-h-11 min-w-0 flex-1 rounded-lg border border-white/25 bg-black/20 px-3 text-base text-purple-100 focus:outline focus:outline-2 focus:outline-parade-goldBright sm:text-xs" />
+        <button type="button" onClick={() => void copyText("link")} aria-label={platform === "instagram" ? "Copy Story link" : "Copy website link"} className={secondaryStyle}>{copied === "link" ? <Check className="h-4 w-4" aria-hidden="true" /> : <Copy className="h-4 w-4" aria-hidden="true" />}</button>
+      </div>
+    </>
+  );
 
   return (
     <dialog
@@ -291,13 +300,17 @@ export function CountdownShareDialog({ snapshot: initialSnapshot, onClose }: { s
                       : platform === "tiktok" ? "Use this vertical card in a TikTok photo post and paste the copied text."
                         : canShareCard ? `Choose ${platform === "other" ? "an app" : preset.label} in your device’s share menu, then paste the copied post.`
                           : `Save the card, upload it ${platform === "other" ? "in your chosen app" : `to ${preset.label}`}, and paste the copied post.`}
-                {platform === "instagram" && format === "story" ? " Add the website link with a Story link sticker." : ""}
+                {platform === "instagram" && format === "story" ? " Add the separate Story link below with Instagram’s Link sticker." : ""}
               </p>
-              <label htmlFor="countdown-share-link" className="mt-3 flex items-center gap-1.5 text-xs font-bold text-purple-100"><Link2 className="h-3.5 w-3.5" aria-hidden="true" /> Website link</label>
-              <div className="mt-1.5 flex gap-2">
-                <input ref={linkRef} id="countdown-share-link" type="text" value={shareUrl} readOnly onFocus={(event) => event.currentTarget.select()} className="min-h-11 min-w-0 flex-1 rounded-lg border border-white/25 bg-black/20 px-3 text-base text-purple-100 focus:outline focus:outline-2 focus:outline-parade-goldBright sm:text-xs" />
-                <button type="button" onClick={() => void copyText("link")} aria-label="Copy website link" className={secondaryStyle}>{copied === "link" ? <Check className="h-4 w-4" aria-hidden="true" /> : <Copy className="h-4 w-4" aria-hidden="true" />}</button>
-              </div>
+              {preset.includeLinkInCaption ? <div className="mt-3">{linkControl}</div> : (
+                <details key={`${platform}-${format}`} open={platform === "instagram" && format === "story"} className="mt-3 rounded-lg border border-white/15 px-3">
+                  <summary className={`cursor-pointer py-3 text-xs font-bold text-purple-100 ${focusStyle}`}>{platform === "instagram" ? "Optional Instagram Story link" : "Optional link for messages"}</summary>
+                  <div className="pb-3">
+                    <p className="mb-2 text-xs leading-5 text-purple-200">{platform === "instagram" ? "Use this in a Story Link sticker. It stays separate from your caption." : "Copy this separately for a message or another place that supports links."}</p>
+                    {linkControl}
+                  </div>
+                </details>
+              )}
             </section>
           </div>
         </div>

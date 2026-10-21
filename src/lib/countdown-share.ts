@@ -16,13 +16,13 @@ export const COUNTDOWN_CARD_SIZES: Record<CardFormat, { width: number; height: n
   square: { width: 1080, height: 1080 }
 };
 
-export const COUNTDOWN_PLATFORM_PRESETS: Record<SharePlatform, { label: string; defaultFormat: CardFormat; formats: CardFormat[] }> = {
-  facebook: { label: "Facebook", defaultFormat: "preview", formats: ["preview", "feed", "story"] },
-  instagram: { label: "Instagram", defaultFormat: "feed", formats: ["feed", "story"] },
-  x: { label: "X", defaultFormat: "preview", formats: ["preview"] },
-  tiktok: { label: "TikTok", defaultFormat: "story", formats: ["story"] },
-  youtube: { label: "YouTube", defaultFormat: "square", formats: ["square"] },
-  other: { label: "Other apps", defaultFormat: "square", formats: ["square", "feed", "story", "preview"] }
+export const COUNTDOWN_PLATFORM_PRESETS: Record<SharePlatform, { label: string; defaultFormat: CardFormat; formats: CardFormat[]; includeLinkInCaption: boolean }> = {
+  facebook: { label: "Facebook", defaultFormat: "preview", formats: ["preview", "feed", "story"], includeLinkInCaption: true },
+  instagram: { label: "Instagram", defaultFormat: "feed", formats: ["feed", "story"], includeLinkInCaption: false },
+  x: { label: "X", defaultFormat: "preview", formats: ["preview"], includeLinkInCaption: true },
+  tiktok: { label: "TikTok", defaultFormat: "story", formats: ["story"], includeLinkInCaption: false },
+  youtube: { label: "YouTube", defaultFormat: "square", formats: ["square"], includeLinkInCaption: false },
+  other: { label: "Other apps", defaultFormat: "square", formats: ["square", "feed", "story", "preview"], includeLinkInCaption: true }
 };
 
 export type TimeRemaining = {
@@ -132,7 +132,7 @@ export function buildCountdownShareUrl(snapshot: CountdownSnapshot, source: Shar
 }
 
 export function buildCountdownCardUrl(snapshot: CountdownSnapshot, format: CardFormat, download = false) {
-  const params = new URLSearchParams({ at: String(snapshot.at), format, v: "2" });
+  const params = new URLSearchParams({ at: String(snapshot.at), format, v: "3" });
   if (download) params.set("download", "1");
   return `/api/countdown-card?${params.toString()}`;
 }
@@ -155,14 +155,17 @@ export function buildCountdownCaption(snapshot: CountdownSnapshot, platform: Sha
     : `🎉 ${TARGET_EVENT_NAME}\n📅 Friday, ${TARGET_FULL_DATE_LABEL}`;
   const invitations: Record<Exclude<SharePlatform, "x">, string> = {
     facebook: "Who’s ready to catch some throws? Share this with your parade crew! Find the schedule, route maps, and live coverage at MG251:",
-    instagram: "Tag your parade crew! Your countdown, parade schedule, route maps, and live coverage are at MG251.xyz:",
-    tiktok: "Who’s coming to Mobile Mardi Gras? Send this to your parade crew and plan your visit with MG251:",
-    youtube: "Who’s counting down with us? Tell us your favorite parade in the comments! Find the countdown, schedule, routes, and coverage at MG251:",
+    instagram: "Save this countdown and tag your parade crew! 🎭\n\nFollow @mardi_gras_mobile_alabama for Mobile Mardi Gras updates.\nVisit MG251.xyz for the parade schedule, route maps, and live coverage.",
+    tiktok: "Who’s catching the first throws with you? Send this to your parade crew! 🎉\n\nFollow @mobilemardigras for parade clips and updates.\nPlan your visit at MG251.xyz.",
+    youtube: "Who’s counting down with us? Tell us your favorite parade in the comments!\n\nSubscribe to @MobileMardiGras for parade videos and live coverage.\nVisit MG251.xyz for the countdown, parade schedule, and route maps.",
     other: "Bring your parade crew! Find the live countdown, parade schedule, route maps, and coverage at MG251:"
   };
+  // Public captions must also work when shared by visitors whose profile has no
+  // MG251 bio link. Keep the full snapshot URL separate on these platforms.
+  const link = COUNTDOWN_PLATFORM_PRESETS[platform].includeLinkInCaption ? `\n${url}` : "";
   const hashtags = platform === "instagram" || platform === "tiktok"
     ? "\n\n#MobileMardiGras #MardiGras2027 #MG251 #MobileAlabama"
     : "";
 
-  return `${heading}\n\n${event}\n\n${invitations[platform]}\n${url}\n\nCountdown as of ${snapshot.dateLabel}.${hashtags}`;
+  return `${heading}\n\n${event}\n\n${invitations[platform]}${link}\n\nCountdown as of ${snapshot.dateLabel}.${hashtags}`;
 }
