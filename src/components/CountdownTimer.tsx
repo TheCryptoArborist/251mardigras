@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import dynamic from "next/dynamic";
-import { ArrowRight, Share2 } from "lucide-react";
+import { Share2 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import {
   COUNTDOWN_PROGRESS_START,
@@ -61,10 +61,7 @@ export function CountdownTimer({ mardiGrasDay }: { mardiGrasDay: string }) {
           </div>
         </>
       ) : <p className="mt-4 text-sm font-bold text-white">The first parade date has arrived. <Link className="underline" href="/schedule">Check the current schedule.</Link></p>}
-      <div className="mt-3 flex flex-wrap items-center justify-between gap-x-3 gap-y-1 text-xs leading-5 text-purple-100">
-        <p><span className="font-bold text-parade-goldBright">Mardi Gras Day:</span> {mardiGrasDay}</p>
-        <button type="button" onClick={() => setShareSnapshot(createCountdownSnapshot())} className="inline-flex min-h-8 items-center gap-1 font-bold text-white hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-parade-goldBright" aria-haspopup="dialog">Get a card + caption <ArrowRight className="h-3 w-3" aria-hidden="true" /></button>
-      </div>
+      <p className="mt-3 text-xs leading-5 text-purple-100"><span className="font-bold text-parade-goldBright">Mardi Gras Day:</span> {mardiGrasDay}</p>
       {shareSnapshot ? <CountdownShareDialog snapshot={shareSnapshot} onClose={() => setShareSnapshot(null)} /> : null}
     </section>
   );
