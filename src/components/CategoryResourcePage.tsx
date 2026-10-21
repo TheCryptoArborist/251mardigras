@@ -16,6 +16,7 @@ type CategoryResourcePageProps = {
   officialReminder?: string;
   resourceLogoPaths?: Record<string, string>;
   showHeroQuickView?: boolean;
+  contentWidth?: "standard" | "wide";
   showResourceSection?: boolean;
   showOfficialReminder?: boolean;
   children?: ReactNode;
@@ -33,6 +34,7 @@ export function CategoryResourcePage({
   officialReminder = "Verify parade schedules, routes, cancellations, road closures, parking rules, towing, public-safety instructions, and weather impacts with official sources.",
   resourceLogoPaths = {},
   showHeroQuickView = true,
+  contentWidth = "standard",
   showResourceSection = true,
   showOfficialReminder = false,
   children
@@ -81,7 +83,7 @@ export function CategoryResourcePage({
       </section>
 
       {showBodyContent ? (
-        <div className="mx-auto max-w-5xl space-y-6 px-4 py-8 sm:px-6 lg:px-8">
+        <div className={`mx-auto space-y-6 px-4 py-8 sm:px-6 lg:px-8 ${contentWidth === "wide" ? "max-w-7xl" : "max-w-5xl"}`}>
           {children ? children : null}
 
           {showResourceSection ? (
