@@ -102,7 +102,7 @@ export default async function LinksPage() {
               Watch Live <ArrowRight className="h-4 w-4" aria-hidden="true" />
             </Link>
             <Link href="/resources" className="inline-flex items-center justify-center gap-2 rounded border border-parade-line bg-white px-5 py-3 text-sm font-bold text-parade-purple hover:bg-parade-purpleSoft">
-              Open Full Resource Guide <ArrowRight className="h-4 w-4" aria-hidden="true" />
+              Open Visitor Guide <ArrowRight className="h-4 w-4" aria-hidden="true" />
             </Link>
           </div>
         </div>

@@ -54,7 +54,7 @@ export default async function MardiGrasGearPage() {
       <section className="space-y-4">
         <Link href="/resources" className="inline-flex items-center gap-2 text-sm font-black text-parade-purple transition hover:text-parade-purpleDark hover:underline">
           <ArrowLeft className="h-4 w-4" aria-hidden="true" />
-          Back to full resource guide
+          Back to Visitor Guide
         </Link>
 
         {resources.length > 0 ? (
@@ -65,7 +65,7 @@ export default async function MardiGrasGearPage() {
           </div>
         ) : (
           <div className="rounded-[1.5rem] border border-parade-gold/35 bg-gradient-to-br from-parade-cream via-white to-parade-purpleMist p-5 text-sm leading-6 text-parade-muted shadow-card">
-            No Mardi Gras gear resources are currently published. Check the full resource guide for the latest available links.
+            No Mardi Gras gear resources are currently published. Check the visitor guide for the latest available links.
           </div>
         )}
       </section>
