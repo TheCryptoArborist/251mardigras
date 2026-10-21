@@ -1,19 +1,46 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import {
+  COUNTDOWN_PLATFORM_PRESETS,
+  COUNTDOWN_PROGRESS_START,
   FIRST_DOWNTOWN_PARADE_TARGET,
   buildCountdownCaption,
   buildCountdownCardUrl,
   buildCountdownShareUrl,
   createCountdownSnapshot,
+  formatCountdownRemaining,
   getTimeRemaining,
-  parseCountdownSnapshot
+  parseCountdownSnapshot,
+  type CardFormat,
+  type SharePlatform
 } from "../src/lib/countdown-share";
 
 const target = Date.parse("2027-01-23T00:30:00Z");
 const minute = 60_000;
+const hour = 60 * minute;
 const day = 86_400_000;
 const now = Date.parse("2026-10-20T15:25:00Z");
+const platforms = ["facebook", "instagram", "x", "tiktok", "youtube", "other"] as const satisfies readonly SharePlatform[];
+const formats = ["feed", "story", "preview", "square"] as const satisfies readonly CardFormat[];
+
+function defaultXCaptionWeight(caption: string) {
+  let weight = 0;
+  const text = caption.replace(/https?:\/\/\S+/gu, () => {
+    weight += 23;
+    return "";
+  });
+  // X's weight-one Unicode ranges; other code points (including the single
+  // emoji in our default copy) weigh two. This is not a user-edit validator.
+  for (const character of text.normalize("NFC")) {
+    const point = character.codePointAt(0)!;
+    const weighsOne = point <= 0x10ff
+      || (point >= 0x2000 && point <= 0x200d)
+      || (point >= 0x2010 && point <= 0x201f)
+      || (point >= 0x2032 && point <= 0x2037);
+    weight += weighsOne ? 1 : 2;
+  }
+  return weight;
+}
 
 test("the live countdown uses the actual first parade instant and floors partial days", () => {
   assert.equal(Date.parse(FIRST_DOWNTOWN_PARADE_TARGET), target);
@@ -113,9 +140,62 @@ test("valid historical snapshot links stay historical while malformed or impossi
   assert.deepEqual(parseCountdownSnapshot(String(allowedClockSkew.at), now), allowedClockSkew);
 });
 
-test("Facebook and Instagram captions return visitors to the exact snapshot used by their cards", () => {
+test("each platform starts with a suitable format that is available in its format choices", () => {
+  const defaults: Record<SharePlatform, CardFormat> = {
+    facebook: "preview",
+    instagram: "feed",
+    x: "preview",
+    tiktok: "story",
+    youtube: "square",
+    other: "square"
+  };
+  assert.deepEqual(Object.keys(COUNTDOWN_PLATFORM_PRESETS).sort(), [...platforms].sort());
+  for (const platform of platforms) {
+    const preset = COUNTDOWN_PLATFORM_PRESETS[platform];
+    assert.equal(preset.defaultFormat, defaults[platform], platform);
+    assert.ok(preset.formats.includes(preset.defaultFormat), `${platform} must offer its default format`);
+    for (const format of preset.formats) {
+      assert.ok(formats.includes(format), `${platform} offers an unsupported format: ${format}`);
+    }
+  }
+});
+
+test("remaining-time copy handles singular, plural, and exact day/hour/minute boundaries", () => {
+  const cases = [
+    { remaining: day + hour + minute, full: "1 day, 1 hour, 1 minute", compact: "1d 1h 1m" },
+    { remaining: 2 * day + 2 * hour + 2 * minute, full: "2 days, 2 hours, 2 minutes", compact: "2d 2h 2m" },
+    { remaining: day, full: "1 day, 0 hours, 0 minutes", compact: "1d 0h 0m" },
+    { remaining: day - 1000, full: "23 hours, 59 minutes", compact: "23h 59m" },
+    { remaining: hour, full: "1 hour, 0 minutes", compact: "1h 0m" },
+    { remaining: hour - 1000, full: "59 minutes", compact: "59m" },
+    { remaining: minute + 59_000, full: "1 minute", compact: "1m" },
+    { remaining: minute, full: "1 minute", compact: "1m" }
+  ];
+  for (const { remaining, full, compact } of cases) {
+    const snapshot = createCountdownSnapshot(target - remaining);
+    assert.equal(formatCountdownRemaining(snapshot), full);
+    assert.equal(formatCountdownRemaining(snapshot, true), compact);
+  }
+});
+
+test("the last partial minute stays upcoming in the formatter and every platform caption", () => {
+  for (const capturedAt of [target - minute + 1000, target - 1]) {
+    const snapshot = createCountdownSnapshot(capturedAt);
+    assert.equal(snapshot.expired, false);
+    assert.equal(formatCountdownRemaining(snapshot), "Less than a minute");
+    assert.equal(formatCountdownRemaining(snapshot, true), "<1m");
+    for (const platform of platforms) {
+      const caption = buildCountdownCaption(snapshot, platform);
+      assert.ok(caption.includes(platform === "x" ? "<1m until" : "Less than a minute until"), platform);
+      assert.ok(caption.includes(buildCountdownShareUrl(snapshot, platform)), platform);
+      assert.doesNotMatch(caption, /scheduled start[^\n]*(?:arrived|passed|reached)/i);
+    }
+  }
+});
+
+test("all platform captions return visitors to the exact snapshot used by every card format", () => {
   const snapshot = createCountdownSnapshot(now);
-  for (const platform of ["facebook", "instagram"] as const) {
+  for (const platform of platforms) {
     const returnUrl = new URL(buildCountdownShareUrl(snapshot, platform));
     assert.equal(returnUrl.origin, "https://mg251.xyz");
     assert.equal(returnUrl.pathname, "/countdown");
@@ -126,45 +206,74 @@ test("Facebook and Instagram captions return visitors to the exact snapshot used
 
     const caption = buildCountdownCaption(snapshot, platform);
     assert.ok(caption.includes(returnUrl.toString()));
-    assert.match(caption, new RegExp(`\\b${snapshot.days}\\s+days?\\b`, "i"));
+    assert.ok(caption.includes(platform === "x" ? "94d 9h 5m" : "94 days, 9 hours, 5 minutes"), platform);
+    assert.ok(caption.includes(snapshot.dateLabel), platform);
     assert.match(caption, /first downtown/i);
     assert.match(caption, /Conde Cavaliers/i);
     assert.match(caption, /Jan(?:uary|\.)?\s+22,?\s+2027/);
     assert.match(caption, /6:30\s*PM\s*CT/i);
 
-    for (const format of ["feed", "story", "preview"] as const) {
+    for (const format of formats) {
       const card: URL = new URL(buildCountdownCardUrl(snapshot, format), returnUrl.origin);
       assert.equal(card.pathname, "/api/countdown-card");
       assert.equal(card.searchParams.get("at"), returnUrl.searchParams.get("at"));
       assert.equal(card.searchParams.get("format"), format);
+      assert.equal(card.searchParams.get("v"), "2");
       assert.deepEqual(parseCountdownSnapshot(card.searchParams.get("at") ?? undefined, now), snapshot);
     }
   }
 });
 
-test("share and X URLs preserve attribution and downloaded cards retain the same captured instant", () => {
+test("share URLs preserve attribution and downloaded cards retain the same captured instant and cache version", () => {
   const snapshot = createCountdownSnapshot(now);
-  for (const source of ["share", "x"] as const) {
+  for (const source of ["share", ...platforms] as const) {
     const url = new URL(buildCountdownShareUrl(snapshot, source));
     assert.equal(url.searchParams.get("utm_source"), source);
     assert.equal(url.searchParams.get("at"), String(snapshot.at));
   }
-  for (const format of ["feed", "story"] as const) {
+  for (const format of formats) {
     const download = new URL(buildCountdownCardUrl(snapshot, format, true), "https://mg251.xyz");
     assert.equal(download.searchParams.get("at"), String(snapshot.at));
     assert.equal(download.searchParams.get("format"), format);
+    assert.equal(download.searchParams.get("v"), "2");
     assert.ok(download.searchParams.has("download"));
     assert.equal(new URL(buildCountdownCardUrl(snapshot, format), "https://mg251.xyz").searchParams.has("download"), false);
   }
 });
 
 test("captions stop promising a future parade once the scheduled start has arrived", () => {
-  const snapshot = createCountdownSnapshot(target + minute);
-  for (const platform of ["facebook", "instagram"] as const) {
-    const caption = buildCountdownCaption(snapshot, platform);
-    assert.doesNotMatch(caption, /\b0\s+days?\s+(?:until|to go)\b/i);
-    assert.match(caption, /arrived|passed|schedule/i);
-    assert.match(caption, /Conde Cavaliers/i);
-    assert.ok(caption.includes(buildCountdownShareUrl(snapshot, platform)));
+  for (const capturedAt of [target, target + minute, target + day]) {
+    const snapshot = createCountdownSnapshot(capturedAt);
+    assert.equal(formatCountdownRemaining(snapshot), "Scheduled start reached");
+    assert.equal(formatCountdownRemaining(snapshot, true), "Scheduled start reached");
+    for (const platform of platforms) {
+      const caption = buildCountdownCaption(snapshot, platform);
+      assert.doesNotMatch(caption, /\buntil\b|\bto go\b|(?:^|\s)-\d/i);
+      assert.match(caption, /arrived|passed|schedule/i);
+      assert.match(caption, /Conde Cavaliers/i);
+      assert.ok(caption.includes(snapshot.dateLabel), platform);
+      assert.ok(caption.includes(buildCountdownShareUrl(snapshot, platform)), platform);
+    }
+  }
+});
+
+test("default X captions fit within 280 weighted characters, including the snapshot URL and emoji", () => {
+  const capturedTimes = [
+    Date.parse(COUNTDOWN_PROGRESS_START),
+    now,
+    target - day - hour - minute,
+    target - day + 1000,
+    target - minute,
+    target - 1,
+    target,
+    target + day
+  ];
+  for (const capturedAt of capturedTimes) {
+    const snapshot = createCountdownSnapshot(capturedAt);
+    const caption = buildCountdownCaption(snapshot, "x");
+    assert.equal(caption.match(/https?:\/\/\S+/gu)?.length, 1);
+    assert.ok(caption.includes(buildCountdownShareUrl(snapshot, "x")));
+    const weight = defaultXCaptionWeight(caption);
+    assert.ok(weight < 280, `Default X caption weighs ${weight} characters at ${snapshot.dateLabel}`);
   }
 });

@@ -2,19 +2,14 @@ import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { ImageResponse } from "next/og";
 import type { CSSProperties } from "react";
-import { TARGET_EVENT_NAME, type CardFormat, type CountdownSnapshot } from "@/lib/countdown-share";
-
-export const COUNTDOWN_CARD_SIZES: Record<CardFormat, { width: number; height: number }> = {
-  feed: { width: 1080, height: 1350 },
-  story: { width: 1080, height: 1920 },
-  preview: { width: 1200, height: 630 }
-};
+import { COUNTDOWN_CARD_SIZES, TARGET_EVENT_NAME, TARGET_FULL_DATE_LABEL, formatCountdownRemaining, type CardFormat, type CountdownSnapshot } from "@/lib/countdown-share";
 
 const gold = "#ffd45a";
 const cream = "#fff5d4";
 const lavender = "#e6d5f4";
 const green = "#55b891";
 const flex: CSSProperties = { display: "flex" };
+const [targetDateLabel, targetTimeLabel] = TARGET_FULL_DATE_LABEL.split(" • ");
 let logoDataPromise: Promise<string> | undefined;
 
 function getOriginalLogo() {
@@ -33,7 +28,7 @@ export async function renderCountdownCard(snapshot: CountdownSnapshot, format: C
       <CardDecorations width={size.width} height={size.height} />
       {format === "preview"
         ? <PreviewCard snapshot={snapshot} logo={logo} />
-        : <PortraitCard snapshot={snapshot} logo={logo} story={format === "story"} />}
+        : <PortraitCard snapshot={snapshot} logo={logo} format={format} />}
     </div>,
     { ...size, headers }
   );
@@ -62,49 +57,67 @@ function OriginalLogo({ logo, size }: { logo: string; size: number }) {
   );
 }
 
-function CountdownNumber({ snapshot, preview = false, story = false }: { snapshot: CountdownSnapshot; preview?: boolean; story?: boolean }) {
-  if (snapshot.expired) {
+function CountdownNumbers({ snapshot, format }: { snapshot: CountdownSnapshot; format: CardFormat }) {
+  const preview = format === "preview";
+  const story = format === "story";
+  const square = format === "square";
+  const underMinute = snapshot.days === 0 && snapshot.hours === 0 && snapshot.minutes === 0;
+
+  if (snapshot.expired || underMinute) {
     return (
       <div style={{ ...flex, flexDirection: "column", alignItems: "center", justifyContent: "center", width: "100%", height: "100%", textAlign: "center" }}>
-        <div style={{ ...flex, fontSize: preview ? 60 : story ? 110 : 98, fontWeight: 700, lineHeight: 1.05, letterSpacing: -3, color: gold }}>Make your parade plans</div>
-        <div style={{ ...flex, marginTop: 22, fontSize: preview ? 20 : 29, color: lavender }}>Check the latest schedule</div>
+        <div style={{ ...flex, maxWidth: "100%", fontSize: preview ? 54 : square ? 70 : story ? 92 : 84, fontWeight: 700, lineHeight: 1.08, letterSpacing: -2, color: gold }}>{formatCountdownRemaining(snapshot)}</div>
+        <div style={{ ...flex, marginTop: preview ? 16 : 22, fontSize: preview ? 21 : square ? 24 : 29, color: lavender }}>{snapshot.expired ? "Check the latest parade schedule" : "TO GO"}</div>
       </div>
     );
   }
 
   return (
     <div style={{ ...flex, flexDirection: "column", alignItems: "center", justifyContent: "center", width: "100%", height: "100%" }}>
-      <div style={{ ...flex, fontSize: preview ? 186 : story ? 300 : 270, fontWeight: 700, lineHeight: 0.94, letterSpacing: preview ? -9 : -14, color: gold }}>{snapshot.days === 0 ? "<1" : String(snapshot.days)}</div>
-      <div style={{ ...flex, marginTop: preview ? 10 : 20, fontSize: preview ? 34 : story ? 58 : 52, fontWeight: 700, letterSpacing: preview ? 4 : 7, color: cream }}>{snapshot.days <= 1 ? "DAY TO GO" : "DAYS TO GO"}</div>
+      <div style={{ ...flex, width: "100%", gap: preview ? 14 : 18 }}>
+        {[
+          { value: snapshot.days, label: "DAYS" },
+          { value: snapshot.hours, label: "HOURS" },
+          { value: snapshot.minutes, label: "MINUTES" }
+        ].map(({ value, label }) => (
+          <div key={label} style={{ ...flex, flex: 1, minWidth: 0, flexDirection: "column", alignItems: "center", justifyContent: "center", padding: preview ? "24px 6px" : square ? "26px 10px" : "36px 10px", border: "2px solid rgba(255,212,90,0.35)", borderRadius: preview ? 20 : 28, background: "rgba(27,7,50,0.35)" }}>
+            <div style={{ ...flex, fontSize: preview ? 85 : square ? 114 : story ? 144 : 138, fontWeight: 700, lineHeight: 1, letterSpacing: preview ? -4 : -6, color: gold }}>{label === "DAYS" ? String(value) : String(value).padStart(2, "0")}</div>
+            <div style={{ ...flex, marginTop: preview ? 12 : 18, fontSize: preview ? 18 : square ? 23 : 27, fontWeight: 700, letterSpacing: preview ? 1.5 : 2.5, color: cream }}>{label}</div>
+          </div>
+        ))}
+      </div>
+      <div style={{ ...flex, marginTop: preview ? 18 : 22, fontSize: preview ? 19 : square ? 23 : 28, fontWeight: 700, letterSpacing: 4, color: lavender }}>TO GO</div>
     </div>
   );
 }
 
-function PortraitCard({ snapshot, logo, story }: { snapshot: CountdownSnapshot; logo: string; story: boolean }) {
+function PortraitCard({ snapshot, logo, format }: { snapshot: CountdownSnapshot; logo: string; format: Exclude<CardFormat, "preview"> }) {
+  const story = format === "story";
+  const square = format === "square";
+
   return (
-    <div style={{ ...flex, position: "absolute", top: story ? 230 : 76, right: 76, bottom: story ? 250 : 66, left: 76, flexDirection: "column", alignItems: "center" }}>
+    <div style={{ ...flex, position: "absolute", top: story ? 230 : square ? 60 : 76, right: story ? 96 : square ? 60 : 76, bottom: story ? 250 : square ? 52 : 66, left: story ? 96 : square ? 60 : 76, flexDirection: "column", alignItems: "center" }}>
       <div style={{ ...flex, width: "100%", alignItems: "center", justifyContent: "center" }}>
-        <OriginalLogo logo={logo} size={story ? 160 : 142} />
+        <OriginalLogo logo={logo} size={story ? 160 : square ? 110 : 142} />
         <div style={{ ...flex, marginLeft: 28, flexDirection: "column" }}>
-          <div style={{ ...flex, color: gold, fontSize: story ? 28 : 26, fontWeight: 700, letterSpacing: 4 }}>MOBILE, ALABAMA</div>
-          <div style={{ ...flex, marginTop: 10, color: cream, fontSize: story ? 48 : 44, fontWeight: 700, letterSpacing: -1 }}>Mardi Gras 2027</div>
+          <div style={{ ...flex, color: gold, fontSize: story ? 28 : square ? 23 : 26, fontWeight: 700, letterSpacing: 4 }}>MOBILE, ALABAMA</div>
+          <div style={{ ...flex, marginTop: 10, color: cream, fontSize: story ? 48 : square ? 38 : 44, fontWeight: 700, letterSpacing: -1 }}>Mardi Gras 2027</div>
         </div>
       </div>
-      <div style={{ ...flex, marginTop: story ? 62 : 46, color: gold, fontSize: story ? 34 : 30, fontWeight: 700, letterSpacing: 4, textAlign: "center" }}>FIRST DOWNTOWN PARADE</div>
-      <div style={{ ...flex, width: "100%", height: story ? 390 : 344, marginTop: 14, flexShrink: 0 }}>
-        <CountdownNumber snapshot={snapshot} story={story} />
+      <div style={{ ...flex, marginTop: story ? 62 : square ? 30 : 46, color: gold, fontSize: story ? 34 : square ? 26 : 30, fontWeight: 700, letterSpacing: square ? 3 : 4, textAlign: "center" }}>FIRST DOWNTOWN PARADE</div>
+      <div style={{ ...flex, width: "100%", height: story ? 330 : square ? 250 : 310, marginTop: square ? 22 : 28, flexShrink: 0 }}>
+        <CountdownNumbers snapshot={snapshot} format={format} />
       </div>
-      <div style={{ ...flex, width: 90, height: 6, marginTop: story ? 35 : 26, background: green, borderRadius: 3 }} />
-      <div style={{ ...flex, flexDirection: "column", alignItems: "center", marginTop: story ? 34 : 28, textAlign: "center" }}>
-        <div style={{ ...flex, fontSize: story ? 70 : 62, fontWeight: 700, lineHeight: 1.1, letterSpacing: -2 }}>{TARGET_EVENT_NAME}</div>
-        <div style={{ ...flex, marginTop: 18, fontSize: story ? 42 : 38, fontWeight: 700, color: gold }}>January 22, 2027</div>
-        <div style={{ ...flex, marginTop: 10, fontSize: story ? 36 : 32, color: lavender }}>6:30 PM CT</div>
-        {snapshot.expired ? <div style={{ ...flex, marginTop: 14, fontSize: 23, color: lavender }}>The scheduled start has passed.</div> : null}
+      <div style={{ ...flex, width: 90, height: 6, marginTop: story ? 35 : square ? 22 : 26, background: green, borderRadius: 3 }} />
+      <div style={{ ...flex, flexDirection: "column", alignItems: "center", marginTop: story ? 34 : square ? 22 : 28, textAlign: "center" }}>
+        <div style={{ ...flex, fontSize: story ? 70 : square ? 52 : 62, fontWeight: 700, lineHeight: 1.1, letterSpacing: -2 }}>{TARGET_EVENT_NAME}</div>
+        <div style={{ ...flex, marginTop: square ? 14 : 18, fontSize: story ? 42 : square ? 32 : 38, fontWeight: 700, color: gold }}>{targetDateLabel}</div>
+        <div style={{ ...flex, marginTop: square ? 8 : 10, fontSize: story ? 36 : square ? 27 : 32, color: lavender }}>{targetTimeLabel}</div>
       </div>
-      <div style={{ ...flex, width: "100%", marginTop: "auto", paddingTop: 26, flexDirection: "column", alignItems: "center", textAlign: "center" }}>
-        <div style={{ ...flex, fontSize: story ? 94 : 84, fontWeight: 700, lineHeight: 1, letterSpacing: -3, color: gold }}>MG251.xyz</div>
-        <div style={{ ...flex, marginTop: 18, fontSize: story ? 30 : 28, fontWeight: 700, color: cream }}>Parade schedule • Route maps • Live coverage</div>
-        <div style={{ ...flex, marginTop: 28, fontSize: story ? 21 : 20, color: lavender }}>Countdown as of {snapshot.dateLabel}</div>
+      <div style={{ ...flex, width: "100%", marginTop: "auto", paddingTop: square ? 20 : 26, flexDirection: "column", alignItems: "center", textAlign: "center" }}>
+        <div style={{ ...flex, fontSize: story ? 94 : square ? 66 : 84, fontWeight: 700, lineHeight: 1, letterSpacing: -3, color: gold }}>MG251.xyz</div>
+        <div style={{ ...flex, marginTop: square ? 14 : 18, fontSize: story ? 30 : square ? 24 : 28, fontWeight: 700, color: cream }}>Parade schedule • Route maps • Live coverage</div>
+        <div style={{ ...flex, marginTop: square ? 20 : 28, fontSize: story ? 21 : square ? 18 : 20, color: lavender }}>Countdown as of {snapshot.dateLabel}</div>
       </div>
     </div>
   );
@@ -112,7 +125,7 @@ function PortraitCard({ snapshot, logo, story }: { snapshot: CountdownSnapshot; 
 
 function PreviewCard({ snapshot, logo }: { snapshot: CountdownSnapshot; logo: string }) {
   return (
-    <div style={{ ...flex, position: "absolute", top: 52, right: 64, bottom: 48, left: 64, flexDirection: "column" }}>
+    <div style={{ ...flex, position: "absolute", top: 44, right: 52, bottom: 38, left: 52, flexDirection: "column" }}>
       <div style={{ ...flex, alignItems: "center", justifyContent: "space-between" }}>
         <div style={{ ...flex, alignItems: "center" }}>
           <OriginalLogo logo={logo} size={94} />
@@ -126,15 +139,14 @@ function PreviewCard({ snapshot, logo }: { snapshot: CountdownSnapshot; logo: st
           <div style={{ ...flex, marginTop: 7, fontSize: 18 }}>{snapshot.dateLabel}</div>
         </div>
       </div>
-      <div style={{ ...flex, flex: 1, alignItems: "center", gap: 40, paddingTop: 12, paddingBottom: 14 }}>
-        <div style={{ ...flex, width: 415, height: 255, flexShrink: 0 }}><CountdownNumber snapshot={snapshot} preview /></div>
-        <div style={{ ...flex, width: 6, height: 190, borderRadius: 3, background: green }} />
+      <div style={{ ...flex, flex: 1, alignItems: "center", gap: 32, paddingTop: 12, paddingBottom: 14 }}>
+        <div style={{ ...flex, width: 520, height: 250, flexShrink: 0 }}><CountdownNumbers snapshot={snapshot} format="preview" /></div>
+        <div style={{ ...flex, width: 6, height: 190, flexShrink: 0, borderRadius: 3, background: green }} />
         <div style={{ ...flex, flex: 1, flexDirection: "column" }}>
-          <div style={{ ...flex, fontSize: 22, color: gold, fontWeight: 700, letterSpacing: 2 }}>FIRST DOWNTOWN PARADE</div>
+          <div style={{ ...flex, fontSize: 20, color: gold, fontWeight: 700, letterSpacing: 2 }}>FIRST DOWNTOWN PARADE</div>
           <div style={{ ...flex, marginTop: 18, fontSize: 49, fontWeight: 700, lineHeight: 1.1, letterSpacing: -2 }}>{TARGET_EVENT_NAME}</div>
-          <div style={{ ...flex, marginTop: 18, fontSize: 32, fontWeight: 700, color: gold }}>January 22, 2027</div>
-          <div style={{ ...flex, marginTop: 8, fontSize: 27, color: lavender }}>6:30 PM CT</div>
-          {snapshot.expired ? <div style={{ ...flex, marginTop: 12, fontSize: 18, color: lavender }}>The scheduled start has passed.</div> : null}
+          <div style={{ ...flex, marginTop: 18, fontSize: 32, fontWeight: 700, color: gold }}>{targetDateLabel}</div>
+          <div style={{ ...flex, marginTop: 8, fontSize: 27, color: lavender }}>{targetTimeLabel}</div>
         </div>
       </div>
       <div style={{ ...flex, alignItems: "center", justifyContent: "space-between", paddingTop: 18, borderTop: "2px solid rgba(255,212,90,0.3)" }}>
