@@ -293,7 +293,7 @@ function HomepageBannerIcon({ kind, size }: { kind: "jester" | "logo" | "king"; 
 
 function HomepageHistoryCallout() {
   return (
-    <section className="relative overflow-hidden rounded-[1.5rem] border border-parade-gold/35 bg-gradient-to-br from-white via-parade-cream to-parade-purpleMist p-5 shadow-card">
+    <section id="mobile-mardi-gras-history" className="relative scroll-mt-24 overflow-hidden rounded-[1.5rem] border border-parade-gold/35 bg-gradient-to-br from-white via-parade-cream to-parade-purpleMist p-5 shadow-card">
       <span className="pointer-events-none absolute right-[-4rem] top-[-4rem] h-32 w-32 rounded-full bg-parade-gold/20 blur-2xl" aria-hidden="true" />
       <div className="relative z-10 flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
         <div className="flex items-start gap-3">
@@ -308,7 +308,7 @@ function HomepageHistoryCallout() {
             </p>
           </div>
         </div>
-        <Link href="/resources#mobile-mardi-gras-history" className="inline-flex items-center justify-center gap-2 rounded-full bg-parade-purple px-5 py-3 text-sm font-black text-white shadow-civic transition hover:-translate-y-0.5 hover:bg-parade-purpleDark lg:shrink-0">
+        <Link href="/history" className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-parade-purple px-5 py-3 text-sm font-black text-white shadow-civic transition hover:-translate-y-0.5 hover:bg-parade-purpleDark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-parade-purple lg:shrink-0">
           Read brief history <ArrowRight className="h-4 w-4" aria-hidden="true" />
         </Link>
       </div>

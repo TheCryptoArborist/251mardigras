@@ -31,7 +31,7 @@ const categoryPages = [
     categories: ["Support"],
     icon: <HeartHandshake className="h-5 w-5" aria-hidden="true" />,
     primaryHref: "/",
-    primaryAction: "Back to homepage"
+    primaryAction: "Back to Home"
   },
   {
     slug: "history-culture",
@@ -40,8 +40,8 @@ const categoryPages = [
     description: "Mobile Carnival Museum and culture resources for visitors who want to learn more about Mobile Carnival history, mystic society traditions, costumes, artifacts, and Mardi Gras culture.",
     categories: ["History & Culture"],
     icon: <Landmark className="h-5 w-5" aria-hidden="true" />,
-    primaryHref: "/resources",
-    primaryAction: "Open Visitor Guide"
+    primaryHref: "/history",
+    primaryAction: "Read Mobile Mardi Gras History"
   },
   {
     slug: "social-channels",
@@ -108,9 +108,9 @@ export default async function LinksCategoryPage({ params }: LinksCategoryPagePro
             <Link href={page.primaryHref} className="inline-flex items-center justify-center gap-2 rounded bg-parade-purple px-5 py-3 text-sm font-bold text-white hover:bg-parade-purpleDark">
               {page.primaryAction} <ArrowRight className="h-4 w-4" aria-hidden="true" />
             </Link>
-            {page.primaryHref !== "/resources" ? (
-              <Link href="/resources" className="inline-flex items-center justify-center gap-2 rounded border border-parade-line bg-white px-5 py-3 text-sm font-bold text-parade-purple hover:bg-parade-purpleSoft">
-                Open Visitor Guide <ArrowRight className="h-4 w-4" aria-hidden="true" />
+            {page.primaryHref !== "/" ? (
+              <Link href="/" className="inline-flex items-center justify-center gap-2 rounded border border-parade-line bg-white px-5 py-3 text-sm font-bold text-parade-purple hover:bg-parade-purpleSoft">
+                Back to Home <ArrowRight className="h-4 w-4" aria-hidden="true" />
               </Link>
             ) : null}
           </div>
@@ -126,7 +126,7 @@ export default async function LinksCategoryPage({ params }: LinksCategoryPagePro
           </section>
         ) : (
           <section className="rounded border border-dashed border-parade-line bg-parade-purpleSoft p-5 text-sm leading-6 text-parade-muted">
-            No direct resources are currently published in this category. Use the visitor guide for the latest available links.
+            No direct resources are currently published in this category. Use the homepage for the latest available links.
           </section>
         )}
 
