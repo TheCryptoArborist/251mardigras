@@ -1,18 +1,18 @@
 import { renderCountdownCard } from "@/lib/countdown-card";
-import { isValidCountdownSnapshotTimestamp, parseCountdownSnapshot, type CardFormat } from "@/lib/countdown-share";
+import { COUNTDOWN_CARD_SIZES, isValidCountdownSnapshotTimestamp, parseCountdownSnapshot, type CardFormat } from "@/lib/countdown-share";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-const FORMATS: CardFormat[] = ["feed", "story", "preview"];
+const FORMATS = Object.keys(COUNTDOWN_CARD_SIZES) as CardFormat[];
 // OpenNext otherwise varies Netlify's cache only by framework query parameters.
-const NETLIFY_VARY = "query=at|format|download";
+const NETLIFY_VARY = "query=at|format|download|v";
 
 export async function GET(request: Request) {
   const url = new URL(request.url);
   const format = url.searchParams.get("format") ?? "feed";
   if (!FORMATS.includes(format as CardFormat)) {
-    return Response.json({ error: "Choose a card format: feed, story, or preview." }, { status: 400, headers: { "Cache-Control": "no-store", "Netlify-CDN-Cache-Control": "no-store", "Netlify-Vary": NETLIFY_VARY } });
+    return Response.json({ error: "Choose a card format: feed, story, preview, or square." }, { status: 400, headers: { "Cache-Control": "no-store", "Netlify-CDN-Cache-Control": "no-store", "Netlify-Vary": NETLIFY_VARY } });
   }
 
   const now = Date.now();
@@ -24,12 +24,13 @@ export async function GET(request: Request) {
     "Cache-Control": frozenSnapshot ? "public, max-age=3600, immutable" : "no-store",
     "Netlify-CDN-Cache-Control": frozenSnapshot ? "public, durable, s-maxage=3600" : "no-store",
     "Netlify-Vary": NETLIFY_VARY,
+    "X-Countdown-Snapshot-At": String(snapshot.at),
     "X-Content-Type-Options": "nosniff"
   };
 
   if (url.searchParams.get("download") === "1") {
-    const label = snapshot.expired ? "parade-plans" : snapshot.days === 0 ? "under-1-day" : `${snapshot.days}-days`;
-    headers["Content-Disposition"] = `attachment; filename="mg251-${label}-${format}-${snapshot.dateKey}.png"`;
+    const label = snapshot.expired ? "parade-plans" : snapshot.totalMilliseconds < 60_000 ? "under-1-minute" : `${snapshot.days}d-${snapshot.hours}h-${snapshot.minutes}m`;
+    headers["Content-Disposition"] = `attachment; filename="mg251-${label}-${format}-${snapshot.dateKey}-${snapshot.at}.png"`;
   }
 
   return renderCountdownCard(snapshot, format as CardFormat, headers);

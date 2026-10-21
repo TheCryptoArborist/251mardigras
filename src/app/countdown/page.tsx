@@ -4,7 +4,7 @@ import type { Metadata } from "next";
 import { ArrowRight, CalendarDays, MapPinned, PlayCircle } from "lucide-react";
 import { CountdownTimer } from "@/components/CountdownTimer";
 import { SITE_LOGO_ALT, SITE_LOGO_PATH } from "@/lib/brand";
-import { buildCountdownCardUrl, parseCountdownSnapshot, TARGET_EVENT_NAME, TARGET_FULL_DATE_LABEL } from "@/lib/countdown-share";
+import { COUNTDOWN_CARD_SIZES, buildCountdownCardUrl, formatCountdownRemaining, parseCountdownSnapshot, TARGET_EVENT_NAME, TARGET_FULL_DATE_LABEL } from "@/lib/countdown-share";
 import { absoluteUrl, createPageMetadata } from "@/lib/seo";
 import paradeSchedule2027 from "../../../data/parade-schedule-2027.json";
 
@@ -15,20 +15,19 @@ type CountdownPageProps = { searchParams: Promise<{ at?: string | string[] }> };
 export async function generateMetadata({ searchParams }: CountdownPageProps): Promise<Metadata> {
   const params = await searchParams;
   const snapshot = parseCountdownSnapshot(typeof params.at === "string" ? params.at : undefined);
-  const countdownLabel = snapshot.expired ? "Plan your Mobile Mardi Gras visit" : snapshot.days > 0 ? `${snapshot.days} ${snapshot.days === 1 ? "day" : "days"} until Mobile’s first downtown parade` : "Less than a day until Mobile’s first downtown parade";
+  const countdownLabel = `${formatCountdownRemaining(snapshot)}${snapshot.expired ? " —" : " until"} Mobile’s first downtown parade`;
   const description = `${TARGET_EVENT_NAME} — ${TARGET_FULL_DATE_LABEL}. Bring your crew and find the live countdown, parade schedule, route maps, and coverage at MG251.xyz. Countdown as of ${snapshot.dateLabel}.`;
   const imageUrl = absoluteUrl(buildCountdownCardUrl(snapshot, "preview"));
   const metadata = createPageMetadata({ title: countdownLabel, description, path: "/countdown", image: imageUrl, imageAlt: countdownLabel });
 
   return {
     ...metadata,
-    title: "Mobile Mardi Gras Countdown 2027",
     openGraph: {
       ...metadata.openGraph,
       // Social previews are snapshots. Give each one its own URL so platforms
-      // do not reuse an older day's number when a new countdown is shared.
+      // do not reuse an older countdown when a new snapshot is shared.
       url: absoluteUrl(`/countdown?at=${snapshot.at}`),
-      images: [{ url: imageUrl, width: 1200, height: 630, type: "image/png", alt: countdownLabel }]
+      images: [{ url: imageUrl, ...COUNTDOWN_CARD_SIZES.preview, type: "image/png", alt: countdownLabel }]
     }
   };
 }

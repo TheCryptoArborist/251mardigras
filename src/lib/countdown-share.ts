@@ -5,8 +5,25 @@ export const TARGET_FULL_DATE_LABEL = "January 22, 2027 • 6:30 PM CT";
 export const TARGET_SHORT_DATE_LABEL = "Jan. 22, 2027 • 6:30 PM CT";
 export const COUNTDOWN_SHARE_TITLE = "Mobile Mardi Gras Countdown";
 
-export type SharePlatform = "facebook" | "instagram";
-export type CardFormat = "feed" | "story" | "preview";
+export const COUNTDOWN_SHARE_PLATFORMS = ["facebook", "instagram", "x", "tiktok", "youtube", "other"] as const;
+export type SharePlatform = (typeof COUNTDOWN_SHARE_PLATFORMS)[number];
+export type CardFormat = "feed" | "story" | "preview" | "square";
+
+export const COUNTDOWN_CARD_SIZES: Record<CardFormat, { width: number; height: number }> = {
+  feed: { width: 1080, height: 1350 },
+  story: { width: 1080, height: 1920 },
+  preview: { width: 1200, height: 630 },
+  square: { width: 1080, height: 1080 }
+};
+
+export const COUNTDOWN_PLATFORM_PRESETS: Record<SharePlatform, { label: string; defaultFormat: CardFormat; formats: CardFormat[] }> = {
+  facebook: { label: "Facebook", defaultFormat: "preview", formats: ["preview", "feed", "story"] },
+  instagram: { label: "Instagram", defaultFormat: "feed", formats: ["feed", "story"] },
+  x: { label: "X", defaultFormat: "preview", formats: ["preview"] },
+  tiktok: { label: "TikTok", defaultFormat: "story", formats: ["story"] },
+  youtube: { label: "YouTube", defaultFormat: "square", formats: ["square"] },
+  other: { label: "Other apps", defaultFormat: "square", formats: ["square", "feed", "story", "preview"] }
+};
 
 export type TimeRemaining = {
   totalMilliseconds: number;
@@ -89,7 +106,23 @@ export function parseCountdownSnapshot(value: string | undefined, now: number = 
     : createCountdownSnapshot(now);
 }
 
-export function buildCountdownShareUrl(snapshot: CountdownSnapshot, source: SharePlatform | "share" | "x" = "share") {
+export function formatCountdownRemaining(snapshot: CountdownSnapshot, compact = false) {
+  if (snapshot.expired) return "Scheduled start reached";
+  if (snapshot.totalMilliseconds < 60_000) return compact ? "<1m" : "Less than a minute";
+
+  const units = [
+    { value: snapshot.days, label: "day", short: "d" },
+    { value: snapshot.hours, label: "hour", short: "h" },
+    { value: snapshot.minutes, label: "minute", short: "m" }
+  ];
+  const first = snapshot.days > 0 ? 0 : snapshot.hours > 0 ? 1 : 2;
+  return units.slice(first).map(({ value, label, short }) => compact
+    ? `${value}${short}`
+    : `${value} ${label}${value === 1 ? "" : "s"}`
+  ).join(compact ? " " : ", ");
+}
+
+export function buildCountdownShareUrl(snapshot: CountdownSnapshot, source: SharePlatform | "share" = "share") {
   const url = new URL("https://mg251.xyz/countdown");
   url.searchParams.set("at", String(snapshot.at));
   url.searchParams.set("utm_source", source);
@@ -99,24 +132,37 @@ export function buildCountdownShareUrl(snapshot: CountdownSnapshot, source: Shar
 }
 
 export function buildCountdownCardUrl(snapshot: CountdownSnapshot, format: CardFormat, download = false) {
-  const params = new URLSearchParams({ at: String(snapshot.at), format });
+  const params = new URLSearchParams({ at: String(snapshot.at), format, v: "2" });
   if (download) params.set("download", "1");
   return `/api/countdown-card?${params.toString()}`;
 }
 
 export function buildCountdownCaption(snapshot: CountdownSnapshot, platform: SharePlatform) {
+  const remaining = formatCountdownRemaining(snapshot, platform === "x");
+  const url = buildCountdownShareUrl(snapshot, platform);
+  if (platform === "x") {
+    const heading = snapshot.expired
+      ? "🎭 The first downtown parade’s scheduled start has arrived! Check the Mobile Mardi Gras schedule."
+      : `🎭 ${remaining} until Mobile’s first downtown parade!`;
+    return `${heading}\n${TARGET_EVENT_NAME} • Jan. 22, 2027 • 6:30 PM CT\n${url}\nAs of ${snapshot.dateLabel}. #MG251`;
+  }
+
   const heading = snapshot.expired
     ? "🎭 Make your Mobile Mardi Gras plans!"
-    : snapshot.days === 0
-      ? "🎭 LESS THAN 1 DAY TO GO!"
-      : `🎭 ${snapshot.days} ${snapshot.days === 1 ? "DAY" : "DAYS"} TO GO!`;
+    : `🎭 ${remaining} until Mobile’s first downtown Mardi Gras parade!`;
   const event = snapshot.expired
-    ? `This countdown tracked the first downtown parade: ${TARGET_EVENT_NAME} — ${TARGET_FULL_DATE_LABEL}.`
-    : `Mobile’s first downtown Mardi Gras parade is getting closer!\n\n🎉 ${TARGET_EVENT_NAME}\n📅 Friday, ${TARGET_FULL_DATE_LABEL}`;
-  const invitation = platform === "instagram"
-    ? "Tag your parade crew! Find the parade schedule, route maps, and live coverage at MG251.xyz."
-    : "Who’s ready to catch some throws? Share this with your parade crew, then plan your day with the parade schedule, route maps, and live coverage:";
-  const hashtags = platform === "instagram" ? "\n\n#MobileMardiGras #MardiGras2027 #MG251 #MobileAlabama" : "";
+    ? `The scheduled start of ${TARGET_EVENT_NAME} — ${TARGET_FULL_DATE_LABEL} — has passed. Check the current schedule for what’s next.`
+    : `🎉 ${TARGET_EVENT_NAME}\n📅 Friday, ${TARGET_FULL_DATE_LABEL}`;
+  const invitations: Record<Exclude<SharePlatform, "x">, string> = {
+    facebook: "Who’s ready to catch some throws? Share this with your parade crew! Find the schedule, route maps, and live coverage at MG251:",
+    instagram: "Tag your parade crew! Your countdown, parade schedule, route maps, and live coverage are at MG251.xyz:",
+    tiktok: "Who’s coming to Mobile Mardi Gras? Send this to your parade crew and plan your visit with MG251:",
+    youtube: "Who’s counting down with us? Tell us your favorite parade in the comments! Find the countdown, schedule, routes, and coverage at MG251:",
+    other: "Bring your parade crew! Find the live countdown, parade schedule, route maps, and coverage at MG251:"
+  };
+  const hashtags = platform === "instagram" || platform === "tiktok"
+    ? "\n\n#MobileMardiGras #MardiGras2027 #MG251 #MobileAlabama"
+    : "";
 
-  return `${heading}\n\n${event}\n\n${invitation}\n${buildCountdownShareUrl(snapshot, platform)}\n\nCountdown as of ${snapshot.dateLabel}.${hashtags}`;
+  return `${heading}\n\n${event}\n\n${invitations[platform]}\n${url}\n\nCountdown as of ${snapshot.dateLabel}.${hashtags}`;
 }
