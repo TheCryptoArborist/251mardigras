@@ -258,6 +258,7 @@ function UpcomingCommunityEvents({ events }: { events: CommunityEvent[] }) {
                   </time>
                   <div className="min-w-0 flex-1">
                     <h3 className="text-sm font-black leading-5 group-hover:underline sm:text-base">{event.title}</h3>
+                    <p className="mt-1 break-words text-xs font-semibold leading-5 text-purple-100">Hosted by {event.organization}</p>
                     <p className="mt-1 text-xs font-bold text-parade-goldBright">{new Intl.DateTimeFormat("en-US", { ...dateOptions, weekday: "short", hour: "numeric", minute: "2-digit" }).format(start)} CT</p>
                     <p className="mt-1 text-xs leading-5 text-purple-100">{event.venueName || event.locationLabel}</p>
                   </div>
