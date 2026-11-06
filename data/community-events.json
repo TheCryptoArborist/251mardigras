@@ -358,5 +358,51 @@
     "audience": "Adults only, 21+",
     "flyerUrl": "https://www.jotform.com/uploads/PeterToler/262217749749067/6657537338325577888/mobile%20mystics%20halloween.jpg",
     "organizationLogoUrl": "/images/event-logos/mobile-mystics-logo.jpg"
+  },
+  {
+    "id": "order-of-olympia-pop-up-family-movie-night-2026",
+    "slug": "order-of-olympia-pop-up-family-movie-night-2026",
+    "status": "approved",
+    "title": "Pop-Up Family Movie Night",
+    "organization": "Order of Olympia",
+    "eventType": "Fundraiser",
+    "startDateTime": "2026-11-13T18:00:00-06:00",
+    "endDateTime": "2026-11-13T22:00:00-06:00",
+    "venueName": "",
+    "venueAddress": "29001 Bass Pro Drive",
+    "cityStateZip": "Spanish Fort, AL 36527",
+    "description": "Join the Order of Olympia for a family-friendly double feature of The Goonies and Jumanji. Bring a chair, blanket, air mattress, or bean bag for a movie night with family or a date. The event takes place at 29001 Bass Pro Drive in Spanish Fort. Tickets are $10 for an individual, $25 for a carload of four or more, $35 for VIP, or $45 for a family pack.",
+    "ticketUrl": "https://www.zeffy.com/en-US/ticketing/pop-up-family-movie-night",
+    "ticketLabel": "Tickets",
+    "cost": "Individual $10 / Carload (4+) $25 / VIP $35 / Family pack $45",
+    "audience": "Family-Friendly",
+    "publicContact": "Board@orderofolympia.org",
+    "flyerUrl": "https://www.jotform.com/uploads/PeterToler/262217749749067/6697354457321290927/IMG_0832.jpeg",
+    "flyerDimensions": {
+      "width": 768,
+      "height": 1376
+    }
+  },
+  {
+    "id": "order-of-olympia-rockin-the-roller-rink-2026",
+    "slug": "order-of-olympia-rockin-the-roller-rink-2026",
+    "status": "approved",
+    "title": "Rockin’ the Roller Rink",
+    "organization": "Order of Olympia",
+    "eventType": "Fundraiser",
+    "startDateTime": "2026-11-15T15:00:00-06:00",
+    "endDateTime": "2026-11-15T17:00:00-06:00",
+    "venueName": "Dreamland Skate",
+    "venueAddress": "5672 Three Notch Road",
+    "cityStateZip": "Mobile, AL 36619",
+    "description": "Join the Order of Olympia for Rockin’ the Roller Rink, an Elton John-themed skating fundraiser at Dreamland Skate benefiting the Epilepsy Foundation. Enjoy an afternoon of skating, music, and dancing while supporting a good cause. This family-friendly event runs from 3:00 PM to 5:00 PM. Admission is $6, payable at the door.",
+    "cost": "$6 admission, payable at the door",
+    "audience": "Family-Friendly",
+    "publicContact": "Board@orderofolympia.org",
+    "flyerUrl": "https://www.jotform.com/uploads/PeterToler/262217749749067/6697358737323497037/IMG_0811.jpeg",
+    "flyerDimensions": {
+      "width": 1320,
+      "height": 1966
+    }
   }
 ]
