@@ -3,6 +3,7 @@ import paradeSchedule2027 from "../../data/parade-schedule-2027.json";
 import type { ParadeSchedule } from "@/components/ScheduleRouteViewer";
 import { getApprovedCommunityEvents } from "@/lib/community-events";
 import { absoluteUrl } from "@/lib/seo";
+import { ARCADE_GAMES } from "@/lib/arcade";
 
 const paradeSchedule = paradeSchedule2027 as ParadeSchedule;
 
@@ -16,6 +17,7 @@ const staticRoutes: MetadataRoute.Sitemap = [
   { url: absoluteUrl("/watch"), changeFrequency: "daily", priority: 0.95 },
   { url: absoluteUrl("/replays"), changeFrequency: "weekly", priority: 0.9 },
   { url: absoluteUrl("/events"), changeFrequency: "daily", priority: 0.9 },
+  { url: absoluteUrl("/play"), changeFrequency: "weekly", priority: 0.8 },
   { url: absoluteUrl("/submit-event"), changeFrequency: "monthly", priority: 0.75 },
   { url: absoluteUrl("/food-drink"), changeFrequency: "weekly", priority: 0.85 },
   { url: absoluteUrl("/parking-access"), changeFrequency: "weekly", priority: 0.85 },
@@ -39,5 +41,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.7
   })));
 
-  return [...staticRoutes, ...eventRoutes, ...paradeRoutes];
+  const arcadeRoutes = ARCADE_GAMES.map((game) => ({ url: absoluteUrl(`/play/${game.slug}`), changeFrequency: "monthly" as const, priority: 0.65 }));
+  return [...staticRoutes, ...arcadeRoutes, ...eventRoutes, ...paradeRoutes];
 }

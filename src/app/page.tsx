@@ -17,6 +17,7 @@ import {
   Utensils
 } from "lucide-react";
 import { FeaturedVideo } from "@/components/FeaturedVideo";
+import { ArcadeShowcase } from "@/components/ArcadeShowcase";
 import { getUpcomingCommunityEvents, type CommunityEvent } from "@/lib/community-events";
 import { CountdownTimer } from "@/components/CountdownTimer";
 import { VisitorCounter } from "@/components/VisitorCounter";
@@ -151,6 +152,8 @@ export default async function HomePage() {
             </ul>
           </nav>
         </section>
+
+        <ArcadeShowcase />
 
         <div className="grid gap-5 rounded-[1.5rem] bg-gradient-to-br from-parade-purpleDeep to-parade-purple p-4 text-white shadow-civic sm:p-6 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)] lg:items-center">
           <HomepageVideoSpotlight />

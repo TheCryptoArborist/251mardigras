@@ -12,6 +12,7 @@ const navItems = [
   { href: "/schedule#all-route-maps", label: "Routes" },
   { href: "/watch", label: "Watch" },
   { href: "/events", label: "Events" },
+  { href: "/play", label: "Arcade" },
   { href: "/food-drink", label: "Food & Drink" },
   { href: "/parking-access", label: "Parking" },
   { href: "/weather", label: "Weather" },
