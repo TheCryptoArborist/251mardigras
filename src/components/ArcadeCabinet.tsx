@@ -1,45 +1,38 @@
-import Image from "next/image";
 import Link from "next/link";
-import { ArrowUpRight, Flag, VenetianMask } from "lucide-react";
+import { ArrowRight, Gamepad2 } from "lucide-react";
+import { GamePreviewVideo } from "@/components/GamePreviewVideo";
 import type { ArcadeGame } from "@/lib/arcade";
 
 export function ArcadeCabinet({ game }: { game: ArcadeGame }) {
-  const Emblem = game.theme === "maze" ? VenetianMask : Flag;
-
   return (
     <article className={`arcade-cabinet arcade-cabinet--${game.theme}`} aria-labelledby={`cabinet-${game.slug}`}>
-      <div className="cabinet-topline"><span>MG251 ORIGINAL</span><span>NO. {game.number}</span></div>
-      <div className="cabinet-marquee">
-        <Emblem size={28} strokeWidth={1.6} aria-hidden="true" />
-        <h3 id={`cabinet-${game.slug}`}>
-          <span>{game.marquee[0]}</span>
-          <strong>{game.marquee[1]}</strong>
-        </h3>
-        <Emblem size={28} strokeWidth={1.6} aria-hidden="true" />
+      <div className="cabinet-artwork">
+        <div className="cabinet-topline"><span>{game.genre}</span><span className="cabinet-status">PREVIEW</span></div>
+        <GamePreviewVideo title={game.title} src={game.video} poster={game.image} />
       </div>
-      <div className="cabinet-monitor">
-        <div className="cabinet-screen">
-          <Image src={game.image} alt={game.imageAlt} width={1200} height={750} sizes="(max-width: 639px) 85vw, 440px" />
-        </div>
-        <div className="cabinet-screen-label"><span>{game.genre}</span><span className="cabinet-status">COMING SOON</span></div>
-      </div>
-      <div className="cabinet-controls" aria-hidden="true">
-        <div className="cabinet-joystick"><i /><b /></div>
-        <span className="cabinet-player-label">PLAYER {game.number}</span>
-        <div className="cabinet-buttons"><i /><i /></div>
-      </div>
-      <div className="cabinet-front">
-        <p>{game.tagline}</p>
-        <Link className="arcade-button" href={`/play/${game.slug}`} aria-label={`Preview ${game.title}`}>
-          Preview game <ArrowUpRight size={18} aria-hidden="true" />
+      <div className="cabinet-details">
+        <h3 id={`cabinet-${game.slug}`}>{game.title}</h3>
+        <p className="cabinet-description">{game.description}</p>
+        <Link className="cabinet-cta" href={`/play/${game.slug}`} aria-label={`Explore ${game.title}`}>
+          Game preview <ArrowRight size={17} aria-hidden="true" />
         </Link>
-        <div className="cabinet-coin-row" aria-hidden="true">
-          <span className="cabinet-coin-door"><i /><b /></span>
-          <span>LET THE GOOD<br />TIMES PLAY.</span>
-          <Emblem size={35} strokeWidth={1.2} />
-        </div>
       </div>
-      <div className="cabinet-feet" aria-hidden="true"><i /><i /></div>
+    </article>
+  );
+}
+
+export function ComingSoonCabinet({ number }: { number: string }) {
+  return (
+    <article className="arcade-cabinet arcade-cabinet--soon" aria-labelledby={`cabinet-coming-${number}`}>
+      <div className="cabinet-artwork">
+        <div className="cabinet-topline"><span>CABINET {number}</span><span className="cabinet-status cabinet-status--soon">COMING SOON</span></div>
+        <div className="cabinet-coming-art" aria-hidden="true"><Gamepad2 size={58} strokeWidth={1} /><strong>?</strong><span>NEXT UP</span></div>
+      </div>
+      <div className="cabinet-details">
+        <h3 id={`cabinet-coming-${number}`}>Coming Soon</h3>
+        <p className="cabinet-description">The next good time is still under wraps. More Mardi Gras games are on the way.</p>
+        <p className="cabinet-soon-note">Watch this cabinet.</p>
+      </div>
     </article>
   );
 }
