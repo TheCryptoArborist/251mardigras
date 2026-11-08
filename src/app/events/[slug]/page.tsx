@@ -160,6 +160,9 @@ export default async function CommunityEventDetailPage({ params }: CommunityEven
 
         <section className="rounded-[1.5rem] border border-parade-line bg-white p-5 shadow-card">
           <h2 className="text-2xl font-black text-parade-purpleDark">Event details</h2>
+          {event.slug === "king-cake-off-2027" ? (
+            <a href="/kingcakeoff" className="mt-4 inline-flex items-center rounded-full bg-parade-purple px-5 py-3 text-sm font-black text-white hover:bg-parade-purpleDark">View &amp; share the King Cake-Off countdown →</a>
+          ) : null}
           <p className="mt-3 text-sm leading-6 text-parade-muted">{event.description}</p>
           {event.accessibilityNotes ? <DetailBlock title="Accessibility notes" body={event.accessibilityNotes} /> : null}
           {event.parkingNotes ? <DetailBlock title="Parking notes" body={event.parkingNotes} /> : null}

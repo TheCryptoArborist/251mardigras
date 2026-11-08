@@ -1,0 +1,14 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//MG251//King Cake Off//EN
+BEGIN:VEVENT
+UID:kingcakeoff2027@mg251.xyz
+DTSTAMP:20261108T040000Z
+DTSTART:20270115T230000Z
+DTEND:20270116T013000Z
+SUMMARY:9th Annual King Cake-Off
+LOCATION:Arthur R. Outlaw Mobile Convention Center\, 1 S. Water St.\, Mobile AL
+DESCRIPTION:Presented by PNC. Supports Big Brothers Big Sisters of the Central Gulf Coast. Details: https://www.centralgulfbbbs.org/kco
+URL:https://mg251.xyz/events/king-cake-off-2027
+END:VEVENT
+END:VCALENDAR

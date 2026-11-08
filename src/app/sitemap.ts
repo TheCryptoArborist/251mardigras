@@ -8,6 +8,7 @@ import { ARCADE_GAMES } from "@/lib/arcade";
 const paradeSchedule = paradeSchedule2027 as ParadeSchedule;
 
 const staticRoutes: MetadataRoute.Sitemap = [
+  { url: absoluteUrl("/kingcakeoff"), changeFrequency: "weekly", priority: 0.8 },
   { url: absoluteUrl("/"), changeFrequency: "daily", priority: 1 },
   { url: absoluteUrl("/countdown"), changeFrequency: "daily", priority: 0.85 },
   { url: absoluteUrl("/links"), changeFrequency: "daily", priority: 0.95 },
