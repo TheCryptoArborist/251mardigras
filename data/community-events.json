@@ -407,6 +407,8 @@
   },
   {
     "id": "king-cake-off-2027",
+    "flyerUrl": "/images/event-flyers/king-cake-off-2027.jpg",
+    "flyerDimensions": {"width": 1363, "height": 1363},
     "slug": "king-cake-off-2027",
     "status": "approved",
     "title": "9th Annual King Cake-Off",
