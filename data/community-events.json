@@ -404,5 +404,26 @@
       "width": 1320,
       "height": 1966
     }
+  },
+  {
+    "id": "king-cake-off-2027",
+    "slug": "king-cake-off-2027",
+    "status": "approved",
+    "title": "9th Annual King Cake-Off",
+    "organization": "Big Brothers Big Sisters of the Central Gulf Coast",
+    "eventType": "Fundraiser",
+    "startDateTime": "2027-01-15T17:00:00-06:00",
+    "endDateTime": "2027-01-15T19:30:00-06:00",
+    "venueName": "Arthur R. Outlaw Mobile Convention Center",
+    "venueAddress": "1 S. Water St.",
+    "cityStateZip": "Mobile, AL 36602",
+    "description": "Celebrate Mardi Gras with the 9th Annual King Cake-Off, presented by PNC. Sample king cakes and king cake-inspired treats from Gulf Coast bakeries, eateries, and grocery stores competing for top honors. Enjoy live music, local vendors, children’s activities, and specialty cocktails. Proceeds support youth mentoring through Big Brothers Big Sisters of the Central Gulf Coast. The organizer says tickets go on sale on Black Friday; visit the official event page for current ticket availability and pricing.",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=Arthur+R.+Outlaw+Mobile+Convention+Center+1+S+Water+St+Mobile+AL+36602",
+    "ticketUrl": "https://www.centralgulfbbbs.org/kco",
+    "ticketLabel": "Official Event & Ticket Info",
+    "cost": "Ticketed event; check the organizer’s website for current pricing. Tickets go on sale on Black Friday.",
+    "audience": "Family-Friendly",
+    "publicContact": "carleigh@centralgulfbbbs.org",
+    "organizationLogoUrl": "https://static.wixstatic.com/media/2db912_30e175fd17724333a65c23b7039be95a~mv2.png"
   }
 ]
