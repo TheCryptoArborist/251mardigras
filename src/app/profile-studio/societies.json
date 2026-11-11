@@ -35,6 +35,11 @@
     "src": "/images/profile-studio/societies/dauphin-island-peoples-parade.webp"
   },
   {
+    "id": "society:etruscans",
+    "name": "Etruscans",
+    "src": "/images/profile-studio/societies/etruscans.svg"
+  },
+  {
     "id": "society:infant-mystics",
     "name": "Infant Mystics",
     "src": "/images/profile-studio/societies/infant-mystics.webp"
