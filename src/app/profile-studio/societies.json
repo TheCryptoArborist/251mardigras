@@ -35,11 +35,6 @@
     "src": "/images/profile-studio/societies/dauphin-island-peoples-parade.webp"
   },
   {
-    "id": "society:elexis-i-motorcade",
-    "name": "Elexis I Motorcade",
-    "src": "/images/profile-studio/societies/elexis-i-motorcade.webp"
-  },
-  {
     "id": "society:infant-mystics",
     "name": "Infant Mystics",
     "src": "/images/profile-studio/societies/infant-mystics.webp"
@@ -118,6 +113,11 @@
     "id": "society:maids-of-mirth",
     "name": "Maids of Mirth",
     "src": "/images/profile-studio/societies/maids-of-mirth.webp"
+  },
+  {
+    "id": "society:elexis-i-motorcade",
+    "name": "MAMGA",
+    "src": "/images/profile-studio/societies/elexis-i-motorcade.webp"
   },
   {
     "id": "society:massacre-island-secret-society",
