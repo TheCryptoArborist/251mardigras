@@ -80,6 +80,8 @@ export default function ProfileStudio() {
   const [frame,setFrame]=useState<Frame>("classic"),[badge,setBadge]=useState<Badge>("none"),[phrase,setPhrase]=useState("");
   const [hasPhoto,setHasPhoto]=useState(false),[zoom,setZoom]=useState(1),[x,setX]=useState(0),[y,setY]=useState(0),[rotation,setRotation]=useState(0),[badgeSize,setBadgeSize]=useState(176);
   const [error,setError]=useState(""),[status,setStatus]=useState(""),[revision,setRevision]=useState(0);
+  const [shareFiles,setShareFiles]=useState<{renderer:unknown;revision:number;profile:File|null;frame:File}|null>(null);
+  const [nativeImageShare,setNativeImageShare]=useState(false);
   const [societySearch,setSocietySearch]=useState("");
   const [badgeBacking,setBadgeBacking]=useState<BadgeBackground>("purple");
   const [removeSocietyWhite,setRemoveSocietyWhite]=useState(true);
@@ -158,10 +160,40 @@ export default function ProfileStudio() {
     }
   },[frame,badge,phrase,zoom,x,y,rotation,badgeSize,badgeBacking,societyImage,artworkRemoveWhite,frameArtwork]);
   useEffect(()=>{const c=canvas.current?.getContext("2d");if(c)render(c);},[render,revision,hasPhoto]);
+  // Prepare files before the tap: iOS requires share() during the user gesture.
+  useEffect(()=>{
+    if(!exportReady)return;
+    let cancelled=false;
+    const timer=window.setTimeout(()=>{
+      const makeFile=(frameOnly:boolean)=>new Promise<File>((resolve,reject)=>{
+        const out=document.createElement("canvas");out.width=out.height=1024;
+        const c=out.getContext("2d");if(!c){reject(new Error("Canvas unavailable"));return;}
+        render(c,frameOnly);
+        out.toBlob(blob=>blob?resolve(new File([blob],`mg251-${frame}-${frameOnly?"frame":"profile"}.png`,{type:"image/png"})):reject(new Error("PNG unavailable")),"image/png");
+      });
+      void Promise.all([hasPhoto?makeFile(false):Promise.resolve(null),makeFile(true)]).then(([profile,frameFile])=>{
+        if(cancelled)return;
+        setShareFiles({renderer:render,revision,profile,frame:frameFile});
+        const mobile=window.matchMedia("(max-width:760px), (pointer:coarse)").matches;
+        setNativeImageShare(mobile&&Boolean(typeof navigator.share==="function"&&typeof navigator.canShare==="function"&&navigator.canShare({files:[frameFile]})));
+      }).catch(()=>{if(!cancelled)setError("The image could not be prepared. Please adjust your frame and try again.");});
+    },120);
+    return ()=>{cancelled=true;window.clearTimeout(timer);};
+  },[render,revision,hasPhoto,frame,exportReady]);
+  const filesReady=exportReady&&shareFiles?.renderer===render&&shareFiles.revision===revision;
   async function upload(file?:File){if(!file)return;setError("");setStatus("");if(!["image/jpeg","image/png","image/webp"].includes(file.type)){setError("Choose a JPG, PNG, or WebP photo. On an iPhone, export HEIC photos as JPG first.");return;}if(file.size>20*1024*1024){setError("Please choose a photo smaller than 20 MB.");return;}
     const current=++loadId.current,url=URL.createObjectURL(file),im=new Image();im.onload=()=>{URL.revokeObjectURL(url);if(current!==loadId.current)return;photo.current=im;reset();setHasPhoto(true);setRevision(v=>v+1);setStatus("Photo ready. Drag the preview to position it.");};im.onerror=()=>{URL.revokeObjectURL(url);if(current===loadId.current)setError("This photo could not be opened. Try another JPG, PNG, or WebP.");};im.src=url;
   }
-  function download(frameOnly=false){if(!exportReady)return;setError("");const out=document.createElement("canvas");out.width=out.height=1024;const c=out.getContext("2d");if(!c){setError("Your browser could not create the image. Please try again.");return;}render(c,frameOnly);out.toBlob(blob=>{if(!blob){setError("The image could not be saved. Please try again.");return;}const url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download=`mg251-${frame}-${frameOnly?"frame":"profile"}.png`;a.click();setTimeout(()=>URL.revokeObjectURL(url),10000);setStatus("PNG ready. Check your downloads or Files app.");},"image/png");}
+  function download(frameOnly=false,forceDownload=false){if(!exportReady)return;setError("");
+    const file=filesReady?(frameOnly?shareFiles?.frame:shareFiles?.profile):null;
+    if(!forceDownload&&nativeImageShare&&file){
+      // Share only the PNG so the sheet offers image actions rather than a link preview.
+      void navigator.share({files:[file],title:"My Mardi Gras profile picture"}).then(()=>setStatus("Share sheet closed. Your phone handles saving and sharing.")).catch((error:unknown)=>{
+        if(error instanceof Error&&error.name==="AbortError")return;
+        setStatus("Sharing could not open. Use Download PNG instead, then save the image from your downloads.");
+      });return;
+    }
+const out=document.createElement("canvas");out.width=out.height=1024;const c=out.getContext("2d");if(!c){setError("Your browser could not create the image. Please try again.");return;}render(c,frameOnly);out.toBlob(blob=>{if(!blob){setError("The image could not be saved. Please try again.");return;}const url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download=`mg251-${frame}-${frameOnly?"frame":"profile"}.png`;a.click();setTimeout(()=>URL.revokeObjectURL(url),10000);setStatus("PNG ready. Check your downloads or Files app.");},"image/png");}
   return <div className={s.studio}><div className={s.inner}>
     <div className={s.eyebrow}>Made for Mobile · Mardi Gras 2027</div>
     <div className={s.intro}><div><h1>Your photo.<br/>A little more Mardi Gras.</h1><p>Pick a frame. Make it yours. Take the parade with you.</p></div><span className={s.pill}><Sparkles size={13} style={{display:"inline",marginRight:6}}/> MG251 Profile Studio</span></div>
@@ -206,7 +238,9 @@ export default function ProfileStudio() {
       <div className={s.preview}><div className={s.previewHead}><span>YOUR PROFILE PREVIEW</span><span>1024 × 1024 PNG</span></div>
         <div className={s.canvasWrap}><canvas ref={canvas} className={s.canvas} width={1024} height={1024} role="img" aria-label={`Profile picture preview with ${frames.find(f=>f.id===frame)?.name} frame${hasPhoto?" and your photo":""}`} onPointerDown={e=>{if(!hasPhoto)return;e.currentTarget.setPointerCapture(e.pointerId);drag.current={x:e.clientX,y:e.clientY,ox:x,oy:y};}} onPointerMove={e=>{if(!drag.current)return;const d=drag.current,scale=1024/e.currentTarget.getBoundingClientRect().width;setX(Math.max(-400,Math.min(400,d.ox+(e.clientX-d.x)*scale)));setY(Math.max(-400,Math.min(400,d.oy+(e.clientY-d.y)*scale)));}} onPointerUp={()=>{drag.current=null;}} onPointerCancel={()=>{drag.current=null;}}/></div>
         <p className={s.hint}><Move size={13} style={{display:"inline",marginRight:6}}/>{hasPhoto?"Drag your photo to position it, or use the sliders.":"Start with your photo, or download a frame on its own."}<br/>Photo fits the frame’s inner opening. Zoom out for more space.</p>
-        <div className={s.downloadRow}><button className={s.primary} disabled={!hasPhoto||!exportReady} onClick={()=>download()}><Download size={17}/> Download profile picture</button><button className={s.secondary} disabled={!exportReady} onClick={()=>download(true)}><Download size={16}/> Download frame only</button></div>
+        <div className={s.downloadRow}><button className={s.primary} disabled={!hasPhoto||!filesReady} onClick={()=>download()}><Download size={17}/> {nativeImageShare?"Save or share profile picture":"Download profile picture"}</button><button className={s.secondary} disabled={!filesReady} onClick={()=>download(true)}><Download size={16}/> {nativeImageShare?"Save or share frame only":"Download frame only"}</button></div>
+        {nativeImageShare&&<><p className={s.small}>Choose Save Image, Messages, or another app in your phone’s share sheet. Available actions depend on your phone.</p><button className={s.downloadFallback} disabled={!filesReady} onClick={()=>download(!hasPhoto,true)}>Download PNG instead</button></>}
+        {exportReady&&!filesReady&&<p className={s.small} role="status">Preparing your PNG…</p>}
         <div className={s.privacy}><LockKeyhole size={13}/> Your photo stays on your device. No sign-in needed.</div><div role="status" className={s.status}>{status}</div>
       </div>
     </div><p className={s.footerNote}>Made for the parade route. Made for you. · MG251.xyz</p>
