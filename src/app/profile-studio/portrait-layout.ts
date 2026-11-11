@@ -4,6 +4,7 @@ export type PortraitOpening = {
   y: number;
   width: number;
   height: number;
+  frameRadius?: number;
 };
 
 // Select only the transparent window connected to the center. Openwork and
@@ -45,6 +46,16 @@ export function getClassicOpening(): PortraitOpening {
   return classicOpening;
 }
 
+// Use each artwork’s visible extent, rather than the full export canvas.
+export function artworkRadius(pixels: Uint8ClampedArray, width: number, height: number) {
+  let left=width,top=height,right=-1,bottom=-1;
+  for(let y=0;y<height;y++)for(let x=0;x<width;x++){
+    if(pixels[(y*width+x)*4+3]<=32)continue;
+    left=Math.min(left,x);right=Math.max(right,x);top=Math.min(top,y);bottom=Math.max(bottom,y);
+  }
+  return Math.min(500,width/2-left,right-width/2,height/2-top,bottom-height/2);
+}
+
 export function makePortraitOpening(frame: HTMLImageElement): PortraitOpening {
   const mask = document.createElement("canvas"); mask.width = mask.height = 1024;
   const c = mask.getContext("2d", { willReadFrequently: true });
@@ -65,13 +76,13 @@ export function makePortraitOpening(frame: HTMLImageElement): PortraitOpening {
     }
   }
   c.clearRect(0, 0, 1024, 1024); c.putImageData(result, 0, 0);
-  return { mask, x: opening.x, y: opening.y, width: opening.width, height: opening.height };
+  return { mask, x: opening.x, y: opening.y, width: opening.width, height: opening.height, frameRadius: artworkRadius(pixels.data,1024,1024) };
 }
 
-export function badgeCenterY(width: number, height: number) {
+export function badgeCenterY(width: number, height: number, frameRadius=500) {
   // Reserve enough space for the badge's full rectangular bounds inside a
   // circular social profile crop, including a small allowance for its shadow.
-  const halfWidth = width / 2 + 7;
-  const lowerEdge = 512 + Math.sqrt(500 * 500 - halfWidth * halfWidth);
-  return Math.min(935, lowerEdge - height / 2 - 8);
+  const halfWidth = width / 2 + 14;
+  const lowerEdge = 512 + Math.sqrt(frameRadius * frameRadius - halfWidth * halfWidth);
+  return Math.min(935, lowerEdge - height / 2 - 14);
 }

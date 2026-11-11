@@ -25,7 +25,7 @@ const accents = [
   { id: "logo" as const, name: "Mobile Mardi Gras", src: "/images/mardi-gras-mobile-logo.png" },
   { id: "jester" as const, name: "Carnival Jester", src: "/images/schedule/mardi-gras-jester-icon.webp" },
   { id: "king" as const, name: "Carnival King", src: "/images/schedule/mardi-gras-king-icon.webp" },
-  { id: "hero" as const, name: "Tree Hero", src: "/images/profile-studio/badges/tree-hero.webp" }
+  { id: "hero" as const, name: "Tree Hero", src: "/images/profile-studio/badges/tree-hero-bust-v2.webp" }
 ];
 const gold = "#f3cf72";
 
@@ -156,7 +156,7 @@ export default function ProfileStudio() {
     drawFrame(c,frame,frameArtwork[frame]);
     if(badge!=="none"){
       if(societyImage?.id===badge&&societyImage.removeWhite===artworkRemoveWhite){
-        drawBottomBadge(c,societyImage.image,badgeSize,badgeBacking);
+        drawBottomBadge(c,societyImage.image,badgeSize,badgeBacking,portraitOpenings.current[frame]?.frameRadius);
       }
 
     }

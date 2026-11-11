@@ -1,7 +1,7 @@
 import { badgeCenterY } from "./portrait-layout";
 
 // Fit the entire trimmed logo inside the medallion, including its corners.
-export function badgeLayout(width: number, height: number, size: number, backed: boolean) {
+export function badgeLayout(width: number, height: number, size: number, backed: boolean, frameRadius=500) {
   const ratio = width / height;
   const shape = ratio > 1.2 ? Math.min(1.5, ratio) : ratio < .8 ? Math.max(.72, ratio) : 1;
   const outerWidth = backed ? size * Math.min(1, shape) : size * Math.min(1, ratio);
@@ -9,14 +9,14 @@ export function badgeLayout(width: number, height: number, size: number, backed:
   const scale = backed
     ? 1 / Math.hypot(width / (outerWidth - 24), height / (outerHeight - 24))
     : size / Math.max(width, height);
-  return { outerWidth, outerHeight, width: width * scale, height: height * scale, y: badgeCenterY(outerWidth, outerHeight) };
+  return { outerWidth, outerHeight, width: width * scale, height: height * scale, y: badgeCenterY(outerWidth, outerHeight, frameRadius) };
 }
 
 export type BadgeBackground = "purple" | "gold" | "none";
 
-export function drawBottomBadge(c: CanvasRenderingContext2D, image: HTMLCanvasElement, size: number, background: BadgeBackground) {
+export function drawBottomBadge(c: CanvasRenderingContext2D, image: HTMLCanvasElement, size: number, background: BadgeBackground, frameRadius=500) {
   const backed = background !== "none";
-  const b = badgeLayout(image.width, image.height, size, backed);
+  const b = badgeLayout(image.width, image.height, size, backed, frameRadius);
   c.save();
   c.shadowColor = "#12051fcc"; c.shadowBlur = 7; c.shadowOffsetY = 2;
   if (backed) {
