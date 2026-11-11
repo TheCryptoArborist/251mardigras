@@ -9,7 +9,7 @@ import { getClassicOpening, makePortraitOpening, type PortraitOpening } from "./
 import societies from "./societies.json";
 import s from "./studio.module.css";
 
-type Frame = "classic" | "beads" | "jester" | "royal" | "balcony" | "moonpie" | "oak" | "canopy" | "natural";
+type Frame = "classic" | "beads" | "jester" | "royal" | "balcony" | "moonpie" | "canopy" | "natural";
 type Badge = "logo" | "jester" | "king" | "hero" | "none" | `society:${string}`;
 const frames: { id: Frame; name: string; description: string }[] = [
   { id: "classic", name: "Classic MG251", description: "Fine gold trim · the original" },
@@ -18,9 +18,8 @@ const frames: { id: Frame; name: string; description: string }[] = [
   { id: "royal", name: "Royal Procession", description: "Gilded scrolls & crown jewels" },
   { id: "balcony", name: "Balcony Nights", description: "Ironwork, lanterns & bead garlands" },
   { id: "moonpie", name: "MoonPie Magic", description: "Mobile’s favorite parade throw" },
-  { id: "oak", name: "Royal Oak Wreath", description: "Purple & gold oak leaves and acorns" },
-  { id: "canopy", name: "Carnival Canopy", description: "Golden branches, leaves & roots" },
-  { id: "natural", name: "Natural Canopy", description: "Living green leaves & natural wood" }
+  { id: "canopy", name: "Purple & Gold Tree", description: "Purple leaves, golden branches & roots" },
+  { id: "natural", name: "Natural Tree", description: "Living green leaves & natural wood" }
 ];
 const accents = [
   { id: "logo" as const, name: "Mobile Mardi Gras", src: "/images/mardi-gras-mobile-logo.png" },
