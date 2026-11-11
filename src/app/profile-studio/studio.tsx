@@ -82,6 +82,7 @@ export default function ProfileStudio() {
   const [frame,setFrame]=useState<Frame>("classic"),[badge,setBadge]=useState<Badge>("none"),[phrase,setPhrase]=useState("");
   const [hasPhoto,setHasPhoto]=useState(false),[zoom,setZoom]=useState(1),[x,setX]=useState(0),[y,setY]=useState(0),[rotation,setRotation]=useState(0),[badgeSize,setBadgeSize]=useState(176);
   const [error,setError]=useState(""),[status,setStatus]=useState(""),[revision,setRevision]=useState(0);
+  const [exportBackground,setExportBackground]=useState<"purple"|"transparent">("purple");
   const [shareFiles,setShareFiles]=useState<{renderer:unknown;revision:number;profile:File|null;frame:File}|null>(null);
   const [nativeImageShare,setNativeImageShare]=useState(false);
   const [societySearch,setSocietySearch]=useState("");
@@ -129,6 +130,12 @@ export default function ProfileStudio() {
 
   const render=useCallback((c:CanvasRenderingContext2D,frameOnly=false)=>{
     c.clearRect(0,0,1024,1024);
+    if(exportBackground==="purple"){
+      c.save();c.fillStyle="#241032";c.fillRect(0,0,1024,1024);
+      // Frame-only files still need an open center for placing over a photo.
+      if(frameOnly){c.globalCompositeOperation="destination-out";c.drawImage((portraitOpenings.current[frame]??getClassicOpening()).mask,0,0);}
+      c.restore();
+    }
     if(!frameOnly){
       const opening=portraitOpenings.current[frame]??getClassicOpening();
       const layer=photoLayer.current??document.createElement("canvas");
@@ -161,7 +168,7 @@ export default function ProfileStudio() {
       }
 
     }
-  },[frame,badge,phrase,zoom,x,y,rotation,badgeSize,badgeBacking,badgeX,badgeY,societyImage,artworkRemoveWhite,frameArtwork]);
+  },[frame,badge,phrase,exportBackground,zoom,x,y,rotation,badgeSize,badgeBacking,badgeX,badgeY,societyImage,artworkRemoveWhite,frameArtwork]);
   useEffect(()=>{const c=canvas.current?.getContext("2d");if(c)render(c);},[render,revision,hasPhoto]);
   // Prepare files before the tap: iOS requires share() during the user gesture.
   useEffect(()=>{
@@ -240,12 +247,14 @@ const out=document.createElement("canvas");out.width=out.height=1024;const c=out
             <button type="button" className={s.secondary} onClick={()=>{setBadgeX(0);setBadgeY(0);}}>Reset badge position</button>
             <p className={s.small} style={{marginTop:0}}>Position stays inside the frame’s circular boundary. Movement stops at the edge.</p>
           </div>}
-          <label className={s.label} style={{display:"block",marginTop:20}}>Say it your way<select className={s.select} value={phrase} onChange={e=>setPhrase(e.target.value)}><option value="">No wording</option>{["Ready for Mardi Gras","Meet Me on the Route","Mobile Mardi Gras 2027"].map(p=><option key={p}>{p}</option>)}</select></label><p className={s.small}>Your download has transparent corners. Frame-only downloads also have a transparent center.</p>
+          <label className={s.label} style={{display:"block",marginTop:20}}>Say it your way<select className={s.select} value={phrase} onChange={e=>setPhrase(e.target.value)}><option value="">No wording</option>{["Ready for Mardi Gras","Meet Me on the Route","Mobile Mardi Gras 2027"].map(p=><option key={p}>{p}</option>)}</select></label><p className={s.small}>{exportBackground==="purple"?"Purple fills the space outside your frame. Frame-only downloads keep a transparent center.":"Your download has transparent corners. Frame-only downloads also have a transparent center."}</p>
         </section>
       </div>
       <div className={s.preview}><div className={s.previewHead}><span>YOUR PROFILE PREVIEW</span><span>1024 × 1024 PNG</span></div>
         <div className={s.canvasWrap}><canvas ref={canvas} className={s.canvas} width={1024} height={1024} role="img" aria-label={`Profile picture preview with ${frames.find(f=>f.id===frame)?.name} frame${hasPhoto?" and your photo":""}`} onPointerDown={e=>{if(!hasPhoto)return;e.currentTarget.setPointerCapture(e.pointerId);drag.current={x:e.clientX,y:e.clientY,ox:x,oy:y};}} onPointerMove={e=>{if(!drag.current)return;const d=drag.current,scale=1024/e.currentTarget.getBoundingClientRect().width;setX(Math.max(-400,Math.min(400,d.ox+(e.clientX-d.x)*scale)));setY(Math.max(-400,Math.min(400,d.oy+(e.clientY-d.y)*scale)));}} onPointerUp={()=>{drag.current=null;}} onPointerCancel={()=>{drag.current=null;}}/></div>
         <p className={s.hint}><Move size={13} style={{display:"inline",marginRight:6}}/>{hasPhoto?"Drag your photo to position it, or use the sliders.":"Start with your photo, or download a frame on its own."}<br/>Photo fits the frame’s inner opening. Zoom out for more space.</p>
+        <label className={s.exportBackground}>Export background<select className={s.select} aria-label="Export background" value={exportBackground} onChange={e=>setExportBackground(e.target.value as "purple"|"transparent")}><option value="purple">Purple — best for social media</option><option value="transparent">Transparent — for overlays &amp; editing</option></select></label>
+        <p className={s.exportHelp}>{exportBackground==="purple"?"Fills the space around your frame so apps won’t turn it white.":"Keeps the outside clear. Some social apps may replace transparency with white."}</p>
         <div className={s.downloadRow}><button className={s.primary} disabled={!hasPhoto||!filesReady} onClick={()=>download()}><Download size={17}/> {nativeImageShare?"Save or share profile picture":"Download profile picture"}</button><button className={s.secondary} disabled={!filesReady} onClick={()=>download(true)}><Download size={16}/> {nativeImageShare?"Save or share frame only":"Download frame only"}</button></div>
         {nativeImageShare&&<><p className={s.small}>Choose Save Image, Messages, or another app in your phone’s share sheet. Available actions depend on your phone.</p><button className={s.downloadFallback} disabled={!filesReady} onClick={()=>download(!hasPhoto,true)}>Download PNG instead</button></>}
         {exportReady&&!filesReady&&<p className={s.small} role="status">Preparing your PNG…</p>}
