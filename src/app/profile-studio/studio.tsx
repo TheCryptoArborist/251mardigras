@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Download, Upload, RotateCw, Move, LockKeyhole, Sparkles, Check } from "lucide-react";
 import { loadSocietyArtwork } from "./society-artwork";
-import { drawBottomBadge } from "./badge-layout";
+import { drawBottomBadge, type BadgeBackground } from "./badge-layout";
 import { getClassicOpening, makePortraitOpening, type PortraitOpening } from "./portrait-layout";
 import societies from "./societies.json";
 import s from "./studio.module.css";
@@ -79,7 +79,7 @@ export default function ProfileStudio() {
   const [hasPhoto,setHasPhoto]=useState(false),[zoom,setZoom]=useState(1),[x,setX]=useState(0),[y,setY]=useState(0),[rotation,setRotation]=useState(0),[badgeSize,setBadgeSize]=useState(176);
   const [error,setError]=useState(""),[status,setStatus]=useState(""),[revision,setRevision]=useState(0);
   const [societySearch,setSocietySearch]=useState("");
-  const [badgeBacking,setBadgeBacking]=useState(true);
+  const [badgeBacking,setBadgeBacking]=useState<BadgeBackground>("purple");
   const [removeSocietyWhite,setRemoveSocietyWhite]=useState(true);
   const [societyImage,setSocietyImage]=useState<{id:string;removeWhite:boolean;image:HTMLCanvasElement}|null>(null);
   const portraitOpenings=useRef<Partial<Record<Frame,PortraitOpening>>>({});
@@ -197,7 +197,7 @@ export default function ProfileStudio() {
             </div>
             {visibleSocieties.length===0&&<p className={s.small}>No societies match. Try a shorter name or clear the search.</p>}
           </div>
-          {badge!=="none"&&<label className={s.label} style={{display:"block",marginTop:18}}>Badge style<select className={s.select} aria-label="Badge style" value={badgeBacking?"medallion":"plain"} onChange={e=>setBadgeBacking(e.target.value==="medallion")}><option value="medallion">Purple &amp; gold</option><option value="plain">Logo only</option></select><span className={s.small}>Backing adapts to your logo’s shape and keeps it clear of your photo.</span></label>}
+          {badge!=="none"&&<label className={s.label} style={{display:"block",marginTop:18}}>Badge background<select className={s.select} aria-label="Badge background" value={badgeBacking} onChange={e=>setBadgeBacking(e.target.value as BadgeBackground)}><option value="purple">Purple</option><option value="gold">Gold</option><option value="none">Logo only</option></select><span className={s.small}>Backing adapts to your logo’s shape and keeps it clear of your photo.</span></label>}
           {badge!=="none"&&<label style={{display:"block",marginTop:18}}><div className={s.rangeLabel}>Badge size<span>{badgeSize===176?"Default":"Custom"}</span></div><input className={s.range} aria-label="Badge size" type="range" min="80" max="300" value={badgeSize} onChange={e=>setBadgeSize(Number(e.target.value))}/></label>}
           <label className={s.label} style={{display:"block",marginTop:20}}>Say it your way<select className={s.select} value={phrase} onChange={e=>setPhrase(e.target.value)}><option value="">No wording</option>{["Ready for Mardi Gras","Meet Me on the Route","Mobile Mardi Gras 2027"].map(p=><option key={p}>{p}</option>)}</select></label><p className={s.small}>Your download has transparent corners. Frame-only downloads also have a transparent center.</p>
         </section>

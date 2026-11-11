@@ -12,25 +12,29 @@ export function badgeLayout(width: number, height: number, size: number, backed:
   return { outerWidth, outerHeight, width: width * scale, height: height * scale, y: badgeCenterY(outerWidth, outerHeight) };
 }
 
-export function drawBottomBadge(c: CanvasRenderingContext2D, image: HTMLCanvasElement, size: number, backed: boolean) {
+export type BadgeBackground = "purple" | "gold" | "none";
+
+export function drawBottomBadge(c: CanvasRenderingContext2D, image: HTMLCanvasElement, size: number, background: BadgeBackground) {
+  const backed = background !== "none";
   const b = badgeLayout(image.width, image.height, size, backed);
   c.save();
   c.shadowColor = "#12051fcc"; c.shadowBlur = 7; c.shadowOffsetY = 2;
   if (backed) {
     const rx = b.outerWidth / 2, ry = b.outerHeight / 2;
     const fill = c.createLinearGradient(0, b.y - ry, 0, b.y + ry);
-    fill.addColorStop(0, "#4b2169"); fill.addColorStop(1, "#210c36");
+    fill.addColorStop(0, background === "gold" ? "#fff0ae" : "#4b2169");
+    fill.addColorStop(1, background === "gold" ? "#d3a339" : "#210c36");
     c.beginPath(); c.ellipse(512, b.y, rx, ry, 0, 0, Math.PI * 2);
     c.fillStyle = fill; c.fill();
     c.shadowBlur = 0; c.shadowOffsetY = 0;
     const gold = c.createLinearGradient(0, b.y - ry, 0, b.y + ry);
     gold.addColorStop(0, "#fff0ae"); gold.addColorStop(.5, "#deb443"); gold.addColorStop(1, "#a97820");
-    c.strokeStyle = gold; c.lineWidth = 5; c.stroke();
+    c.strokeStyle = background === "gold" ? "#4b2169" : gold; c.lineWidth = 5; c.stroke();
     c.beginPath(); c.ellipse(512, b.y, rx - 7, ry - 7, 0, 0, Math.PI * 2);
-    c.strokeStyle = "#e8c66b66"; c.lineWidth = 1; c.stroke();
+    c.strokeStyle = background === "gold" ? "#6b3a7766" : "#e8c66b66"; c.lineWidth = 1; c.stroke();
   }
-  // A soft light edge keeps dark society lettering visible on purple.
-  if (backed) { c.shadowColor = "#fff0bc"; c.shadowBlur = 2; }
+  // A subtle edge separates artwork from either backing color.
+  if (backed) { c.shadowColor = background === "gold" ? "#4b2169" : "#fff0bc"; c.shadowBlur = 2; }
   c.drawImage(image, 512 - b.width / 2, b.y - b.height / 2, b.width, b.height);
   c.restore();
 }
