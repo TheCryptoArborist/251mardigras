@@ -212,9 +212,9 @@ const out=document.createElement("canvas");out.width=out.height=1024;const c=out
         </section>
         <section className={s.section}><h2><span className={s.number}>2</span>Find your frame</h2><p className={s.collectionIntro}>Made for Mobile. Choose your Carnival style.</p><div className={s.frameGrid}>{frames.map(f=><button key={f.id} className={`${s.choice} ${s.frameChoice}`} aria-label={f.name} aria-pressed={frame===f.id} onClick={()=>setFrame(f.id)}><FrameThumbnail frame={f.id} artwork={frameArtwork[f.id]}/><span>{f.name}</span><small>{f.description}</small>{frame===f.id&&<Check size={12} style={{position:"absolute",right:8,top:8,width:12,height:12}}/>}</button>)}</div>{!frameReady&&<p className={s.small} role="status">Loading your frame…</p>}</section>
         <section className={s.section}><h2><span className={s.number}>3</span>Make it yours</h2><p className={s.collectionIntro}>Keep it simple, add a Mobile Mardi Gras emblem, or represent your society.</p><div className={s.badgeGrid}>
-          <button className={`${s.choice} ${s.accentChoice}`} aria-pressed={badge==="none"} onClick={()=>setBadge("none")}><span className={s.noArtwork} aria-hidden="true">—</span>No artwork</button>
           {accents.map(item=><button key={item.id} className={`${s.choice} ${s.accentChoice}`} aria-pressed={badge===item.id} onClick={()=>setBadge(item.id)}><span className={s.accentThumb}><SocietyThumbnail src={item.src} removeWhite={false} round={item.id==="jester"||item.id==="king"}/></span>{item.name}</button>)}
         </div>
+          <button className={`${s.choice} ${s.noArtworkChoice}`} aria-pressed={badge==="none"} onClick={()=>setBadge("none")}><span aria-hidden="true">—</span>No artwork</button>
           <div className={s.societyPanel}>
             <h3>Society logos <span>{societies.length}</span></h3>
             <p className={s.small}>Choose your society to place its logo at the bottom of your profile picture.</p>
