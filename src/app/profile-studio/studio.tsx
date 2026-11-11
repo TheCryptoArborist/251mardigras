@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Download, Upload, RotateCw, Move, LockKeyhole, Sparkles, Check } from "lucide-react";
 import { loadSocietyArtwork } from "./society-artwork";
+import { drawPhraseRibbon } from "./phrase-ribbon";
 import { drawBottomBadge, type BadgeBackground } from "./badge-layout";
 import { getClassicOpening, makePortraitOpening, type PortraitOpening } from "./portrait-layout";
 import societies from "./societies.json";
@@ -148,8 +149,8 @@ export default function ProfileStudio() {
       p.restore();p.save();p.globalCompositeOperation="destination-in";p.drawImage(opening.mask,0,0);p.restore();
       c.drawImage(layer,0,0);
     }
+    drawPhraseRibbon(c,phrase,portraitOpenings.current[frame]??getClassicOpening());
     drawFrame(c,frame,frameArtwork[frame]);
-    if(phrase){c.save();c.translate(512,512);c.font="bold 27px system-ui";c.fillStyle="#fff0bc";c.textAlign="center";const chars=[...phrase.toUpperCase()],radius=478;const widths=chars.map(ch=>c.measureText(ch).width+3);let a=-Math.PI/2-widths.reduce((sum,v)=>sum+v,0)/radius/2;chars.forEach((ch,i)=>{const delta=widths[i]/radius;c.save();c.rotate(a+delta/2);c.translate(radius,0);c.rotate(Math.PI/2);c.fillText(ch,0,9);c.restore();a+=delta;});c.restore();}
     if(badge!=="none"){
       if(societyImage?.id===badge&&societyImage.removeWhite===artworkRemoveWhite){
         drawBottomBadge(c,societyImage.image,badgeSize,badgeBacking);
