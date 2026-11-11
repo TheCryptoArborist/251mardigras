@@ -88,6 +88,7 @@ export default function ProfileStudio() {
   const [societySearch,setSocietySearch]=useState("");
   const [badgeX,setBadgeX]=useState(0),[badgeY,setBadgeY]=useState(0);
   const [badgeBacking,setBadgeBacking]=useState<BadgeBackground>("purple");
+  const lastBadgeColor=useRef<"purple"|"gold">("purple");
   const [removeSocietyWhite,setRemoveSocietyWhite]=useState(true);
   const [societyImage,setSocietyImage]=useState<{id:string;removeWhite:boolean;image:HTMLCanvasElement}|null>(null);
   const portraitOpenings=useRef<Partial<Record<Frame,PortraitOpening>>>({});
@@ -223,6 +224,7 @@ const out=document.createElement("canvas");out.width=out.height=1024;const c=out
           {accents.map(item=><button key={item.id} className={`${s.choice} ${s.accentChoice}`} aria-pressed={badge===item.id} onClick={()=>setBadge(item.id)}><span className={s.accentThumb}><SocietyThumbnail src={item.src} removeWhite={false} round={item.id==="jester"||item.id==="king"}/></span>{item.name}</button>)}
         </div>
           <button className={`${s.choice} ${s.noArtworkChoice}`} aria-pressed={badge==="none"} onClick={()=>setBadge("none")}><span aria-hidden="true">—</span>No artwork</button>
+          {badge!=="none"&&<label className={s.cleanupToggle}><input type="checkbox" checked={badgeBacking==="none"} onChange={e=>{if(e.target.checked){if(badgeBacking!=="none")lastBadgeColor.current=badgeBacking;setBadgeBacking("none");}else setBadgeBacking(lastBadgeColor.current);}}/>Remove badge background</label>}
           <div className={s.societyPanel}>
             <h3>Society logos <span>{societies.length}</span></h3>
             <p className={s.small}>Choose your society to place its logo at the bottom of your profile picture.</p>
@@ -240,7 +242,7 @@ const out=document.createElement("canvas");out.width=out.height=1024;const c=out
             </div>
             {visibleSocieties.length===0&&<p className={s.small}>No societies match. Try a shorter name or clear the search.</p>}
           </div>
-          {badge!=="none"&&<label className={s.label} style={{display:"block",marginTop:18}}>Badge background<select className={s.select} aria-label="Badge background" value={badgeBacking} onChange={e=>setBadgeBacking(e.target.value as BadgeBackground)}><option value="purple">Purple</option><option value="gold">Gold</option><option value="none">Logo only</option></select><span className={s.small}>Backing adapts to your logo’s shape and keeps it clear of your photo.</span></label>}
+          {badge!=="none"&&<label className={s.label} style={{display:"block",marginTop:18}}>Badge background<select className={s.select} aria-label="Badge background" value={badgeBacking} onChange={e=>{const value=e.target.value as BadgeBackground;if(value!=="none")lastBadgeColor.current=value;setBadgeBacking(value);}}><option value="purple">Purple</option><option value="gold">Gold</option><option value="none">Logo only</option></select><span className={s.small}>Backing adapts to your logo’s shape and keeps it clear of your photo.</span></label>}
           {badge!=="none"&&<label style={{display:"block",marginTop:18}}><div className={s.rangeLabel}>Badge size<span>{badgeSize===176?"Default":"Custom"}</span></div><input className={s.range} aria-label="Badge size" type="range" min="80" max="300" value={badgeSize} onChange={e=>setBadgeSize(Number(e.target.value))}/></label>}
           {badge!=="none"&&<div className={s.sliders}>
             {[{label:"Badge left / right",value:badgeX,set:setBadgeX},{label:"Badge up / down",value:badgeY,set:setBadgeY}].map(control=><label key={control.label}><div className={s.rangeLabel}>{control.label}</div><input className={s.range} type="range" min="-300" max="300" step="1" value={control.value} aria-label={control.label} onChange={e=>control.set(Number(e.target.value))}/></label>)}
