@@ -9,7 +9,7 @@ import { getClassicOpening, makePortraitOpening, type PortraitOpening } from "./
 import societies from "./societies.json";
 import s from "./studio.module.css";
 
-type Frame = "classic" | "beads" | "jester" | "royal" | "balcony" | "moonpie";
+type Frame = "classic" | "beads" | "jester" | "royal" | "balcony" | "moonpie" | "oak" | "canopy";
 type Badge = "logo" | "jester" | "king" | "none" | `society:${string}`;
 const frames: { id: Frame; name: string; description: string }[] = [
   { id: "classic", name: "Classic MG251", description: "Fine gold trim · the original" },
@@ -17,7 +17,9 @@ const frames: { id: Frame; name: string; description: string }[] = [
   { id: "jester", name: "Jester’s Court", description: "Velvet, bells & masquerade" },
   { id: "royal", name: "Royal Procession", description: "Gilded scrolls & crown jewels" },
   { id: "balcony", name: "Balcony Nights", description: "Ironwork, lanterns & bead garlands" },
-  { id: "moonpie", name: "MoonPie Magic", description: "Mobile’s favorite parade throw" }
+  { id: "moonpie", name: "MoonPie Magic", description: "Mobile’s favorite parade throw" },
+  { id: "oak", name: "Royal Oak Wreath", description: "Purple & gold oak leaves and acorns" },
+  { id: "canopy", name: "Carnival Canopy", description: "Golden branches, leaves & roots" }
 ];
 const accents = [
   { id: "logo" as const, name: "Mobile Mardi Gras", src: "/images/mardi-gras-mobile-logo.png" },
