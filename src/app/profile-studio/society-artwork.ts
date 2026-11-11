@@ -25,8 +25,8 @@ export function clearExteriorWhite(pixels: Uint8ClampedArray, width: number, hei
 }
 
 const artworkCache = new Map<string, Promise<HTMLCanvasElement>>();
-export function loadSocietyArtwork(src: string, removeWhite: boolean) {
-  const key = `${src}:${removeWhite}`;
+export function loadSocietyArtwork(src: string, removeWhite: boolean, circular = false) {
+  const key = `${src}:${removeWhite}:${circular}`;
   let pending = artworkCache.get(key);
   if (!pending) {
     pending = new Promise<HTMLCanvasElement>((resolve, reject) => {
@@ -38,6 +38,9 @@ export function loadSocietyArtwork(src: string, removeWhite: boolean) {
           source.width = image.naturalWidth; source.height = image.naturalHeight;
           const c = source.getContext("2d", { willReadFrequently: true });
           if (!c) throw new Error("Canvas unavailable");
+          if (circular) {
+            c.beginPath(); c.arc(source.width / 2, source.height / 2, Math.min(source.width, source.height) * 0.465, 0, Math.PI * 2); c.clip();
+          }
           c.drawImage(image, 0, 0);
           const data = c.getImageData(0, 0, source.width, source.height);
           if (removeWhite) clearExteriorWhite(data.data, source.width, source.height);
