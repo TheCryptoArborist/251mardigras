@@ -2,10 +2,12 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Download, Upload, RotateCw, Move, LockKeyhole, Sparkles, Check } from "lucide-react";
+import NextImage from "next/image";
+import societies from "./societies.json";
 import s from "./studio.module.css";
 
 type Frame = "classic" | "beads" | "skyline" | "mask" | "royal" | "arcade";
-type Badge = "logo" | "mask" | "moonpie" | "none";
+type Badge = "logo" | "mask" | "moonpie" | "none" | `society:${string}`;
 const frames: { id: Frame; name: string }[] = [
   { id: "classic", name: "Classic MG251" }, { id: "beads", name: "Throw Me Something" },
   { id: "skyline", name: "Mobile Skyline" }, { id: "mask", name: "Masquerade" },
@@ -59,6 +61,20 @@ export default function ProfileStudio() {
   const [frame,setFrame]=useState<Frame>("classic"),[badge,setBadge]=useState<Badge>("logo"),[phrase,setPhrase]=useState("");
   const [hasPhoto,setHasPhoto]=useState(false),[zoom,setZoom]=useState(1),[x,setX]=useState(0),[y,setY]=useState(0),[rotation,setRotation]=useState(0),[badgeSize,setBadgeSize]=useState(168);
   const [error,setError]=useState(""),[status,setStatus]=useState(""),[revision,setRevision]=useState(0);
+  const [societySearch,setSocietySearch]=useState("");
+  const [societyImage,setSocietyImage]=useState<{id:string;image:HTMLImageElement}|null>(null);
+  const selectedSociety=societies.find(item=>item.id===badge);
+  const visibleSocieties=societies.filter(item=>item.name.toLocaleLowerCase().includes(societySearch.trim().toLocaleLowerCase()));
+  const artworkReady=!selectedSociety||societyImage?.id===badge;
+  useEffect(()=>{
+    if(!selectedSociety)return;
+    let cancelled=false;
+    const im=new Image();
+    im.onload=()=>{if(!cancelled)setSocietyImage({id:selectedSociety.id,image:im});};
+    im.onerror=()=>{if(!cancelled)setError("This society logo could not load. Please select it again or try another logo.");};
+    im.src=selectedSociety.src;
+    return ()=>{cancelled=true;};
+  },[selectedSociety]);
   const drag=useRef<{x:number;y:number;ox:number;oy:number}|null>(null),loadId=useRef(0);
   const reset=()=>{setZoom(1);setX(0);setY(0);setRotation(0);};
   useEffect(()=>{const im=new Image();im.onload=()=>{logo.current=im;setRevision(v=>v+1);};im.src="/images/mardi-gras-mobile-logo.png";},[]);
@@ -70,17 +86,23 @@ export default function ProfileStudio() {
       c.restore();}
     drawFrame(c,frame);
     if(phrase){c.save();c.translate(512,512);c.font="bold 27px system-ui";c.fillStyle="#fff0bc";c.textAlign="center";const chars=[...phrase.toUpperCase()],radius=478;const widths=chars.map(ch=>c.measureText(ch).width+3);let a=-Math.PI/2-widths.reduce((sum,v)=>sum+v,0)/radius/2;chars.forEach((ch,i)=>{const delta=widths[i]/radius;c.save();c.rotate(a+delta/2);c.translate(radius,0);c.rotate(Math.PI/2);c.fillText(ch,0,9);c.restore();a+=delta;});c.restore();}
-    if(badge!=="none"){const by=frame==="skyline"?850:879;
+    if(badge!=="none"){const by=Math.min(frame==="skyline"?850:879,953-badgeSize/2);
+      if(badge.startsWith("society:")&&societyImage?.id===badge){
+        circle(c,512,by,badgeSize/2+4,"#ffffff",gold,4);
+        const im=societyImage.image,scale=(badgeSize*.68)/Math.max(im.naturalWidth,im.naturalHeight);
+        const w=im.naturalWidth*scale,h=im.naturalHeight*scale;
+        c.drawImage(im,512-w/2,by-h/2,w,h);
+      }
       if(badge==="logo"){circle(c,512,by,badgeSize/2+5,"#2e103f",gold,4);if(logo.current)c.drawImage(logo.current,512-badgeSize/2,by-badgeSize/2,badgeSize,badgeSize);}
       if(badge==="mask"){circle(c,512,by,badgeSize/2,"#2e103f",gold,3);mask(c,512,by,badgeSize*.88);}
       if(badge==="moonpie"){circle(c,512,by,badgeSize/2,"#b18032",gold,4);c.save();c.beginPath();c.ellipse(512,by+14,badgeSize*.43,badgeSize*.16,0,0,Math.PI);c.strokeStyle="#fff0bc";c.lineWidth=11;c.stroke();c.font=`bold ${Math.round(badgeSize*.14)}px system-ui`;c.textAlign="center";c.fillStyle="#381348";c.fillText("MOONPIE",512,by-8);c.restore();}
     }
-  },[frame,badge,phrase,zoom,x,y,rotation,badgeSize]);
+  },[frame,badge,phrase,zoom,x,y,rotation,badgeSize,societyImage]);
   useEffect(()=>{const c=canvas.current?.getContext("2d");if(c)render(c);},[render,revision,hasPhoto]);
   async function upload(file?:File){if(!file)return;setError("");setStatus("");if(!["image/jpeg","image/png","image/webp"].includes(file.type)){setError("Choose a JPG, PNG, or WebP photo. On an iPhone, export HEIC photos as JPG first.");return;}if(file.size>20*1024*1024){setError("Please choose a photo smaller than 20 MB.");return;}
     const current=++loadId.current,url=URL.createObjectURL(file),im=new Image();im.onload=()=>{URL.revokeObjectURL(url);if(current!==loadId.current)return;photo.current=im;reset();setHasPhoto(true);setRevision(v=>v+1);setStatus("Photo ready. Drag the preview to position it.");};im.onerror=()=>{URL.revokeObjectURL(url);if(current===loadId.current)setError("This photo could not be opened. Try another JPG, PNG, or WebP.");};im.src=url;
   }
-  function download(frameOnly=false){setError("");const out=document.createElement("canvas");out.width=out.height=1024;const c=out.getContext("2d");if(!c){setError("Your browser could not create the image. Please try again.");return;}render(c,frameOnly);out.toBlob(blob=>{if(!blob){setError("The image could not be saved. Please try again.");return;}const url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download=`mg251-${frame}-${frameOnly?"frame":"profile"}.png`;a.click();setTimeout(()=>URL.revokeObjectURL(url),10000);setStatus("PNG ready. Check your downloads or Files app.");},"image/png");}
+  function download(frameOnly=false){if(!artworkReady)return;setError("");const out=document.createElement("canvas");out.width=out.height=1024;const c=out.getContext("2d");if(!c){setError("Your browser could not create the image. Please try again.");return;}render(c,frameOnly);out.toBlob(blob=>{if(!blob){setError("The image could not be saved. Please try again.");return;}const url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download=`mg251-${frame}-${frameOnly?"frame":"profile"}.png`;a.click();setTimeout(()=>URL.revokeObjectURL(url),10000);setStatus("PNG ready. Check your downloads or Files app.");},"image/png");}
   return <div className={s.studio}><div className={s.inner}>
     <div className={s.eyebrow}>Made for Mobile · Mardi Gras 2027</div>
     <div className={s.intro}><div><h1>Your photo.<br/>A little more Mardi Gras.</h1><p>Pick a frame. Make it yours. Take the parade with you.</p></div><span className={s.pill}><Sparkles size={13} style={{display:"inline",marginRight:6}}/> MG251 Profile Studio</span></div>
@@ -88,7 +110,7 @@ export default function ProfileStudio() {
       <div className={s.preview}><div className={s.previewHead}><span>YOUR PROFILE PREVIEW</span><span>1024 × 1024 PNG</span></div>
         <div className={s.canvasWrap}><canvas ref={canvas} className={s.canvas} width={1024} height={1024} role="img" aria-label={`Profile picture preview with ${frames.find(f=>f.id===frame)?.name} frame${hasPhoto?" and your photo":""}`} onPointerDown={e=>{if(!hasPhoto)return;e.currentTarget.setPointerCapture(e.pointerId);drag.current={x:e.clientX,y:e.clientY,ox:x,oy:y};}} onPointerMove={e=>{if(!drag.current)return;const d=drag.current,scale=1024/e.currentTarget.getBoundingClientRect().width;setX(Math.max(-400,Math.min(400,d.ox+(e.clientX-d.x)*scale)));setY(Math.max(-400,Math.min(400,d.oy+(e.clientY-d.y)*scale)));}} onPointerUp={()=>{drag.current=null;}} onPointerCancel={()=>{drag.current=null;}}/></div>
         <p className={s.hint}><Move size={13} style={{display:"inline",marginRight:6}}/>{hasPhoto?"Drag your photo to position it, or use the sliders.":"Start with your photo, or download a frame on its own."}<br/>Artwork stays inside the circular profile crop.</p>
-        <div className={s.downloadRow}><button className={s.primary} disabled={!hasPhoto} onClick={()=>download()}><Download size={17}/> Download profile picture</button><button className={s.secondary} onClick={()=>download(true)}><Download size={16}/> Download frame only</button></div>
+        <div className={s.downloadRow}><button className={s.primary} disabled={!hasPhoto||!artworkReady} onClick={()=>download()}><Download size={17}/> Download profile picture</button><button className={s.secondary} disabled={!artworkReady} onClick={()=>download(true)}><Download size={16}/> Download frame only</button></div>
         <div className={s.privacy}><LockKeyhole size={13}/> Your photo stays on your device. No sign-in needed.</div><div role="status" className={s.status}>{status}</div>
       </div>
       <div className={s.controls}>
@@ -98,7 +120,22 @@ export default function ProfileStudio() {
         </section>
         <section className={s.section}><h2><span className={s.number}>2</span>Find your frame</h2><div className={s.frameGrid}>{frames.map(f=><button key={f.id} className={s.choice} aria-pressed={frame===f.id} onClick={()=>setFrame(f.id)}><FrameIcon frame={f.id}/>{f.name}{frame===f.id&&<Check size={12} style={{position:"absolute",right:6,top:6,width:12,height:12}}/>}</button>)}</div></section>
         <section className={s.section}><h2><span className={s.number}>3</span>Add a finishing touch</h2><div className={s.badgeGrid}>{([{id:"logo",name:"MG251"},{id:"mask",name:"Mask"},{id:"moonpie",name:"MoonPie"},{id:"none",name:"No badge"}] as {id:Badge;name:string}[]).map(b=><button key={b.id} className={s.choice} aria-pressed={badge===b.id} onClick={()=>setBadge(b.id)}><BadgeIcon badge={b.id}/>{b.name}</button>)}</div>
-          {badge!=="none"&&<label style={{display:"block",marginTop:18}}><div className={s.rangeLabel}>Badge size<span>{badgeSize===168?"Original":"Custom"}</span></div><input className={s.range} aria-label="Badge size" type="range" min="110" max="220" value={badgeSize} onChange={e=>setBadgeSize(Number(e.target.value))}/></label>}
+          <div className={s.societyPanel}>
+            <h3>Society logos <span>{societies.length}</span></h3>
+            <p className={s.small}>Choose your society to place its logo at the bottom of your profile picture.</p>
+            <label className={s.label} htmlFor="society-search">Find a society</label>
+            <input id="society-search" type="search" className={s.select} placeholder="Search society names…" value={societySearch} onChange={e=>setSocietySearch(e.target.value)}/>
+            <p className={s.societyCount} role="status">{visibleSocieties.length} of {societies.length} societies{selectedSociety?` · Selected: ${selectedSociety.name}`:""}{!artworkReady?" · Loading logo…":""}</p>
+            <div className={s.societyGrid} role="group" aria-label="Society logos">
+              {visibleSocieties.map(item=><button key={item.id} className={s.choice} aria-label={item.name} aria-pressed={badge===item.id} onClick={()=>{setError("");setBadge(item.id as Badge);}}>
+                <span className={s.societyThumb}><NextImage src={item.src} alt="" width={68} height={68} unoptimized loading="lazy"/></span>
+                <span>{item.name}</span>
+                {badge===item.id&&<Check size={12} style={{position:"absolute",right:6,top:6,width:12,height:12}}/>}
+              </button>)}
+            </div>
+            {visibleSocieties.length===0&&<p className={s.small}>No societies match. Try a shorter name or clear the search.</p>}
+          </div>
+          {badge!=="none"&&<label style={{display:"block",marginTop:18}}><div className={s.rangeLabel}>Badge size<span>{badgeSize===168?"Original":"Custom"}</span></div><input className={s.range} aria-label="Badge size" type="range" min="110" max="300" value={badgeSize} onChange={e=>setBadgeSize(Number(e.target.value))}/></label>}
           <label className={s.label} style={{display:"block",marginTop:20}}>Say it your way<select className={s.select} value={phrase} onChange={e=>setPhrase(e.target.value)}><option value="">No wording</option>{["Ready for Mardi Gras","Meet Me on the Route","Mobile Mardi Gras 2027"].map(p=><option key={p}>{p}</option>)}</select></label><p className={s.small}>Your download has transparent corners. Frame-only downloads also have a transparent center.</p>
         </section>
       </div>
