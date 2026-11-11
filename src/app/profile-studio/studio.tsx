@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Download, Upload, RotateCw, Move, LockKeyhole, Sparkles, Check } from "lucide-react";
-import NextImage from "next/image";
+import { loadSocietyArtwork } from "./society-artwork";
 import societies from "./societies.json";
 import s from "./studio.module.css";
 
@@ -56,25 +56,49 @@ function FrameIcon({frame}:{frame:Frame}) {
 }
 function BadgeIcon({badge}:{badge:Badge}) {return <svg viewBox="0 0 60 60" aria-hidden="true">{badge==="logo"?<><circle cx="30" cy="30" r="25" fill={purple} stroke={gold} strokeWidth="2"/><text x="30" y="35" textAnchor="middle" fontSize="13" fontWeight="bold" fill={gold}>MG251</text></>:badge==="mask"?<path d="M5 21Q20 11 30 25Q40 11 55 21Q51 48 30 33Q9 48 5 21M13 26L22 28M38 28L47 26" fill={purple} stroke={gold} strokeWidth="3"/>:badge==="moonpie"?<><circle cx="30" cy="30" r="23" fill="#bd8c35" stroke={gold} strokeWidth="2"/><path d="M9 30Q30 42 51 30" stroke="#ffedb7" strokeWidth="6"/><text x="30" y="26" textAnchor="middle" fontSize="9" fontWeight="bold" fill="#3f174f">MOONPIE</text></>:<><circle cx="30" cy="30" r="21" fill="none" stroke="#c6aed3"/><path d="M15 45L45 15" stroke="#c6aed3"/></>}</svg>;}
 
+function SocietyThumbnail({ src, removeWhite }: { src: string; removeWhite: boolean }) {
+  const ref = useRef<HTMLCanvasElement>(null);
+  useEffect(() => {
+    let cancelled = false;
+    const element = ref.current;
+    if (!element) return;
+    const draw = () => { void loadSocietyArtwork(src, removeWhite).then(image => {
+      if (cancelled) return;
+      const c = element.getContext("2d"); if (!c) return;
+      c.clearRect(0, 0, 136, 136);
+      const scale = 128 / Math.max(image.width, image.height);
+      const w = image.width * scale, h = image.height * scale;
+      c.drawImage(image, (136 - w) / 2, (136 - h) / 2, w, h);
+    }).catch(() => { /* The named button remains usable for a retry. */ }); };
+    if (!("IntersectionObserver" in window)) { draw(); return () => { cancelled = true; }; }
+    const observer = new IntersectionObserver(entries => {
+      if (entries.some(entry => entry.isIntersecting)) { observer.disconnect(); draw(); }
+    }, { rootMargin: "100px" });
+    observer.observe(element);
+    return () => { cancelled = true; observer.disconnect(); };
+  }, [src, removeWhite]);
+  return <canvas ref={ref} width={136} height={136} aria-hidden="true"/>;
+}
+
 export default function ProfileStudio() {
   const canvas=useRef<HTMLCanvasElement>(null),photo=useRef<HTMLImageElement|null>(null),logo=useRef<HTMLImageElement|null>(null),fileInput=useRef<HTMLInputElement>(null);
   const [frame,setFrame]=useState<Frame>("classic"),[badge,setBadge]=useState<Badge>("logo"),[phrase,setPhrase]=useState("");
   const [hasPhoto,setHasPhoto]=useState(false),[zoom,setZoom]=useState(1),[x,setX]=useState(0),[y,setY]=useState(0),[rotation,setRotation]=useState(0),[badgeSize,setBadgeSize]=useState(168);
   const [error,setError]=useState(""),[status,setStatus]=useState(""),[revision,setRevision]=useState(0);
   const [societySearch,setSocietySearch]=useState("");
-  const [societyImage,setSocietyImage]=useState<{id:string;image:HTMLImageElement}|null>(null);
+  const [removeSocietyWhite,setRemoveSocietyWhite]=useState(true);
+  const [societyImage,setSocietyImage]=useState<{id:string;removeWhite:boolean;image:HTMLCanvasElement}|null>(null);
   const selectedSociety=societies.find(item=>item.id===badge);
   const visibleSocieties=societies.filter(item=>item.name.toLocaleLowerCase().includes(societySearch.trim().toLocaleLowerCase()));
-  const artworkReady=!selectedSociety||societyImage?.id===badge;
+  const artworkReady=!selectedSociety||(societyImage?.id===badge&&societyImage.removeWhite===removeSocietyWhite);
   useEffect(()=>{
     if(!selectedSociety)return;
     let cancelled=false;
-    const im=new Image();
-    im.onload=()=>{if(!cancelled)setSocietyImage({id:selectedSociety.id,image:im});};
-    im.onerror=()=>{if(!cancelled)setError("This society logo could not load. Please select it again or try another logo.");};
-    im.src=selectedSociety.src;
+    void loadSocietyArtwork(selectedSociety.src,removeSocietyWhite).then(image=>{
+      if(!cancelled)setSocietyImage({id:selectedSociety.id,removeWhite:removeSocietyWhite,image});
+    }).catch(()=>{if(!cancelled)setError("This society logo could not load. Please try another logo.");});
     return ()=>{cancelled=true;};
-  },[selectedSociety]);
+  },[selectedSociety,removeSocietyWhite]);
   const drag=useRef<{x:number;y:number;ox:number;oy:number}|null>(null),loadId=useRef(0);
   const reset=()=>{setZoom(1);setX(0);setY(0);setRotation(0);};
   useEffect(()=>{const im=new Image();im.onload=()=>{logo.current=im;setRevision(v=>v+1);};im.src="/images/mardi-gras-mobile-logo.png";},[]);
@@ -87,17 +111,17 @@ export default function ProfileStudio() {
     drawFrame(c,frame);
     if(phrase){c.save();c.translate(512,512);c.font="bold 27px system-ui";c.fillStyle="#fff0bc";c.textAlign="center";const chars=[...phrase.toUpperCase()],radius=478;const widths=chars.map(ch=>c.measureText(ch).width+3);let a=-Math.PI/2-widths.reduce((sum,v)=>sum+v,0)/radius/2;chars.forEach((ch,i)=>{const delta=widths[i]/radius;c.save();c.rotate(a+delta/2);c.translate(radius,0);c.rotate(Math.PI/2);c.fillText(ch,0,9);c.restore();a+=delta;});c.restore();}
     if(badge!=="none"){const by=Math.min(frame==="skyline"?850:879,953-badgeSize/2);
-      if(badge.startsWith("society:")&&societyImage?.id===badge){
-        circle(c,512,by,badgeSize/2+4,"#ffffff",gold,4);
-        const im=societyImage.image,scale=(badgeSize*.68)/Math.max(im.naturalWidth,im.naturalHeight);
-        const w=im.naturalWidth*scale,h=im.naturalHeight*scale;
-        c.drawImage(im,512-w/2,by-h/2,w,h);
+      if(badge.startsWith("society:")&&societyImage?.id===badge&&societyImage.removeWhite===removeSocietyWhite){
+        const im=societyImage.image,scale=badgeSize/Math.max(im.width,im.height);
+        const w=im.width*scale,h=im.height*scale;
+        c.save();c.shadowColor="#180a27";c.shadowBlur=5;
+        c.drawImage(im,512-w/2,by-h/2,w,h);c.restore();
       }
       if(badge==="logo"){circle(c,512,by,badgeSize/2+5,"#2e103f",gold,4);if(logo.current)c.drawImage(logo.current,512-badgeSize/2,by-badgeSize/2,badgeSize,badgeSize);}
       if(badge==="mask"){circle(c,512,by,badgeSize/2,"#2e103f",gold,3);mask(c,512,by,badgeSize*.88);}
       if(badge==="moonpie"){circle(c,512,by,badgeSize/2,"#b18032",gold,4);c.save();c.beginPath();c.ellipse(512,by+14,badgeSize*.43,badgeSize*.16,0,0,Math.PI);c.strokeStyle="#fff0bc";c.lineWidth=11;c.stroke();c.font=`bold ${Math.round(badgeSize*.14)}px system-ui`;c.textAlign="center";c.fillStyle="#381348";c.fillText("MOONPIE",512,by-8);c.restore();}
     }
-  },[frame,badge,phrase,zoom,x,y,rotation,badgeSize,societyImage]);
+  },[frame,badge,phrase,zoom,x,y,rotation,badgeSize,societyImage,removeSocietyWhite]);
   useEffect(()=>{const c=canvas.current?.getContext("2d");if(c)render(c);},[render,revision,hasPhoto]);
   async function upload(file?:File){if(!file)return;setError("");setStatus("");if(!["image/jpeg","image/png","image/webp"].includes(file.type)){setError("Choose a JPG, PNG, or WebP photo. On an iPhone, export HEIC photos as JPG first.");return;}if(file.size>20*1024*1024){setError("Please choose a photo smaller than 20 MB.");return;}
     const current=++loadId.current,url=URL.createObjectURL(file),im=new Image();im.onload=()=>{URL.revokeObjectURL(url);if(current!==loadId.current)return;photo.current=im;reset();setHasPhoto(true);setRevision(v=>v+1);setStatus("Photo ready. Drag the preview to position it.");};im.onerror=()=>{URL.revokeObjectURL(url);if(current===loadId.current)setError("This photo could not be opened. Try another JPG, PNG, or WebP.");};im.src=url;
@@ -123,12 +147,14 @@ export default function ProfileStudio() {
           <div className={s.societyPanel}>
             <h3>Society logos <span>{societies.length}</span></h3>
             <p className={s.small}>Choose your society to place its logo at the bottom of your profile picture.</p>
+            <label className={s.cleanupToggle}><input type="checkbox" checked={removeSocietyWhite} onChange={e=>setRemoveSocietyWhite(e.target.checked)}/> Remove white background</label>
+            <p className={s.small}>Clears outside white space and fits the logo closely. Turn off to keep its original background.</p>
             <label className={s.label} htmlFor="society-search">Find a society</label>
             <input id="society-search" type="search" className={s.select} placeholder="Search society names…" value={societySearch} onChange={e=>setSocietySearch(e.target.value)}/>
             <p className={s.societyCount} role="status">{visibleSocieties.length} of {societies.length} societies{selectedSociety?` · Selected: ${selectedSociety.name}`:""}{!artworkReady?" · Loading logo…":""}</p>
             <div className={s.societyGrid} role="group" aria-label="Society logos">
               {visibleSocieties.map(item=><button key={item.id} className={s.choice} aria-label={item.name} aria-pressed={badge===item.id} onClick={()=>{setError("");setBadge(item.id as Badge);}}>
-                <span className={s.societyThumb}><NextImage src={item.src} alt="" width={68} height={68} unoptimized loading="lazy"/></span>
+                <span className={s.societyThumb}><SocietyThumbnail src={item.src} removeWhite={removeSocietyWhite}/></span>
                 <span>{item.name}</span>
                 {badge===item.id&&<Check size={12} style={{position:"absolute",right:6,top:6,width:12,height:12}}/>}
               </button>)}
