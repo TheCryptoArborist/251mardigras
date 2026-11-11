@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Download, Upload, RotateCw, Move, LockKeyhole, Sparkles, Check } from "lucide-react";
 import { loadSocietyArtwork } from "./society-artwork";
+import { badgeCenterY, getClassicOpening, makePortraitOpening, type PortraitOpening } from "./portrait-layout";
 import societies from "./societies.json";
 import s from "./studio.module.css";
 
@@ -74,17 +75,25 @@ function SocietyThumbnail({ src, removeWhite, round = false }: { src: string; re
 export default function ProfileStudio() {
   const canvas=useRef<HTMLCanvasElement>(null),photo=useRef<HTMLImageElement|null>(null),fileInput=useRef<HTMLInputElement>(null);
   const [frame,setFrame]=useState<Frame>("classic"),[badge,setBadge]=useState<Badge>("none"),[phrase,setPhrase]=useState("");
-  const [hasPhoto,setHasPhoto]=useState(false),[zoom,setZoom]=useState(1),[x,setX]=useState(0),[y,setY]=useState(0),[rotation,setRotation]=useState(0),[badgeSize,setBadgeSize]=useState(168);
+  const [hasPhoto,setHasPhoto]=useState(false),[zoom,setZoom]=useState(1),[x,setX]=useState(0),[y,setY]=useState(0),[rotation,setRotation]=useState(0),[badgeSize,setBadgeSize]=useState(128);
   const [error,setError]=useState(""),[status,setStatus]=useState(""),[revision,setRevision]=useState(0);
   const [societySearch,setSocietySearch]=useState("");
   const [removeSocietyWhite,setRemoveSocietyWhite]=useState(true);
   const [societyImage,setSocietyImage]=useState<{id:string;removeWhite:boolean;image:HTMLCanvasElement}|null>(null);
+  const portraitOpenings=useRef<Partial<Record<Frame,PortraitOpening>>>({});
+  const photoLayer=useRef<HTMLCanvasElement|null>(null);
   const [frameArtwork,setFrameArtwork]=useState<Partial<Record<Frame,HTMLImageElement>>>({});
   useEffect(()=>{
     let cancelled=false;
     for(const entry of frames.filter(item=>item.id!=="classic"&&item.id!=="beads")){
       const image=new Image();
-      image.onload=()=>{if(!cancelled)setFrameArtwork(current=>({...current,[entry.id]:image}));};
+      image.onload=()=>{
+        if(cancelled)return;
+        try {
+          portraitOpenings.current[entry.id]=makePortraitOpening(image);
+          setFrameArtwork(current=>({...current,[entry.id]:image}));
+        } catch { setError("This frame’s photo opening could not load. Please choose another frame."); }
+      };
       image.onerror=()=>{if(!cancelled)setError("A frame could not load. Please refresh or choose another frame.");};
       image.src=`/images/profile-studio/frames/${entry.id}-v2.webp`;
     }
@@ -111,16 +120,36 @@ export default function ProfileStudio() {
 
   const render=useCallback((c:CanvasRenderingContext2D,frameOnly=false)=>{
     c.clearRect(0,0,1024,1024);
-    if(!frameOnly){c.save();circle(c,512,512,457);c.clip();c.fillStyle="#30163f";c.fillRect(0,0,1024,1024);
-      if(photo.current){const im=photo.current,swap=rotation%180!==0;const w=swap?im.naturalHeight:im.naturalWidth,h=swap?im.naturalWidth:im.naturalHeight;const scale=Math.max(916/w,916/h)*zoom;c.translate(512+x,512+y);c.rotate(rotation*Math.PI/180);c.drawImage(im,-im.naturalWidth*scale/2,-im.naturalHeight*scale/2,im.naturalWidth*scale,im.naturalHeight*scale);}
-      else {const g=c.createLinearGradient(200,100,800,900);g.addColorStop(0,"#71458d");g.addColorStop(1,"#2e153e");c.fillStyle=g;c.fillRect(0,0,1024,1024);circle(c,512,395,108,"#c3a2d64a");c.beginPath();c.ellipse(512,753,230,216,0,0,Math.PI*2);c.fillStyle="#c3a2d633";c.fill();c.textAlign="center";c.fillStyle="#f4dfaa";c.font="600 27px system-ui";c.fillText("Your photo goes here",512,605);}
-      c.restore();}
+    if(!frameOnly){
+      const opening=portraitOpenings.current[frame]??getClassicOpening();
+      const layer=photoLayer.current??document.createElement("canvas");
+      if(!photoLayer.current){layer.width=layer.height=1024;photoLayer.current=layer;}
+      const p=layer.getContext("2d");
+      if(!p)return;
+      p.clearRect(0,0,1024,1024);p.save();
+      p.fillStyle="#30163f";p.fillRect(0,0,1024,1024);
+      if(photo.current){
+        const im=photo.current,swap=rotation%180!==0;
+        const w=swap?im.naturalHeight:im.naturalWidth,h=swap?im.naturalWidth:im.naturalHeight;
+        const scale=Math.max(opening.width/w,opening.height/h)*zoom;
+        p.translate(opening.x+opening.width/2+x,opening.y+opening.height/2+y);
+        p.rotate(rotation*Math.PI/180);
+        p.drawImage(im,-im.naturalWidth*scale/2,-im.naturalHeight*scale/2,im.naturalWidth*scale,im.naturalHeight*scale);
+      } else {
+        const g=p.createLinearGradient(200,100,800,900);g.addColorStop(0,"#71458d");g.addColorStop(1,"#2e153e");
+        p.fillStyle=g;p.fillRect(0,0,1024,1024);circle(p,512,395,108,"#c3a2d64a");
+        p.beginPath();p.ellipse(512,753,230,216,0,0,Math.PI*2);p.fillStyle="#c3a2d633";p.fill();
+        p.textAlign="center";p.fillStyle="#f4dfaa";p.font="600 27px system-ui";p.fillText("Your photo goes here",512,605);
+      }
+      p.restore();p.save();p.globalCompositeOperation="destination-in";p.drawImage(opening.mask,0,0);p.restore();
+      c.drawImage(layer,0,0);
+    }
     drawFrame(c,frame,frameArtwork[frame]);
     if(phrase){c.save();c.translate(512,512);c.font="bold 27px system-ui";c.fillStyle="#fff0bc";c.textAlign="center";const chars=[...phrase.toUpperCase()],radius=478;const widths=chars.map(ch=>c.measureText(ch).width+3);let a=-Math.PI/2-widths.reduce((sum,v)=>sum+v,0)/radius/2;chars.forEach((ch,i)=>{const delta=widths[i]/radius;c.save();c.rotate(a+delta/2);c.translate(radius,0);c.rotate(Math.PI/2);c.fillText(ch,0,9);c.restore();a+=delta;});c.restore();}
-    if(badge!=="none"){const by=Math.min(879,953-badgeSize/2);
+    if(badge!=="none"){
       if(societyImage?.id===badge&&societyImage.removeWhite===artworkRemoveWhite){
         const im=societyImage.image,scale=badgeSize/Math.max(im.width,im.height);
-        const w=im.width*scale,h=im.height*scale;
+        const w=im.width*scale,h=im.height*scale,by=badgeCenterY(w,h);
         c.save();c.shadowColor="#180a27";c.shadowBlur=5;
         c.drawImage(im,512-w/2,by-h/2,w,h);c.restore();
       }
@@ -138,13 +167,13 @@ export default function ProfileStudio() {
     <div className={s.layout}>
       <div className={s.preview}><div className={s.previewHead}><span>YOUR PROFILE PREVIEW</span><span>1024 × 1024 PNG</span></div>
         <div className={s.canvasWrap}><canvas ref={canvas} className={s.canvas} width={1024} height={1024} role="img" aria-label={`Profile picture preview with ${frames.find(f=>f.id===frame)?.name} frame${hasPhoto?" and your photo":""}`} onPointerDown={e=>{if(!hasPhoto)return;e.currentTarget.setPointerCapture(e.pointerId);drag.current={x:e.clientX,y:e.clientY,ox:x,oy:y};}} onPointerMove={e=>{if(!drag.current)return;const d=drag.current,scale=1024/e.currentTarget.getBoundingClientRect().width;setX(Math.max(-400,Math.min(400,d.ox+(e.clientX-d.x)*scale)));setY(Math.max(-400,Math.min(400,d.oy+(e.clientY-d.y)*scale)));}} onPointerUp={()=>{drag.current=null;}} onPointerCancel={()=>{drag.current=null;}}/></div>
-        <p className={s.hint}><Move size={13} style={{display:"inline",marginRight:6}}/>{hasPhoto?"Drag your photo to position it, or use the sliders.":"Start with your photo, or download a frame on its own."}<br/>Artwork stays inside the circular profile crop.</p>
+        <p className={s.hint}><Move size={13} style={{display:"inline",marginRight:6}}/>{hasPhoto?"Drag your photo to position it, or use the sliders.":"Start with your photo, or download a frame on its own."}<br/>Photo fits the frame’s inner opening. Zoom out for more space.</p>
         <div className={s.downloadRow}><button className={s.primary} disabled={!hasPhoto||!exportReady} onClick={()=>download()}><Download size={17}/> Download profile picture</button><button className={s.secondary} disabled={!exportReady} onClick={()=>download(true)}><Download size={16}/> Download frame only</button></div>
         <div className={s.privacy}><LockKeyhole size={13}/> Your photo stays on your device. No sign-in needed.</div><div role="status" className={s.status}>{status}</div>
       </div>
       <div className={s.controls}>
         <section className={s.section}><h2><span className={s.number}>1</span>Add your photo</h2><label className={s.upload}><Upload size={26}/><strong>{hasPhoto?"Choose a different photo":"Choose your profile photo"}</strong><small>JPG, PNG or WebP · Up to 20 MB</small><input ref={fileInput} className={s.file} type="file" accept="image/jpeg,image/png,image/webp" aria-label="Choose your profile photo" onChange={e=>{void upload(e.target.files?.[0]);e.target.value="";}}/></label>{error&&<p role="alert" className={s.error}>{error}</p>}
-          <div className={s.sliders}>{[{label:"Zoom",value:zoom,set:setZoom,min:1,max:3,step:.01,display:`${zoom.toFixed(2)}×`},{label:"Move left / right",value:x,set:setX,min:-400,max:400,step:1,display:""},{label:"Move up / down",value:y,set:setY,min:-400,max:400,step:1,display:""}].map(v=><label key={v.label}><div className={s.rangeLabel}>{v.label}<span>{v.display}</span></div><input className={s.range} type="range" min={v.min} max={v.max} step={v.step} value={v.value} aria-label={v.label} disabled={!hasPhoto} onChange={e=>v.set(Number(e.target.value))}/></label>)}</div>
+          <div className={s.sliders}>{[{label:"Zoom",value:zoom,set:setZoom,min:.5,max:3,step:.01,display:`${zoom.toFixed(2)}×`},{label:"Move left / right",value:x,set:setX,min:-400,max:400,step:1,display:""},{label:"Move up / down",value:y,set:setY,min:-400,max:400,step:1,display:""}].map(v=><label key={v.label}><div className={s.rangeLabel}>{v.label}<span>{v.display}</span></div><input className={s.range} type="range" min={v.min} max={v.max} step={v.step} value={v.value} aria-label={v.label} disabled={!hasPhoto} onChange={e=>v.set(Number(e.target.value))}/></label>)}</div>
           <div className={s.cropActions}><button className={s.secondary} disabled={!hasPhoto} onClick={()=>{setRotation(r=>(r+90)%360);setX(0);setY(0);}}><RotateCw size={14}/> Rotate 90°</button><button className={s.secondary} disabled={!hasPhoto} onClick={reset}>Reset crop</button><button className={s.secondary} disabled={!hasPhoto} onClick={()=>{++loadId.current;photo.current=null;setHasPhoto(false);reset();setStatus("");}}>Remove photo</button></div>
         </section>
         <section className={s.section}><h2><span className={s.number}>2</span>Find your frame</h2><p className={s.collectionIntro}>Made for Mobile. Choose your Carnival style.</p><div className={s.frameGrid}>{frames.map(f=><button key={f.id} className={`${s.choice} ${s.frameChoice}`} aria-label={f.name} aria-pressed={frame===f.id} onClick={()=>setFrame(f.id)}><FrameThumbnail frame={f.id} artwork={frameArtwork[f.id]}/><span>{f.name}</span><small>{f.description}</small>{frame===f.id&&<Check size={12} style={{position:"absolute",right:8,top:8,width:12,height:12}}/>}</button>)}</div>{!frameReady&&<p className={s.small} role="status">Loading your frame…</p>}</section>
@@ -169,7 +198,7 @@ export default function ProfileStudio() {
             </div>
             {visibleSocieties.length===0&&<p className={s.small}>No societies match. Try a shorter name or clear the search.</p>}
           </div>
-          {badge!=="none"&&<label style={{display:"block",marginTop:18}}><div className={s.rangeLabel}>Badge size<span>{badgeSize===168?"Original":"Custom"}</span></div><input className={s.range} aria-label="Badge size" type="range" min="110" max="300" value={badgeSize} onChange={e=>setBadgeSize(Number(e.target.value))}/></label>}
+          {badge!=="none"&&<label style={{display:"block",marginTop:18}}><div className={s.rangeLabel}>Badge size<span>{badgeSize===128?"Original":"Custom"}</span></div><input className={s.range} aria-label="Badge size" type="range" min="80" max="300" value={badgeSize} onChange={e=>setBadgeSize(Number(e.target.value))}/></label>}
           <label className={s.label} style={{display:"block",marginTop:20}}>Say it your way<select className={s.select} value={phrase} onChange={e=>setPhrase(e.target.value)}><option value="">No wording</option>{["Ready for Mardi Gras","Meet Me on the Route","Mobile Mardi Gras 2027"].map(p=><option key={p}>{p}</option>)}</select></label><p className={s.small}>Your download has transparent corners. Frame-only downloads also have a transparent center.</p>
         </section>
       </div>
