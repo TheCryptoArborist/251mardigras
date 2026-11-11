@@ -3,7 +3,8 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Download, Upload, RotateCw, Move, LockKeyhole, Sparkles, Check } from "lucide-react";
 import { loadSocietyArtwork } from "./society-artwork";
-import { badgeCenterY, getClassicOpening, makePortraitOpening, type PortraitOpening } from "./portrait-layout";
+import { drawBottomBadge } from "./badge-layout";
+import { getClassicOpening, makePortraitOpening, type PortraitOpening } from "./portrait-layout";
 import societies from "./societies.json";
 import s from "./studio.module.css";
 
@@ -75,9 +76,10 @@ function SocietyThumbnail({ src, removeWhite, round = false }: { src: string; re
 export default function ProfileStudio() {
   const canvas=useRef<HTMLCanvasElement>(null),photo=useRef<HTMLImageElement|null>(null),fileInput=useRef<HTMLInputElement>(null);
   const [frame,setFrame]=useState<Frame>("classic"),[badge,setBadge]=useState<Badge>("none"),[phrase,setPhrase]=useState("");
-  const [hasPhoto,setHasPhoto]=useState(false),[zoom,setZoom]=useState(1),[x,setX]=useState(0),[y,setY]=useState(0),[rotation,setRotation]=useState(0),[badgeSize,setBadgeSize]=useState(128);
+  const [hasPhoto,setHasPhoto]=useState(false),[zoom,setZoom]=useState(1),[x,setX]=useState(0),[y,setY]=useState(0),[rotation,setRotation]=useState(0),[badgeSize,setBadgeSize]=useState(176);
   const [error,setError]=useState(""),[status,setStatus]=useState(""),[revision,setRevision]=useState(0);
   const [societySearch,setSocietySearch]=useState("");
+  const [badgeBacking,setBadgeBacking]=useState(true);
   const [removeSocietyWhite,setRemoveSocietyWhite]=useState(true);
   const [societyImage,setSocietyImage]=useState<{id:string;removeWhite:boolean;image:HTMLCanvasElement}|null>(null);
   const portraitOpenings=useRef<Partial<Record<Frame,PortraitOpening>>>({});
@@ -148,14 +150,11 @@ export default function ProfileStudio() {
     if(phrase){c.save();c.translate(512,512);c.font="bold 27px system-ui";c.fillStyle="#fff0bc";c.textAlign="center";const chars=[...phrase.toUpperCase()],radius=478;const widths=chars.map(ch=>c.measureText(ch).width+3);let a=-Math.PI/2-widths.reduce((sum,v)=>sum+v,0)/radius/2;chars.forEach((ch,i)=>{const delta=widths[i]/radius;c.save();c.rotate(a+delta/2);c.translate(radius,0);c.rotate(Math.PI/2);c.fillText(ch,0,9);c.restore();a+=delta;});c.restore();}
     if(badge!=="none"){
       if(societyImage?.id===badge&&societyImage.removeWhite===artworkRemoveWhite){
-        const im=societyImage.image,scale=badgeSize/Math.max(im.width,im.height);
-        const w=im.width*scale,h=im.height*scale,by=badgeCenterY(w,h);
-        c.save();c.shadowColor="#180a27";c.shadowBlur=5;
-        c.drawImage(im,512-w/2,by-h/2,w,h);c.restore();
+        drawBottomBadge(c,societyImage.image,badgeSize,badgeBacking);
       }
 
     }
-  },[frame,badge,phrase,zoom,x,y,rotation,badgeSize,societyImage,artworkRemoveWhite,frameArtwork]);
+  },[frame,badge,phrase,zoom,x,y,rotation,badgeSize,badgeBacking,societyImage,artworkRemoveWhite,frameArtwork]);
   useEffect(()=>{const c=canvas.current?.getContext("2d");if(c)render(c);},[render,revision,hasPhoto]);
   async function upload(file?:File){if(!file)return;setError("");setStatus("");if(!["image/jpeg","image/png","image/webp"].includes(file.type)){setError("Choose a JPG, PNG, or WebP photo. On an iPhone, export HEIC photos as JPG first.");return;}if(file.size>20*1024*1024){setError("Please choose a photo smaller than 20 MB.");return;}
     const current=++loadId.current,url=URL.createObjectURL(file),im=new Image();im.onload=()=>{URL.revokeObjectURL(url);if(current!==loadId.current)return;photo.current=im;reset();setHasPhoto(true);setRevision(v=>v+1);setStatus("Photo ready. Drag the preview to position it.");};im.onerror=()=>{URL.revokeObjectURL(url);if(current===loadId.current)setError("This photo could not be opened. Try another JPG, PNG, or WebP.");};im.src=url;
@@ -198,7 +197,8 @@ export default function ProfileStudio() {
             </div>
             {visibleSocieties.length===0&&<p className={s.small}>No societies match. Try a shorter name or clear the search.</p>}
           </div>
-          {badge!=="none"&&<label style={{display:"block",marginTop:18}}><div className={s.rangeLabel}>Badge size<span>{badgeSize===128?"Original":"Custom"}</span></div><input className={s.range} aria-label="Badge size" type="range" min="80" max="300" value={badgeSize} onChange={e=>setBadgeSize(Number(e.target.value))}/></label>}
+          {badge!=="none"&&<label className={s.label} style={{display:"block",marginTop:18}}>Badge style<select className={s.select} aria-label="Badge style" value={badgeBacking?"medallion":"plain"} onChange={e=>setBadgeBacking(e.target.value==="medallion")}><option value="medallion">Purple &amp; gold</option><option value="plain">Logo only</option></select><span className={s.small}>Backing adapts to your logo’s shape and keeps it clear of your photo.</span></label>}
+          {badge!=="none"&&<label style={{display:"block",marginTop:18}}><div className={s.rangeLabel}>Badge size<span>{badgeSize===176?"Default":"Custom"}</span></div><input className={s.range} aria-label="Badge size" type="range" min="80" max="300" value={badgeSize} onChange={e=>setBadgeSize(Number(e.target.value))}/></label>}
           <label className={s.label} style={{display:"block",marginTop:20}}>Say it your way<select className={s.select} value={phrase} onChange={e=>setPhrase(e.target.value)}><option value="">No wording</option>{["Ready for Mardi Gras","Meet Me on the Route","Mobile Mardi Gras 2027"].map(p=><option key={p}>{p}</option>)}</select></label><p className={s.small}>Your download has transparent corners. Frame-only downloads also have a transparent center.</p>
         </section>
       </div>
