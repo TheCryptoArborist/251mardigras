@@ -27,11 +27,9 @@ export function drawBottomBadge(c: CanvasRenderingContext2D, image: HTMLCanvasEl
     c.beginPath(); c.ellipse(512, b.y, rx, ry, 0, 0, Math.PI * 2);
     c.fillStyle = fill; c.fill();
     c.shadowBlur = 0; c.shadowOffsetY = 0;
-    const gold = c.createLinearGradient(0, b.y - ry, 0, b.y + ry);
-    gold.addColorStop(0, "#fff0ae"); gold.addColorStop(.5, "#deb443"); gold.addColorStop(1, "#a97820");
-    c.strokeStyle = background === "gold" ? "#4b2169" : gold; c.lineWidth = 5; c.stroke();
-    c.beginPath(); c.ellipse(512, b.y, rx - 7, ry - 7, 0, 0, Math.PI * 2);
-    c.strokeStyle = background === "gold" ? "#6b3a7766" : "#e8c66b66"; c.lineWidth = 1; c.stroke();
+    // Use a bold, solid opposite-color rim so it reads at avatar size.
+    c.strokeStyle = background === "gold" ? "#4b2169" : "#e8c364";
+    c.lineWidth = 10; c.stroke();
   }
   // A subtle edge separates artwork from either backing color.
   if (backed) { c.shadowColor = background === "gold" ? "#4b2169" : "#fff0bc"; c.shadowBlur = 2; }
