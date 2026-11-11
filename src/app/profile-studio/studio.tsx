@@ -85,6 +85,7 @@ export default function ProfileStudio() {
   const [shareFiles,setShareFiles]=useState<{renderer:unknown;revision:number;profile:File|null;frame:File}|null>(null);
   const [nativeImageShare,setNativeImageShare]=useState(false);
   const [societySearch,setSocietySearch]=useState("");
+  const [badgeX,setBadgeX]=useState(0),[badgeY,setBadgeY]=useState(0);
   const [badgeBacking,setBadgeBacking]=useState<BadgeBackground>("purple");
   const [removeSocietyWhite,setRemoveSocietyWhite]=useState(true);
   const [societyImage,setSocietyImage]=useState<{id:string;removeWhite:boolean;image:HTMLCanvasElement}|null>(null);
@@ -156,11 +157,11 @@ export default function ProfileStudio() {
     drawFrame(c,frame,frameArtwork[frame]);
     if(badge!=="none"){
       if(societyImage?.id===badge&&societyImage.removeWhite===artworkRemoveWhite){
-        drawBottomBadge(c,societyImage.image,badgeSize,badgeBacking,portraitOpenings.current[frame]?.frameRadius);
+        drawBottomBadge(c,societyImage.image,badgeSize,badgeBacking,portraitOpenings.current[frame]?.frameRadius,badgeX,badgeY);
       }
 
     }
-  },[frame,badge,phrase,zoom,x,y,rotation,badgeSize,badgeBacking,societyImage,artworkRemoveWhite,frameArtwork]);
+  },[frame,badge,phrase,zoom,x,y,rotation,badgeSize,badgeBacking,badgeX,badgeY,societyImage,artworkRemoveWhite,frameArtwork]);
   useEffect(()=>{const c=canvas.current?.getContext("2d");if(c)render(c);},[render,revision,hasPhoto]);
   // Prepare files before the tap: iOS requires share() during the user gesture.
   useEffect(()=>{
@@ -234,6 +235,11 @@ const out=document.createElement("canvas");out.width=out.height=1024;const c=out
           </div>
           {badge!=="none"&&<label className={s.label} style={{display:"block",marginTop:18}}>Badge background<select className={s.select} aria-label="Badge background" value={badgeBacking} onChange={e=>setBadgeBacking(e.target.value as BadgeBackground)}><option value="purple">Purple</option><option value="gold">Gold</option><option value="none">Logo only</option></select><span className={s.small}>Backing adapts to your logo’s shape and keeps it clear of your photo.</span></label>}
           {badge!=="none"&&<label style={{display:"block",marginTop:18}}><div className={s.rangeLabel}>Badge size<span>{badgeSize===176?"Default":"Custom"}</span></div><input className={s.range} aria-label="Badge size" type="range" min="80" max="300" value={badgeSize} onChange={e=>setBadgeSize(Number(e.target.value))}/></label>}
+          {badge!=="none"&&<div className={s.sliders}>
+            {[{label:"Badge left / right",value:badgeX,set:setBadgeX},{label:"Badge up / down",value:badgeY,set:setBadgeY}].map(control=><label key={control.label}><div className={s.rangeLabel}>{control.label}</div><input className={s.range} type="range" min="-300" max="300" step="1" value={control.value} aria-label={control.label} onChange={e=>control.set(Number(e.target.value))}/></label>)}
+            <button type="button" className={s.secondary} onClick={()=>{setBadgeX(0);setBadgeY(0);}}>Reset badge position</button>
+            <p className={s.small} style={{marginTop:0}}>Position stays inside the frame’s circular boundary. Movement stops at the edge.</p>
+          </div>}
           <label className={s.label} style={{display:"block",marginTop:20}}>Say it your way<select className={s.select} value={phrase} onChange={e=>setPhrase(e.target.value)}><option value="">No wording</option>{["Ready for Mardi Gras","Meet Me on the Route","Mobile Mardi Gras 2027"].map(p=><option key={p}>{p}</option>)}</select></label><p className={s.small}>Your download has transparent corners. Frame-only downloads also have a transparent center.</p>
         </section>
       </div>
