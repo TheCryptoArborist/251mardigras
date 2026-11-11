@@ -29,6 +29,8 @@ export function drawBottomBadge(c: CanvasRenderingContext2D, image: HTMLCanvasEl
     c.beginPath(); c.ellipse(512, b.y, rx - 7, ry - 7, 0, 0, Math.PI * 2);
     c.strokeStyle = "#e8c66b66"; c.lineWidth = 1; c.stroke();
   }
+  // A soft light edge keeps dark society lettering visible on purple.
+  if (backed) { c.shadowColor = "#fff0bc"; c.shadowBlur = 2; }
   c.drawImage(image, 512 - b.width / 2, b.y - b.height / 2, b.width, b.height);
   c.restore();
 }
