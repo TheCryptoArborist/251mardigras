@@ -445,13 +445,14 @@
     "startDateTime": "2026-11-21T18:00:00-06:00",
     "endDateTime": "2026-11-21T23:59:00-06:00",
     "dateLabel": "Sat, Nov 21, 2026 • Starts at 6:00 PM CT",
-    "venueName": "Mobile Mystics Barn",
-    "venueAddress": "",
-    "cityStateZip": "Mobile, AL",
-    "description": "Join the Mobile Mystics for Touchdown Bingo at the Mobile Mystics Barn on Saturday, November 21, 2026, starting at 6:00 PM. See the organizer for participation and admission details.",
+    "venueName": "Mobile Mystics Float Barn",
+    "venueAddress": "659 St. Anthony Street",
+    "cityStateZip": "Mobile, AL 36603",
+    "description": "Join the Mobile Mystics for Touchdown Bingo at the Mobile Mystics Float Barn on Saturday, November 21, 2026, starting at 6:00 PM. See the organizer for participation and admission details.",
     "eventArtworkUrl": "/images/event-logos/mobile-mystics-touchdown-bingo-2026.jpg",
     "organizationLogoUrl": "/images/event-logos/mobile-mystics-touchdown-bingo-2026.jpg",
-    "endTimeUnconfirmed": true
+    "endTimeUnconfirmed": true,
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=659%20St%20Anthony%20St%20Mobile%20AL%2036603"
   },
   {
     "id": "mobile-mystics-pub-crawl-vip-giveaway-2027",
@@ -463,12 +464,13 @@
     "startDateTime": "2027-01-09T12:00:00-06:00",
     "endDateTime": "2027-01-09T23:59:00-06:00",
     "dateLabel": "Sat, Jan 9, 2027 • Starts at 12:00 PM CT",
-    "venueName": "Mobile Mystics Barn",
-    "venueAddress": "",
-    "cityStateZip": "Mobile, AL",
-    "description": "Join the Mobile Mystics for their Pub Crawl & VIP Giveaway on Saturday, January 9, 2027, beginning at noon at the Mobile Mystics Barn. Contact the Mobile Mystics for pub crawl participation and giveaway details.",
+    "venueName": "Mobile Mystics Float Barn",
+    "venueAddress": "659 St. Anthony Street",
+    "cityStateZip": "Mobile, AL 36603",
+    "description": "Join the Mobile Mystics for their Pub Crawl & VIP Giveaway on Saturday, January 9, 2027, beginning at noon at the Mobile Mystics Float Barn. Contact the Mobile Mystics for pub crawl participation and giveaway details.",
     "eventArtworkUrl": "/images/event-logos/mobile-mystics-pub-crawl-2027.jpg",
     "organizationLogoUrl": "/images/event-logos/mobile-mystics-pub-crawl-2027.jpg",
-    "endTimeUnconfirmed": true
+    "endTimeUnconfirmed": true,
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=659%20St%20Anthony%20St%20Mobile%20AL%2036603"
   }
 ]
