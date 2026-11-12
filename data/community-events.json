@@ -298,7 +298,7 @@
     "id": "mobile-mystics-mardi-gras-ball-2027",
     "slug": "mobile-mystics-mardi-gras-ball-2027",
     "status": "approved",
-    "title": "Mobile Mystics Mardi Gras Ball",
+    "title": "Mobile Mystics 34th Annual Ball",
     "organization": "Mobile Mystics",
     "eventType": "Ball",
     "startDateTime": "2027-01-30T18:00:00-06:00",
@@ -306,15 +306,19 @@
     "venueName": "Mobile Convention Center",
     "venueAddress": "1 S Water St.",
     "cityStateZip": "Mobile, AL",
-    "description": "Join the Mobile Mystics for the Mobile Mystics Mardi Gras Ball at the Mobile Convention Center on January 30, 2027. Doors open at 6:00 PM, with callouts beginning at 7:00 PM. Tickets are $140 per couple. Entertainment will be announced soon. Physical tickets/armbands must be purchased in person from Mobile Mystics members only. Do not purchase from unverified online sellers or scam accounts.",
+    "description": "Join the Mobile Mystics for the Mobile Mystics 34th Annual Ball at the Mobile Convention Center on January 30, 2027. Doors open at 6:00 PM, with callouts beginning at 7:00 PM. Tickets are $140 per couple. Entertainment will be announced soon. Physical tickets/armbands must be purchased in person from Mobile Mystics members only. Do not purchase from unverified online sellers or scam accounts.",
     "ticketUrl": "https://facebook.com/events/s/the-mobile-mystics-annual-mard/1559136422561718/",
     "ticketLabel": "Facebook Event Info",
     "cost": "$140 per couple",
     "audience": "Adults only, 21+",
     "publicContact": "mmnewsletter@gmail.com",
     "flyerUrl": "/images/event-flyers/mobile-mystics-mardi-gras-ball-2027.jpg",
-    "flyerDimensions": { "width": 1696, "height": 624 },
-    "organizationLogoUrl": "/images/event-logos/mobile-mystics-logo.jpg"
+    "flyerDimensions": {
+      "width": 1696,
+      "height": 624
+    },
+    "organizationLogoUrl": "/images/event-logos/mobile-mystics-annual-ball-2027.png",
+    "eventArtworkUrl": "/images/event-logos/mobile-mystics-annual-ball-2027.png"
   },
   {
     "id": "a-night-of-royalty-2027",
@@ -408,7 +412,10 @@
   {
     "id": "king-cake-off-2027",
     "flyerUrl": "/images/event-flyers/king-cake-off-2027.jpg",
-    "flyerDimensions": {"width": 1363, "height": 1363},
+    "flyerDimensions": {
+      "width": 1363,
+      "height": 1363
+    },
     "slug": "king-cake-off-2027",
     "status": "approved",
     "title": "9th Annual King Cake-Off",
@@ -427,5 +434,40 @@
     "audience": "Family-Friendly",
     "publicContact": "carleigh@centralgulfbbbs.org",
     "organizationLogoUrl": "/images/event-flyers/king-cake-off-2027.jpg"
+  },
+  {
+    "id": "mobile-mystics-touchdown-bingo-2026",
+    "slug": "mobile-mystics-touchdown-bingo-2026",
+    "status": "approved",
+    "title": "Mobile Mystics Touchdown Bingo",
+    "organization": "Mobile Mystics",
+    "eventType": "Bingo",
+    "startDateTime": "2026-11-21T18:00:00-06:00",
+    "endDateTime": "2026-11-21T23:59:00-06:00",
+    "dateLabel": "Sat, Nov 21, 2026 • Starts at 6:00 PM CT",
+    "venueName": "Mobile Mystics Barn",
+    "venueAddress": "",
+    "cityStateZip": "Mobile, AL",
+    "description": "Join the Mobile Mystics for Touchdown Bingo at the Mobile Mystics Barn on Saturday, November 21, beginning at 6:00 PM. Football-themed bingo and Mobile Mystics artwork featured on the organizer's event announcement. Ticket prices and an end time were not provided on the flyer.",
+    "eventArtworkUrl": "/images/event-logos/mobile-mystics-touchdown-bingo-2026.png",
+    "organizationLogoUrl": "/images/event-logos/mobile-mystics-touchdown-bingo-2026.png"
+  },
+  {
+    "id": "mobile-mystics-pub-crawl-vip-giveaway-2027",
+    "slug": "mobile-mystics-pub-crawl-vip-giveaway-2027",
+    "status": "approved",
+    "title": "Mobile Mystics Pub Crawl & VIP Giveaway",
+    "organization": "Mobile Mystics",
+    "eventType": "Pub Crawl",
+    "startDateTime": "2027-01-09T12:00:00-06:00",
+    "endDateTime": "2027-01-09T23:59:00-06:00",
+    "dateLabel": "Sat, Jan 9, 2027 • Starts at 12:00 PM CT",
+    "venueName": "Mobile Mystics Barn",
+    "venueAddress": "",
+    "cityStateZip": "Mobile, AL",
+    "description": "The Mobile Mystics Pub Crawl & VIP Giveaway begins at noon on Saturday, January 9, at the Mobile Mystics Barn. The group's VIP Weekend Drawing is scheduled to take place at the annual pub crawl. Contact the Mobile Mystics for participation and giveaway details. Ticket prices and an end time were not provided on the flyer.",
+    "audience": "Adults, 21+ for VIP drawing",
+    "eventArtworkUrl": "/images/event-logos/mobile-mystics-pub-crawl-2027.png",
+    "organizationLogoUrl": "/images/event-logos/mobile-mystics-pub-crawl-2027.png"
   }
 ]
