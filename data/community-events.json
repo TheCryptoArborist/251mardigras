@@ -317,8 +317,8 @@
       "width": 1696,
       "height": 624
     },
-    "organizationLogoUrl": "/images/event-logos/mobile-mystics-annual-ball-2027.png",
-    "eventArtworkUrl": "/images/event-logos/mobile-mystics-annual-ball-2027.png"
+    "organizationLogoUrl": "/images/event-logos/mobile-mystics-annual-ball-2027.jpg",
+    "eventArtworkUrl": "/images/event-logos/mobile-mystics-annual-ball-2027.jpg"
   },
   {
     "id": "a-night-of-royalty-2027",
@@ -448,9 +448,10 @@
     "venueName": "Mobile Mystics Barn",
     "venueAddress": "",
     "cityStateZip": "Mobile, AL",
-    "description": "Join the Mobile Mystics for Touchdown Bingo at the Mobile Mystics Barn on Saturday, November 21, beginning at 6:00 PM. Football-themed bingo and Mobile Mystics artwork featured on the organizer's event announcement. Ticket prices and an end time were not provided on the flyer.",
-    "eventArtworkUrl": "/images/event-logos/mobile-mystics-touchdown-bingo-2026.png",
-    "organizationLogoUrl": "/images/event-logos/mobile-mystics-touchdown-bingo-2026.png"
+    "description": "Join the Mobile Mystics for Touchdown Bingo at the Mobile Mystics Barn on Saturday, November 21, 2026, starting at 6:00 PM. See the organizer for participation and admission details.",
+    "eventArtworkUrl": "/images/event-logos/mobile-mystics-touchdown-bingo-2026.jpg",
+    "organizationLogoUrl": "/images/event-logos/mobile-mystics-touchdown-bingo-2026.jpg",
+    "endTimeUnconfirmed": true
   },
   {
     "id": "mobile-mystics-pub-crawl-vip-giveaway-2027",
@@ -465,9 +466,9 @@
     "venueName": "Mobile Mystics Barn",
     "venueAddress": "",
     "cityStateZip": "Mobile, AL",
-    "description": "The Mobile Mystics Pub Crawl & VIP Giveaway begins at noon on Saturday, January 9, at the Mobile Mystics Barn. The group's VIP Weekend Drawing is scheduled to take place at the annual pub crawl. Contact the Mobile Mystics for participation and giveaway details. Ticket prices and an end time were not provided on the flyer.",
-    "audience": "Adults, 21+ for VIP drawing",
-    "eventArtworkUrl": "/images/event-logos/mobile-mystics-pub-crawl-2027.png",
-    "organizationLogoUrl": "/images/event-logos/mobile-mystics-pub-crawl-2027.png"
+    "description": "Join the Mobile Mystics for their Pub Crawl & VIP Giveaway on Saturday, January 9, 2027, beginning at noon at the Mobile Mystics Barn. Contact the Mobile Mystics for pub crawl participation and giveaway details.",
+    "eventArtworkUrl": "/images/event-logos/mobile-mystics-pub-crawl-2027.jpg",
+    "organizationLogoUrl": "/images/event-logos/mobile-mystics-pub-crawl-2027.jpg",
+    "endTimeUnconfirmed": true
   }
 ]
