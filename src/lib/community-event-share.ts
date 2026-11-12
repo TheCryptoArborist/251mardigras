@@ -42,7 +42,7 @@ export function buildCommunityEventCaption(event: CommunityEvent, platform: Shar
   const date = formatCommunityEventDate(event);
   const location = fullEventLocation(event);
   const url = buildCommunityEventShareUrl(event, platform);
-  const detailsLabel = event.flyerUrl ? "details and flyer" : "event details";
+  const detailsLabel = event.flyerUrl ? "details and flyer" : event.eventArtworkUrl ? "details and artwork" : "event details";
 
   if (platform === "x") return buildXCaption(event, date, url, ended);
 
