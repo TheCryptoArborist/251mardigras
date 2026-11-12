@@ -30,6 +30,10 @@ export type CommunityEvent = {
   accessibilityNotes?: string;
   parkingNotes?: string;
   flyerUrl?: string;
+  /** Organizer-provided event-specific artwork, distinct from a general society logo or full flyer. */
+  eventArtworkUrl?: string;
+  /** Use a date-only ending for visibility when the organizer has not specified an end time. */
+  endTimeUnconfirmed?: boolean;
   flyerDimensions?: { width: number; height: number };
   organizationLogoUrl?: string;
 };
@@ -78,7 +82,7 @@ export function buildGoogleCalendarUrl(event: CommunityEvent) {
   const url = new URL("https://calendar.google.com/calendar/render");
   url.searchParams.set("action", "TEMPLATE");
   url.searchParams.set("text", event.title);
-  url.searchParams.set("dates", `${formatGoogleDate(event.startDateTime)}/${formatGoogleDate(event.endDateTime)}`);
+  url.searchParams.set("dates", `${formatGoogleDate(event.startDateTime)}/${formatGoogleDate(event.endTimeUnconfirmed ? event.startDateTime : event.endDateTime)}`);
   url.searchParams.set("details", buildCalendarDescription(event));
   url.searchParams.set("location", fullEventLocation(event));
 
@@ -99,7 +103,7 @@ export function buildCommunityEventIcs(event: CommunityEvent) {
     `UID:${uid}`,
     `DTSTAMP:${now}`,
     `DTSTART:${formatIcsDate(event.startDateTime)}`,
-    `DTEND:${formatIcsDate(event.endDateTime)}`,
+    event.endTimeUnconfirmed ? null : `DTEND:${formatIcsDate(event.endDateTime)}`,
     `SUMMARY:${escapeIcsText(event.title)}`,
     `DESCRIPTION:${escapeIcsText(buildCalendarDescription(event))}`,
     `LOCATION:${escapeIcsText(fullEventLocation(event))}`,
@@ -119,7 +123,7 @@ export function buildCommunityCalendarIcs(events = getApprovedCommunityEvents())
       `UID:${event.id}@mg251.xyz`,
       `DTSTAMP:${now}`,
       `DTSTART:${formatIcsDate(event.startDateTime)}`,
-      `DTEND:${formatIcsDate(event.endDateTime)}`,
+      event.endTimeUnconfirmed ? null : `DTEND:${formatIcsDate(event.endDateTime)}`,
       `SUMMARY:${escapeIcsText(event.title)}`,
       `DESCRIPTION:${escapeIcsText(buildCalendarDescription(event))}`,
       `LOCATION:${escapeIcsText(fullEventLocation(event))}`,
@@ -145,6 +149,7 @@ export function buildCommunityCalendarIcs(events = getApprovedCommunityEvents())
 function buildCalendarDescription(event: CommunityEvent) {
   return [
     event.description,
+    event.endTimeUnconfirmed ? "Organizer has not published an event end time." : null,
     event.cost ? `Cost: ${event.cost}` : null,
     event.audience ? `Audience: ${event.audience}` : null,
     event.publicContact ? `Public contact: ${event.publicContact}` : null,
