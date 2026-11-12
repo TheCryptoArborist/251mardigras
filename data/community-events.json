@@ -448,11 +448,12 @@
     "venueName": "Mobile Mystics Float Barn",
     "venueAddress": "659 St. Anthony Street",
     "cityStateZip": "Mobile, AL 36603",
-    "description": "Join the Mobile Mystics for Touchdown Bingo at the Mobile Mystics Float Barn on Saturday, November 21, 2026, starting at 6:00 PM. See the organizer for participation and admission details.",
+    "description": "Join the Mobile Mystics for Touchdown Bingo at the Mobile Mystics Float Barn on Saturday, November 21, 2026, starting at 6:00 PM. Admission is $30 per person and includes 10 bingo cards.",
     "eventArtworkUrl": "/images/event-logos/mobile-mystics-touchdown-bingo-2026.jpg",
     "organizationLogoUrl": "/images/event-logos/mobile-mystics-touchdown-bingo-2026.jpg",
     "endTimeUnconfirmed": true,
-    "mapUrl": "https://www.google.com/maps/search/?api=1&query=659%20St%20Anthony%20St%20Mobile%20AL%2036603"
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=659%20St%20Anthony%20St%20Mobile%20AL%2036603",
+    "cost": "$30 per person admission • Includes 10 bingo cards"
   },
   {
     "id": "mobile-mystics-pub-crawl-vip-giveaway-2027",
