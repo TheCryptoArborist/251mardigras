@@ -1,0 +1,32 @@
+name: Import Mobile Mystics community-event logo artwork
+on:
+  push:
+    paths:
+      - '.github/workflows/import-mobile-mystics-logos.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  import-event-logos:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download three distinct logos
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p public/images/event-logos
+          curl --fail --location --retry 3 'https://media.canva.com/v2/image-resize/format:PNG/height:200/quality:100/uri:ifs%3A%2F%2FM%2F0b6ed16c-5294-4541-ba94-869e0236cc17/watermark:F/width:196?csig=AAAAAAAAAAAAAAAAAAAAAMbpv7ttHKKM9hcJmdGITOd5amNFU75rPikXP9yW9-MH&exp=1794459750&osig=AAAAAAAAAAAAAAAAAAAAABGtz3JmH1ZSQjVGZ3BJbePNbQxs7mih1XiFySZ-gehh&signer=media-rpc&token=AAIAAU0AJDBiNmVkMTZjLTUyOTQtNDU0MS1iYTk0LTg2OWUwMjM2Y2MxNwAAAAABoc4iznC4kpOG3alcOhD7FVtPQPw4hvJwqiTtwildV_aoZxMEuA&x-canva-quality=thumbnail' --output 'public/images/event-logos/mobile-mystics-touchdown-bingo-2026.png'
+          curl --fail --location --retry 3 'https://media.canva.com/v2/image-resize/format:PNG/height:200/quality:100/uri:ifs%3A%2F%2FM%2F16265f43-a9a1-40ab-8394-a2f5879a9be1/watermark:F/width:196?csig=AAAAAAAAAAAAAAAAAAAAALnzLH3sReHL_O2xqQ3djAB65K-bbiA4gf71NQfgpwBA&exp=1794459820&osig=AAAAAAAAAAAAAAAAAAAAAB7qsS7HY5SEgU0whfYy4r1GuzN7OIGMZFeupJtYyYa8&signer=media-rpc&token=AAIAAU0AJDE2MjY1ZjQzLWE5YTEtNDBhYi04Mzk0LWEyZjU4NzlhOWJlMQAAAAABoc4j3-DJTzl6TPDN0TjZvRKjiITfAqj59cvkDE39fXqXsayG0A&x-canva-quality=thumbnail' --output 'public/images/event-logos/mobile-mystics-pub-crawl-2027.png'
+          curl --fail --location --retry 3 'https://media.canva.com/v2/image-resize/format:PNG/height:200/quality:100/uri:ifs%3A%2F%2FM%2Fc6d86c7a-4b2c-4ca6-bd0c-6214d3c710d4/watermark:F/width:196?csig=AAAAAAAAAAAAAAAAAAAAAHXCMYLQUjP2MZCLmgrsAqn3Kcd1gFsBRnpcN4LdrYzy&exp=1794460048&osig=AAAAAAAAAAAAAAAAAAAAAIjTXSBbtqCqRrxszSG-Fv_wZ7_YYolkWC9Qx33_xfvK&signer=media-rpc&token=AAIAAU0AJGM2ZDg2YzdhLTRiMmMtNGNhNi1iZDBjLTYyMTRkM2M3MTBkNAAAAAABoc4nWoD_WV7B8nhO88nHkEcqPumyGU7NzZlj64woc1KC0PLeDw&x-canva-quality=thumbnail' --output 'public/images/event-logos/mobile-mystics-annual-ball-2027.png'
+          file public/images/event-logos/mobile-mystics-*
+      - name: Commit imported assets and remove one-time import workflow
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add public/images/event-logos/mobile-mystics-*
+          git rm .github/workflows/import-mobile-mystics-logos.yml
+          git commit -m 'Add individual Mobile Mystics event logo assets'
+          git push
