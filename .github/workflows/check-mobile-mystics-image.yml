@@ -1,0 +1,17 @@
+name: Test full-resolution Mobile Mystics image download
+on:
+  push:
+    paths: [.github/workflows/check-mobile-mystics-image.yml]
+  workflow_dispatch:
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Test signed and resized Canva image URLs
+        shell: bash
+        run: |
+          set -uo pipefail
+          curl --location --max-time 25 --silent --show-error --output /tmp/signed.jpg --write-out 'original HTTP %{http_code} size %{size_download}\n' 'https://media.canva.com/v2/image-resize/format:JPG/height:199/quality:75/uri:ifs%3A%2F%2FM%2Fd26e0728-3b36-48ac-8ad9-70eb0c1707a8/watermark:F/width:188?csig=AAAAAAAAAAAAAAAAAAAAAMvdIRxX2D2v3lXGFjdVlLT0Moi6eb4KXHM4zZyG2p4Y&exp=1794460478&osig=AAAAAAAAAAAAAAAAAAAAADwIMa81B0RWJ8QAbBKFkJUs8xlPc7yegmzm33XVNNye&signer=media-rpc&token=AAIAAU0AJGQyNmUwNzI4LTNiMzYtNDhhYy04YWQ5LTcwZWIwYzE3MDdhOAAAAAABoc4t6jCogOSK9Fhpn0LA4Ri5fDB0pSrq4j-rTxH_-hV4pIXPwA&x-canva-quality=thumbnail'
+          file /tmp/signed.jpg
+          curl --location --max-time 25 --silent --show-error --output /tmp/resized.jpg --write-out 'resized HTTP %{http_code} size %{size_download}\n' 'https://media.canva.com/v2/image-resize/format:JPG/height:578/quality:100/uri:ifs%3A%2F%2FM%2Fd26e0728-3b36-48ac-8ad9-70eb0c1707a8/watermark:F/width:545?csig=AAAAAAAAAAAAAAAAAAAAAMvdIRxX2D2v3lXGFjdVlLT0Moi6eb4KXHM4zZyG2p4Y&exp=1794460478&osig=AAAAAAAAAAAAAAAAAAAAADwIMa81B0RWJ8QAbBKFkJUs8xlPc7yegmzm33XVNNye&signer=media-rpc&token=AAIAAU0AJGQyNmUwNzI4LTNiMzYtNDhhYy04YWQ5LTcwZWIwYzE3MDdhOAAAAAABoc4t6jCogOSK9Fhpn0LA4Ri5fDB0pSrq4j-rTxH_-hV4pIXPwA&x-canva-quality=thumbnail'
+          file /tmp/resized.jpg
