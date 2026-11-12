@@ -87,11 +87,12 @@ async function readRemoteFlyer(source: string) {
 
 async function readLocalFlyer(source: string) {
   const path = decodeURIComponent(source);
-  if (!path.startsWith("/images/event-flyers/") || /[\\\0?#]/.test(path)
+  if (!(path.startsWith("/images/event-flyers/") || path.startsWith("/images/event-logos/")) || /[\\\0?#]/.test(path)
     || path.split("/").some((part) => part === "." || part === "..")) {
     throw new Error("Flyer path is not allowed");
   }
-  const directory = await realpath(join(process.cwd(), "public/images/event-flyers"));
+  const sourceDirectory = path.startsWith("/images/event-logos/") ? "event-logos" : "event-flyers";
+  const directory = await realpath(join(process.cwd(), "public/images", sourceDirectory));
   const file = await realpath(resolve(process.cwd(), "public", `.${path}`));
   if (!file.startsWith(`${directory}${sep}`)) throw new Error("Flyer path is not allowed");
   const details = await stat(file);
@@ -125,12 +126,13 @@ function rasterInfo(bytes: Buffer) {
 }
 
 async function loadFlyer(event: CommunityEvent): Promise<Flyer | null> {
-  if (!event.flyerUrl) return null;
+  const artwork = event.eventArtworkUrl ?? event.flyerUrl;
+  if (!artwork) return null;
   // The route supplies an approved record; request parameters never select a
   // filesystem path or remote URL. Restrict that record's image source as well.
-  const bytes = event.flyerUrl.startsWith("/")
-    ? await readLocalFlyer(event.flyerUrl)
-    : await readRemoteFlyer(event.flyerUrl);
+  const bytes = artwork.startsWith("/")
+    ? await readLocalFlyer(artwork)
+    : await readRemoteFlyer(artwork);
   const { mime, width, height } = rasterInfo(bytes);
   if (!width || !height || width > 12_000 || height > 12_000 || width * height > MAX_FLYER_PIXELS) {
     throw new Error("Flyer dimensions are too large");
@@ -238,7 +240,7 @@ function FlyerArtwork({ flyer, width, height }: { flyer: Flyer; width: number; h
     <div style={{ ...flex, width, height, alignItems: "center", justifyContent: "center", flexShrink: 0, border: `1px solid ${goldShade}`, borderRadius: 18, background: purpleDeep }}>
       {/* Keep the original image bytes and full artwork; never crop or overlay it. */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={flyer.data} width={imageWidth} height={imageHeight} alt="Event flyer" style={{ objectFit: "contain" }} />
+      <img src={flyer.data} width={imageWidth} height={imageHeight} alt="Organizer-provided event artwork" style={{ objectFit: "contain" }} />
     </div>
   );
 }
