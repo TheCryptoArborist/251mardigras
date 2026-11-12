@@ -36,6 +36,7 @@ export default async function CommunityEventDetailPage({ params }: CommunityEven
 
   const locationDetails = [event.venueAddress, event.cityStateZip].filter(Boolean).join(", ");
   const hasEnded = hasCommunityEventEnded(event);
+  const primaryArtwork = event.eventArtworkUrl ?? event.flyerUrl;
 
   return (
     <div>
@@ -93,30 +94,30 @@ export default async function CommunityEventDetailPage({ params }: CommunityEven
                     Map / Directions <ExternalLink className="h-4 w-4" aria-hidden="true" />
                   </a>
                 ) : null}
-                {event.flyerUrl ? (
-                  <a href="#event-flyer" className="inline-flex items-center justify-center gap-2 rounded-full border border-white/25 bg-white/10 px-5 py-3 text-sm font-black text-white transition hover:bg-white/15">
-                    View Flyer
+                {primaryArtwork ? (
+                  <a href={event.flyerUrl ? "#event-flyer" : "#event-artwork"} className="inline-flex items-center justify-center gap-2 rounded-full border border-white/25 bg-white/10 px-5 py-3 text-sm font-black text-white transition hover:bg-white/15">
+                    {event.flyerUrl ? "View Flyer" : "View Artwork"}
                   </a>
                 ) : null}
               </div>
             </div>
 
-            {event.flyerUrl ? (
-              <a href="#event-flyer" className="relative block overflow-hidden rounded-[1.5rem] border border-parade-gold/35 bg-white/10 p-2 shadow-glow backdrop-blur transition hover:-translate-y-0.5 hover:bg-white/15">
+            {primaryArtwork ? (
+              <a href={event.flyerUrl ? "#event-flyer" : "#event-artwork"} className="relative block overflow-hidden rounded-[1.5rem] border border-parade-gold/35 bg-white/10 p-2 shadow-glow backdrop-blur transition hover:-translate-y-0.5 hover:bg-white/15">
                 <div
-                  className={`relative overflow-hidden rounded-[1.1rem] bg-parade-purpleDark ${event.flyerDimensions ? "" : "aspect-[4/5]"}`}
-                  style={event.flyerDimensions ? { aspectRatio: `${event.flyerDimensions.width} / ${event.flyerDimensions.height}` } : undefined}
+                  className={`relative overflow-hidden rounded-[1.1rem] bg-parade-purpleDark ${event.eventArtworkUrl ? "aspect-square" : event.flyerDimensions ? "" : "aspect-[4/5]"}`}
+                  style={!event.eventArtworkUrl && event.flyerDimensions ? { aspectRatio: `${event.flyerDimensions.width} / ${event.flyerDimensions.height}` } : undefined}
                 >
                   <EventFlyerImage
-                    src={event.flyerUrl}
-                    alt={`${event.title} flyer preview`}
+                    src={primaryArtwork}
+                    alt={`${event.title} event artwork preview`}
                     sizes="(min-width: 1024px) 360px, 100vw"
-                    className={event.flyerDimensions ? "object-contain" : "object-cover"}
+                    className={event.eventArtworkUrl ? "object-contain p-3" : event.flyerDimensions ? "object-contain" : "object-cover"}
                     priority
                   />
                 </div>
                 <span className="mt-2 block text-center text-xs font-black uppercase tracking-wide text-parade-goldBright">
-                  Event flyer and details
+                  {event.eventArtworkUrl ? "Event artwork and details" : "Event flyer and details"}
                 </span>
               </a>
             ) : null}
@@ -156,7 +157,7 @@ export default async function CommunityEventDetailPage({ params }: CommunityEven
           </dl>
         </section>
 
-        {event.flyerUrl ? <EventFlyerSection event={event} /> : null}
+        {primaryArtwork ? <EventFlyerSection event={event} /> : null}
 
         <section className="rounded-[1.5rem] border border-parade-line bg-white p-5 shadow-card">
           <h2 className="text-2xl font-black text-parade-purpleDark">Event details</h2>
@@ -168,7 +169,7 @@ export default async function CommunityEventDetailPage({ params }: CommunityEven
           {event.parkingNotes ? <DetailBlock title="Parking notes" body={event.parkingNotes} /> : null}
           {event.publicContact ? <DetailBlock title="Public contact" body={event.publicContact} /> : null}
           {event.mapUrl ? <DetailLink title="Map / directions" href={event.mapUrl} label="Open submitted map link" /> : null}
-          {event.flyerUrl ? <DetailAnchor title="Event flyer" href="#event-flyer" label="View full flyer on this page" /> : null}
+          {primaryArtwork ? <DetailAnchor title={event.flyerUrl ? "Event flyer" : "Event artwork"} href={event.flyerUrl ? "#event-flyer" : "#event-artwork"} label={event.flyerUrl ? "View full flyer on this page" : "View event artwork on this page"} /> : null}
         </section>
 
         <section className="rounded-[1.5rem] border border-amber-200 bg-parade-goldSoft p-5 shadow-civic">
@@ -193,21 +194,23 @@ export default async function CommunityEventDetailPage({ params }: CommunityEven
 }
 
 function EventFlyerSection({ event }: { event: ApprovedEvent }) {
+  const isFullFlyer = Boolean(event.flyerUrl);
+  const artwork = event.flyerUrl ?? event.eventArtworkUrl!;
   return (
-    <section id="event-flyer" className="scroll-mt-24 rounded-[1.5rem] border border-parade-gold/35 bg-gradient-to-br from-parade-purpleDeep via-parade-purpleDark to-parade-purple p-4 text-white shadow-card sm:p-5">
+    <section id={isFullFlyer ? "event-flyer" : "event-artwork"} className="scroll-mt-24 rounded-[1.5rem] border border-parade-gold/35 bg-gradient-to-br from-parade-purpleDeep via-parade-purpleDark to-parade-purple p-4 text-white shadow-card sm:p-5">
       <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <p className="text-xs font-black uppercase tracking-[0.16em] text-parade-goldBright">Event flyer</p>
+          <p className="text-xs font-black uppercase tracking-[0.16em] text-parade-goldBright">{isFullFlyer ? "Event flyer" : "Event artwork"}</p>
           <h2 className="mt-1 text-2xl font-black text-white">{event.title}</h2>
         </div>
-        <p className="text-xs font-bold text-purple-100">Flyer provided by the event organizer.</p>
+        <p className="text-xs font-bold text-purple-100">Artwork provided by the event organizer.</p>
       </div>
       <div className="overflow-hidden rounded-[1.25rem] border border-parade-gold/35 bg-white p-2 shadow-glow">
         <EventFlyerImage
-          src={event.flyerUrl!}
-          alt={`${event.title} flyer`}
+          src={artwork}
+          alt={`${event.title} ${isFullFlyer ? "flyer" : "event artwork"}`}
           fullSize
-          dimensions={event.flyerDimensions}
+          dimensions={event.flyerDimensions ?? (!isFullFlyer ? { width: 1, height: 1 } : undefined)}
           sizes="(min-width: 1024px) 760px, 100vw"
           className="object-contain"
         />
