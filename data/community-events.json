@@ -536,6 +536,11 @@
     "venueAddress": "Courtyard; parade continues to the main stage at Bienville Square",
     "description": "Start your MoonPie evening with the Best Decorated Umbrella Contest and a courtyard performance by The Jukebox Brass Band at 7:30 PM. Enjoy the cutting of the World’s Largest Edible MoonPie at 7:45 PM, then join the Second-Line Parade presented by Novelis at 8:10 PM. Bring a decorated Mardi Gras umbrella and follow the procession from the hotel courtyard to the main stage at Bienville Square. The organizer has not specified an end time for the procession. Times are Central and subject to change; check the official schedule before attending.",
     "slug": "moonpie-courtyard-second-line-2026",
-    "mapUrl": "https://www.google.com/maps/search/?api=1&query=Renaissance%20Riverview%20Plaza%20Hotel%20Courtyard%20Mobile%20AL"
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=Renaissance%20Riverview%20Plaza%20Hotel%20Courtyard%20Mobile%20AL",
+    "flyerUrl": "/images/event-flyers/moonpie-umbrella-contest-2026.png",
+    "flyerDimensions": {
+      "width": 689,
+      "height": 1136
+    }
   }
 ]
