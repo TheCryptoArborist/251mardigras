@@ -491,7 +491,9 @@
     "venueAddress": "Bienville Square; MoonPie Drop at the RSA Trustmark Building",
     "description": "Welcome 2027 with free live music and Mobile’s signature midnight MoonPie Drop. Evening entertainment begins at 6:30 PM, followed by opening remarks at 8:30 PM, The Jukebox Brass Band at 8:45 PM, Symone French & the Trouille Troupe at 9:30 PM, and CeeLo Green at 11:00 PM. At midnight, the giant MoonPie drops from the RSA Trustmark Building to welcome the new year, with a pyro display near the main stage. The DJ plays between acts through 12:30 AM. Separate daytime Kids Zone and courtyard festivities are also listed on the community calendar. Times are Central and subject to change; check the official schedule before attending.",
     "slug": "moonpie-over-mobile-2026",
-    "mapUrl": "https://www.google.com/maps/search/?api=1&query=Downtown%20Mobile%20/%20Main%20Stage%20at%20Bienville%20Square%20Mobile%20AL"
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=Downtown%20Mobile%20/%20Main%20Stage%20at%20Bienville%20Square%20Mobile%20AL",
+    "eventArtworkUrl": "/images/event-logos/moonpie-over-mobile.png",
+    "organizationLogoUrl": "/images/event-logos/moonpie-over-mobile.png"
   },
   {
     "status": "approved",
@@ -511,11 +513,8 @@
     "description": "Celebrate New Year’s Eve early with the family at MoonPie Over Mobile’s Kids Zone. Enjoy bounce houses, New Year’s Eve crafts, MoonPie treats, and a second-line march to the children’s MoonPie Drop at noon. Kids Zone activities run from 11:00 AM to 1:00 PM on December 31, 2026. Times are Central and subject to change; check the official schedule before attending.",
     "slug": "moonpie-kids-noon-years-eve-2026",
     "mapUrl": "https://www.google.com/maps/search/?api=1&query=Mardi%20Gras%20Park%20Mobile%20AL",
-    "flyerUrl": "/images/event-flyers/moonpie-kids-noon-years-eve-2026.png",
-    "flyerDimensions": {
-      "width": 692,
-      "height": 1026
-    }
+    "eventArtworkUrl": "/images/event-logos/moonpie-over-mobile.png",
+    "organizationLogoUrl": "/images/event-logos/moonpie-over-mobile.png"
   },
   {
     "status": "approved",
@@ -537,10 +536,7 @@
     "description": "Start your MoonPie evening with the Best Decorated Umbrella Contest and a courtyard performance by The Jukebox Brass Band at 7:30 PM. Enjoy the cutting of the World’s Largest Edible MoonPie at 7:45 PM, then join the Second-Line Parade presented by Novelis at 8:10 PM. Bring a decorated Mardi Gras umbrella and follow the procession from the hotel courtyard to the main stage at Bienville Square. The organizer has not specified an end time for the procession. Times are Central and subject to change; check the official schedule before attending.",
     "slug": "moonpie-courtyard-second-line-2026",
     "mapUrl": "https://www.google.com/maps/search/?api=1&query=Renaissance%20Riverview%20Plaza%20Hotel%20Courtyard%20Mobile%20AL",
-    "flyerUrl": "/images/event-flyers/moonpie-umbrella-contest-2026.png",
-    "flyerDimensions": {
-      "width": 689,
-      "height": 1136
-    }
+    "eventArtworkUrl": "/images/event-logos/moonpie-over-mobile.png",
+    "organizationLogoUrl": "/images/event-logos/moonpie-over-mobile.png"
   }
 ]
