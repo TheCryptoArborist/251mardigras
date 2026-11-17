@@ -513,9 +513,9 @@
     "description": "Celebrate New Year’s Eve early with the family at MoonPie Over Mobile’s Kids Zone. Enjoy bounce houses, New Year’s Eve crafts, MoonPie treats, and a second-line march to the children’s MoonPie Drop at noon. Kids Zone activities run from 11:00 AM to 1:00 PM on December 31, 2026. Times are Central and subject to change; check the official schedule before attending.",
     "slug": "moonpie-kids-noon-years-eve-2026",
     "mapUrl": "https://www.google.com/maps/search/?api=1&query=Mardi%20Gras%20Park%20Mobile%20AL",
-    "eventArtworkUrl": "/images/event-flyers/moonpie-kids-zone-2026.png",
+    "eventArtworkUrl": "/images/event-flyers/moonpie-kids-zone-2026-full.png",
     "organizationLogoUrl": "/images/event-logos/moonpie-over-mobile.png",
-    "flyerUrl": "/images/event-flyers/moonpie-kids-zone-2026.png",
+    "flyerUrl": "/images/event-flyers/moonpie-kids-zone-2026-full.png",
     "flyerDimensions": {
       "width": 1080,
       "height": 1350
@@ -545,3 +545,4 @@
     "organizationLogoUrl": "/images/event-logos/moonpie-over-mobile.png"
   }
 ]
+
