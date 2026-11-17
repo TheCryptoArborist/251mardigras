@@ -156,10 +156,6 @@ function EventCardMedia({ event }: { event: CommunityEvent }) {
         sizes="(min-width: 1024px) 50vw, 100vw"
         className={event.eventArtworkUrl ? "object-contain p-3 transition duration-300 hover:scale-105" : hasLandscapeFlyer ? "object-contain" : "object-cover transition duration-300 hover:scale-105"}
       />
-      <span className="absolute inset-0 bg-gradient-to-t from-parade-purpleDeep/55 via-transparent to-transparent" aria-hidden="true" />
-      <span className="absolute bottom-3 left-3 rounded-full bg-parade-gold px-3 py-1 text-xs font-black uppercase tracking-wide text-parade-purpleDark shadow-glow">
-        {event.eventArtworkUrl ? "Event artwork" : "Event Flyer"}
-      </span>
     </Link>
   );
 }
