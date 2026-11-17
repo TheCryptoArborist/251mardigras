@@ -8,7 +8,7 @@ import "./arcade.css";
 
 export const metadata = createPageMetadata({
   title: "Mardi Gras Arcade",
-  description: "Explore six MG251 arcade cabinets. Watch 15-second gameplay previews of MoonPie Run and MoonPie Motorway, with four more cabinets coming soon.",
+  description: "Play MoonPie Run, preview MoonPie Motorway, and explore six MG251 arcade cabinets with four more games coming soon.",
   path: "/play",
   image: "/images/arcade/moonpie-motorway-poster.webp",
   imageAlt: "MoonPie Motorway, a Mobile Mardi Gras arcade racing game"
@@ -29,8 +29,8 @@ export default function ArcadePage() {
           </div>
         </header>
         <section className="arcade-floor" id="cabinets" aria-labelledby="arcade-lineup-heading">
-          <div className="arcade-section-title"><div><p className="arcade-eyebrow">THE GAME LINEUP</p><h2 id="arcade-lineup-heading">Choose your game.</h2></div><p>2 gameplay previews · 4 coming soon</p></div>
-          <p className="arcade-launch-note">Watch a 15-second preview of our first two games. Public play is coming soon.</p>
+          <div className="arcade-section-title"><div><p className="arcade-eyebrow">THE GAME LINEUP</p><h2 id="arcade-lineup-heading">Choose your game.</h2></div><p>1 ready to play · 1 preview · 4 coming soon</p></div>
+          <p className="arcade-launch-note">MoonPie Run is ready to play—no account needed. Watch our gameplay previews and explore the next cabinets.</p>
           <div className="arcade-cabinets">
             {ARCADE_GAMES.map((game) => <ArcadeCabinet key={game.slug} game={game} />)}
             {["03", "04", "05", "06"].map((number) => <ComingSoonCabinet key={number} number={number} />)}

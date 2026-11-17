@@ -1,6 +1,7 @@
 export const ARCADE_GAMES = [
   {
     slug: "moonpie-run",
+    playUrl: "/arcade/moonpie-run",
     title: "MoonPie Run",
     marquee: ["MOONPIE", "RUN"],
     genre: "MAZE CHASE",
@@ -16,6 +17,7 @@ export const ARCADE_GAMES = [
   },
   {
     slug: "moonpie-motorway",
+    playUrl: null,
     title: "MoonPie Motorway",
     marquee: ["MOONPIE", "MOTORWAY"],
     genre: "ARCADE RACING",

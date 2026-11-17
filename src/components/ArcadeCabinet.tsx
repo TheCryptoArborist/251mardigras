@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { ArrowRight, Gamepad2 } from "lucide-react";
 import { GamePreviewVideo } from "@/components/GamePreviewVideo";
 import type { ArcadeGame } from "@/lib/arcade";
@@ -7,15 +6,15 @@ export function ArcadeCabinet({ game }: { game: ArcadeGame }) {
   return (
     <article className={`arcade-cabinet arcade-cabinet--${game.theme}`} aria-labelledby={`cabinet-${game.slug}`}>
       <div className="cabinet-artwork">
-        <div className="cabinet-topline"><span>{game.genre}</span><span className="cabinet-status">PREVIEW</span></div>
+        <div className="cabinet-topline"><span>{game.genre}</span><span className="cabinet-status">{game.playUrl ? "PLAY NOW" : "PREVIEW"}</span></div>
         <GamePreviewVideo title={game.title} src={game.video} poster={game.image} />
       </div>
       <div className="cabinet-details">
         <h3 id={`cabinet-${game.slug}`}>{game.title}</h3>
         <p className="cabinet-description">{game.description}</p>
-        <Link className="cabinet-cta" href={`/play/${game.slug}`} aria-label={`Explore ${game.title}`}>
-          Game preview <ArrowRight size={17} aria-hidden="true" />
-        </Link>
+        <a className="cabinet-cta" href={game.playUrl || `/play/${game.slug}`} aria-label={`${game.playUrl ? "Play" : "Preview"} ${game.title}`}>
+          {game.playUrl ? "Play Now" : "Game preview"} <ArrowRight size={17} aria-hidden="true" />
+        </a>
       </div>
     </article>
   );
