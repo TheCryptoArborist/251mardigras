@@ -11,6 +11,8 @@ export function ArcadeShowcase() {
           <p className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.16em] text-parade-goldBright"><Gamepad2 size={18} aria-hidden="true" /> A new way to Mardi Gras</p>
           <h2 id="homepage-arcade-heading" className="mt-3 text-3xl font-black tracking-tight text-white sm:text-4xl">Mardi Gras Arcade</h2>
           <p className="mt-3 max-w-md text-sm leading-6 text-purple-100">The parade doesn&apos;t have to end. Play MoonPie Run now, preview MoonPie Motorway, and explore our retro cabinet lobby.</p>
+          {/* The standalone game serves a complete HTML document and needs a full navigation. */}
+          {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
           <a href="/arcade/moonpie-run" className="mt-5 mr-3 inline-flex min-h-12 items-center justify-center gap-3 rounded-full bg-parade-goldBright px-6 py-3 text-sm font-black text-parade-purpleDark hover:bg-parade-goldSoft focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-parade-goldBright">Play MoonPie Run <ArrowRight size={18} aria-hidden="true" /></a>
           <Link href="/play" className="mt-5 inline-flex min-h-12 items-center justify-center gap-3 rounded-full bg-parade-goldBright px-6 py-3 text-sm font-black text-parade-purpleDark transition hover:bg-parade-goldSoft focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-parade-goldBright">Enter the Arcade <ArrowRight size={18} aria-hidden="true" /></Link>
         </div>

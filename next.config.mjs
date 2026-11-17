@@ -10,11 +10,6 @@ const nextConfig = {
   async redirects() {
     return [
       {
-        source: "/arcade/moonpie-run",
-        destination: "https://moonpie-run-mobile.arborist63.chatgpt.site/",
-        permanent: false
-      },
-      {
         source: "/arcade",
         destination: "/play",
         permanent: false
