@@ -1,0 +1,131 @@
+[
+  {
+    "name": "Fort Whiting",
+    "address": "1630 South Broad Street, Mobile, AL 36605",
+    "aliases": [
+      "Fort Whiting Armory",
+      "Fort Whiting Reception Hall"
+    ],
+    "source": "https://smd.alabama.gov/wp-content/uploads/2026/01/LEGAL-AD-FORT-WHITING-%E2%80%93-CLASSROOM-A202-26-B-0006-TERMITE-REPAIR.pdf",
+    "checked": "2026-11-16"
+  },
+  {
+    "name": "Mobile Convention Center",
+    "address": "1 South Water Street, Mobile, AL 36602",
+    "aliases": [
+      "Arthur R. Outlaw Mobile Convention Center",
+      "Outlaw Convention Center"
+    ],
+    "source": "https://www.cityofmobile.gov/departments/convention-center/",
+    "checked": "2026-11-16"
+  },
+  {
+    "name": "Crown Hall",
+    "address": "653 St. Louis Street, Mobile, AL 36602",
+    "aliases": [
+      "Crown Hall by Bay Gourmet Catering"
+    ],
+    "source": "https://www.crownhall.events/",
+    "checked": "2026-11-16"
+  },
+  {
+    "name": "The Grounds",
+    "address": "1035 Cody Road North, Mobile, AL 36608",
+    "aliases": [
+      "Greater Gulf State Fairgrounds"
+    ],
+    "source": "https://www.thegroundsmobile.com/contact",
+    "checked": "2026-11-16"
+  },
+  {
+    "name": "The Calirojaé",
+    "address": "1004 Dauphin Island Parkway, Mobile, AL 36605",
+    "aliases": [
+      "Calirojae"
+    ],
+    "source": "https://www.mobilecountyal.gov/community_events/events/ozanams-jazz-extravaganza-2026-2026-06-25",
+    "checked": "2026-11-16"
+  },
+  {
+    "name": "Daphne Civic Center",
+    "address": "2603 US Highway 98, Daphne, AL 36526",
+    "aliases": [],
+    "source": "https://www.daphneal.com/188/Civic-Center",
+    "checked": "2026-11-16"
+  },
+  {
+    "name": "Fairhope Civic Center",
+    "address": "161 North Section Street, Fairhope, AL 36532",
+    "aliases": [],
+    "source": "https://www.fairhopeal.gov/Facilities/Facility/Details/Fairhope-Civic-Center-Rental-Information-1",
+    "checked": "2026-11-16"
+  },
+  {
+    "name": "Country Club of Mobile",
+    "address": "4101 Wimbledon Drive, Mobile, AL 36608",
+    "aliases": [
+      "The Country Club of Mobile"
+    ],
+    "source": "https://members.ccofmobile.org/Contact_Us",
+    "checked": "2026-11-16"
+  },
+  {
+    "name": "Perdido Beach Resort",
+    "address": "27200 Perdido Beach Boulevard, Orange Beach, AL 36561",
+    "aliases": [
+      "Perdidio Beach Resort"
+    ],
+    "source": "https://www.perdidobeachresort.com/",
+    "checked": "2026-11-16"
+  },
+  {
+    "name": "Spanish Fort Community Center",
+    "address": "7361 Spanish Fort Boulevard, Spanish Fort, AL 36527",
+    "aliases": [],
+    "source": "https://www.cityofspanishfort.com/communitycenter",
+    "checked": "2026-11-16"
+  },
+  {
+    "name": "Elks Lodge #108",
+    "address": "2671 Dauphin Island Parkway, Mobile, AL 36605",
+    "aliases": [
+      "Mobile Elks Lodge",
+      "Elks Lodge 108",
+      "Elks Lodge #108, DIP"
+    ],
+    "source": "https://www.elks.org/lodges/contactUs.cfm?lodgenumber=0108",
+    "checked": "2026-11-16"
+  },
+  {
+    "name": "Baldwin County Coliseum",
+    "address": "19477 Fairground Road, Robertsdale, AL 36567",
+    "aliases": [
+      "Robertsdale Coliseum"
+    ],
+    "source": "https://www.robertsdale.org/bc-coliseum",
+    "checked": "2026-11-16"
+  },
+  {
+    "name": "Government Plaza",
+    "address": "205 Government Street, Mobile, AL 36644",
+    "aliases": [
+      "Mobile Government Plaza"
+    ],
+    "source": "https://www.mobilecountyal.gov/government/frequently-asked-questions/",
+    "checked": "2026-11-16"
+  },
+  {
+    "name": "The Locale",
+    "address": "4128 Government Boulevard, Mobile, AL 36693",
+    "aliases": [],
+    "source": "https://bgcsouthal.org/annual-grand-coronation/",
+    "checked": "2026-11-16"
+  },
+  {
+    "name": "Mobile Carnival Museum",
+    "address": "355 Government Street, Mobile, AL 36602",
+    "aliases": [],
+    "source": "https://mobilecarnivalmuseum.com/contact/",
+    "checked": "2026-11-16"
+  }
+]
