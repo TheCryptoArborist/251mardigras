@@ -2,6 +2,7 @@
 import { useRef, useState, type FormEvent } from "react";
 import societies from "@/data/ball-societies.json";
 import venues from "@/data/ball-venues.json";
+import ballDetails from "@/data/ball-details-2027.json";
 
 const inputClass = "mt-1 w-full rounded-xl border border-parade-line bg-white px-3 py-3 text-base text-parade-ink focus:outline-none focus:ring-2 focus:ring-parade-gold";
 const buttonClass = "inline-flex min-h-11 items-center justify-center rounded-full bg-parade-gold px-5 py-3 text-sm font-black text-parade-purpleDark hover:bg-parade-goldBright focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-parade-purple";
@@ -54,12 +55,12 @@ export default function BallDirectory() {
       <input id="society-search" type="search" className={inputClass} placeholder="Search for your society…" value={search} onChange={e=>setSearch(e.target.value)} />
       <p className="my-5 text-sm text-parade-muted" aria-live="polite">{matches.length} {matches.length===1 ? "society" : "societies"} shown</p>
       <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-        {matches.map(name=><article key={name} className="flex flex-col rounded-[1.5rem] border border-parade-line bg-white p-6 shadow-card">
-          <div className="flex items-center justify-between gap-2"><span aria-hidden="true" className="grid h-11 w-11 place-items-center rounded-full border border-parade-gold/40 bg-parade-goldSoft text-parade-purple">✦</span><span className="rounded-full bg-parade-purpleMist px-3 py-1 text-xs font-bold text-parade-purple">Awaiting confirmation</span></div>
+        {matches.map(name=>{const ball = ballDetails.find(b=>b.society===name); return <article key={name} className="flex flex-col rounded-[1.5rem] border border-parade-line bg-white p-6 shadow-card">
+          <div className="flex items-center justify-between gap-2"><span aria-hidden="true" className="grid h-11 w-11 place-items-center rounded-full border border-parade-gold/40 bg-parade-goldSoft text-parade-purple">✦</span><span className="rounded-full bg-parade-purpleMist px-3 py-1 text-xs font-bold text-parade-purple">{ball ? "Date and venue confirmed" : "Awaiting confirmation"}</span></div>
           <h3 className="mt-5 text-xl font-black text-parade-purpleDark">{name}</h3>
-          <p className="mb-5 mt-3 text-sm leading-6 text-parade-muted">2027 date, time and venue awaiting confirmation.</p>
-          <button type="button" onClick={()=>open(name)} className="mt-auto min-h-11 border-t border-parade-line pt-3 text-left text-sm font-black text-parade-purple hover:underline" aria-label={`Submit 2027 ball details for ${name}`}>Submit 2027 Ball Details →</button>
-        </article>)}
+          {ball ? <div className="mb-5 mt-3 space-y-2 text-sm leading-6 text-parade-muted"><p className="font-bold text-parade-purpleDark">{ball.title}</p><p>{ball.dateLabel}<br/>Time: {ball.time ?? "Not announced"}</p><p className="font-bold">{ball.venue}<br/><span className="font-normal">{ball.address}</span></p><p>{ball.admission}</p><p className="text-xs">Source: {ball.source}.<br/>Verified November 16, 2026.</p></div> : <p className="mb-5 mt-3 text-sm leading-6 text-parade-muted">2027 date, time and venue awaiting confirmation.</p>}
+          <button type="button" onClick={()=>open(name)} className="mt-auto min-h-11 border-t border-parade-line pt-3 text-left text-sm font-black text-parade-purple hover:underline" aria-label={`Submit 2027 ball details for ${name}`}>{ball ? "Submit a correction →" : "Submit 2027 Ball Details →"}</button>
+        </article>})}
       </div>
       {!matches.length && <p className="py-6">No societies match your search. Try another name or add your organization below.</p>}
       <div className="mt-8 flex flex-col items-start justify-between gap-5 rounded-[1.5rem] border border-parade-line bg-parade-purpleMist p-6 sm:flex-row sm:items-center"><div><h3 className="text-xl font-black text-parade-purpleDark">Don’t see your organization?</h3><p className="mt-2 text-sm text-parade-muted">Add your society and ball details for review.</p></div><button type="button" className={buttonClass} onClick={()=>open("")}>Add your society +</button></div>
