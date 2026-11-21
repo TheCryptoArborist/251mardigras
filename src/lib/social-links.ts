@@ -1,7 +1,9 @@
+export const MG251_YOUTUBE_HANDLE = "@MobileMardiGras";
+
 export const MG251_SOCIAL_LINKS = [
   {
     label: "YouTube",
-    href: "https://www.youtube.com/@MobileMardiGras?sub_confirmation=1",
+    href: `https://www.youtube.com/${MG251_YOUTUBE_HANDLE}?sub_confirmation=1`,
     action: "Subscribe",
     featured: true
   },

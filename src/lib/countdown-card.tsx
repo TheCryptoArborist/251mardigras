@@ -6,6 +6,8 @@ import { COUNTDOWN_CARD_SIZES, formatCountdownRemaining, type CardFormat, type C
 
 import { PARADE_SHARE_BANNER_PATH, PARADE_SHARE_BANNER_RATIO } from "@/lib/brand";
 
+import { MG251_YOUTUBE_HANDLE } from "@/lib/social-links";
+
 const purple = "#34125f";
 const purpleDark = "#21083f";
 const purpleDeep = "#17042f";
@@ -191,7 +193,7 @@ function PortraitCard({ snapshot, banner, format }: { snapshot: CountdownSnapsho
       </div>
       <div style={{ ...flex, width: "100%", marginTop: "auto", flexShrink: 0, paddingTop: story ? 30 : square ? 22 : 24, flexDirection: "column", alignItems: "center", textAlign: "center" }}>
         <div style={{ ...flex, fontSize: story ? 98 : square ? 58 : 74, fontWeight: 700, lineHeight: 1, letterSpacing: -3, color: gold, WebkitTextStroke: `1px ${gold}` }}>MG251.xyz</div>
-        <div style={{ ...flex, marginTop: story ? 22 : square ? 14 : 16, fontSize: story ? 30 : square ? 24 : 26, fontWeight: 700, color: cream }}>Parade schedule • Route maps • Live coverage</div>
+        <div style={{ ...flex, marginTop: story ? 22 : square ? 14 : 16, fontSize: story ? 30 : square ? 24 : 26, fontWeight: 700, color: cream }}>Watch the parade live on YouTube • {MG251_YOUTUBE_HANDLE}</div>
         <div style={{ ...flex, marginTop: story ? 26 : square ? 12 : 17, fontSize: story ? 22 : square ? 18 : 20, color: goldSoft }}>{snapshot.hasScheduledTime ? "Countdown" : "Details"} as of {snapshot.dateLabel}</div>
       </div>
     </div>
@@ -226,7 +228,7 @@ function PreviewCard({ snapshot, banner }: { snapshot: CountdownSnapshot; banner
       </div>
       <div style={{ ...flex, alignItems: "center", justifyContent: "space-between", marginTop: "auto", paddingTop: 16, borderTop: "1px solid rgba(255,201,40,0.35)" }}>
         <div style={{ ...flex, fontSize: 54, fontWeight: 700, lineHeight: 1, color: gold, letterSpacing: -2, WebkitTextStroke: `0.8px ${gold}` }}>MG251.xyz</div>
-        <div style={{ ...flex, maxWidth: 610, fontSize: 23, fontWeight: 700, color: cream }}>Parade schedule • Route maps • Live coverage</div>
+        <div style={{ ...flex, maxWidth: 610, fontSize: 23, fontWeight: 700, color: cream }}>Watch the parade live on YouTube • {MG251_YOUTUBE_HANDLE}</div>
       </div>
     </div>
   );

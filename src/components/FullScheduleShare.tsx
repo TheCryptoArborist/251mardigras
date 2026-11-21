@@ -6,12 +6,14 @@ import { useEffect, useRef, useState } from "react";
 import { PARADE_SHARE_BANNER_PATH } from "@/lib/brand";
 import type { ParadeSchedule } from "@/components/ScheduleRouteViewer";
 
+import { MG251_YOUTUBE_HANDLE } from "@/lib/social-links";
+
 const IMAGE_WIDTH = 1080;
 const MARGIN = 46;
 const MAX_IMAGE_EDGE = 4096;
 const DAY_HEIGHT = 55;
 const ROW_HEIGHT = 60;
-const FOOTER_HEIGHT = 118;
+const FOOTER_HEIGHT = 158;
 const GOLD = "#ffd45a";
 const PALE_GOLD = "#fff2b5";
 const FONT = "system-ui, sans-serif";
@@ -121,6 +123,8 @@ async function renderSchedule(schedule: ParadeSchedule, scheduleUrl: string, lay
   ctx.font = `850 29px ${FONT}`;
   const url = new URL(scheduleUrl);
   ctx.fillText(url.host + url.pathname, MARGIN, y + 72);
+  ctx.font = `800 30px ${FONT}`;
+  ctx.fillText(`Watch parades live on YouTube  ·  ${MG251_YOUTUBE_HANDLE}`, MARGIN, y + 111, contentWidth);
 
   const png = new Promise<Blob>((resolve, reject) => {
     canvas.toBlob((blob) => blob ? resolve(blob) : reject(new Error("PNG export failed")), "image/png");

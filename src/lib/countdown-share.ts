@@ -211,7 +211,7 @@ export function buildCountdownShareUrl(snapshot: CountdownSnapshot, source: Shar
 }
 
 export function buildCountdownCardUrl(snapshot: CountdownSnapshot, format: CardFormat, download = false) {
-  const params = new URLSearchParams({ at: String(snapshot.at), format, v: "5" });
+  const params = new URLSearchParams({ at: String(snapshot.at), format, v: "6" });
   if (snapshot.event.paradeId) params.set("parade", snapshot.event.paradeId);
   if (download) params.set("download", "1");
   return `/api/countdown-card?${params.toString()}`;
