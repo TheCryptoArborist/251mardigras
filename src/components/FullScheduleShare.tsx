@@ -3,13 +3,12 @@
 import { Download, Share2, X } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
-import { SITE_LOGO_PATH } from "@/lib/brand";
+import { PARADE_SHARE_BANNER_PATH } from "@/lib/brand";
 import type { ParadeSchedule } from "@/components/ScheduleRouteViewer";
 
 const IMAGE_WIDTH = 1080;
 const MARGIN = 46;
-const HEADER_HEIGHT = 312;
-const LOGO_SIZE = 128;
+const MAX_IMAGE_EDGE = 4096;
 const DAY_HEIGHT = 55;
 const ROW_HEIGHT = 60;
 const FOOTER_HEIGHT = 118;
@@ -18,47 +17,51 @@ const PALE_GOLD = "#fff2b5";
 const FONT = "system-ui, sans-serif";
 
 async function renderSchedule(schedule: ParadeSchedule, scheduleUrl: string) {
-  const canvas = document.createElement("canvas");
+  const banner = new window.Image();
+  banner.src = PARADE_SHARE_BANNER_PATH;
+  const hasBanner = await banner.decode().then(() => true, () => false);
+  const contentWidth = IMAGE_WIDTH - MARGIN * 2;
+  const bannerHeight = hasBanner ? contentWidth * banner.naturalHeight / banner.naturalWidth : 85;
+  const titleY = 40 + bannerHeight + 45;
+  const headerHeight = titleY + 100;
   const days = schedule.days.filter((day) => day.parades.length > 0);
-  canvas.width = IMAGE_WIDTH;
-  canvas.height = HEADER_HEIGHT + FOOTER_HEIGHT + days.reduce(
-    (height, day) => height + DAY_HEIGHT + day.parades.length * ROW_HEIGHT,
+  const height = headerHeight + FOOTER_HEIGHT + days.reduce(
+    (total, day) => total + DAY_HEIGHT + day.parades.length * ROW_HEIGHT,
     0
   );
+  const canvas = document.createElement("canvas");
+  const scale = Math.min(1, MAX_IMAGE_EDGE / height);
+  canvas.width = Math.round(IMAGE_WIDTH * scale);
+  canvas.height = Math.round(height * scale);
   const ctx = canvas.getContext("2d");
   if (!ctx) throw new Error("Canvas is unavailable");
+  ctx.scale(canvas.width / IMAGE_WIDTH, canvas.height / height);
 
-  const background = ctx.createLinearGradient(0, 0, IMAGE_WIDTH, canvas.height);
+  const background = ctx.createLinearGradient(0, 0, IMAGE_WIDTH, height);
   background.addColorStop(0, "#4a0b70");
   background.addColorStop(1, "#210637");
   ctx.fillStyle = background;
-  ctx.fillRect(0, 0, IMAGE_WIDTH, canvas.height);
+  ctx.fillRect(0, 0, IMAGE_WIDTH, height);
   ctx.strokeStyle = GOLD;
   ctx.lineWidth = 3;
-  ctx.strokeRect(22, 22, IMAGE_WIDTH - 44, canvas.height - 44);
+  ctx.strokeRect(22, 22, IMAGE_WIDTH - 44, height - 44);
   ctx.textBaseline = "middle";
 
   const right = IMAGE_WIDTH - MARGIN;
-  const logo = new window.Image();
-  logo.src = SITE_LOGO_PATH;
-  const hasLogo = await logo.decode().then(() => true, () => false);
-  if (hasLogo) {
-    ctx.drawImage(logo, MARGIN, 40, LOGO_SIZE, LOGO_SIZE);
+  if (hasBanner) {
+    ctx.drawImage(banner, MARGIN, 40, contentWidth, bannerHeight);
+  } else {
+    ctx.fillStyle = GOLD;
+    ctx.font = `900 42px ${FONT}`;
+    ctx.fillText("MG251.xyz  /  MOBILE, ALABAMA", MARGIN, 85);
   }
-
-  const brandX = hasLogo ? MARGIN + LOGO_SIZE + 22 : MARGIN;
-  ctx.fillStyle = GOLD;
-  ctx.font = `900 42px ${FONT}`;
-  ctx.fillText("MG251.xyz", brandX, 86);
-  ctx.font = `800 24px ${FONT}`;
-  ctx.fillText("MOBILE, ALABAMA", brandX, 125);
   ctx.fillStyle = PALE_GOLD;
   ctx.font = `900 52px ${FONT}`;
-  ctx.fillText(schedule.title, MARGIN, 209, right - MARGIN);
+  ctx.fillText(schedule.title, MARGIN, titleY, contentWidth);
   ctx.font = `700 27px ${FONT}`;
-  ctx.fillText(`${schedule.displayDateRange}  ·  All times Central`, MARGIN, 261, right - MARGIN);
+  ctx.fillText(`${schedule.displayDateRange}  ·  All times Central`, MARGIN, titleY + 52, contentWidth);
 
-  let y = HEADER_HEIGHT;
+  let y = headerHeight;
   for (const day of days) {
     ctx.fillStyle = "#63228a";
     ctx.fillRect(MARGIN, y + 5, right - MARGIN, DAY_HEIGHT - 10);
@@ -92,10 +95,10 @@ async function renderSchedule(schedule: ParadeSchedule, scheduleUrl: string) {
   const png = new Promise<Blob>((resolve, reject) => {
     canvas.toBlob((blob) => blob ? resolve(blob) : reject(new Error("PNG export failed")), "image/png");
   });
-  return { png, height: canvas.height };
+  return { png, width: canvas.width, height: canvas.height };
 }
 
-type ScheduleImage = { file: File; url: string; canShare: boolean; height: number };
+type ScheduleImage = { file: File; url: string; canShare: boolean; width: number; height: number };
 
 export function FullScheduleShare({ schedule, scheduleUrl }: { schedule: ParadeSchedule; scheduleUrl: string }) {
   const dialog = useRef<HTMLDialogElement>(null);
@@ -115,11 +118,11 @@ export function FullScheduleShare({ schedule, scheduleUrl }: { schedule: ParadeS
     setPreparing(true);
     setStatus("Preparing schedule image…");
     try {
-      const { png, height } = await renderSchedule(schedule, scheduleUrl);
+      const { png, width, height } = await renderSchedule(schedule, scheduleUrl);
       const blob = await png;
       const file = new File([blob], `MG251-${schedule.season}-Parade-Schedule.png`, { type: "image/png" });
       const canShare = typeof navigator.share === "function" && navigator.canShare?.({ files: [file] }) === true;
-      setImage({ file, canShare, height, url: URL.createObjectURL(blob) });
+      setImage({ file, canShare, width, height, url: URL.createObjectURL(blob) });
       setStatus("");
     } catch {
       setStatus("The image couldn’t be prepared. Please try again.");
@@ -203,7 +206,7 @@ export function FullScheduleShare({ schedule, scheduleUrl }: { schedule: ParadeS
               <Image
                 src={image.url}
                 alt={`${schedule.title} image preview, with all dates, start times and routes listed on this page.`}
-                width={IMAGE_WIDTH}
+                width={image.width}
                 height={image.height}
                 unoptimized
                 className="h-auto w-full rounded-lg"

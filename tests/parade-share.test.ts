@@ -158,7 +158,7 @@ test("parade links, card formats, and timestamp parsing retain the same selected
     assert.equal(card.searchParams.get("parade"), event.paradeId);
     assert.equal(card.searchParams.get("at"), String(snapshot.at));
     assert.equal(card.searchParams.get("format"), format);
-    assert.equal(card.searchParams.get("v"), "4");
+    assert.equal(card.searchParams.get("v"), "5");
     assert.equal(card.searchParams.get("download"), "1");
     const trustedEvent = getParadeShareEvent(card.searchParams.get("parade")!);
     assert.ok(trustedEvent);

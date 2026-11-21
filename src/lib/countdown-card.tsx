@@ -4,6 +4,8 @@ import { ImageResponse } from "next/og";
 import type { CSSProperties } from "react";
 import { COUNTDOWN_CARD_SIZES, formatCountdownRemaining, type CardFormat, type CountdownSnapshot } from "@/lib/countdown-share";
 
+import { PARADE_SHARE_BANNER_PATH, PARADE_SHARE_BANNER_RATIO } from "@/lib/brand";
+
 const purple = "#34125f";
 const purpleDark = "#21083f";
 const purpleDeep = "#17042f";
@@ -12,25 +14,25 @@ const goldShade = "#d69b16";
 const cream = "#fffaf0";
 const goldSoft = "#fff4cf";
 const flex: CSSProperties = { display: "flex" };
-let logoDataPromise: Promise<string> | undefined;
+let bannerDataPromise: Promise<string> | undefined;
 
-function getOriginalLogo() {
-  logoDataPromise ??= readFile(join(process.cwd(), "public/images/mardi-gras-mobile-logo.png"))
-    .then((buffer) => `data:image/png;base64,${buffer.toString("base64")}`)
-    .catch((error) => { logoDataPromise = undefined; throw error; });
-  return logoDataPromise;
+function getShareBanner() {
+  bannerDataPromise ??= readFile(join(process.cwd(), "public", PARADE_SHARE_BANNER_PATH))
+    .then((buffer) => `data:image/jpeg;base64,${buffer.toString("base64")}`)
+    .catch((error) => { bannerDataPromise = undefined; throw error; });
+  return bannerDataPromise;
 }
 
 export async function renderCountdownCard(snapshot: CountdownSnapshot, format: CardFormat, headers?: HeadersInit) {
-  const logo = await getOriginalLogo();
+  const banner = await getShareBanner();
   const size = COUNTDOWN_CARD_SIZES[format];
 
   return new ImageResponse(
     <div style={{ ...flex, width: "100%", height: "100%", position: "relative", overflow: "hidden", background: `linear-gradient(145deg, ${purpleDeep} 0%, ${purple} 52%, ${purpleDark} 100%)`, color: cream, fontFamily: "sans-serif" }}>
       <CardDecorations width={size.width} height={size.height} />
       {format === "preview"
-        ? <PreviewCard snapshot={snapshot} logo={logo} />
-        : <PortraitCard snapshot={snapshot} logo={logo} format={format} />}
+        ? <PreviewCard snapshot={snapshot} banner={banner} />
+        : <PortraitCard snapshot={snapshot} banner={banner} format={format} />}
     </div>,
     { ...size, headers }
   );
@@ -83,14 +85,10 @@ function CardDecorations({ width, height }: { width: number; height: number }) {
   );
 }
 
-function OriginalLogo({ logo, size }: { logo: string; size: number }) {
-  return (
-    <div style={{ ...flex, width: size, height: size, flexShrink: 0, borderRadius: 20, overflow: "hidden", border: `2px solid ${goldShade}` }}>
-      {/* ImageResponse embeds the unchanged local artwork in the exported PNG. */}
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={logo} width={size} height={size} alt="Mardi Gras - Mobile, Alabama" style={{ objectFit: "contain" }} />
-    </div>
-  );
+function ShareBanner({ banner, width }: { banner: string; width: number }) {
+  // The export embeds the complete artwork at its original aspect ratio.
+  // eslint-disable-next-line @next/next/no-img-element
+  return <img src={banner} width={width} height={Math.round(width / PARADE_SHARE_BANNER_RATIO)} alt="Mardi Gras - Mobile, Alabama" style={{ flexShrink: 0 }} />;
 }
 
 function eventNameLines(name: string) {
@@ -109,7 +107,7 @@ function eventNameLines(name: string) {
 }
 
 function PosterHeadline({ snapshot, format }: { snapshot: CountdownSnapshot; format: CardFormat }) {
-  const wide = format === "preview" || format === "square";
+  const wide = format !== "story";
   const story = format === "story";
   const underMinute = snapshot.hasScheduledTime && !snapshot.expired && snapshot.totalMilliseconds < 60_000;
   const first = snapshot.expired ? "MAKE YOUR" : !snapshot.hasScheduledTime ? "SAVE THE" : underMinute ? "IT’S ALMOST" : "THE COUNTDOWN";
@@ -118,7 +116,7 @@ function PosterHeadline({ snapshot, format }: { snapshot: CountdownSnapshot; for
   return (
     <div style={{ ...flex, width: "100%", flexDirection: "column", alignItems: "center", textAlign: "center", fontWeight: 700, lineHeight: 1.02, letterSpacing: wide ? -1.5 : -2 }}>
       {wide ? (
-        <div style={{ ...flex, fontSize: format === "preview" ? 54 : 55, color: cream, WebkitTextStroke: `1.5px ${cream}` }}>{first} {second}</div>
+        <div style={{ ...flex, fontSize: format === "feed" ? 56 : format === "preview" ? 54 : 55, color: cream, WebkitTextStroke: `1.5px ${cream}` }}>{first} {second}</div>
       ) : (
         <div style={{ ...flex, width: "100%", flexDirection: "column", alignItems: "center" }}>
           <div style={{ ...flex, fontSize: story ? 70 : 61, color: cream, WebkitTextStroke: `1.5px ${cream}` }}>{first}</div>
@@ -153,7 +151,7 @@ function CountdownNumbers({ snapshot, format }: { snapshot: CountdownSnapshot; f
           { value: snapshot.minutes, label: "MINUTES" }
         ].map(({ value, label }) => (
           <div key={label} style={{ ...flex, flex: 1, minWidth: 0, flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
-            <div style={{ ...flex, fontSize: snapshot.days > 99 ? (preview ? 108 : square ? 164 : story ? 160 : 164) : preview ? 142 : square ? 174 : story ? 230 : 204, fontWeight: 700, lineHeight: 1, letterSpacing: preview ? -4 : -7, color: gold, WebkitTextStroke: `${preview ? 2.5 : 3.5}px ${gold}` }}>{label === "DAYS" ? String(value) : String(value).padStart(2, "0")}</div>
+            <div style={{ ...flex, fontSize: snapshot.days > 99 ? (preview ? 108 : square ? 138 : story ? 160 : 164) : preview ? 142 : square ? 146 : story ? 230 : 204, fontWeight: 700, lineHeight: 1, letterSpacing: preview ? -4 : -7, color: gold, WebkitTextStroke: `${preview ? 2.5 : 3.5}px ${gold}` }}>{label === "DAYS" ? String(value) : String(value).padStart(2, "0")}</div>
             <div style={{ ...flex, marginTop: preview ? 12 : 18, fontSize: preview ? 20 : square ? 25 : 28, fontWeight: 700, letterSpacing: preview ? 2 : 3.5, color: cream, WebkitTextStroke: `0.4px ${cream}` }}>{label}</div>
           </div>
         ))}
@@ -162,7 +160,7 @@ function CountdownNumbers({ snapshot, format }: { snapshot: CountdownSnapshot; f
   );
 }
 
-function PortraitCard({ snapshot, logo, format }: { snapshot: CountdownSnapshot; logo: string; format: Exclude<CardFormat, "preview"> }) {
+function PortraitCard({ snapshot, banner, format }: { snapshot: CountdownSnapshot; banner: string; format: Exclude<CardFormat, "preview"> }) {
   const story = format === "story";
   const square = format === "square";
   const { event } = snapshot;
@@ -173,19 +171,13 @@ function PortraitCard({ snapshot, logo, format }: { snapshot: CountdownSnapshot;
   const timeAndRoute = event.paradeId && event.route ? `${event.timeLabel} • ${event.route}` : event.timeLabel;
 
   return (
-    <div style={{ ...flex, position: "absolute", top: story ? 250 : square ? 104 : 120, right: story ? 96 : square ? 80 : 88, bottom: story ? 270 : square ? 92 : 104, left: story ? 96 : square ? 80 : 88, flexDirection: "column", alignItems: "center" }}>
-      <div style={{ ...flex, width: "100%", alignItems: "center", justifyContent: "center" }}>
-        <OriginalLogo logo={logo} size={story ? 150 : square ? 92 : 124} />
-        <div style={{ ...flex, marginLeft: square ? 22 : 28, flexDirection: "column" }}>
-          <div style={{ ...flex, color: goldSoft, fontSize: story ? 28 : square ? 22 : 25, fontWeight: 700, letterSpacing: 4 }}>MOBILE, ALABAMA</div>
-          <div style={{ ...flex, marginTop: 9, color: cream, fontSize: story ? 50 : square ? 36 : 42, fontWeight: 700, letterSpacing: -1, WebkitTextStroke: `0.5px ${cream}` }}>Mardi Gras {event.date.slice(0, 4)}</div>
-        </div>
-      </div>
-      <div style={{ ...flex, width: "100%", marginTop: longName ? (story ? 50 : square ? 20 : 30) : (story ? 60 : square ? 24 : 38) }}><PosterHeadline snapshot={snapshot} format={format} /></div>
-      <div style={{ ...flex, width: "100%", height: longName ? (story ? 286 : square ? 172 : 232) : (story ? 306 : square ? 196 : 264), marginTop: longName ? (story ? 34 : square ? 14 : 22) : (story ? 46 : square ? 18 : 28), flexShrink: 0 }}>
+    <div style={{ ...flex, position: "absolute", top: story ? 200 : square ? 38 : 48, right: story ? 96 : square ? 80 : 88, bottom: story ? 215 : square ? 36 : 52, left: story ? 96 : square ? 80 : 88, flexDirection: "column", alignItems: "center" }}>
+      <ShareBanner banner={banner} width={square ? 760 : story ? 888 : 904} />
+      <div style={{ ...flex, width: "100%", flexShrink: 0, marginTop: longName ? (story ? 50 : square ? 20 : 30) : (story ? 60 : square ? 24 : 38) }}><PosterHeadline snapshot={snapshot} format={format} /></div>
+      <div style={{ ...flex, width: "100%", height: longName ? (story ? 272 : square ? 160 : 220) : (story ? 290 : square ? 174 : 228), marginTop: longName ? (story ? 34 : square ? 14 : 22) : (story ? 46 : square ? 18 : 28), flexShrink: 0 }}>
         <CountdownNumbers snapshot={snapshot} format={format} />
       </div>
-      <div style={{ ...flex, alignItems: "center", gap: 16, marginTop: story ? 20 : square ? 14 : 10, color: goldSoft, fontSize: story ? 27 : square ? 22 : 25, fontWeight: 700, letterSpacing: 2, textAlign: "center" }}>
+      <div style={{ ...flex, alignItems: "center", flexShrink: 0, gap: 16, marginTop: story ? 20 : square ? 16 : 10, color: goldSoft, fontSize: story ? 27 : square ? 22 : 25, fontWeight: 700, letterSpacing: 2, textAlign: "center" }}>
         <div style={{ ...flex, width: square ? 35 : 45, height: 2, background: goldShade }} />
         <span>{event.paradeId ? "MOBILE MARDI GRAS" : "FIRST DOWNTOWN PARADE"}</span>
         <div style={{ ...flex, width: square ? 35 : 45, height: 2, background: goldShade }} />
@@ -197,37 +189,31 @@ function PortraitCard({ snapshot, logo, format }: { snapshot: CountdownSnapshot;
         <div style={{ ...flex, marginTop: story ? 24 : square ? 14 : 16, fontSize: story ? 46 : square ? 34 : 40, fontWeight: 700, color: goldSoft }}>{event.dateLabel}</div>
         <div style={{ ...flex, maxWidth: "100%", marginTop: story ? 12 : square ? 8 : 10, fontSize: story ? 40 : square ? 29 : 34, color: cream }}>{timeAndRoute}</div>
       </div>
-      <div style={{ ...flex, width: "100%", marginTop: "auto", paddingTop: story ? 36 : square ? 20 : 24, flexDirection: "column", alignItems: "center", textAlign: "center" }}>
-        <div style={{ ...flex, fontSize: story ? 112 : square ? 72 : 90, fontWeight: 700, lineHeight: 1, letterSpacing: -3, color: gold, WebkitTextStroke: `1px ${gold}` }}>MG251.xyz</div>
+      <div style={{ ...flex, width: "100%", marginTop: "auto", flexShrink: 0, paddingTop: story ? 30 : square ? 22 : 24, flexDirection: "column", alignItems: "center", textAlign: "center" }}>
+        <div style={{ ...flex, fontSize: story ? 98 : square ? 58 : 74, fontWeight: 700, lineHeight: 1, letterSpacing: -3, color: gold, WebkitTextStroke: `1px ${gold}` }}>MG251.xyz</div>
         <div style={{ ...flex, marginTop: story ? 22 : square ? 14 : 16, fontSize: story ? 30 : square ? 24 : 26, fontWeight: 700, color: cream }}>Parade schedule • Route maps • Live coverage</div>
-        <div style={{ ...flex, marginTop: story ? 32 : square ? 20 : 26, fontSize: story ? 22 : square ? 18 : 20, color: goldSoft }}>{snapshot.hasScheduledTime ? "Countdown" : "Details"} as of {snapshot.dateLabel}</div>
+        <div style={{ ...flex, marginTop: story ? 26 : square ? 12 : 17, fontSize: story ? 22 : square ? 18 : 20, color: goldSoft }}>{snapshot.hasScheduledTime ? "Countdown" : "Details"} as of {snapshot.dateLabel}</div>
       </div>
     </div>
   );
 }
 
-function PreviewCard({ snapshot, logo }: { snapshot: CountdownSnapshot; logo: string }) {
+function PreviewCard({ snapshot, banner }: { snapshot: CountdownSnapshot; banner: string }) {
   const { event } = snapshot;
   const timeAndRoute = event.paradeId && event.route ? `${event.timeLabel} • ${event.route}` : event.timeLabel;
   const nameSize = event.name.length > 34 ? 34 : event.name.length > 22 ? 38 : 46;
 
   return (
-    <div style={{ ...flex, position: "absolute", top: 44, right: 64, bottom: 42, left: 64, flexDirection: "column" }}>
+    <div style={{ ...flex, position: "absolute", top: 28, right: 64, bottom: 28, left: 64, flexDirection: "column" }}>
       <div style={{ ...flex, alignItems: "center", justifyContent: "space-between" }}>
-        <div style={{ ...flex, alignItems: "center" }}>
-          <OriginalLogo logo={logo} size={78} />
-          <div style={{ ...flex, marginLeft: 22, flexDirection: "column" }}>
-            <div style={{ ...flex, fontSize: 19, color: goldSoft, fontWeight: 700, letterSpacing: 3 }}>MOBILE, ALABAMA</div>
-            <div style={{ ...flex, marginTop: 8, fontSize: 30, color: cream, fontWeight: 700, WebkitTextStroke: `0.5px ${cream}` }}>Mardi Gras {event.date.slice(0, 4)}</div>
-          </div>
-        </div>
+        <ShareBanner banner={banner} width={420} />
         <div style={{ ...flex, maxWidth: 300, flexDirection: "column", alignItems: "flex-end", textAlign: "right", color: goldSoft }}>
           <div style={{ ...flex, fontSize: 15, letterSpacing: 2 }}>{snapshot.hasScheduledTime ? "COUNTDOWN AS OF" : "DETAILS AS OF"}</div>
           <div style={{ ...flex, marginTop: 7, fontSize: 18 }}>{snapshot.dateLabel}</div>
         </div>
       </div>
-      <div style={{ ...flex, width: "100%", marginTop: 22 }}><PosterHeadline snapshot={snapshot} format="preview" /></div>
-      <div style={{ ...flex, alignItems: "center", gap: 30, height: 234, marginTop: 12, flexShrink: 0 }}>
+      <div style={{ ...flex, width: "100%", marginTop: 10 }}><PosterHeadline snapshot={snapshot} format="preview" /></div>
+      <div style={{ ...flex, alignItems: "center", gap: 30, height: 210, marginTop: 8, flexShrink: 0 }}>
         <div style={{ ...flex, width: 620, height: 215, flexShrink: 0 }}><CountdownNumbers snapshot={snapshot} format="preview" /></div>
         <div style={{ ...flex, flex: 1, minWidth: 0, flexDirection: "column" }}>
           <div style={{ ...flex, fontSize: 18, color: goldSoft, fontWeight: 700, letterSpacing: 1.5 }}>{event.paradeId ? "MOBILE MARDI GRAS" : "FIRST DOWNTOWN PARADE"}</div>

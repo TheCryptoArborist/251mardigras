@@ -212,7 +212,7 @@ test("all platform captions and card formats preserve the captured countdown", (
     assert.equal(card.pathname, "/api/countdown-card");
     assert.equal(card.searchParams.get("at"), String(snapshot.at));
     assert.equal(card.searchParams.get("format"), format);
-    assert.equal(card.searchParams.get("v"), "4");
+    assert.equal(card.searchParams.get("v"), "5");
     assert.equal(card.searchParams.has("parade"), false);
     assert.deepEqual(parseCountdownSnapshot(card.searchParams.get("at") ?? undefined, now), snapshot);
   }
@@ -277,7 +277,7 @@ test("share URLs preserve attribution and downloaded cards retain the same captu
     const download = new URL(buildCountdownCardUrl(snapshot, format, true), "https://mg251.xyz");
     assert.equal(download.searchParams.get("at"), String(snapshot.at));
     assert.equal(download.searchParams.get("format"), format);
-    assert.equal(download.searchParams.get("v"), "4");
+    assert.equal(download.searchParams.get("v"), "5");
     assert.equal(download.searchParams.has("parade"), false);
     assert.ok(download.searchParams.has("download"));
     assert.equal(new URL(buildCountdownCardUrl(snapshot, format), "https://mg251.xyz").searchParams.has("download"), false);

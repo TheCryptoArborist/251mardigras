@@ -2,6 +2,7 @@
 const nextConfig = {
   reactStrictMode: true,
   outputFileTracingIncludes: {
+    "/api/countdown-card": ["./public/images/parade-share-banner.jpg"],
     "/api/events/*/share-card": [
       "./public/images/event-flyers/**/*",
       "./public/images/mardi-gras-mobile-logo.png"
