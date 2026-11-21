@@ -7,11 +7,11 @@ import { SITE_LOGO_PATH } from "@/lib/brand";
 import type { ParadeSchedule } from "@/components/ScheduleRouteViewer";
 
 const IMAGE_WIDTH = 1080;
-const MARGIN = 58;
+const MARGIN = 46;
 const HEADER_HEIGHT = 312;
 const LOGO_SIZE = 128;
 const DAY_HEIGHT = 55;
-const ROW_HEIGHT = 39;
+const ROW_HEIGHT = 60;
 const FOOTER_HEIGHT = 118;
 const GOLD = "#ffd45a";
 const PALE_GOLD = "#fff2b5";
@@ -63,24 +63,20 @@ async function renderSchedule(schedule: ParadeSchedule, scheduleUrl: string) {
     ctx.fillStyle = "#63228a";
     ctx.fillRect(MARGIN, y + 5, right - MARGIN, DAY_HEIGHT - 10);
     ctx.fillStyle = GOLD;
-    ctx.font = `800 28px ${FONT}`;
+    ctx.font = `800 35px ${FONT}`;
     const label = day.specialLabel ? `${day.label}  ·  ${day.specialLabel}` : day.label;
     ctx.fillText(label, MARGIN + 14, y + DAY_HEIGHT / 2, right - MARGIN - 28);
     y += DAY_HEIGHT;
 
     for (const parade of day.parades) {
-      const middle = y + ROW_HEIGHT / 2;
-      const nameX = MARGIN + 180;
-      const routeX = right - 120;
-      ctx.fillStyle = GOLD;
-      ctx.font = `700 26px ${FONT}`;
-      ctx.fillText(parade.time, MARGIN + 14, middle, nameX - MARGIN - 30);
+      const rowX = MARGIN + 14;
+      const rowWidth = right - MARGIN - 28;
       ctx.fillStyle = PALE_GOLD;
-      ctx.font = `650 28px ${FONT}`;
-      ctx.fillText(parade.name, nameX, middle, routeX - nameX - 20);
+      ctx.font = `750 38px ${FONT}`;
+      ctx.fillText(parade.name, rowX, y + 17, rowWidth);
       ctx.fillStyle = GOLD;
-      ctx.font = `750 23px ${FONT}`;
-      ctx.fillText(parade.route, routeX, middle, 120);
+      ctx.font = `700 28px ${FONT}`;
+      ctx.fillText(`${parade.time}  ·  ${parade.route}`, rowX, y + 44, rowWidth);
       y += ROW_HEIGHT;
     }
   }
@@ -203,7 +199,7 @@ export function FullScheduleShare({ schedule, scheduleUrl }: { schedule: ParadeS
             <p role="status" className={status ? "w-full text-sm text-parade-goldSoft" : "sr-only"}>{status}</p>
           </div>
           {image && (
-            <div className="min-h-0 overflow-y-auto overscroll-contain px-4 pb-4 sm:px-5 sm:pb-5">
+            <div className="min-h-0 overflow-y-auto overscroll-contain pb-4 sm:px-5 sm:pb-5">
               <Image
                 src={image.url}
                 alt={`${schedule.title} image preview, with all dates, start times and routes listed on this page.`}
