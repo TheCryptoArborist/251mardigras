@@ -3,11 +3,13 @@
 import { Download, Share2, X } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
+import { SITE_LOGO_PATH } from "@/lib/brand";
 import type { ParadeSchedule } from "@/components/ScheduleRouteViewer";
 
 const IMAGE_WIDTH = 1080;
 const MARGIN = 58;
-const HEADER_HEIGHT = 240;
+const HEADER_HEIGHT = 312;
+const LOGO_SIZE = 128;
 const DAY_HEIGHT = 55;
 const ROW_HEIGHT = 39;
 const FOOTER_HEIGHT = 118;
@@ -15,7 +17,7 @@ const GOLD = "#ffd45a";
 const PALE_GOLD = "#fff2b5";
 const FONT = "system-ui, sans-serif";
 
-function renderSchedule(schedule: ParadeSchedule, scheduleUrl: string) {
+async function renderSchedule(schedule: ParadeSchedule, scheduleUrl: string) {
   const canvas = document.createElement("canvas");
   const days = schedule.days.filter((day) => day.parades.length > 0);
   canvas.width = IMAGE_WIDTH;
@@ -37,14 +39,24 @@ function renderSchedule(schedule: ParadeSchedule, scheduleUrl: string) {
   ctx.textBaseline = "middle";
 
   const right = IMAGE_WIDTH - MARGIN;
+  const logo = new window.Image();
+  logo.src = SITE_LOGO_PATH;
+  const hasLogo = await logo.decode().then(() => true, () => false);
+  if (hasLogo) {
+    ctx.drawImage(logo, MARGIN, 40, LOGO_SIZE, LOGO_SIZE);
+  }
+
+  const brandX = hasLogo ? MARGIN + LOGO_SIZE + 22 : MARGIN;
   ctx.fillStyle = GOLD;
+  ctx.font = `900 42px ${FONT}`;
+  ctx.fillText("MG251.xyz", brandX, 86);
   ctx.font = `800 24px ${FONT}`;
-  ctx.fillText("MG251  /  MOBILE, ALABAMA", MARGIN, 69);
+  ctx.fillText("MOBILE, ALABAMA", brandX, 125);
   ctx.fillStyle = PALE_GOLD;
   ctx.font = `900 52px ${FONT}`;
-  ctx.fillText(schedule.title, MARGIN, 130, right - MARGIN);
+  ctx.fillText(schedule.title, MARGIN, 209, right - MARGIN);
   ctx.font = `700 27px ${FONT}`;
-  ctx.fillText(`${schedule.displayDateRange}  ·  All times Central`, MARGIN, 185, right - MARGIN);
+  ctx.fillText(`${schedule.displayDateRange}  ·  All times Central`, MARGIN, 261, right - MARGIN);
 
   let y = HEADER_HEIGHT;
   for (const day of days) {
@@ -107,7 +119,7 @@ export function FullScheduleShare({ schedule, scheduleUrl }: { schedule: ParadeS
     setPreparing(true);
     setStatus("Preparing schedule image…");
     try {
-      const { png, height } = renderSchedule(schedule, scheduleUrl);
+      const { png, height } = await renderSchedule(schedule, scheduleUrl);
       const blob = await png;
       const file = new File([blob], `MG251-${schedule.season}-Parade-Schedule.png`, { type: "image/png" });
       const canShare = typeof navigator.share === "function" && navigator.canShare?.({ files: [file] }) === true;
