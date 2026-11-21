@@ -4,6 +4,7 @@ import { ArrowUp, CalendarPlus, ChevronDown, Clock3, ExternalLink, MapPinned, Sh
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { FullScheduleShare } from "@/components/FullScheduleShare";
 import { StatusPill } from "@/components/StatusPill";
 import { createCountdownSnapshot, createParadeShareEvent, type CountdownSnapshot } from "@/lib/countdown-share";
 
@@ -232,6 +233,7 @@ export function ScheduleRouteViewer({ schedule, focusParadeId }: ScheduleRouteVi
             >
               Route maps <MapPinned className="h-4 w-4" aria-hidden="true" />
             </a>
+            <FullScheduleShare schedule={schedule} scheduleUrl={SCHEDULE_SHARE_BASE_URL} />
             <span className="inline-flex items-center gap-2 px-1 py-2.5 text-xs font-bold text-purple-100">
               <ShieldCheck className="h-4 w-4 text-parade-goldBright" aria-hidden="true" />
               Last verified {formatVerificationDate(schedule.lastTranscribedAt)}
