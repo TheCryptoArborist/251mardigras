@@ -9,6 +9,16 @@ import artwork from "../profile-studio/societies.json";
 const formUrl = "https://form.jotform.com/263255927154058";
 const normalize = (name: string) => name.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[^a-z0-9 ]/g, "");
 const societyArtwork = new Map(artwork.map(({ name, src }) => [normalize(name), src]));
+const additionalArtwork = new Map([
+  ["Krewe of Phoenix", "/images/ball-societies/krewe-of-phoenix.webp"],
+  ["Krewe of Serendipity", "/images/ball-societies/krewe-of-serendipity.webp"],
+  ["Los Toros Bravos", "/images/ball-societies/los-toros-bravos.webp"],
+]);
+const artworkAliases = new Map([
+  ["Krewe de Secondline/Port City Secondliners", "Krewe de Secondline"],
+  ["MAMGA Grand Marshal’s Ball", "MAMGA"],
+  ["Order of Misfits/Monde Ball", "Order of Misfits"],
+]);
 
 export default function BallDirectory() {
   const [search, setSearch] = useState("");
@@ -28,7 +38,8 @@ export default function BallDirectory() {
       <p className="my-4 text-sm text-parade-muted" aria-live="polite">{matches.length} {matches.length === 1 ? "society" : "societies"} found</p>
       <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {matches.map((name) => {
-          const src = societyArtwork.get(normalize(name));
+          const artworkName = artworkAliases.get(name) ?? name;
+          const src = additionalArtwork.get(name) ?? societyArtwork.get(normalize(artworkName));
           return (
             <li key={name}>
               <a href={formUrl + "?q3_textbox1=" + encodeURIComponent(name)} aria-label={`Submit ball details for ${name}`} className="group flex min-h-24 items-center gap-4 rounded-xl border border-parade-line border-l-4 border-l-parade-gold bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-parade-purple">
