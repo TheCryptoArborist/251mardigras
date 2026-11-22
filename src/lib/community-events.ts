@@ -13,6 +13,8 @@ export type CommunityEvent = {
   title: string;
   organization: string;
   eventType: string;
+  ballVisibility?: "schedule-only" | "date-only";
+  carnivalSeason?: number;
   startDateTime: string;
   endDateTime: string;
   venueName: string;
@@ -48,8 +50,16 @@ const communityEvents: CommunityEvent[] = (communityEventsJson as CommunityEvent
 
 export function getApprovedCommunityEvents() {
   return communityEvents
-    .filter((event) => event.status === "approved")
+    .filter((event) => event.status === "approved" && !event.ballVisibility)
     .sort((a, b) => new Date(a.startDateTime).getTime() - new Date(b.startDateTime).getTime());
+}
+
+export function getApprovedBalls(season: number) {
+  return communityEvents
+    .filter((event) => event.status === "approved" && event.eventType === "Ball" &&
+      (event.carnivalSeason ?? Number(event.startDateTime.slice(0, 4))) === season)
+    .sort((a, b) => a.startDateTime.slice(0, 10).localeCompare(b.startDateTime.slice(0, 10)) ||
+      new Date(a.startDateTime).getTime() - new Date(b.startDateTime).getTime());
 }
 
 export function getUpcomingCommunityEvents(now = new Date()) {
