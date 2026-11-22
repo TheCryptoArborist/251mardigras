@@ -2,6 +2,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { ArrowDown, Gamepad2 } from "lucide-react";
 import { ArcadeCabinet, ComingSoonCabinet } from "@/components/ArcadeCabinet";
+import { ArcadeCheckIn } from "@/components/ArcadeCheckIn";
+import paradeSchedule from "../../../data/parade-schedule-2027.json";
 import { ARCADE_GAMES } from "@/lib/arcade";
 import { createPageMetadata } from "@/lib/seo";
 import "./arcade.css";
@@ -15,6 +17,7 @@ export const metadata = createPageMetadata({
 });
 
 export default function ArcadePage() {
+  const firstParadeDay = paradeSchedule.days[0];
   return (
     <div className="mardi-arcade">
       <div className="arcade-skyline" aria-hidden="true" />
@@ -28,6 +31,7 @@ export default function ArcadePage() {
             <div className="arcade-hero-actions"><a className="arcade-button" href="#cabinets">Choose a game <ArrowDown size={15} aria-hidden="true" /></a><Link href="/schedule" className="arcade-secondary-link">Parade schedule</Link></div>
           </div>
         </header>
+        <ArcadeCheckIn paradeDay={firstParadeDay.date} paradeName={firstParadeDay.parades[0].name} />
         <section className="arcade-floor" id="cabinets" aria-labelledby="arcade-lineup-heading">
           <div className="arcade-section-title"><div><p className="arcade-eyebrow">THE GAME LINEUP</p><h2 id="arcade-lineup-heading">Choose your game.</h2></div><p>1 ready to play · 1 preview · 4 coming soon</p></div>
           <p className="arcade-launch-note">MoonPie Run is ready to play—no account needed. Watch our gameplay previews and explore the next cabinets.</p>

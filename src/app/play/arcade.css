@@ -124,3 +124,39 @@
  .arcade-preview-image figcaption { font-size:11px; padding-inline:12px; }
 }
 @media (prefers-reduced-motion:reduce) { .arcade-cabinet { transition:none; } html:has(.mardi-arcade) { scroll-behavior:auto; } }
+
+.arcade-checkin {
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  align-items:center;
+  gap:18px 24px;
+  max-width:1120px;
+  margin:0 auto 20px;
+  padding:20px;
+  border:1px solid #ffda7066;
+  border-radius:10px;
+  background:radial-gradient(ellipse at 7% 0%,#623472 0%,transparent 59%),#261532;
+}
+.arcade-checkin-lead { display:flex; align-items:center; gap:14px; }
+.arcade-checkin-emblem { display:grid; place-items:center; flex:0 0 52px; height:52px; border:1px solid #ffda7099; border-radius:50%; background:#301744; color:var(--arcade-gold); }
+.arcade-checkin h2 { margin:3px 0 4px; font:900 clamp(28px,4vw,42px)/1 'Arcade Condensed',Impact,sans-serif; }
+.arcade-checkin p:not(.arcade-eyebrow) { margin:4px 0; color:#e6d4ed; font-size:13px; line-height:1.4; }
+.arcade-checkin a { color:var(--arcade-gold); font-size:13px; text-decoration:underline; text-underline-offset:3px; }
+.arcade-checkin-action { text-align:right; }
+.arcade-checkin-action button { margin-bottom:3px; font-size:12px; }
+.arcade-checkin-action button:disabled { border-color:#d4ad6755; background:#382147; color:#f5ddb0; cursor:default; }
+.arcade-checkin-badges { display:grid; grid-column:1/-1; grid-template-columns:repeat(5,minmax(0,1fr)); gap:8px; margin:0; padding:0; list-style:none; }
+.arcade-checkin-badges li { display:grid; justify-items:center; align-content:center; gap:3px; min-height:88px; padding:7px; border:1px solid #d7add844; border-radius:6px; background:#190f25; color:#ead9ef; text-align:center; }
+.arcade-checkin-badges li svg { color:#c8a4de; }
+.arcade-checkin-badges li.is-earned { border-color:#ffda70ad; background:#392346; }
+.arcade-checkin-badges li.is-earned svg { color:var(--arcade-gold); }
+.arcade-checkin-badges strong { font-size:12px; }
+.arcade-checkin-badges span,.arcade-checkin-badges small { font-size:11px; }
+@media (max-width:650px) {
+  .arcade-checkin { grid-template-columns:1fr; gap:12px; padding:14px; }
+  .arcade-checkin-action { text-align:left; }
+  .arcade-checkin-badges { grid-template-columns:repeat(3,minmax(0,1fr)); }
+}
+@media (max-width:360px) {
+  .arcade-checkin-badges { grid-template-columns:repeat(2,minmax(0,1fr)); }
+}
