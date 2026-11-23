@@ -20,7 +20,7 @@ const dayLength = 86_400_000;
 const badges = [
   { name: "First Throw", goal: 1, icon: Star },
   { name: "Bead Collector", goal: 7, icon: Medal },
-  { name: "Christmas Krewe", goal: 12, icon: Gift, holiday: true },
+  { name: "Christmas Crewe", goal: 12, icon: Gift, holiday: true },
   { name: "MoonPie Master", goal: 21, icon: Sparkles },
   { name: "Carnival Royalty", goal: 30, icon: Crown }
 ];
