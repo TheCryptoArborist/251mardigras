@@ -1,0 +1,105 @@
+{
+  "method": "actual game.js evaluated with mocked DOM/canvas; no browser performance claims",
+  "observations": {
+    "escapeFromPauseSchedule": {
+      "state": "paused",
+      "pauseHidden": false,
+      "scheduleHidden": true
+    },
+    "shiftReleasedBeforeLetter": {
+      "turn": 0
+    },
+    "elapsedAfterTenWallSeconds": {
+      "10": 10,
+      "20": 10,
+      "30": 10,
+      "60": 10,
+      "120": 10
+    },
+    "cruiseBoost": {
+      "speed": 6732,
+      "charge": 76.9999999999996,
+      "boostActive": true
+    },
+    "invulnerableTrafficContact": {
+      "markedPermanentlyHit": false,
+      "lives": 3
+    },
+    "checkpoints": {
+      "logical": [
+        445000,
+        895000,
+        1380000
+      ],
+      "gantries": [
+        8000,
+        446500,
+        896500,
+        1381500
+      ],
+      "finishStripeStart": 1381500
+    },
+    "fullRunsWithTraffic": [
+      {
+        "mode": "cup",
+        "lane": -0.6,
+        "state": "ended",
+        "seconds": 36,
+        "parades": 8,
+        "lives": 0,
+        "score": 140,
+        "won": false
+      },
+      {
+        "mode": "cup",
+        "lane": 0,
+        "state": "ended",
+        "seconds": 33,
+        "parades": 8,
+        "lives": 0,
+        "score": 140,
+        "won": false
+      },
+      {
+        "mode": "cup",
+        "lane": 0.6,
+        "state": "ended",
+        "seconds": 46,
+        "parades": 11,
+        "lives": 0,
+        "score": 160,
+        "won": false
+      },
+      {
+        "mode": "cruise",
+        "lane": -0.6,
+        "state": "ended",
+        "seconds": 274,
+        "parades": 45,
+        "lives": 3,
+        "score": 775,
+        "won": true
+      },
+      {
+        "mode": "cruise",
+        "lane": 0,
+        "state": "ended",
+        "seconds": 275,
+        "parades": 45,
+        "lives": 3,
+        "score": 780,
+        "won": true
+      },
+      {
+        "mode": "cruise",
+        "lane": 0.6,
+        "state": "ended",
+        "seconds": 275,
+        "parades": 45,
+        "lives": 3,
+        "score": 740,
+        "won": true
+      }
+    ]
+  }
+}

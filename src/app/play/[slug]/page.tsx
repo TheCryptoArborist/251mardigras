@@ -9,7 +9,7 @@ import "../arcade.css";
 type Props = { params: Promise<{ slug: string }> };
 
 export function generateStaticParams() {
-  return ARCADE_GAMES.map(({ slug }) => ({ slug }));
+  return ARCADE_GAMES.filter((game) => game.slug !== "moonpie-motorway").map(({ slug }) => ({ slug }));
 }
 
 export async function generateMetadata({ params }: Props) {

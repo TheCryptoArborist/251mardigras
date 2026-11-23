@@ -1,0 +1,39 @@
+[
+  {
+    "name": "carnival-scenery-v2.webp",
+    "bytes": 1998322,
+    "size": [
+      1254,
+      1254
+    ],
+    "decodedRGBABytes": 6290064,
+    "alpha": {
+      "transparent": 478656,
+      "opaque": 209,
+      "partial": 1093651
+    }
+  },
+  {
+    "name": "race-cars-v2.webp",
+    "bytes": 1362478,
+    "size": [
+      1536,
+      1024
+    ],
+    "decodedRGBABytes": 6291456,
+    "alpha": {
+      "transparent": 392632,
+      "opaque": 0,
+      "partial": 1180232
+    }
+  },
+  {
+    "name": "mobile-skyline-v2.webp",
+    "bytes": 1915238,
+    "size": [
+      2172,
+      724
+    ],
+    "decodedRGBABytes": 6290112
+  }
+]

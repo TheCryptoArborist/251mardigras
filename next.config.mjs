@@ -2,6 +2,8 @@
 const nextConfig = {
   reactStrictMode: true,
   outputFileTracingIncludes: {
+    "/play/moonpie-motorway": ["./games/moonpie-motorway/dist/**/*"],
+    "/play/moonpie-motorway/**": ["./games/moonpie-motorway/dist/**/*"],
     "/api/countdown-card": ["./public/images/parade-share-banner.jpg"],
     "/api/events/*/share-card": [
       "./public/images/event-flyers/**/*",
