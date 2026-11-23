@@ -548,6 +548,30 @@
     "mapUrl": "https://www.google.com/maps/search/?api=1&query=Renaissance%20Riverview%20Plaza%20Hotel%20Courtyard%20Mobile%20AL",
     "eventArtworkUrl": "/images/event-logos/moonpie-courtyard-celebration.png",
     "organizationLogoUrl": "/images/event-logos/moonpie-over-mobile.png"
+  },
+  {
+    "id": "a-christmas-breakfast-2026",
+    "slug": "a-christmas-breakfast-2026",
+    "status": "approved",
+    "title": "A Christmas Breakfast",
+    "organization": "Order of Olympia",
+    "eventType": "Family Event",
+    "startDateTime": "2026-12-05T10:00:00-06:00",
+    "endDateTime": "2026-12-05T12:00:00-06:00",
+    "venueName": "The Mystic Barn",
+    "venueAddress": "659 St. Anthony Street",
+    "cityStateZip": "Mobile, AL 36603",
+    "description": "Join the Order of Olympia for a Christmas breakfast with holiday characters at The Mystic Barn. Tickets are $10 per person through Zeffy.",
+    "mapUrl": "https://www.google.com/maps/dir/?api=1&destination=659%20St.%20Anthony%20Street%2C%20Mobile%2C%20AL%2036603",
+    "ticketUrl": "https://www.zeffy.com/en-US/ticketing/a-christmas-breakfast",
+    "ticketLabel": "Buy Tickets on Zeffy",
+    "cost": "$10 per person",
+    "audience": "Family-Friendly",
+    "flyerUrl": "/images/event-flyers/a-christmas-breakfast-2026.jpg",
+    "flyerDimensions": {
+      "width": 1190,
+      "height": 1187
+    }
   }
 ]
 
