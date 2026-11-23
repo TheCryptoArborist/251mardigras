@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#1a102c"><meta name="description" content="Catch the throws. Dodge the rascals. Play MoonPie Run, a Mobile, Alabama Mardi Gras maze chase in purple and gold.">
+<title>MoonPie Run · Mobile Mardi Gras</title>
+<link rel="stylesheet" href="style.css?v=1.14">
+<link rel="stylesheet" href="progress.css?v=1.14">
+</head>
+<body>
+<div class="ambient" aria-hidden="true"></div>
+<header class="masthead"><a href="./" class="brand" aria-label="MoonPie Run home"><span class="brand-mark">✦</span> PORT CITY <b>ARCADE</b></a><div class="edition">MOBILE, ALABAMA <span>·</span> PARADE SEASON, EVERY SEASON</div></header>
+<main>
+<section class="intro">
+<div class="eyebrow"><span class="status-dot"></span> A PORT CITY ORIGINAL</div>
+<h1>MOONPIE<br> <span>RUN</span><i>✦</i></h1>
+<p class="tagline">Catch the throws.<br> Outrun the trouble.</p>
+<p class="description">The parade’s rolling through downtown Mobile. Scoop up the doubloons, grab a MoonPie, and give the carnival rascals a run for their money.</p>
+<div class="mini-scene" aria-hidden="true"><canvas id="street-preview" width="390" height="180"></canvas><span>MEET ME ON DAUPHIN STREET</span></div>
+<div class="howto"><div class="section-kicker">THE ART OF THE CHASE</div><div class="instruction"><span class="legend beads">◉ ◉ ◉</span><p><b>Collect every doubloon</b><small>Clear the route to keep the parade rolling.</small></p></div><div class="instruction"><span class="legend cookie">◉</span><p><b>MoonPies turn the tables</b><small>Frightened rascals are yours to chase.</small></p></div><div class="instruction"><span class="legend mask">♠</span><p><b>Three lives. Three routes.</b><small>Dauphin Street to the waterfront.</small></p></div></div>
+<div class="controls-note"><kbd>↑</kbd><kbd>←</kbd><kbd>↓</kbd><kbd>→</kbd><span>or WASD to move · P to pause</span></div>
+</section>
+<section class="arcade" aria-label="MoonPie Run game">
+<div class="cabinet-top"><span>✦</span><span>DOWNTOWN MOBILE · AFTER DARK</span><span>✦</span></div>
+<canvas id="skyline" class="skyline-banner" width="1122" height="231" aria-label="MoonPie Run title over the Mobile skyline"></canvas>
+<div class="player-strip"><button id="player-button"><small>PLAYER</small><strong id="player-name">Choose username</strong></button><button id="leaderboard-button">Leaderboard ↗</button><button id="badges-button">Badges <span id="badge-count">0/12</span></button></div>
+<div class="scoreboard"><div><label>SCORE</label><strong id="score">000000</strong></div><div class="score-route"><label>PARADE ROUTE</label><strong id="route-number">01 <em>/ 03</em></strong></div><div><label>PERSONAL BEST</label><strong id="best">000000</strong></div></div>
+<div class="route-bar"><span><i></i> <b id="route-name">DAUPHIN STREET</b></span><span id="beads-left">READY TO ROLL</span></div>
+<p class="play-instructions"><span class="keyboard-instructions">Arrow keys or WASD to move · P to pause</span><span class="mobile-instructions">Swipe the maze or tap the arrows</span></p>
+<div class="game-actions" role="group" aria-label="Game controls"><button class="icon-button" id="sound" aria-label="Turn sound on" title="Toggle sound">♪ <span>SOUND OFF</span></button><button class="pause-button" id="pause" aria-label="Pause game" disabled>Ⅱ <span>PAUSE</span></button></div>
+<div class="game-window" id="game-window">
+<canvas id="game" width="552" height="600" aria-label="Mardi Gras maze. Use arrow keys, WASD, swipes, or the on-screen direction buttons to collect Mardi Gras coins and avoid rascals." tabindex="0"></canvas>
+<div class="overlay" id="overlay"><div class="overlay-content" id="overlay-content"><h2>Getting the parade ready…</h2><p>One moment before the good times roll.</p></div></div>
+<div class="game-toast" id="toast" aria-live="polite"></div>
+<div class="badge-notice" id="badge-notice" role="status" aria-live="polite"></div>
+</div>
+<div class="cabinet-bottom"><div class="lives"><span>LIVES</span><b id="lives">◆ ◆ ◆</b></div><div class="power" id="power"><span>MOONPIE POWER</span><div><i id="power-fill"></i></div></div></div>
+<div class="touch-controls" aria-label="Touch direction controls"><button data-dir="left" aria-label="Move left">←</button><div><button data-dir="up" aria-label="Move up">↑</button><button data-dir="down" aria-label="Move down">↓</button></div><button data-dir="right" aria-label="Move right">→</button></div>
+<div class="progress-row"><span id="progress-label">THE THROWS ARE WAITING</span><div class="route-progress"><i id="route-fill"></i></div><span id="progress-percent">0%</span></div>
+</section>
+</main>
+<footer><span>MADE FOR MOBILE. BUILT FOR ONE MORE ROUND.</span><span>FICTIONAL MAZES INSPIRED BY DOWNTOWN · V1.14</span></footer>
+<script src="art.js?v=1.14"></script>
+<script src="audio.js?v=1.14"></script>
+<dialog class="progress-dialog" id="progress-dialog" aria-labelledby="progress-title">
+ <header class="progress-header"><div><small>MOONPIE RUN · PLAYER PASSPORT</small><h2 id="progress-title">Your place in the parade.</h2></div><button id="progress-close" class="progress-close" aria-label="Close leaderboard and badges">×</button></header>
+ <div class="progress-scroll">
+  <section class="profile-panel" id="profile-panel" aria-label="Your player username"></section>
+  <nav class="progress-tabs" role="tablist" aria-label="Player records"><button role="tab" id="board-tab" data-progress-tab="leaderboard" aria-selected="true" aria-controls="board-panel">LEADERBOARD</button><button role="tab" id="badges-tab" data-progress-tab="badges" aria-selected="false" aria-controls="badges-panel">TROPHY ROOM</button><button role="tab" id="profile-tab" data-progress-tab="profile" aria-selected="false" aria-controls="player-detail">PLAYER PROFILE</button></nav>
+  <section id="board-panel" role="tabpanel" aria-labelledby="board-tab"><div class="board-heading"><div><h3>Hall of Throws</h3><p id="board-status">Loading high scores…</p></div><button class="refresh-board" id="refresh-board">Refresh ↻</button></div><div class="board-periods" role="group" aria-label="Ranking period"><button data-scope="all" aria-pressed="true">All time</button><button data-scope="daily" aria-pressed="false">Today</button><button data-scope="weekly" aria-pressed="false">This week</button></div><p id="board-reset" class="board-reset"></p><table class="leaderboard-table"><thead><tr><th>RANK</th><th>PLAYER</th><th>SCORE</th><th>BADGES</th></tr></thead><tbody id="leaderboard-rows"></tbody></table><p class="board-empty" id="board-empty" hidden></p><p class="your-rank" id="your-rank"></p></section>
+  <section id="player-detail" role="tabpanel" aria-labelledby="profile-tab" hidden></section>
+  <section id="badges-panel" role="tabpanel" aria-labelledby="badges-tab" hidden><div class="trophy-heading"><div><small class="trophy-eyebrow">THE MYSTIC COLLECTION</small><h3>Your Trophy Room</h3></div><span id="trophy-status">0 of 12 badges earned</span></div><div id="collection-summary" class="collection-summary"></div><div class="badge-grid" id="badge-grid"></div><p id="trophy-footnote" class="trophy-footnote"></p></section>
+ </div>
+</dialog>
+<script type="module" src="progress.js?v=1.14"></script>
+</body></html>
