@@ -572,6 +572,29 @@
       "width": 1190,
       "height": 1187
     }
+  },
+  {
+    "id": "mardi-gras-tree-lighting-2027",
+    "slug": "mardi-gras-tree-lighting-2027",
+    "status": "approved",
+    "title": "Lighting of the Mardi Gras Tree",
+    "organization": "City of Mobile",
+    "eventType": "Family Event",
+    "startDateTime": "2027-01-09T17:30:00-06:00",
+    "endDateTime": "2027-01-09T19:00:00-06:00",
+    "venueName": "Mardi Gras Park",
+    "venueAddress": "109 Government St.",
+    "cityStateZip": "Mobile, AL 36602",
+    "description": "Kick off Carnival season at the City of Mobile’s Mardi Gras tree lighting and brass band showcase. Jukebox Brass Band opens at 5:30 p.m., followed by the Excelsior Band at 5:50 p.m. and welcoming remarks at 6:10 p.m. The tree lights up at 6:20 p.m., and New Orleans’ Big 6 Brass Band plays at 6:25 p.m. The event wraps up at 7 p.m. All times are Central. Food trucks and vendors will be on site, rain or shine.",
+    "mapUrl": "https://www.google.com/maps/dir/?api=1&destination=Mardi%20Gras%20Park%2C%20109%20Government%20St%2C%20Mobile%2C%20AL%2036602",
+    "ticketUrl": "https://www.cityofmobile.gov/events/events/lighting-of-the-mardi-gras-tree-2027",
+    "ticketLabel": "Official Event Info",
+    "audience": "Family-Friendly",
+    "flyerUrl": "/images/event-flyers/mardi-gras-tree-lighting-2027.jpg",
+    "flyerDimensions": {
+      "width": 1320,
+      "height": 420
+    }
   }
 ]
 
