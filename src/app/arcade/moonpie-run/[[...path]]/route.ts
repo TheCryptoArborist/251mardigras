@@ -48,12 +48,18 @@ async function serve(request: Request, context: Context) {
     }
     if (request.method === 'HEAD') return new Response(null, { status: response.status, headers: output });
     if (!resource) {
-      const html = (await response.text()).replace('<head>', `<head><base href="${BASE}/">`);
+      const html = (await response.text()).replace('<head>', `<head><base href="${BASE}/"><meta name="moonpie-api-base" content="${BASE}">`);
       return new Response(html, { status: response.status, headers: output });
     }
     if (resource === 'progress.js') {
       // Relative modules/assets use the base above; scope absolute score API calls too.
-      const source = (await response.text()).replace('fetch(path,{', `fetch('${BASE}'+path,{`);
+      const original = await response.text();
+      // Config-aware clients are served verbatim. Retain v1.14 compatibility
+      // until Sites has been released and the rollback window has closed.
+      if (original.includes("document.querySelector('meta[name=\"moonpie-api-base\"]')")) {
+        return new Response(original, { status: response.status, headers: output });
+      }
+      const source = original.replace('fetch(path,{', `fetch('${BASE}'+path,{`);
       if (!source.includes(`fetch('${BASE}'+path,{`)) throw new Error('Game API integration changed');
       return new Response(source, { status: response.status, headers: output });
     }

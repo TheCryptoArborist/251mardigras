@@ -1,5 +1,7 @@
 # MoonPie Run
 
+For this repository's local commands, source provenance, and release procedure, see [the MG251 integration guide](../../docs/moonpie-run.md). The original project documentation below is retained for context; its publication guidance does not authorize deployment without review.
+
 A Mobile, Alabama Mardi Gras maze chase with purple-and-gold pixel art, three parade routes, a shared leaderboard, and twelve achievements.
 
 ## Play

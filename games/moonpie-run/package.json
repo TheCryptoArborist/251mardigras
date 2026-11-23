@@ -6,6 +6,8 @@
     "node": ">=22.13.0"
   },
   "scripts": {
+    "test": "node --test tests/*.test.mjs",
+    "db:local": "node --import ./scripts/sites-env.mjs ./node_modules/wrangler/bin/wrangler.js d1 migrations apply DB --config wrangler.local.jsonc --local --persist-to .wrangler/state",
     "install:ci": "node scripts/install-ci.mjs",
     "dev": "node scripts/prepare-game.mjs && node scripts/run-framework.mjs dev",
     "build": "node scripts/prepare-game.mjs && node scripts/run-framework.mjs build",
