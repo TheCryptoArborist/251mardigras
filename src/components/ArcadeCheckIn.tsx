@@ -26,7 +26,9 @@ type Progress = { today: string; dates: string[]; mulligan?: string | null; stor
 
 function readProgress(today: string, paradeDay: string): Progress {
   const dates = readArcadeCheckIns(today, paradeDay);
-  return { today, dates, mulligan: localStorage.getItem(mulliganKey) };
+  const savedMulligan = localStorage.getItem(mulliganKey);
+  const mulligan = savedMulligan && savedMulligan > checkInStart ? savedMulligan : null;
+  return { today, dates, mulligan };
 }
 
 function missedDayToRestore({ today, dates, mulligan }: Progress, paradeDay: string) {
@@ -89,10 +91,11 @@ export function ArcadeCheckIn({ paradeDay, paradeName }: { paradeDay: string; pa
   }
 
   const today = progress?.today ?? checkInStart;
+  const opensLater = !progress || today < checkInStart;
   const dates = progress?.dates ?? [];
   const daysLeft = dayNumber(paradeDay) - dayNumber(today);
   const checkedIn = dates.includes(today);
-  const holiday = today >= holidayStart && today <= holidayEnd;
+  const holiday = !opensLater && today >= holidayStart && today <= holidayEnd;
   const ThemeIcon = holiday ? TreePine : Sparkles;
   const streak = countStreak(dates, daysLeft < 0 ? paradeDay : today, progress?.mulligan);
   const missedDay = progress && !progress.storageError && missedDayToRestore(progress, paradeDay);
@@ -145,15 +148,21 @@ export function ArcadeCheckIn({ paradeDay, paradeName }: { paradeDay: string; pa
         </div>
       </div>
       <div className="arcade-checkin-action">
-        {daysLeft >= 0 && (
-          <button className="arcade-button" type="button" onClick={checkIn} disabled={!progress || checkedIn || today < checkInStart}>
-            {checkedIn && <Check size={16} aria-hidden="true" />}
-            {checkedIn ? "Checked in today" : "Check in today"}
-          </button>
+        {opensLater ? (
+          <p><strong>Check-ins open {paradeFormat.format(new Date(checkInStart))}</strong><br />Come back at midnight Mobile time to start earning badges.</p>
+        ) : (
+          <>
+            {daysLeft >= 0 && (
+              <button className="arcade-button" type="button" onClick={checkIn} disabled={checkedIn}>
+                {checkedIn && <Check size={16} aria-hidden="true" />}
+                {checkedIn ? "Checked in today" : "Check in today"}
+              </button>
+            )}
+            <p role="status">{progress?.storageError ? "Progress could not be saved. Check that browser storage is enabled." : `${dates.length} total ${dates.length === 1 ? "check-in" : "check-ins"} · Saved in this browser`}</p>
+            <p><strong>{streak}-day streak</strong></p>
+            {daysLeft > 0 && <p>{checkedIn ? "Come back tomorrow after midnight Mobile time." : "One check-in per day. Every visit counts."}</p>}
+          </>
         )}
-        <p role="status">{progress?.storageError ? "Progress could not be saved. Check that browser storage is enabled." : `${dates.length} total ${dates.length === 1 ? "check-in" : "check-ins"} · Saved in this browser`}</p>
-        <p><strong>{streak}-day streak</strong></p>
-        {daysLeft > 0 && <p>{checkedIn ? "Come back tomorrow after midnight Mobile time." : "One check-in per day. Every visit counts."}</p>}
       </div>
       {missedDay && (
         <div style={{ gridColumn: "1 / -1" }}>
