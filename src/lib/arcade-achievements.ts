@@ -1,6 +1,6 @@
-export const checkInStart = "2026-12-01";
+export const checkInStart = "2026-11-27";
 export const checkInStoragePrefix = "mg251:road-to-first-throw:2027:";
-export const holidayStart = checkInStart;
+export const holidayStart = "2026-12-01";
 export const holidayEnd = "2026-12-25";
 
 export const arcadeAchievements = [
