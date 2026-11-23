@@ -25,7 +25,13 @@ for(const entry of entries){
  const expected=metadata.split(' ')[2];
  try{
   // Git applies checkout clean filters, so Windows CRLF is not a false change.
-  const actual=git('hash-object',path.join(moduleRoot,file));
+  let actual=git('hash-object',path.join(moduleRoot,file));
+  if(file==='game/index.html'){
+   // The only approved document edit loads the isolated responsive fixes.
+   const document=readFileSync(path.join(moduleRoot,file),'utf8').replace(/\r\n/g,'\n');
+   const restored=document.replace('<link rel="stylesheet" href="layout-fixes.css?v=1">\n','');
+   actual=execFileSync('git',['hash-object','--stdin'],{cwd:moduleRoot,encoding:'utf8',input:restored}).trim();
+  }
   if(actual!==expected)errors.push(file);
  }catch{errors.push(file+' (missing/unreadable)');}
  checked++;

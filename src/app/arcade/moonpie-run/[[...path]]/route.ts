@@ -2,7 +2,7 @@
 const UPSTREAM = 'https://moonpie-run-mobile.arborist63.chatgpt.site';
 const BASE = '/arcade/moonpie-run';
 const API = new Set(['api/player', 'api/leaderboard', 'api/runs', 'api/runs/finish']);
-const FILES = new Set(['style.css', 'progress.css', 'art.js', 'audio.js', 'progress.js', 'game.js', 'badges.mjs', 'run-outbox.mjs', 'assets/downtown-sprites.png', 'assets/mobile-artwork-reference.png']);
+const FILES = new Set(['style.css', 'progress.css', 'layout-fixes.css', 'art.js', 'audio.js', 'progress.js', 'game.js', 'badges.mjs', 'run-outbox.mjs', 'assets/downtown-sprites.png', 'assets/mobile-artwork-reference.png']);
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
 type Context = { params: Promise<{ path?: string[] }> };

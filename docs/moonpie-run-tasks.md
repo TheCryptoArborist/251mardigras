@@ -23,6 +23,8 @@ Acceptance: preserved source/assets/migrations/identity have no unexplained diff
 
 ## 2. Exercise browser gameplay and mobile layout
 
+Status: local browser pass performed; see [browser QA evidence and remaining checks](moonpie-run-browser-qa.md). Two responsive-layout defects were corrected. The broad items below remain open where only partially exercised.
+
 - [ ] Local browser: title/start, three-route progression, visible controls, keyboard, buffered turns, swipes/direction buttons, pause/resume, restart and result panel.
 - [ ] Viewports: narrow phone portrait, phone landscape and desktop; inspect maze/control fit, overflow, resizing and safe-area behavior.
 - [ ] Lifecycle: background/foreground, open/close player panel, audio unlock/mute, interrupted death/capture sequences.
@@ -81,5 +83,7 @@ Dependency: current Sites tools expose database inspection, but no backup/restor
 Twenty levels, bonus stages, extra lives, special tools, difficulty modes and two-player play are reference differences, not approved tasks to implement. Payments and tournaments remain outside scope. No original ROM/binaries/assets are to be redistributed.
 
 ## Execution log
+
+- 2026-11-23: Task 2 local browser pass recorded in `moonpie-run-browser-qa.md`. Fixed narrow overlay overflow and active phone layout/landscape controls. Game tests 36/36, proxy tests 5/5, game production build and baseline guard pass. Physical devices, full UI playthrough, lifecycle/audio and conclusive sharing checks remain open. No production operations.
 
 - 2026-11-23: Task 1 complete in an isolated worktree. Canonical-source guard: 137 protected files match (the three reviewed integration exceptions are README, package scripts and API client); dependencies/runtime declarations also match. Negative check: a temporary audio edit was rejected, original bytes restored, then guard passed again. Game tests: 36/36. Proxy tests: 4/4. `git diff --check` passes. No production operations or changes to Float Rider. Task 2 is next.

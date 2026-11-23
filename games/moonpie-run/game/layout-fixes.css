@@ -1,0 +1,46 @@
+/* Browser QA corrections. Keep the original v1.14 styles/art untouched. */
+.overlay .start-button{min-width:0;width:min(100%,220px);max-width:100%;white-space:normal}
+.overlay-content{min-width:0;overflow-wrap:anywhere}
+
+@media(max-width:760px){
+ .arcade.is-started{position:fixed;inset:0;z-index:10;width:100%;margin:0}
+}
+
+/* Short landscape phones need side controls, including widths above 760px. */
+@media(orientation:landscape) and (max-height:600px) and (max-width:1100px){
+ .arcade.is-started{
+  position:fixed;inset:0;z-index:10;width:100%;height:100vh;height:100dvh;margin:0;
+  padding:8px max(8px,env(safe-area-inset-right)) 8px max(8px,env(safe-area-inset-left));
+  display:grid;grid-template-columns:140px minmax(0,1fr) 160px;
+  grid-template-rows:64px 72px minmax(0,1fr) 40px 20px;gap:4px 8px;border-radius:8px
+ }
+ .is-started .cabinet-top,.is-started .skyline-banner{display:none}
+ .is-started .game-window{grid-column:2;grid-row:1/-1;align-self:center;justify-self:center;width:min(100%,calc((100dvh - 24px) * .92));aspect-ratio:23/25}
+ .is-started .player-strip{grid-column:1;grid-row:1;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:30px 30px;gap:4px;padding:0;border:0}
+ .is-started .player-strip button{min-width:0;min-height:28px;padding:2px;font-size:7px}
+ .is-started #player-button{grid-column:1/-1}
+ .is-started .badge-count{margin:0}
+ .is-started .player-strip small{display:none}
+ .is-started .scoreboard{grid-column:1;grid-row:2;display:flex;flex-wrap:wrap;padding:4px 0;gap:5px}
+ .is-started .scoreboard strong,.is-started .scoreboard .score-route strong{font-size:17px}
+ .is-started .scoreboard label{font-size:7px;margin-bottom:3px}
+ .is-started .route-bar{grid-column:1;grid-row:3;align-self:start;flex-wrap:wrap;padding:5px 0;font-size:7px}
+ .is-started .cabinet-bottom{grid-column:1;grid-row:4;padding:0;gap:6px}
+ .is-started .lives>span,.is-started .power>span{font-size:7px;margin-bottom:4px}
+ .is-started .lives b{letter-spacing:1px}
+ .is-started .progress-row{grid-column:1;grid-row:5;margin:0;font-size:6px;gap:4px}
+ .is-started .play-instructions{grid-column:3;grid-row:1;align-self:center;margin:0;font-size:10px;line-height:18px}
+ .is-started .keyboard-instructions{display:none}
+ .is-started .mobile-instructions{display:inline}
+ .is-started .game-actions{display:contents}
+ .is-started #sound,.is-started #pause{grid-column:3;min-height:44px;width:100%;min-width:0;align-self:center}
+ .is-started #sound{grid-row:2}
+ .is-started #pause{grid-row:4/6}
+ .is-started .touch-controls{grid-column:3;grid-row:3;display:flex;align-self:center;padding:0;gap:6px}
+ .is-started .touch-controls button{width:46px;height:44px;min-height:44px}
+ .is-started .touch-controls>span{display:none}
+ .is-started .overlay{padding:8px}
+ .is-started .overlay-content{padding:12px 8px}
+ .is-started .overlay-art{display:none}
+ .is-started .overlay h2{font-size:26px}
+}

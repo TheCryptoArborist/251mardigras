@@ -6,6 +6,18 @@ import {GET,POST} from '../src/app/arcade/moonpie-run/[[...path]]/route';
 const root='https://mg251.xyz/arcade/moonpie-run';
 const context=(path:string[]=[])=>({params:Promise.resolve({path})});
 
+test('serve the responsive stylesheet verbatim through the game proxy',async()=>{
+ const source=readFileSync(new URL('../games/moonpie-run/game/layout-fixes.css',import.meta.url),'utf8');
+ const original=globalThis.fetch;
+ try{
+  globalThis.fetch=async()=>new Response(source,{headers:{'content-type':'text/css'}});
+  const response=await GET(new Request(root+'/layout-fixes.css?v=1'),context(['layout-fixes.css']));
+  assert.equal(response.status,200);
+  assert.equal(response.headers.get('content-type'),'text/css');
+  assert.equal(await response.text(),source);
+ }finally{globalThis.fetch=original}
+});
+
 test('configured canonical client is served verbatim and uses the explicit same-origin API base',async()=>{
  const source=readFileSync(new URL('../games/moonpie-run/game/progress.js',import.meta.url),'utf8');
  const original=globalThis.fetch;
