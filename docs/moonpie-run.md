@@ -1,5 +1,7 @@
 # MoonPie Run source and release guide
 
+The corrected original-game reference was separately inspected: see [Deluxe Pacman reference audit](moonpie-run-reference-audit.md) for archive integrity, recovered manual findings, behavior comparisons and four additional regression checks. No gameplay changes resulted.
+
 ## Audit and provenance (2026-11-23)
 
 Read issue #42 in full (no comments), the repository README and PROJECT_HANDOFF.md, and the canonical Sites README. No AGENTS.md was present in either source tree. MG251 main was `acbdd49`; its daily check-in work is retained without modification.
