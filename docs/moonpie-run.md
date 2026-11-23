@@ -1,5 +1,7 @@
 # MoonPie Run source and release guide
 
+Track the remaining work in the ordered [audit task list](moonpie-run-tasks.md). Before changing or releasing the game, run `npm run verify:baseline` from `games/moonpie-run` to check the protected canonical source.
+
 The corrected original-game reference was separately inspected: see [Deluxe Pacman reference audit](moonpie-run-reference-audit.md) for archive integrity, recovered manual findings, behavior comparisons and four additional regression checks. No gameplay changes resulted.
 
 ## Audit and provenance (2026-11-23)
