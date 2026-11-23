@@ -328,20 +328,25 @@
     "organization": "Le Mardi Gras of Royalty — Deaf Society",
     "eventType": "Ball",
     "startDateTime": "2027-02-06T19:00:00-06:00",
-    "endDateTime": "2027-02-07T02:00:00-06:00",
+    "endDateTime": "2027-02-07T00:00:00-06:00",
     "venueName": "Via",
-    "venueAddress": "Dauphin Street",
-    "cityStateZip": "Mobile, AL",
-    "description": "Join Le Mardi Gras of Royalty for A Night of Royalty, an adults-only Mardi Gras ball celebrating a society of Deaf Mobilians and its support for the Deaf community and beyond. The organization uses visual language to communicate, and guests are encouraged to reach out in advance if accommodations are needed.",
+    "venueAddress": "1717 Dauphin St.",
+    "cityStateZip": "Mobile, AL 36604",
+    "description": "Le Mardi Gras of Royalty, a Deaf Mardi Gras organization, presents its second annual Mardi Gras ball with the theme “A Night With the Royal Empire.” Formal attire is required. Food will be provided, and the event is BYOB. Contact the organizer about accessibility accommodations.",
     "mapUrl": "https://maps.apple/p/LoPctyepNXC2sr",
     "ticketUrl": "tel:2519239708",
     "ticketLabel": "Call for Tickets",
-    "cost": "$70",
+    "cost": "$65 per person",
     "audience": "Adults only, 21+",
     "publicContact": "251-923-9708",
     "accessibilityNotes": "Reach out if accommodations are needed.",
     "parkingNotes": "Parking available.",
-    "organizationLogoUrl": "https://www.jotform.com/uploads/PeterToler/262217749749067/6627232038361478720/IMG_8843.png"
+    "flyerUrl": "/images/event-flyers/a-night-of-royalty-2027.webp",
+    "eventArtworkUrl": "/images/event-flyers/a-night-of-royalty-2027.webp",
+    "flyerDimensions": {
+      "width": 710,
+      "height": 1536
+    }
   },
   {
     "id": "mobile-mystics-halloween-party-2026",
