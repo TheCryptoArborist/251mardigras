@@ -15,7 +15,7 @@ const baseline='9cbe858';
 const tree=git('rev-parse',`${baseline}:${prefix}`);
 assert.equal(tree,'d910203511bc7a5b1c0359f8628dc7edb650ed9c','Canonical import tree changed');
 // Reviewed integration edits only. New files do not replace baseline files.
-const integrationEdits=new Set(['README.md','package.json','game/progress.js']);
+const integrationEdits=new Set(['README.md','package.json','game/progress.js','app/api/[...path]/route.ts']);
 const entries=git('ls-tree','-r','--full-tree',`${baseline}:${prefix}`).split('\n');
 assert.equal(entries.length,140,'Canonical import file count changed');
 const errors=[];let checked=0;

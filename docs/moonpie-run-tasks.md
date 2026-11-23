@@ -35,8 +35,10 @@ Acceptance: record browser/device, viewport, steps and result for each check. Fi
 
 ## 3. Verify complete player persistence through the local integration
 
+Status: [HTTP/local D1 evidence](moonpie-run-persistence-qa.md) passes after correcting an API request-stream lifetime failure. Remaining browser and deterministic ranking checks are explicitly listed in that report.
+
 - [ ] Exercise real local Worker HTTP flow with a browser cookie: create profile, choose/rename username, create/finish run, reload and reopen profile.
-- [ ] Retry the same finish request, including interrupted responses; verify one completed run and one lifetime-stat increment.
+- [x] Retry the same finish request, including interrupted responses; verify one completed run and one lifetime-stat increment. Real HTTP/D1 plus simulated response loss and parallel submissions.
 - [ ] Queue multiple pending scores; restore after reload/offline recovery; verify per-tab behavior and visible permanent errors.
 - [ ] Verify separate browsers cannot claim ownership and public profiles exclude private identifiers.
 - [ ] Check ranking ties, daily/weekly/all-time boundaries, recent runs and all 12 badge progress/earned states against deterministic test data.
@@ -83,6 +85,8 @@ Dependency: current Sites tools expose database inspection, but no backup/restor
 Twenty levels, bonus stages, extra lives, special tools, difficulty modes and two-player play are reference differences, not approved tasks to implement. Payments and tournaments remain outside scope. No original ROM/binaries/assets are to be redistributed.
 
 ## Execution log
+
+- 2026-11-23: Task 3 HTTP/local D1 pass. Corrected reproducible POST request-stream interruptions in the adapter; original score/identity service unchanged. Parallel duplicate finish and lost-response recovery count once. Separate-cookie ownership, privacy, recent runs and ranking scopes verified. 37 game tests pass; guard checks 136 protected originals with the adapter recorded as an integration exception. Browser/tab recovery and deterministic HTTP ranking boundaries remain open.
 
 - 2026-11-23: Task 2 local browser pass recorded in `moonpie-run-browser-qa.md`. Fixed narrow overlay overflow and active phone layout/landscape controls. Game tests 36/36, proxy tests 5/5, game production build and baseline guard pass. Physical devices, full UI playthrough, lifecycle/audio and conclusive sharing checks remain open. No production operations.
 
