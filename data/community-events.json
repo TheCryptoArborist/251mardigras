@@ -595,6 +595,30 @@
       "width": 1320,
       "height": 420
     }
+  },
+  {
+    "id": "carnival-royales-purple-reign-2027",
+    "slug": "carnival-royales-purple-reign-2027",
+    "status": "approved",
+    "title": "Purple Reign",
+    "organization": "Carnival Royales",
+    "eventType": "Ball",
+    "carnivalSeason": 2027,
+    "startDateTime": "2027-01-23T20:00:00-06:00",
+    "endDateTime": "2027-01-23T23:59:00-06:00",
+    "endTimeUnconfirmed": true,
+    "dateLabel": "Sat, Jan 23, 2027 • Starts at 8:00 PM CT",
+    "venueName": "The Locale",
+    "venueAddress": "4128 Government Boulevard",
+    "cityStateZip": "Mobile, AL 36693",
+    "description": "Join Carnival Royales for Purple Reign, celebrating the Purple Dynasty, at The Locale on Saturday, January 23, 2027. Doors open and the event begins at 8:00 PM, with call-outs at 9:30 PM. This public ticketed ball features a special performance by Mr. Campbell. Tickets are $75 each. The organizer has not provided an event end time. All times are Central.",
+    "cost": "$75 per person",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=The%20Locale%204128%20Government%20Boulevard%20Mobile%20AL%2036693",
+    "flyerUrl": "/images/event-flyers/carnival-royales-purple-reign-2027.jpeg",
+    "flyerDimensions": {
+      "width": 1170,
+      "height": 2011
+    },
+    "organizationLogoUrl": "/images/event-logos/carnival-royales.jpeg"
   }
 ]
-

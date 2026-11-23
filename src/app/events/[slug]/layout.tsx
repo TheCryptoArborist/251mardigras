@@ -79,7 +79,7 @@ function communityEventJsonLd(event: ApprovedEvent) {
     description: event.description,
     url: absoluteUrl(`/events/${event.slug}`),
     startDate: event.startDateTime,
-    endDate: event.endDateTime,
+    endDate: event.endTimeUnconfirmed ? undefined : event.endDateTime,
     eventStatus: "https://schema.org/EventScheduled",
     eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
     image,
