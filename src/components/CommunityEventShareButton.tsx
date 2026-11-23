@@ -11,9 +11,10 @@ type CommunityEventShareButtonProps = {
   event: CommunityEvent;
   variant?: "light" | "dark" | "compact";
   className?: string;
+  label?: string;
 };
 
-export function CommunityEventShareButton({ event, variant = "light", className = "" }: CommunityEventShareButtonProps) {
+export function CommunityEventShareButton({ event, variant = "light", className = "", label = "Share event" }: CommunityEventShareButtonProps) {
   const [open, setOpen] = useState(false);
   const variantStyle = variant === "dark"
     ? "gap-2 rounded-full border-parade-gold/45 bg-white/10 px-4 py-2.5 text-sm text-white hover:bg-white/20 focus-visible:outline-parade-goldBright"
@@ -26,7 +27,7 @@ export function CommunityEventShareButton({ event, variant = "light", className 
       <button type="button" onClick={() => setOpen(true)} aria-label={`Share ${event.title}`} aria-haspopup="dialog" aria-expanded={open}
         className={`inline-flex min-h-11 max-w-full items-center justify-center border font-black transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 ${variantStyle} ${className}`}>
         <Share2 className={`${variant === "compact" ? "h-3.5 w-3.5" : "h-4 w-4"} shrink-0`} aria-hidden="true" />
-        <span>Share event</span>
+        <span>{label}</span>
       </button>
       {open ? <CommunityEventShareDialog key={event.id} event={event} onClose={() => setOpen(false)} /> : null}
     </>

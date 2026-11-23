@@ -23,7 +23,7 @@ export function EventFlyerImage({ src, alt, sizes, className, priority = false, 
         <span className="sr-only">{alt}.</span>
         <ImageOff className="h-7 w-7 text-parade-goldBright" aria-hidden="true" />
         <p className="text-sm font-black text-parade-goldBright">Flyer temporarily unavailable</p>
-        <p className="max-w-xs text-xs leading-5 text-purple-100">Event details are available below.</p>
+        <p className="max-w-xs text-xs leading-5 text-purple-100">Event details are available on this page.</p>
       </div>
     );
   }
