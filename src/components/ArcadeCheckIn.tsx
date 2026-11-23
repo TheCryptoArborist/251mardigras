@@ -1,37 +1,22 @@
 "use client";
 
 import Link from "next/link";
-import { Check, Crown, Gift, Medal, Sparkles, Star, TreePine } from "lucide-react";
+import { Check, Sparkles, TreePine } from "lucide-react";
 import { useEffect, useState } from "react";
 
-const timeZone = "America/Chicago";
-const dateFormat = new Intl.DateTimeFormat("en-CA", {
-  timeZone, year: "numeric", month: "2-digit", day: "2-digit"
-});
+import Image from "next/image";
+import {
+  achievementArtwork, achievementVisits, arcadeAchievements, checkInStart,
+  checkInStoragePrefix, holidayEnd, holidayStart, mobileDate, readArcadeCheckIns
+} from "@/lib/arcade-achievements";
+
 const paradeFormat = new Intl.DateTimeFormat("en-US", {
   timeZone: "UTC", month: "long", day: "numeric"
 });
-const launchDay = "2026-11-22";
-const storagePrefix = "mg251:road-to-first-throw:2027:";
-const mulliganKey = storagePrefix + "mulligan";
+const mulliganKey = checkInStoragePrefix + "mulligan";
 const shareUrl = "https://mg251.xyz/play";
 const shareCaption = "🎭 I’m counting down to Mobile’s first Mardi Gras parade! Start your own daily check-in and earn badges in the MG251 Mardi Gras Arcade. 💜💛";
-const holidayStart = "2026-12-01";
-const holidayEnd = "2026-12-25";
 const dayLength = 86_400_000;
-
-const badges = [
-  { name: "First Throw", goal: 1, icon: Star },
-  { name: "Bead Collector", goal: 7, icon: Medal },
-  { name: "Christmas Crewe", goal: 12, icon: Gift, holiday: true },
-  { name: "MoonPie Master", goal: 21, icon: Sparkles },
-  { name: "Carnival Royalty", goal: 30, icon: Crown }
-];
-
-function mobileDate() {
-  const parts = dateFormat.formatToParts();
-  return ["year", "month", "day"].map((type) => parts.find((part) => part.type === type)?.value).join("-");
-}
 
 function dayNumber(date: string) {
   return Date.parse(date) / dayLength;
@@ -40,10 +25,7 @@ function dayNumber(date: string) {
 type Progress = { today: string; dates: string[]; mulligan?: string | null; storageError?: boolean };
 
 function readProgress(today: string, paradeDay: string): Progress {
-  const dates = Object.keys(localStorage)
-    .filter((key) => key.startsWith(storagePrefix))
-    .map((key) => key.slice(storagePrefix.length))
-    .filter((date) => /^\d{4}-\d{2}-\d{2}$/.test(date) && date >= launchDay && date <= paradeDay && date <= today);
+  const dates = readArcadeCheckIns(today, paradeDay);
   return { today, dates, mulligan: localStorage.getItem(mulliganKey) };
 }
 
@@ -97,21 +79,20 @@ export function ArcadeCheckIn({ paradeDay, paradeName }: { paradeDay: string; pa
 
   function checkIn() {
     const today = mobileDate();
-    if (today < launchDay || today > paradeDay) return;
+    if (today < checkInStart || today > paradeDay) return;
     try {
-      localStorage.setItem(storagePrefix + today, "1");
+      localStorage.setItem(checkInStoragePrefix + today, "1");
       setProgress(readProgress(today, paradeDay));
     } catch {
       setProgress((previous) => ({ ...previous, today, dates: previous?.dates ?? [], storageError: true }));
     }
   }
 
-  const today = progress?.today ?? launchDay;
+  const today = progress?.today ?? checkInStart;
   const dates = progress?.dates ?? [];
   const daysLeft = dayNumber(paradeDay) - dayNumber(today);
   const checkedIn = dates.includes(today);
   const holiday = today >= holidayStart && today <= holidayEnd;
-  const holidayVisits = dates.filter((date) => date >= holidayStart && date <= holidayEnd).length;
   const ThemeIcon = holiday ? TreePine : Sparkles;
   const streak = countStreak(dates, daysLeft < 0 ? paradeDay : today, progress?.mulligan);
   const missedDay = progress && !progress.storageError && missedDayToRestore(progress, paradeDay);
@@ -153,7 +134,7 @@ export function ArcadeCheckIn({ paradeDay, paradeName }: { paradeDay: string; pa
   }
 
   return (
-    <section className="arcade-checkin" aria-labelledby="arcade-checkin-heading">
+    <section id="daily-check-in" className="arcade-checkin" aria-labelledby="arcade-checkin-heading">
       <div className="arcade-checkin-lead">
         <div className="arcade-checkin-emblem" aria-hidden="true"><ThemeIcon size={26} /></div>
         <div>
@@ -165,7 +146,7 @@ export function ArcadeCheckIn({ paradeDay, paradeName }: { paradeDay: string; pa
       </div>
       <div className="arcade-checkin-action">
         {daysLeft >= 0 && (
-          <button className="arcade-button" type="button" onClick={checkIn} disabled={!progress || checkedIn || today < launchDay}>
+          <button className="arcade-button" type="button" onClick={checkIn} disabled={!progress || checkedIn || today < checkInStart}>
             {checkedIn && <Check size={16} aria-hidden="true" />}
             {checkedIn ? "Checked in today" : "Check in today"}
           </button>
@@ -188,15 +169,18 @@ export function ArcadeCheckIn({ paradeDay, paradeName }: { paradeDay: string; pa
       )}
       {message && <p role="status" style={{ gridColumn: "1 / -1" }}>{message}</p>}
       <ul className="arcade-checkin-badges" aria-label="Collectible badges">
-        {badges.map(({ name, goal, icon: Icon, holiday: holidayBadge }) => {
-          const visits = holidayBadge ? holidayVisits : dates.length;
+        {arcadeAchievements.map((achievement) => {
+          const { id, name, goal } = achievement;
+          const visits = achievementVisits(achievement, dates);
           const earned = visits >= goal;
           return (
-            <li key={name} className={earned ? "is-earned" : undefined}>
-              <Icon size={22} aria-hidden="true" />
+            <li key={id} className={earned ? "is-earned" : undefined}>
+              <Image src={achievementArtwork(id)} width={54} height={54} alt="" unoptimized />
               <strong>{name}</strong>
-              {holidayBadge && <small>Dec. 1–25</small>}
-              <span>{earned ? "Earned" : `${visits} / ${goal} check-ins`}</span>
+              {"holiday" in achievement && <small>Dec. 1–25</small>}
+              {earned
+                ? <Link href={`/profile-studio?reward=${id}#arcade-rewards`} aria-label={`Use ${name} in Profile Studio`}>Use on profile pic</Link>
+                : <span>{visits} / {goal} check-ins</span>}
             </li>
           );
         })}

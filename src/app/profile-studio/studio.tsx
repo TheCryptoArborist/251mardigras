@@ -1,5 +1,9 @@
 "use client";
 
+import Link from "next/link";
+import {
+  achievementArtwork, achievementVisits, arcadeAchievements, mobileDate, readArcadeCheckIns, type ArcadeAchievement
+} from "@/lib/arcade-achievements";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Download, Upload, RotateCw, Move, LockKeyhole, Sparkles, Check } from "lucide-react";
 import { loadSocietyArtwork } from "./society-artwork";
@@ -10,7 +14,8 @@ import societies from "./societies.json";
 import s from "./studio.module.css";
 
 type Frame = "classic" | "beads" | "jester" | "royal" | "balcony" | "moonpie" | "canopy" | "natural";
-type Badge = "logo" | "jester" | "king" | "hero" | "none" | `society:${string}`;
+type ArcadeBadge = `arcade:${ArcadeAchievement["id"]}`;
+type Badge = ArcadeBadge | "logo" | "jester" | "king" | "hero" | "none" | `society:${string}`;
 const frames: { id: Frame; name: string; description: string }[] = [
   { id: "classic", name: "Classic MG251", description: "Fine gold trim · the original" },
   { id: "beads", name: "Throw Me Something", description: "Purple & gold parade beads" },
@@ -27,6 +32,11 @@ const accents = [
   { id: "king" as const, name: "Carnival King", src: "/images/schedule/mardi-gras-king-icon.webp" },
   { id: "hero" as const, name: "Tree Hero", src: "/images/profile-studio/badges/tree-hero-bust-v2.webp" }
 ];
+const arcadeAccents = arcadeAchievements.map(achievement => ({
+  achievement,
+  id: `arcade:${achievement.id}` as const,
+  src: achievementArtwork(achievement.id)
+}));
 const gold = "#f3cf72";
 
 function circle(c: CanvasRenderingContext2D, x: number, y: number, r: number, fill?: string | CanvasGradient, stroke?: string, width = 1) {
@@ -77,7 +87,7 @@ function SocietyThumbnail({ src, removeWhite, round = false }: { src: string; re
   return <canvas ref={ref} width={136} height={136} aria-hidden="true"/>;
 }
 
-export default function ProfileStudio() {
+export default function ProfileStudio({ paradeDay }: { paradeDay: string }) {
   const canvas=useRef<HTMLCanvasElement>(null),photo=useRef<HTMLImageElement|null>(null),fileInput=useRef<HTMLInputElement>(null);
   const [frame,setFrame]=useState<Frame>("classic"),[badge,setBadge]=useState<Badge>("none"),[phrase,setPhrase]=useState("");
   const [hasPhoto,setHasPhoto]=useState(false),[zoom,setZoom]=useState(1),[x,setX]=useState(0),[y,setY]=useState(0),[rotation,setRotation]=useState(0),[badgeSize,setBadgeSize]=useState(176);
@@ -110,8 +120,34 @@ export default function ProfileStudio() {
     }
     return ()=>{cancelled=true;};
   },[]);
+  const [checkIns, setCheckIns] = useState<string[]>([]);
+  useEffect(() => {
+    function refreshCheckIns() {
+      try {
+        const dates = readArcadeCheckIns(mobileDate(), paradeDay);
+        setCheckIns(dates);
+        return dates;
+      } catch {
+        setCheckIns([]);
+        return [];
+      }
+    }
+    const dates = refreshCheckIns();
+    const requested = new URLSearchParams(window.location.search).get("reward");
+    const achievement = requested && arcadeAchievements.find(item => item.id === requested);
+    if (achievement && achievementVisits(achievement, dates) >= achievement.goal) {
+      setBadge(`arcade:${achievement.id}`);
+      setBadgeBacking("none");
+    }
+    window.addEventListener("storage", refreshCheckIns);
+    window.addEventListener("pageshow", refreshCheckIns);
+    return () => {
+      window.removeEventListener("storage", refreshCheckIns);
+      window.removeEventListener("pageshow", refreshCheckIns);
+    };
+  }, [paradeDay]);
   const selectedSociety=societies.find(item=>item.id===badge);
-  const selectedArtwork=selectedSociety??accents.find(item=>item.id===badge);
+  const selectedArtwork=selectedSociety ?? accents.find(item => item.id === badge) ?? arcadeAccents.find(item => item.id === badge);
   const artworkRemoveWhite=selectedSociety?removeSocietyWhite:false;
   const artworkRound=!selectedSociety&&(badge==="jester"||badge==="king");
   const visibleSocieties=societies.filter(item=>item.name.toLocaleLowerCase().includes(societySearch.trim().toLocaleLowerCase()));
@@ -123,7 +159,7 @@ export default function ProfileStudio() {
     let cancelled=false;
     void loadSocietyArtwork(selectedArtwork.src,artworkRemoveWhite,artworkRound).then(image=>{
       if(!cancelled)setSocietyImage({id:selectedArtwork.id,removeWhite:artworkRemoveWhite,image});
-    }).catch(()=>{if(!cancelled)setError("This society logo could not load. Please try another logo.");});
+    }).catch(()=>{if(!cancelled)setError("This badge artwork could not load. Please try another badge.");});
     return ()=>{cancelled=true;};
   },[selectedArtwork,artworkRemoveWhite,artworkRound]);
   const drag=useRef<{x:number;y:number;ox:number;oy:number}|null>(null),loadId=useRef(0);
@@ -224,6 +260,25 @@ const out=document.createElement("canvas");out.width=out.height=1024;const c=out
           {accents.map(item=><button key={item.id} className={`${s.choice} ${s.accentChoice}`} aria-pressed={badge===item.id} onClick={()=>setBadge(item.id)}><span className={s.accentThumb}><SocietyThumbnail src={item.src} removeWhite={false} round={item.id==="jester"||item.id==="king"}/></span>{item.name}</button>)}
         </div>
           <button className={`${s.choice} ${s.noArtworkChoice}`} aria-pressed={badge==="none"} onClick={()=>setBadge("none")}><span aria-hidden="true">—</span>No artwork</button>
+          <section id="arcade-rewards" className={s.arcadeRewards} aria-labelledby="arcade-rewards-heading">
+            <h3 id="arcade-rewards-heading">Arcade rewards</h3>
+            <p>Unlock these badges with daily check-ins on the <Link href="/play#daily-check-in">Road to the First Throw</Link>.</p>
+            <div className={s.badgeGrid}>
+              {arcadeAccents.map((reward) => {
+                const { achievement } = reward;
+                const earned = achievementVisits(achievement, checkIns) >= achievement.goal;
+                return (
+                  <button key={reward.id} type="button" className={`${s.choice} ${s.accentChoice}`}
+                    disabled={!earned} aria-pressed={badge === reward.id}
+                    onClick={() => { setError(""); setBadge(reward.id); setBadgeBacking("none"); }}>
+                    <span className={s.accentThumb}><SocietyThumbnail src={reward.src} removeWhite={false} /></span>
+                    {achievement.name}
+                    <small>{earned ? "Unlocked" : `${achievement.goal} check-ins${"holiday" in achievement ? " · Dec. 1–25" : ""}`}</small>
+                  </button>
+                );
+              })}
+            </div>
+          </section>
           {badge!=="none"&&<label className={s.cleanupToggle}><input type="checkbox" checked={badgeBacking==="none"} onChange={e=>{if(e.target.checked){if(badgeBacking!=="none")lastBadgeColor.current=badgeBacking;setBadgeBacking("none");}else setBadgeBacking(lastBadgeColor.current);}}/>Remove badge background</label>}
           <div className={s.societyPanel}>
             <h3>Society logos <span>{societies.length}</span></h3>

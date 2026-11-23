@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import paradeSchedule from "../../../data/parade-schedule-2027.json";
 import ProfileStudio from "./studio";
 
 export const metadata: Metadata = {
@@ -22,4 +23,4 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false, googleBot: { index: false, follow: false } }
 };
 
-export default function Page() { return <ProfileStudio />; }
+export default function Page() { return <ProfileStudio paradeDay={paradeSchedule.days[0].date} />; }

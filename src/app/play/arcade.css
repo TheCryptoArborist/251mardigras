@@ -131,6 +131,7 @@
   align-items:center;
   gap:18px 24px;
   max-width:1120px;
+  scroll-margin-top:95px;
   margin:0 auto 20px;
   padding:20px;
   border:1px solid #ffda7066;
@@ -160,3 +161,6 @@
 @media (max-width:360px) {
   .arcade-checkin-badges { grid-template-columns:repeat(2,minmax(0,1fr)); }
 }
+.arcade-checkin-badges img{opacity:.56}
+.arcade-checkin-badges .is-earned img{opacity:1}
+.arcade-checkin-badges a{display:grid;place-items:center;min-height:44px;font-size:11px}
