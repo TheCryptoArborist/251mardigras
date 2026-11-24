@@ -6,7 +6,7 @@ import { join } from "node:path";
 // upstream authentication, redirects, or dependency on ChatGPT hosting.
 export const MOTORWAY_BASE = "/play/moonpie-motorway";
 const ROOT = join(process.cwd(), "games/moonpie-motorway/dist");
-const FILES = new Set(["index.html", "game.js", "art.js", "fonts.css", "parades.json", "community.js", "community.css"]);
+const FILES = new Set(["index.html", "game.js", "art.js", "tilt.js", "fonts.css", "parades.json", "community.js", "community.css"]);
 const TYPES: Record<string, string> = {
   html: "text/html; charset=utf-8", js: "text/javascript; charset=utf-8",
   css: "text/css; charset=utf-8", json: "application/json; charset=utf-8",

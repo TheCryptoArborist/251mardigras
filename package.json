@@ -13,7 +13,7 @@
     "sync:linktree": "tsx scripts/sync-linktree.ts",
     "check:sources": "tsx src/jobs/check-sources.ts",
     "check:weather": "tsx src/jobs/check-weather.ts",
-    "test:motorway": "node games/moonpie-motorway/tests/smoke.cjs && node games/moonpie-motorway/tests/regressions.cjs && node games/moonpie-motorway/tests/correctness.cjs && tsx --test tests/motorway-route.test.ts && tsx --test tests/motorway-leaderboard.test.ts && node games/moonpie-motorway/tests/community.cjs",
+    "test:motorway": "node games/moonpie-motorway/tests/smoke.cjs && node games/moonpie-motorway/tests/regressions.cjs && node games/moonpie-motorway/tests/correctness.cjs && tsx --test tests/motorway-route.test.ts && tsx --test tests/motorway-leaderboard.test.ts && node games/moonpie-motorway/tests/community.cjs && node games/moonpie-motorway/tests/tilt.cjs",
     "test:motorway:browser": "node tests/motorway-browser.mjs"
   },
   "dependencies": {
