@@ -664,5 +664,28 @@
     "description": "Ring in the new year with the Order of Pan at its annual New Year’s Eve ball. This year’s theme is Oh Captain My Captain. The ball starts at 8:00 PM Central. Admission is open to the public with a ticket. Ticket price and purchase details are pending.",
     "cost": "Public ticketed event. Price pending.",
     "mapUrl": "https://www.google.com/maps/search/?api=1&query=The%20Caliroja%C3%A9%201004%20Dauphin%20Island%20Parkway%20Mobile%20AL%2036605"
+  },
+  {
+    "id": "athenian-red-white-sweetheart-ball-2027",
+    "slug": "athenian-red-white-sweetheart-ball-2027",
+    "status": "approved",
+    "title": "58th Annual Red & White Sweetheart Ball",
+    "organization": "The Athenian Civic & Social Club, Inc.",
+    "eventType": "Ball",
+    "carnivalSeason": 2027,
+    "startDateTime": "2027-01-30T21:00:00-06:00",
+    "endDateTime": "2027-01-31T02:00:00-06:00",
+    "dateLabel": "Sat, Jan 30, 2027 • 9:00 PM–2:00 AM CT",
+    "venueName": "The Locale",
+    "venueAddress": "4128 Government Boulevard",
+    "cityStateZip": "Mobile, AL 36693",
+    "description": "The Athenian Civic & Social Club, Inc. hosts its 58th Annual Red & White Sweetheart Ball, themed “A Royal Red and White Affair.” Doors open at 8:00 PM and close promptly at 9:00 PM. The ball runs from 9:00 PM to 2:00 AM Central. The flyer requires floor-length red or white evening gowns for women and traditional black-tie formal attire for men: a black tuxedo, white dress shirt, black bow tie, and black formal shoes.",
+    "cost": "$65 per person",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=The%20Locale%204128%20Government%20Boulevard%20Mobile%20AL%2036693",
+    "flyerUrl": "/images/event-flyers/athenian-red-white-sweetheart-ball-2027.jpeg",
+    "flyerDimensions": {
+      "width": 540,
+      "height": 757
+    }
   }
 ]
