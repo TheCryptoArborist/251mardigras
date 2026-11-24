@@ -16,7 +16,7 @@ export async function generateMetadata({ params }: Props) {
   const { slug } = await params;
   const game = ARCADE_GAMES.find((entry) => entry.slug === slug);
   if (!game) return {};
-  return createPageMetadata({ title: game.playUrl ? `${game.title} — Play Now` : `${game.title} — Game Preview`, description: game.description, path: `/play/${game.slug}`, image: game.image, imageAlt: game.imageAlt });
+  return createPageMetadata({ title: `${game.title} — ${game.playUrl ? "Play Now" : "Game Preview"}`, description: game.description, path: `/play/${game.slug}`, image: game.image, imageAlt: game.imageAlt });
 }
 
 export default async function GamePreviewPage({ params }: Props) {

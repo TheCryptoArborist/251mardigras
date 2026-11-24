@@ -10,7 +10,7 @@ export function ArcadeShowcase() {
         <div>
           <p className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.16em] text-parade-goldBright"><Gamepad2 size={18} aria-hidden="true" /> A new way to Mardi Gras</p>
           <h2 id="homepage-arcade-heading" className="mt-3 text-3xl font-black tracking-tight text-white sm:text-4xl">Mardi Gras Arcade</h2>
-          <p className="mt-3 max-w-md text-sm leading-6 text-purple-100">The parade doesn&apos;t have to end. Play MoonPie Run now, preview MoonPie Motorway, and explore our retro cabinet lobby.</p>
+          <p className="mt-3 max-w-md text-sm leading-6 text-purple-100">The parade doesn&apos;t have to end. Play MoonPie Run and MoonPie Motorway, and explore our retro cabinet lobby.</p>
           {/* The standalone game serves a complete HTML document and needs a full navigation. */}
           {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
           <a href="/arcade/moonpie-run" className="mt-5 mr-3 inline-flex min-h-12 items-center justify-center gap-3 rounded-full bg-parade-goldBright px-6 py-3 text-sm font-black text-parade-purpleDark hover:bg-parade-goldSoft focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-parade-goldBright">Play MoonPie Run <ArrowRight size={18} aria-hidden="true" /></a>
@@ -18,10 +18,10 @@ export function ArcadeShowcase() {
         </div>
         <div className="grid grid-cols-2 gap-3 sm:gap-4">
           {ARCADE_GAMES.map((game) => (
-            <Link key={game.slug} href={game.playUrl || `/play/${game.slug}`} prefetch={false} className="group min-w-0 overflow-hidden rounded-xl border border-parade-gold/30 bg-parade-purpleDark transition hover:border-parade-goldBright focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-parade-goldBright">
+            <a key={game.slug} href={game.playUrl} className="group min-w-0 overflow-hidden rounded-xl border border-parade-gold/30 bg-parade-purpleDark transition hover:border-parade-goldBright focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-parade-goldBright">
               <div className="border-b-4 border-parade-gold/70 p-1.5 pb-0"><Image src={game.image} alt={game.imageAlt} width={1200} height={750} sizes="(max-width: 639px) 42vw, 280px" className="aspect-[8/5] w-full rounded-t-md object-cover" /></div>
               <div className="px-3 py-3"><h3 className="text-sm font-black text-white group-hover:text-parade-goldBright">{game.title}</h3><p className="mt-1 text-[0.65rem] font-bold uppercase tracking-wider text-parade-goldBright">{game.playUrl ? "Play now · No account needed" : "Coming soon · Preview"}</p></div>
-            </Link>
+            </a>
           ))}
         </div>
       </div>

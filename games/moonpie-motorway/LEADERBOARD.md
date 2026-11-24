@@ -30,11 +30,13 @@ All these tests passed. Targeted TypeScript and lint checks passed. The generic 
 
 Run `npm run test:motorway:browser` for this check. Install the Playwright Chromium browser, or set `CHROMIUM_PATH` to an installed Chromium executable. It starts and tears down its own Next.js server and local database; screenshots are written to the ignored `artifacts/` directory. No hosted data is read or modified.
 
-The full website build compiled but then failed type checking at the existing `src/app/admin/page.tsx:64` implicit-any callback. Prisma client generation had previously failed with an engine-download HTTP 403 in this environment. That unrelated page was not changed to conceal the failure. A fresh normal and escalated generation attempt still received HTTP 403 from the official Prisma binary host. The terminal GitHub API check was blocked by environment network policy, not proof of a revoked token. Git HTTPS access and the connected GitHub plugin were subsequently verified. The connected Netlify project still reports its existing published deploy as ready; no deployment was attempted.
+The full website production build now passes after approved network access restored Prisma generation. Full-project TypeScript checks revealed unreachable fallback expressions after both games gained play URLs, untyped query rows, and an ES2017-incompatible regex flag. These were corrected without disabling checks. `npm run test:motorway` also passes after the fixes. The build logged an unrelated remote logo fetch warning in this restricted environment but completed successfully.
+
+Draft PR #44 contains the integration and build fixes. Hosted preview validation is still required before production release.
 
 Before release:
 
-1. Restore successful Prisma generation and the full website build.
+1. Confirm the Netlify preview build succeeds for the latest PR commit.
 2. Confirm Netlify Database is available for the site's plan and provision it through the supported Netlify workflow. No hosted database was provisioned by this change.
 3. Deploy a Netlify preview with the migration and check gameplay, saving, ranking, mobile dialogs, and social previews against its backend.
 4. Release to MG251 and verify the canonical share links on the public domain.
