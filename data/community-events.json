@@ -687,5 +687,28 @@
       "width": 540,
       "height": 757
     }
+  },
+  {
+    "id": "conde-cavaliers-strike-gold-2027",
+    "slug": "conde-cavaliers-strike-gold-2027",
+    "status": "approved",
+    "title": "Cavaliers Strike Gold",
+    "organization": "Condé Cavaliers",
+    "eventType": "Ball",
+    "carnivalSeason": 2027,
+    "startDateTime": "2027-01-22T22:00:00-06:00",
+    "endDateTime": "2027-01-23T02:00:00-06:00",
+    "endTimeUnconfirmed": true,
+    "dateLabel": "Fri, Jan 22, 2027 • Entertainment 10:00 PM–2:00 AM CT",
+    "venueName": "Venue to be confirmed",
+    "venueAddress": "",
+    "cityStateZip": "Mobile, AL",
+    "description": "The Condé Cavaliers celebrate their 50th anniversary with Cavaliers Strike Gold. The flyer lists The Black Jacket Symphony on the main stage, DJ Mad Muse in the upstairs Cavalier Ballroom, and Chico on the River Terrace from 10:00 PM to 2:00 AM Central. Queen Delia is listed in Room A. Venue, doors and admission details are pending confirmation.",
+    "flyerUrl": "/images/event-flyers/conde-cavaliers-strike-gold-2027.jpeg",
+    "flyerDimensions": {
+      "width": 526,
+      "height": 769
+    },
+    "organizationLogoUrl": "/images/profile-studio/societies/conde-cavaliers.webp"
   }
 ]
