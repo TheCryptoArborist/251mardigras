@@ -47,7 +47,10 @@ export async function motorwayAPI(request:Request,resource:string){
   if(wall>7200000||wall<data.ticks*1000/60-1500||run.rules_hash!==rules.hash)return json({error:'This run expired or the game was updated. Start a new Cup run.'},409);
   const attempt=await db.pool.query("UPDATE motorway_runs SET attempts=attempts+1,last_attempt_at=now() WHERE id=$1 AND player_hash=$2 AND finished_at IS NULL AND attempts<5 AND (last_attempt_at IS NULL OR last_attempt_at<now()-interval '10 seconds') RETURNING id",[run.id,hash]);
   if(!attempt.rows.length)return json({error:'Please wait 10 seconds before retrying. After five unsuccessful checks, start a new Cup run.'},429);
-  let result;try{result=await verifyReplay(data.ticks,data.controls);}catch{return json({error:'The server could not verify a completed Cup run. Please try a new run.'},422);}
+  let result;try{result=await verifyReplay(data.ticks,data.controls);}catch(error){
+   if(error && typeof error==='object' && 'code' in error && error.code==='ERR_SCRIPT_EXECUTION_TIMEOUT')return json({error:'Score verification took too long. Please try saving again shortly.'},503);
+   return json({error:'The server could not verify a completed Cup run. Please try a new run.'},422);
+  }
   await db.pool.query('UPDATE motorway_runs SET nickname=$1,score=$2,ticks=$3,finished_at=now() WHERE id=$4 AND player_hash=$5 AND finished_at IS NULL',[name,result.score,result.ticks,run.id,hash]);
   return json({score:await publicScore(run.id)});
  }catch(error){

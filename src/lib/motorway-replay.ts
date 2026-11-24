@@ -36,6 +36,6 @@ export async function verifyReplay(ticks: number, controls: Control[]) {
   const script=initialization+`let replayInput={turn:0,brake:false,boost:false};data=JSON.parse(scheduleJSON);validateSchedule(data);prepare();start();state='racing';countdown=0;let cursor=0;
   for(let tick=0;tick<totalTicks;tick++){if(state!=='racing')throw Error('Recording continues after finish');if(cursor<recording.length&&recording[cursor][0]===tick){const r=recording[cursor++];replayInput={turn:r[1],brake:!!r[2],boost:!!r[3]};}update(STEP);}
   if(state!=='ended'||z<finishZ()||lives<=0||timer<=0)throw Error('Complete Carnival Cup to post a score.');globalThis.result={score,ticks:totalTicks,parades:passed};})();`;
-  new Script(script).runInContext(createContext(box,{codeGeneration:{strings:false,wasm:false}}),{timeout:2000});
+  new Script(script).runInContext(createContext(box,{codeGeneration:{strings:false,wasm:false}}),{timeout:10000});
   return box.result as {score:number;ticks:number;parades:number};
 }
