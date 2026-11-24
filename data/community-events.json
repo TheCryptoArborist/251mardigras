@@ -620,5 +620,29 @@
       "height": 2011
     },
     "organizationLogoUrl": "/images/event-logos/carnival-royales.jpeg"
+  },
+  {
+    "id": "mamga-royal-luncheon-2027",
+    "slug": "mamga-royal-luncheon-2027",
+    "status": "approved",
+    "title": "Royal Luncheon",
+    "organization": "Mobile Area Mardi Gras Association (MAMGA)",
+    "eventType": "Luncheon",
+    "carnivalSeason": 2027,
+    "startDateTime": "2027-02-08T11:00:00-06:00",
+    "endDateTime": "2027-02-08T23:59:00-06:00",
+    "endTimeUnconfirmed": true,
+    "dateLabel": "Mon, Feb 8, 2027 • Starts at 11:00 AM CT",
+    "venueName": "Battle House Renaissance Hotel",
+    "venueAddress": "26 N Royal St",
+    "cityStateZip": "Mobile, AL 36602",
+    "description": "The Mobile Area Mardi Gras Association hosts its 2027 Royal Luncheon at the Battle House Renaissance Hotel. For ticket information, call Thomas Buchanan at (251) 301-9859 or Curtis Flakes at (251) 533-9789.",
+    "cost": "$65 per person or $650 per table",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=Battle%20House%20Renaissance%20Hotel%2026%20N%20Royal%20St%20Mobile%20AL%2036602",
+    "flyerUrl": "/images/event-flyers/mamga-royal-luncheon-2027.jpeg",
+    "flyerDimensions": {
+      "width": 738,
+      "height": 780
+    }
   }
 ]
