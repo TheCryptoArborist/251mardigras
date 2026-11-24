@@ -734,5 +734,28 @@
       "height": 1276
     },
     "organizationLogoUrl": "/images/profile-studio/societies/conde-explorers.webp"
+  },
+  {
+    "id": "mamga-little-black-dress-affair-2026",
+    "slug": "mamga-little-black-dress-affair-2026",
+    "status": "approved",
+    "title": "Little Black Dress Affair",
+    "organization": "Mobile Area Mardi Gras Association (MAMGA)",
+    "eventType": "Party",
+    "startDateTime": "2026-11-25T21:00:00-06:00",
+    "endDateTime": "2026-11-26T02:00:00-06:00",
+    "dateLabel": "Wed, Nov 25, 2026 • 9:00 PM–2:00 AM CT",
+    "venueName": "The Locale",
+    "venueAddress": "4128 Government Boulevard",
+    "cityStateZip": "Mobile, AL 36693",
+    "description": "Spend Thanksgiving Eve with MAMGA at the Little Black Dress Affair. Dress to impress and enjoy a live performance by Marieo Parrish, music by DJ Jack Benny, and hosting by MC Kimberly. Advance tickets are $40 per person, and reserved tables of 10 are $400. To purchase tickets or reserve a table, call Josh Williams at (251) 422-1209 or Steve Grandison at (251) 376-6232. Sponsored by D&K Suit Discounters.",
+    "cost": "$40 in advance or $400 for a reserved table of 10",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=The%20Locale%204128%20Government%20Boulevard%20Mobile%20AL%2036693",
+    "flyerUrl": "/images/event-flyers/mamga-little-black-dress-affair-2026.jpeg",
+    "organizationLogoUrl": "/images/profile-studio/societies/elexis-i-motorcade.webp",
+    "flyerDimensions": {
+      "width": 1000,
+      "height": 1250
+    }
   }
 ]
