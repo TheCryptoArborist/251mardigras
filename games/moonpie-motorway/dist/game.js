@@ -2,7 +2,7 @@
 (() => {
 const $=id=>document.getElementById(id),app=$('app'),display=$('track'),displayCtx=display.getContext('2d',{alpha:false}),canvas=document.createElement('canvas'),ctx=canvas.getContext('2d',{alpha:false});
 const SEG=200, ROAD=1800, DEPTH=1.05, CAM=1050, VIEW=190, GAP=30000, START=25000, PLAYER_Z=1500, CAR_WIDTH=520, STEP=1/60;
-const stages=[{name:'Port City Warmup',sky:['#25143e','#9b638d','#efd096'],ground:'#786778',road:'#2b2932'},{name:'Joe Cain Cruise',sky:['#24123e','#764576','#c69079'],ground:'#675468',road:'#272530'},{name:'Fat Tuesday Finale',sky:['#170f2d','#4e2c64','#ac718b'],ground:'#554559',road:'#201f29'}];
+const stages=[{name:'Royal Street & Bienville',sky:['#25143e','#9b638d','#efd096'],ground:'#786778',road:'#2b2932'},{name:'Government Street' ,sky:['#24123e','#764576','#c69079'],ground:'#675468',road:'#272530'},{name:'Broad & Spring Hill',sky:['#170f2d','#4e2c64','#ac718b'],ground:'#554559',road:'#201f29'}];
 const keys={left:false,right:false,brake:false,boost:false};
 const heldKeys=new Set(),touchPointers=new Map();
 let accumulator=0,boostActive=false,renderDirty=true,lastRenderState='',reducedMotion=window.matchMedia?.('(prefers-reduced-motion: reduce)').matches||false;
@@ -35,6 +35,19 @@ lines.forEach((l,i)=>g.fillText(l,440,lines.length===1?220:181+i*88));g.shadowOf
 function makeBeads(){const[c,g]=makeCanvas(170,170);g.shadowColor='#f9cf66';g.shadowBlur=9;for(let i=0;i<20;i++){let a=i/20*Math.PI*2;g.beginPath();g.arc(85+Math.cos(a)*53,84+Math.sin(a)*65,8,0,7);g.fillStyle=i%2?'#f3be51':'#ffe6a1';g.fill();}mask(g,85,92,.7);return c;}
 function makeMoonpie(){const[c,g]=makeCanvas(170,160);g.shadowColor='#fac864';g.shadowBlur=9;g.fillStyle='#ca8d43';g.beginPath();g.ellipse(85,83,65,56,0,0,7);g.fill();g.shadowBlur=0;g.fillStyle='#fff1cc';g.beginPath();g.ellipse(85,92,63,42,0,0,Math.PI);g.fill();g.fillStyle='#a15e2d';g.beginPath();g.ellipse(85,76,65,48,0,0,7);g.fill();g.strokeStyle='#eab969';g.lineWidth=4;g.stroke();g.fillStyle='#492059';g.beginPath();g.ellipse(85,73,44,28,0,0,7);g.fill();g.fillStyle='#ffe197';g.textAlign='center';g.font='bold 17px Arial';g.fillText('MOON',85,70);g.fillText('PIE',85,88);return c;}
 function makeCone(){const[c,g]=makeCanvas(130,170);g.fillStyle='#191120';g.beginPath();g.ellipse(65,150,60,15,0,0,7);g.fill();poly(g,[[65,5],[111,145],[19,145]],'#dca94a');poly(g,[[45,65],[85,65],[96,99],[34,99]],'#fff0d0');rr(g,7,144,116,14,4,'#dda848');return c;}
+// Original decorative signs and park fountain; Route A inspiration, not navigation.
+function makeRouteSign(label){
+ const[c,g]=makeCanvas(560,330);g.fillStyle='#84788b';g.fillRect(260,150,22,180);
+ rr(g,8,10,544,154,12,'#173e37','#f9cf66');g.textAlign='center';g.fillStyle='#f9cf66';g.font='700 24px Barlow,Arial,sans-serif';g.fillText('MOBILE · ROUTE A',280,48);
+ g.fillStyle='#fff2d5';let size=48;do{g.font=`800 ${size--}px "Barlow Condensed",Arial,sans-serif`;}while(g.measureText(label).width>500&&size>22);g.fillText(label,280,118);return c;
+}
+function makeParkFountain(){
+ const[c,g]=makeCanvas(440,330);g.fillStyle='#273e32';g.beginPath();g.ellipse(220,289,215,36,0,0,7);g.fill();
+ for(const [x,y,w,h]of[[220,265,175,43],[220,168,108,25],[220,90,55,15]]){g.fillStyle='#d6c2a2';g.beginPath();g.ellipse(x,y,w,h,0,0,7);g.fill();g.fillStyle='#79abb6';g.beginPath();g.ellipse(x,y-7,w-13,h*.52,0,0,7);g.fill();}
+ g.fillStyle='#d6c2a2';g.fillRect(207,72,26,195);g.strokeStyle='#acdce3';g.lineWidth=5;
+ for(const side of[-1,1]){g.beginPath();g.moveTo(220,76);g.quadraticCurveTo(220+side*105,98,220+side*95,245);g.stroke();g.beginPath();g.moveTo(220,44);g.quadraticCurveTo(220+side*44,30,220+side*45,87);g.stroke();}
+ g.fillStyle='#f9cf66';g.beginPath();g.arc(220,52,8,0,7);g.fill();return c;
+}
 function prepare(){
  const art=window.MotorwayArt;
  sprites={car:art.cars[1],carLeft:art.cars[0],carRight:art.cars[2],rival:art.cars[3],rivals:art.cars.slice(3),beads:makeBeads(),moonpie:makeMoonpie(),cone:makeCone(),...art.props};
@@ -43,7 +56,7 @@ function prepare(){
  segments=Array.from({length:Math.ceil(total/SEG)+VIEW+3},(_,i)=>({z:i*SEG,y:Math.sin(i*SEG/155000)*1500+Math.sin(i*SEG/67000)*550,curve:Math.sin(i*SEG/86000)*.65+Math.sin(i*SEG/190000)*.32,p1:{},p2:{},visible:false}));
  scenery=[];
  const types={brick:[3.7,2600],stucco:[3.7,2400],oak:[3.7,4200],oakTall:[3.6,3200],grandstand:[3.3,4400],float:[3.0,3300],pit:[3.3,3000],crowd:[3.4,2100],lamp:[2.8,1350]};
- const areas=[['brick','crowd','oak','lamp','stucco','crowd','grandstand'],['grandstand','oakTall','float','crowd','brick','lamp','pit'],['stucco','crowd','float','oak','pit','grandstand','lamp']];
+ const areas=[['brick','oak','oakTall','lamp','stucco','crowd','oak'],['stucco','grandstand','float','crowd','stucco','lamp','pit'],['brick','crowd','float','oak','brick','grandstand','lamp']];
  function place(zz,side,type){
   // Reserve the closest roadside space for the approved parade billboards.
   if(billboards.some(b=>Math.sign(b.offset)===side&&Math.abs(b.z-zz)<4800))return;
@@ -54,7 +67,11 @@ function prepare(){
   place(zz,side,area[i%area.length]);
   if(i%2===0)place(zz+1700,-side,area[(i+3)%area.length]);
  }
- for(const [zz,label] of [[8000,'MOBILE · START'],[milestoneZ(1),'CARNIVAL CHECKPOINT'],[milestoneZ(2),'FAT TUESDAY FINALE'],[milestoneZ(3),'FINISH']])scenery.push({z:zz,offset:0,img:art.gate(label),width:5300,kind:'gate'});
+ for(const [zz,label] of [[8000,'MOBILE · START'],[milestoneZ(1),'CARNIVAL CHECKPOINT'],[milestoneZ(2),'FAT TUESDAY FINALE'],[milestoneZ(3),'CIVIC CENTER · FINISH']])scenery.push({z:zz,offset:0,img:art.gate(label),width:5300,kind:'gate'});
+ // Set signs between parade boards; leave their lettering and sight lines intact.
+ const routeStops=[[.025,'ROYAL STREET'],[.13,'BIENVILLE SQUARE'],[.25,'CONCEPTION STREET'],[.37,'GOVERNMENT STREET'],[.49,'SPANISH PLAZA'],[.60,'WASHINGTON AVENUE'],[.72,'BROAD STREET'],[.84,'SPRING HILL AVENUE'],[.96,'CIVIC CENTER AREA']];
+ for(const [fraction,label]of routeStops){const zz=START+fraction*(total-START-12000),near=billboards.reduce((a,b)=>Math.abs(b.z-zz)<Math.abs(a.z-zz)?b:a),side=-Math.sign(near.offset);scenery.push({z:zz,offset:side*2.8,img:makeRouteSign(label),width:2300,kind:'scenery'});}
+ scenery.push({z:START+.16*(total-START-12000),offset:-4.8,img:makeParkFountain(),width:3300,kind:'scenery'});
  $('paradeCount').textContent=data.parades.length+' PARADES. ONE JOYRIDE.';$('scheduleCount').textContent=data.parades.length+' Mobile parades';buildSchedule();updateScheduleCopy();$('startBtn').disabled=false;$('loading').hidden=true;updateCard(0);
 }
 function resetObjects(){rngSeed=251;traffic=[];pickups=[];const end=finishZ();for(let zz=35000,i=0;zz<end;zz+=19000,i++){traffic.push({z:zz,x:(i%3-1)*.64,speed:2200+rand()*1500,width:520,img:sprites.rivals[i%3],kind:'traffic',hit:false});if(i%4===2)traffic.push({z:zz+4200,x:((i+1)%3-1)*.64,speed:2400+rand()*1300,width:520,img:sprites.rivals[i%3],kind:'traffic',hit:false});}
