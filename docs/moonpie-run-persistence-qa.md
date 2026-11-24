@@ -37,4 +37,18 @@ The integration origin is hard-coded to `http://127.0.0.1:8791`, redirects are r
 
 Real browser sessionStorage/reload, separate-tab behavior and rendered pending-error UI still need browser verification. The queue integration uses an in-memory Storage adapter and simulates lost responses, not a physical network disconnect. Actual separate-browser cookie behavior is supported by the earlier UI checks and service tests, but two HTTP cookie jars are not two browser engines.
 
-Deterministic HTTP ranking ties and period-boundary fixtures remain open; current HTTP fixtures run in the present period. Physical-device/lifecycle/sharing checks from task 2 and production continuity/recovery checks remain open. No merge or deployment is authorized by this report.
+Physical-device/lifecycle/sharing checks from task 2 and production continuity/recovery checks remain open. No merge or deployment is authorized by this report.
+
+## Ranking integration follow-up
+
+`node scripts/check-local-rankings.mjs` now verifies deterministic fixtures through the built HTTP API. It creates a fresh local D1 directory beneath `.wrangler/ranking-qa-<uuid>`, applies the original migrations, seeds synthetic records and starts its own loopback Worker on port 8792. It stops that process tree on exit and retains the ignored fixtures for inspection. No existing local or production database is reset. Run `npm run build` first; port 8792 must be free.
+
+Passed for daily, weekly and all-time scopes:
+
+- Exact start timestamp included; one millisecond before start and the exact end timestamp excluded where applicable. Period metadata matches America/Chicago.
+- A player's older 200-point record wins all-time, while the current 50-point record wins the current daily/weekly period. Each player appears once; total-player count and sequential ranks agree.
+- Equal scores break ties by routes cleared, shorter active duration, earlier finish timestamp, then ascending run ID.
+- All twelve lifetime medals remain counted when the period's selected run has fewer achievements.
+- Public recent runs return only the latest ten, newest first, with descending run-ID ordering for identical timestamps.
+
+The fixture rows intentionally bypass score submission validation to isolate ranking reads, including future end-boundary timestamps. They are not claims that those synthetic runs could be submitted through the game. Period expectations use the existing period helper; independent DST/Monday/year-boundary expectations remain covered by the 37-test game suite. The final ranking script and canonical-source guard pass. No runtime change was needed for these checks, so the previously passing build and game suite were not repeated.

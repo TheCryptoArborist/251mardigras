@@ -35,13 +35,13 @@ Acceptance: record browser/device, viewport, steps and result for each check. Fi
 
 ## 3. Verify complete player persistence through the local integration
 
-Status: [HTTP/local D1 evidence](moonpie-run-persistence-qa.md) passes after correcting an API request-stream lifetime failure. Remaining browser and deterministic ranking checks are explicitly listed in that report.
+Status: [HTTP/local D1 evidence](moonpie-run-persistence-qa.md) passes after correcting an API request-stream lifetime failure. Deterministic ranking integration now passes too; browser/tab recovery checks remain open.
 
 - [ ] Exercise real local Worker HTTP flow with a browser cookie: create profile, choose/rename username, create/finish run, reload and reopen profile.
 - [x] Retry the same finish request, including interrupted responses; verify one completed run and one lifetime-stat increment. Real HTTP/D1 plus simulated response loss and parallel submissions.
 - [ ] Queue multiple pending scores; restore after reload/offline recovery; verify per-tab behavior and visible permanent errors.
 - [ ] Verify separate browsers cannot claim ownership and public profiles exclude private identifiers.
-- [ ] Check ranking ties, daily/weekly/all-time boundaries, recent runs and all 12 badge progress/earned states against deterministic test data.
+- [x] Check ranking ties, daily/weekly/all-time boundaries, recent runs and all 12 badge progress/earned states against deterministic test data. Isolated local D1 HTTP fixtures plus medal-threshold and calendar unit tests; see persistence QA report for limits.
 
 Acceptance: local end-to-end evidence supplements the existing passing unit tests. Never reinterpret local success as proof of production continuity.
 
@@ -85,6 +85,8 @@ Dependency: current Sites tools expose database inspection, but no backup/restor
 Twenty levels, bonus stages, extra lives, special tools, difficulty modes and two-player play are reference differences, not approved tasks to implement. Payments and tournaments remain outside scope. No original ROM/binaries/assets are to be redistributed.
 
 ## Execution log
+
+- 2026-11-23: Deterministic ranking integration passes for daily/weekly/all-time filters, all tie-breakers, one entry per player, lifetime badge counts and ten-entry recent-run ordering. Fixtures use a newly created local D1 directory and a self-managed Worker on port 8792. Canonical-source guard passes; no game/runtime changes or production operations.
 
 - 2026-11-23: Task 3 HTTP/local D1 pass. Corrected reproducible POST request-stream interruptions in the adapter; original score/identity service unchanged. Parallel duplicate finish and lost-response recovery count once. Separate-cookie ownership, privacy, recent runs and ranking scopes verified. 37 game tests pass; guard checks 136 protected originals with the adapter recorded as an integration exception. Browser/tab recovery and deterministic HTTP ranking boundaries remain open.
 
