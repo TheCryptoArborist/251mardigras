@@ -645,5 +645,24 @@
       "height": 780
     },
     "organizationLogoUrl": "/images/profile-studio/societies/elexis-i-motorcade.webp"
+  },
+  {
+    "id": "order-of-pan-oh-captain-my-captain-2026",
+    "slug": "order-of-pan-oh-captain-my-captain-2026",
+    "status": "approved",
+    "title": "Oh Captain My Captain",
+    "organization": "Order of Pan",
+    "eventType": "Ball",
+    "carnivalSeason": 2027,
+    "startDateTime": "2026-12-31T20:00:00-06:00",
+    "endDateTime": "2026-12-31T23:59:00-06:00",
+    "endTimeUnconfirmed": true,
+    "dateLabel": "Thu, Dec 31, 2026 • Starts at 8:00 PM CT",
+    "venueName": "The Calirojaé",
+    "venueAddress": "1004 Dauphin Island Parkway",
+    "cityStateZip": "Mobile, AL 36605",
+    "description": "Ring in the new year with the Order of Pan at its annual New Year’s Eve ball. This year’s theme is Oh Captain My Captain. The ball starts at 8:00 PM Central. Admission is open to the public with a ticket. Ticket price and purchase details are pending.",
+    "cost": "Public ticketed event. Price pending.",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=The%20Caliroja%C3%A9%201004%20Dauphin%20Island%20Parkway%20Mobile%20AL%2036605"
   }
 ]
