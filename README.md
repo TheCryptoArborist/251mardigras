@@ -1,5 +1,7 @@
 # Mobile Mardi Gras Tracker
 
+MoonPie Run source, local development, and the staged deployment plan are documented in [docs/moonpie-run.md](docs/moonpie-run.md). The isolated game project is in `games/moonpie-run/`.
+
 Unofficial Phase 1 public-source tracker for Mobile, Alabama Mardi Gras updates.
 
 This app monitors official public pages, stores normalized source snapshots, detects meaningful changes, shows NWS weather risk for downtown Mobile, embeds the Mobile Mardi Gras YouTube livestream, and presents curated resources from the Mobile Mardi Gras Linktree categories.

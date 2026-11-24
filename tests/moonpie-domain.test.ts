@@ -1,8 +1,45 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+import vm from 'node:vm';
 import {GET,POST} from '../src/app/arcade/moonpie-run/[[...path]]/route';
 const root='https://mg251.xyz/arcade/moonpie-run';
 const context=(path:string[]=[])=>({params:Promise.resolve({path})});
+
+test('serve the responsive stylesheet verbatim through the game proxy',async()=>{
+ const source=readFileSync(new URL('../games/moonpie-run/game/layout-fixes.css',import.meta.url),'utf8');
+ const original=globalThis.fetch;
+ try{
+  globalThis.fetch=async()=>new Response(source,{headers:{'content-type':'text/css'}});
+  const response=await GET(new Request(root+'/layout-fixes.css?v=1'),context(['layout-fixes.css']));
+  assert.equal(response.status,200);
+  assert.equal(response.headers.get('content-type'),'text/css');
+  assert.equal(await response.text(),source);
+ }finally{globalThis.fetch=original}
+});
+
+test('configured canonical client is served verbatim and uses the explicit same-origin API base',async()=>{
+ const source=readFileSync(new URL('../games/moonpie-run/game/progress.js',import.meta.url),'utf8');
+ const original=globalThis.fetch;
+ try{
+  globalThis.fetch=async()=>new Response(source,{headers:{'content-type':'text/javascript'}});
+  assert.equal(await (await GET(new Request(root+'/progress.js'),context(['progress.js']))).text(),source);
+  globalThis.fetch=async()=>new Response('<html><head></head></html>');
+  assert.match(await (await GET(new Request(root),context())).text(),/<meta name="moonpie-api-base" content="\/arcade\/moonpie-run">/);
+ }finally{globalThis.fetch=original}
+ const apiLine=source.split('\n').find(line=>line.startsWith('async function api('))!;
+ for(const base of ['', '/arcade/moonpie-run']){
+  const seen:{url:string,init:RequestInit}[]=[];
+  const sandbox=vm.createContext({document:{querySelector:()=>base?{content:base}:null},fetch:async(url:string,init:RequestInit)=>{seen.push({url,init});return Response.json({saved:true})}});
+  vm.runInContext(apiLine,sandbox);
+  await vm.runInContext("api('/api/player')",sandbox);
+  await vm.runInContext("api('/api/runs/finish',{runId:'pending'})",sandbox);
+  assert.equal(seen[0].url,base+'/api/player');
+  assert.equal(seen[1].url,base+'/api/runs/finish');
+  assert.equal(seen[1].init.credentials,'same-origin');
+  assert.equal(seen[1].init.body,JSON.stringify({runId:'pending'}));
+ }
+});
 
 test('serve the game under MG251 and scope score calls to the game path',async()=>{
  const original=globalThis.fetch;

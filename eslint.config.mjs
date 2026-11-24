@@ -18,6 +18,8 @@ const eslintConfig = [
       "node_modules/**",
       "dist/**",
       "coverage/**",
+      "games/moonpie-run/**",
+      ".moonpie-source-audit/**",
       "next-env.d.ts"
     ]
   }
