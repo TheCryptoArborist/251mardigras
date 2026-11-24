@@ -35,11 +35,11 @@ Acceptance: record browser/device, viewport, steps and result for each check. Fi
 
 ## 3. Verify complete player persistence through the local integration
 
-Status: [HTTP/local D1 evidence](moonpie-run-persistence-qa.md) passes after correcting an API request-stream lifetime failure. Deterministic ranking integration now passes too; browser/tab recovery checks remain open.
+Status: [HTTP/local D1 and browser evidence](moonpie-run-persistence-qa.md) passes after correcting an API request-stream lifetime failure. Ranking integration and browser queue recovery pass; independent-browser ownership verification remains open.
 
-- [ ] Exercise real local Worker HTTP flow with a browser cookie: create profile, choose/rename username, create/finish run, reload and reopen profile.
+- [x] Exercise real local Worker HTTP flow with a browser cookie: create profile, choose/rename username, create/finish run, reload and reopen profile. Combined initial browser QA and queue-recovery follow-up.
 - [x] Retry the same finish request, including interrupted responses; verify one completed run and one lifetime-stat increment. Real HTTP/D1 plus simulated response loss and parallel submissions.
-- [ ] Queue multiple pending scores; restore after reload/offline recovery; verify per-tab behavior and visible permanent errors.
+- [x] Queue multiple pending scores; restore after reload/connection recovery; verify per-tab behavior and visible permanent errors. Real browser with controlled 503, 400 and dropped-connection faults; physical offline/online events remain device QA.
 - [ ] Verify separate browsers cannot claim ownership and public profiles exclude private identifiers.
 - [x] Check ranking ties, daily/weekly/all-time boundaries, recent runs and all 12 badge progress/earned states against deterministic test data. Isolated local D1 HTTP fixtures plus medal-threshold and calendar unit tests; see persistence QA report for limits.
 
@@ -85,6 +85,8 @@ Dependency: current Sites tools expose database inspection, but no backup/restor
 Twenty levels, bonus stages, extra lives, special tools, difficulty modes and two-player play are reference differences, not approved tasks to implement. Payments and tournaments remain outside scope. No original ROM/binaries/assets are to be redistributed.
 
 ## Execution log
+
+- 2026-11-23: Browser pending-score recovery passed: two queued runs survive reload, separate new tab shares profile but not queue, manual retry saves once, permanent rejection persists, later scores still save, dropped connection recovers automatically on reload, rename preserves progress. Local test profile ended with five runs/45 doubloons/two badges and one retained simulated rejection. Added loopback fault proxy; no game/runtime or production changes.
 
 - 2026-11-23: Deterministic ranking integration passes for daily/weekly/all-time filters, all tie-breakers, one entry per player, lifetime badge counts and ten-entry recent-run ordering. Fixtures use a newly created local D1 directory and a self-managed Worker on port 8792. Canonical-source guard passes; no game/runtime changes or production operations.
 

@@ -35,7 +35,7 @@ The integration origin is hard-coded to `http://127.0.0.1:8791`, redirects are r
 
 ## Still open
 
-Real browser sessionStorage/reload, separate-tab behavior and rendered pending-error UI still need browser verification. The queue integration uses an in-memory Storage adapter and simulates lost responses, not a physical network disconnect. Actual separate-browser cookie behavior is supported by the earlier UI checks and service tests, but two HTTP cookie jars are not two browser engines.
+Browser sessionStorage/reload, separate-tab behavior and rendered pending-error UI passed in the follow-up below. Actual separate-browser ownership still needs a second browser context: two HTTP cookie jars or two tabs sharing cookies are not two independent browser profiles.
 
 Physical-device/lifecycle/sharing checks from task 2 and production continuity/recovery checks remain open. No merge or deployment is authorized by this report.
 
@@ -52,3 +52,24 @@ Passed for daily, weekly and all-time scopes:
 - Public recent runs return only the latest ten, newest first, with descending run-ID ordering for identical timestamps.
 
 The fixture rows intentionally bypass score submission validation to isolate ranking reads, including future end-boundary timestamps. They are not claims that those synthetic runs could be submitted through the game. Period expectations use the existing period helper; independent DST/Monday/year-boundary expectations remain covered by the 37-test game suite. The final ranking script and canonical-source guard pass. No runtime change was needed for these checks, so the previously passing build and game suite were not repeated.
+
+## Browser queue recovery follow-up
+
+Tested the actual game UI in the Codex in-app browser, using local D1 and the loopback-only `scripts/local-save-fault-proxy.mjs`. No game code, browser storage or hidden game state was injected. Runs were collected through gameplay, then retired with Pause → Restart. The proxy changed only finish-request transport/responses; normal profile/run creation continued through the built Worker.
+
+Observed sequence:
+
+1. Existing local profile LocalQA1123 began with one saved run, nine doubloons and two badges.
+2. With finish responses set to 503, two 140-point runs queued. The player panel showed both entries after reload, including the temporary error and Save runs button. Saved totals stayed at one run/nine doubloons.
+3. A newly opened tab shared the username and saved stats but showed no pending entries. It did not take over the first tab's sessionStorage queue.
+4. Restoring service and clicking Save runs emptied the retryable queue. Reload showed three runs/27 doubloons; the second tab also showed those totals after reload.
+5. A simulated 400 rejection persisted through reload with its error and Dismiss control, but no retry control. It did not increment saved totals. The rejected entry was retained, not dismissed.
+6. A later valid run saved despite that blocked entry: four runs/36 doubloons.
+7. A dropped finish connection produced a visible `Failed to fetch` entry alongside the blocked entry. Restoring service and reloading automatically saved the retryable entry: five runs/45 doubloons, leaving only the permanent rejection.
+8. Renaming to QueueQA1123 and reloading retained five saved runs, 45 doubloons, two badges, recent runs and the blocked error.
+
+These checks verify genuine browser storage and UI behavior under controlled service/connection failures. They do not verify OS airplane mode, automatic `online` event recovery without reload, duplicated-tab opener semantics, browser crash restoration or closing/reopening a tab. SessionStorage intentionally does not promise survival after closing a tab. Independent browser ownership and physical-device checks remain open.
+
+Repeat with `npm start -- --port 8791` and `node scripts/local-save-fault-proxy.mjs` in separate terminals. Open `http://127.0.0.1:8793/`. Set `.wrangler/save-fault-mode.txt` to `transient`, `permanent`, `disconnect` or `pass`; absent control file defaults to pass. Restore pass and stop both processes after QA. Ports 8791 and 8793 are fixed loopback addresses; never use a production tunnel. Cookies share the loopback hostname across ports, while sessionStorage is scoped to origin and tab. This helper is a development fault injector, not a production proxy or deployable endpoint.
+
+No runtime fix was needed. The helper was exercised in all four modes; canonical-source verification passes. Prior game tests/build remain applicable because only this QA helper and documentation changed.
