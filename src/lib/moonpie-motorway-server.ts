@@ -10,12 +10,12 @@ const FILES = new Set(["index.html", "game.js", "art.js", "fonts.css", "parades.
 const TYPES: Record<string, string> = {
   html: "text/html; charset=utf-8", js: "text/javascript; charset=utf-8",
   css: "text/css; charset=utf-8", json: "application/json; charset=utf-8",
-  webp: "image/webp", woff: "font/woff", ttf: "font/ttf", txt: "text/plain; charset=utf-8"
+  png: "image/png", jpg: "image/jpeg", webp: "image/webp", woff: "font/woff", ttf: "font/ttf", txt: "text/plain; charset=utf-8"
 };
 
 export async function serveMotorway(method: string, segments: string[] = [], requestUrl?: string) {
   const resource = segments.length ? segments.join("/") : "index.html";
-  if (!FILES.has(resource) && !/^assets\/[a-zA-Z0-9_-]+\.(webp|woff|ttf|txt)$/.test(resource)) {
+  if (!FILES.has(resource) && !/^assets\/[a-zA-Z0-9_-]+\.(webp|png|jpg|woff|ttf|txt)$/.test(resource)) {
     return new Response("Not found", { status: 404 });
   }
   try {

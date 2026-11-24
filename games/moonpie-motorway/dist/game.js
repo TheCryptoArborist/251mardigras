@@ -48,6 +48,14 @@ function makeParkFountain(){
  for(const side of[-1,1]){g.beginPath();g.moveTo(220,76);g.quadraticCurveTo(220+side*105,98,220+side*95,245);g.stroke();g.beginPath();g.moveTo(220,44);g.quadraticCurveTo(220+side*44,30,220+side*45,87);g.stroke();}
  g.fillStyle='#f9cf66';g.beginPath();g.arc(220,52,8,0,7);g.fill();return c;
 }
+function makeBusinessBoard(name,website,logo,light){
+ const[c,g]=makeCanvas(880,600);g.fillStyle='#433748';g.fillRect(145,450,28,150);g.fillRect(707,450,28,150);
+ g.lineWidth=9;rr(g,8,8,864,480,18,'#211033','#f9cf66');
+ rr(g,30,27,820,275,8,light?'#ffffff':'#211033');
+ if(logo){const scale=Math.min(760/logo.width,245/logo.height),w=logo.width*scale,h=logo.height*scale;g.drawImage(logo,440-w/2,164-h/2,w,h);}
+ g.textAlign='center';g.fillStyle='#fff2d5';g.font='800 64px "Barlow Condensed",Arial,sans-serif';g.fillText(name,440,370);
+ g.strokeStyle='#f9cf6680';g.lineWidth=2;g.beginPath();g.moveTo(70,392);g.lineTo(810,392);g.stroke();g.fillStyle='#f9cf66';g.font='700 49px Barlow,Arial,sans-serif';g.fillText(website,440,453);return c;
+}
 function prepare(){
  const art=window.MotorwayArt;
  sprites={car:art.cars[1],carLeft:art.cars[0],carRight:art.cars[2],rival:art.cars[3],rivals:art.cars.slice(3),beads:makeBeads(),moonpie:makeMoonpie(),cone:makeCone(),...art.props};
@@ -72,6 +80,9 @@ function prepare(){
  const routeStops=[[.025,'ROYAL STREET'],[.13,'BIENVILLE SQUARE'],[.25,'CONCEPTION STREET'],[.37,'GOVERNMENT STREET'],[.49,'SPANISH PLAZA'],[.60,'WASHINGTON AVENUE'],[.72,'BROAD STREET'],[.84,'SPRING HILL AVENUE'],[.96,'CIVIC CENTER AREA']];
  for(const [fraction,label]of routeStops){const zz=START+fraction*(total-START-12000),near=billboards.reduce((a,b)=>Math.abs(b.z-zz)<Math.abs(a.z-zz)?b:a),side=-Math.sign(near.offset);scenery.push({z:zz,offset:side*2.8,img:makeRouteSign(label),width:2300,kind:'scenery'});}
  scenery.push({z:START+.16*(total-START-12000),offset:-4.8,img:makeParkFountain(),width:3300,kind:'scenery'});
+ // One board for each requested business in every stage, in both game modes.
+ const businessBoards=[{id:'lemon',name:"Lemon T’s",website:'www.lemon-ts.com',light:false,fraction:.30},{id:'pops',name:'Pop’s Midtown',website:'popsmidtown.com',light:true,fraction:.68}];
+ for(const business of businessBoards){const img=makeBusinessBoard(business.name,business.website,art.businessLogos?.[business.id],business.light);for(let section=0;section<3;section++){const from=section?milestoneZ(section):START,to=milestoneZ(section+1),zz=from+(to-from)*business.fraction,near=billboards.reduce((a,b)=>Math.abs(b.z-zz)<Math.abs(a.z-zz)?b:a),side=-Math.sign(near.offset);scenery=scenery.filter(o=>o.kind!=='scenery'||Math.sign(o.offset)!==side||Math.abs(o.z-zz)>5000);scenery.push({z:zz,offset:side*2.7,img,width:3700,kind:'business',business:business.id,section});}}
  $('paradeCount').textContent=data.parades.length+' PARADES. ONE JOYRIDE.';$('scheduleCount').textContent=data.parades.length+' Mobile parades';buildSchedule();updateScheduleCopy();$('startBtn').disabled=false;$('loading').hidden=true;updateCard(0);
 }
 function resetObjects(){rngSeed=251;traffic=[];pickups=[];const end=finishZ();for(let zz=35000,i=0;zz<end;zz+=19000,i++){traffic.push({z:zz,x:(i%3-1)*.64,speed:2200+rand()*1500,width:520,img:sprites.rivals[i%3],kind:'traffic',hit:false});if(i%4===2)traffic.push({z:zz+4200,x:((i+1)%3-1)*.64,speed:2400+rand()*1300,width:520,img:sprites.rivals[i%3],kind:'traffic',hit:false});}
@@ -130,7 +141,7 @@ function updateUI(){$('speed').innerHTML=Math.round(speed/7600*120)+'<span>MPH</
 function project(point,worldX,worldY,worldZ,cameraY){const scale=DEPTH/Math.max(1,worldZ);point.x=W/2+worldX*scale*focalWidth()/2;point.y=(1-(worldY-cameraY)*scale)*H/2;point.w=scale*ROAD*focalWidth()/2;point.scale=scale;point.z=worldZ;}
 function quad(x1,y1,w1,x2,y2,w2,fill){poly(ctx,[[Math.round(x1-w1),Math.ceil(y1)+1],[Math.round(x1+w1),Math.ceil(y1)+1],[Math.round(x2+w2),Math.floor(y2)],[Math.round(x2-w2),Math.floor(y2)]],fill);}
 function background(theme,t){window.MotorwayArt.backdrop(ctx,W,H,['racing','countdown','paused','ended'].includes(state)?stage:0,playerX,t);}
-function drawObject(o,camZ,playerCamX,cameraY,g=ctx){const distance=o.z-camZ;if(distance<330||distance>VIEW*SEG)return;const idx=Math.floor(o.z/SEG),s=segments[idx];if(!s||!s.visible||!s.p1.scale)return;const frac=(o.z%SEG)/SEG,p=s.p1,p2=s.p2;const roadx=lerp(p.x,p2.x,frac),groundy=lerp(p.y,p2.y,frac),w=DEPTH/distance*ROAD*focalWidth()/2;const offset=o.offset??o.x;const x=roadx+offset*w;const sw=o.width/ROAD*w,sh=sw*o.img.height/o.img.width;if(sw<2)return;let yy=groundy-sh;if(o.kind==='beads'||o.kind==='moonpie')yy-=sh*.42+Math.sin(elapsed*1000/240+o.z)*sh*.09;const bottom=yy+sh;const clip=s.clip??H;if(yy>clip||x+sw/2<0||x-sw/2>W)return;g.save();g.imageSmoothingEnabled=o.kind==='billboard';g.beginPath();g.rect(0,0,W,Math.max(0,clip));g.clip();g.drawImage(o.img,x-sw/2,yy,sw,sh);g.restore();}
+function drawObject(o,camZ,playerCamX,cameraY,g=ctx){const distance=o.z-camZ;if(distance<330||distance>VIEW*SEG)return;const idx=Math.floor(o.z/SEG),s=segments[idx];if(!s||!s.visible||!s.p1.scale)return;const frac=(o.z%SEG)/SEG,p=s.p1,p2=s.p2;const roadx=lerp(p.x,p2.x,frac),groundy=lerp(p.y,p2.y,frac),w=DEPTH/distance*ROAD*focalWidth()/2;const offset=o.offset??o.x;const x=roadx+offset*w;const sw=o.width/ROAD*w,sh=sw*o.img.height/o.img.width;if(sw<2)return;let yy=groundy-sh;if(o.kind==='beads'||o.kind==='moonpie')yy-=sh*.42+Math.sin(elapsed*1000/240+o.z)*sh*.09;const bottom=yy+sh;const clip=s.clip??H;if(yy>clip||x+sw/2<0||x-sw/2>W)return;g.save();g.imageSmoothingEnabled=o.kind==='billboard'||o.kind==='business';g.beginPath();g.rect(0,0,W,Math.max(0,clip));g.clip();g.drawImage(o.img,x-sw/2,yy,sw,sh);g.restore();}
 function render(now){
  const active=['racing','countdown','paused','ended'].includes(state),camZ=active?z:attractZ;if(active)now=elapsed*1000;
  const displayStage=active?stage:0,theme=stages[displayStage];
