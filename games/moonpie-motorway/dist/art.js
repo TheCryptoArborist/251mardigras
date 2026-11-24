@@ -38,17 +38,18 @@ window.MotorwayArt = (() => {
     return c;
   }
   art.load=async()=>{
-    const [cars,props,sky,lemon,pops]=await Promise.all([
+    const [cars,props,sky,lemon,pops,nicknacks]=await Promise.all([
       image('assets/race-cars-v2.webp'),
       image('assets/carnival-scenery-v2.webp'),
       image('assets/mobile-skyline-v2.webp'),
       image('assets/lemon-ts-logo.png'),
-      image('assets/pops-midtown-logo.jpg')
+      image('assets/pops-midtown-logo.jpg'),
+      image('assets/nicknacks-logo.jpg')
     ]);
     for(let row=0;row<2;row++)for(let col=0;col<3;col++)art.cars.push(carFrame(cars,col,row));
     const names=['brick','stucco','oak','grandstand','float','oakTall','pit','crowd','lamp'];
     names.forEach((n,i)=>art.props[n]=propFrame(props,i%3,Math.floor(i/3)));
-    art.businessLogos={lemon,pops}; art.skyline=sky; art.ready=true;
+    art.businessLogos={lemon,pops,nicknacks}; art.skyline=sky; art.ready=true;
   };
   art.backdrop=(g,w,h,stage,bend,z)=>{
     const horizon=Math.ceil(h*.505);

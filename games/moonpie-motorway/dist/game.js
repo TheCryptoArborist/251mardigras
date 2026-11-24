@@ -48,13 +48,17 @@ function makeParkFountain(){
  for(const side of[-1,1]){g.beginPath();g.moveTo(220,76);g.quadraticCurveTo(220+side*105,98,220+side*95,245);g.stroke();g.beginPath();g.moveTo(220,44);g.quadraticCurveTo(220+side*44,30,220+side*45,87);g.stroke();}
  g.fillStyle='#f9cf66';g.beginPath();g.arc(220,52,8,0,7);g.fill();return c;
 }
-function makeBusinessBoard(name,website,logo,light){
- const[c,g]=makeCanvas(880,600);g.fillStyle='#433748';g.fillRect(145,450,28,150);g.fillRect(707,450,28,150);
- g.lineWidth=9;rr(g,8,8,864,480,18,'#211033','#f9cf66');
- rr(g,30,27,820,275,8,light?'#ffffff':'#211033');
- if(logo){const scale=Math.min(760/logo.width,245/logo.height),w=logo.width*scale,h=logo.height*scale;g.drawImage(logo,440-w/2,164-h/2,w,h);}
- g.textAlign='center';g.fillStyle='#fff2d5';g.font='800 64px "Barlow Condensed",Arial,sans-serif';g.fillText(name,440,370);
- g.strokeStyle='#f9cf6680';g.lineWidth=2;g.beginPath();g.moveTo(70,392);g.lineTo(810,392);g.stroke();g.fillStyle='#f9cf66';g.font='700 49px Barlow,Arial,sans-serif';g.fillText(website,440,453);return c;
+function makeBusinessBoard(name,website,logo,light,facebook=false){
+ const extra=facebook?220:0;const[c,g]=makeCanvas(880,600+extra);g.fillStyle='#433748';g.fillRect(145,450+extra,28,150);g.fillRect(707,450+extra,28,150);
+ g.lineWidth=9;rr(g,8,8,864,480+extra,18,'#211033','#f9cf66');
+ rr(g,30,27,820,275+extra,8,light?'#ffffff':'#211033');
+ if(logo){const scale=Math.min(760/logo.width,(245+extra)/logo.height),w=logo.width*scale,h=logo.height*scale;g.drawImage(logo,440-w/2,164+extra/2-h/2,w,h);}
+ g.translate(0,extra);g.textAlign='center';g.fillStyle='#fff2d5';g.font='800 '+(facebook?46:64)+'px "Barlow Condensed",Arial,sans-serif';g.fillText(name,440,370);
+ g.strokeStyle='#f9cf6680';g.lineWidth=2;g.beginPath();g.moveTo(70,392);g.lineTo(810,392);g.stroke();g.fillStyle='#f9cf66';g.font='700 49px Barlow,Arial,sans-serif';if(facebook){
+  // Facebook's white f on blue, followed by the exact page handle.
+  rr(g,102,408,58,58,7,'#0866ff');g.fillStyle='#fff';g.beginPath();g.moveTo(137,466);g.lineTo(137,441);g.lineTo(145,441);g.lineTo(147,431);g.lineTo(137,431);g.lineTo(137,425);g.quadraticCurveTo(137,421,142,421);g.lineTo(147,421);g.lineTo(147,412);g.lineTo(139,412);g.quadraticCurveTo(126,412,126,425);g.lineTo(126,431);g.lineTo(119,431);g.lineTo(119,441);g.lineTo(126,441);g.lineTo(126,466);g.closePath();g.fill();
+  g.fillStyle='#f9cf66';g.font='700 43px Barlow,Arial,sans-serif';g.fillText(website,475,453);
+ }else g.fillText(website,440,453);return c;
 }
 function prepare(){
  const art=window.MotorwayArt;
@@ -81,8 +85,8 @@ function prepare(){
  for(const [fraction,label]of routeStops){const zz=START+fraction*(total-START-12000),near=billboards.reduce((a,b)=>Math.abs(b.z-zz)<Math.abs(a.z-zz)?b:a),side=-Math.sign(near.offset);scenery.push({z:zz,offset:side*2.8,img:makeRouteSign(label),width:2300,kind:'scenery'});}
  scenery.push({z:START+.16*(total-START-12000),offset:-4.8,img:makeParkFountain(),width:3300,kind:'scenery'});
  // One board for each requested business in every stage, in both game modes.
- const businessBoards=[{id:'lemon',name:"Lemon T’s",website:'www.lemon-ts.com',light:false,fraction:.30},{id:'pops',name:'Pop’s Midtown',website:'popsmidtown.com',light:true,fraction:.68}];
- for(const business of businessBoards){const img=makeBusinessBoard(business.name,business.website,art.businessLogos?.[business.id],business.light);for(let section=0;section<3;section++){const from=section?milestoneZ(section):START,to=milestoneZ(section+1),zz=from+(to-from)*business.fraction,near=billboards.reduce((a,b)=>Math.abs(b.z-zz)<Math.abs(a.z-zz)?b:a),side=-Math.sign(near.offset);scenery=scenery.filter(o=>o.kind!=='scenery'||Math.sign(o.offset)!==side||Math.abs(o.z-zz)>5000);scenery.push({z:zz,offset:side*2.7,img,width:3700,kind:'business',business:business.id,section});}}
+ const businessBoards=[{id:'lemon',name:"Lemon T’s",website:'www.lemon-ts.com',light:false,fraction:.30},{id:'pops',name:'Pop’s Midtown',website:'popsmidtown.com',light:true,fraction:.68},{id:'nicknacks',name:'NickNacks Custom 3D Prints',website:'nicknackscustoms',light:true,facebook:true,fraction:.49,sections:[0]}];
+ for(const business of businessBoards){const img=makeBusinessBoard(business.name,business.website,art.businessLogos?.[business.id],business.light,business.facebook);for(const section of business.sections||[0,1,2]){const from=section?milestoneZ(section):START,to=milestoneZ(section+1),zz=from+(to-from)*business.fraction,near=billboards.reduce((a,b)=>Math.abs(b.z-zz)<Math.abs(a.z-zz)?b:a),side=-Math.sign(near.offset);scenery=scenery.filter(o=>o.kind!=='scenery'||Math.sign(o.offset)!==side||Math.abs(o.z-zz)>5000);scenery.push({z:zz,offset:side*2.7,img,width:3700,kind:'business',business:business.id,section});}}
  $('paradeCount').textContent=data.parades.length+' PARADES. ONE JOYRIDE.';$('scheduleCount').textContent=data.parades.length+' Mobile parades';buildSchedule();updateScheduleCopy();$('startBtn').disabled=false;$('loading').hidden=true;updateCard(0);
 }
 function resetObjects(){rngSeed=251;traffic=[];pickups=[];const end=finishZ();for(let zz=35000,i=0;zz<end;zz+=19000,i++){traffic.push({z:zz,x:(i%3-1)*.64,speed:2200+rand()*1500,width:520,img:sprites.rivals[i%3],kind:'traffic',hit:false});if(i%4===2)traffic.push({z:zz+4200,x:((i+1)%3-1)*.64,speed:2400+rand()*1300,width:520,img:sprites.rivals[i%3],kind:'traffic',hit:false});}
