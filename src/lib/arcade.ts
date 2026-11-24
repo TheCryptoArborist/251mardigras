@@ -17,7 +17,7 @@ export const ARCADE_GAMES = [
   },
   {
     slug: "moonpie-motorway",
-    playUrl: null,
+    playUrl: "/play/moonpie-motorway",
     title: "MoonPie Motorway",
     marquee: ["MOONPIE", "MOTORWAY"],
     genre: "ARCADE RACING",

@@ -1,0 +1,324 @@
+{
+  "season": 2027,
+  "source": "https://mg251.xyz/schedule",
+  "captured": "2026-11-05",
+  "lastVerifiedBySource": "2026-10-20",
+  "timezone": "America/Chicago",
+  "parades": [
+    {
+      "name": "Conde Cavaliers",
+      "date": "2027-01-22",
+      "dateLabel": "JAN 22",
+      "time": "6:30 PM",
+      "route": "Route A"
+    },
+    {
+      "name": "Bayport Parading Society",
+      "date": "2027-01-23",
+      "dateLabel": "JAN 23",
+      "time": "2:00 PM",
+      "route": "Route A"
+    },
+    {
+      "name": "Mystic DJ Riders",
+      "date": "2027-01-23",
+      "dateLabel": "JAN 23",
+      "time": "2:30 PM",
+      "route": "Route A"
+    },
+    {
+      "name": "Pharaohs’ Mystic Society",
+      "date": "2027-01-23",
+      "dateLabel": "JAN 23",
+      "time": "6:30 PM",
+      "route": "Route A"
+    },
+    {
+      "name": "Conde Explorers",
+      "date": "2027-01-23",
+      "dateLabel": "JAN 23",
+      "time": "7:00 PM",
+      "route": "Route A"
+    },
+    {
+      "name": "Order of Polka Dots",
+      "date": "2027-01-28",
+      "dateLabel": "JAN 28",
+      "time": "6:30 PM",
+      "route": "Route A"
+    },
+    {
+      "name": "Order of Inca",
+      "date": "2027-01-29",
+      "dateLabel": "JAN 29",
+      "time": "6:30 PM",
+      "route": "Route A"
+    },
+    {
+      "name": "Mobile Mystics",
+      "date": "2027-01-30",
+      "dateLabel": "JAN 30",
+      "time": "1:00 PM",
+      "route": "Route A"
+    },
+    {
+      "name": "Mobile Mystical Revelers",
+      "date": "2027-01-30",
+      "dateLabel": "JAN 30",
+      "time": "1:30 PM",
+      "route": "Route A"
+    },
+    {
+      "name": "Mobile Mystical Friends",
+      "date": "2027-01-30",
+      "dateLabel": "JAN 30",
+      "time": "2:00 PM",
+      "route": "Route A"
+    },
+    {
+      "name": "Maids of Mirth",
+      "date": "2027-01-30",
+      "dateLabel": "JAN 30",
+      "time": "6:30 PM",
+      "route": "Route G"
+    },
+    {
+      "name": "Order of Butterfly Maidens",
+      "date": "2027-01-30",
+      "dateLabel": "JAN 30",
+      "time": "6:30 PM",
+      "route": "Route A"
+    },
+    {
+      "name": "Krewe of Marry Mates",
+      "date": "2027-01-30",
+      "dateLabel": "JAN 30",
+      "time": "7:30 PM",
+      "route": "Route A"
+    },
+    {
+      "name": "Neptune’s Daughters",
+      "date": "2027-01-31",
+      "dateLabel": "JAN 31",
+      "time": "6:30 PM",
+      "route": "Route A"
+    },
+    {
+      "name": "Order of Isis",
+      "date": "2027-01-31",
+      "dateLabel": "JAN 31",
+      "time": "7:00 PM",
+      "route": "Route A"
+    },
+    {
+      "name": "Order of Venus",
+      "date": "2027-02-01",
+      "dateLabel": "FEB 1",
+      "time": "6:30 PM",
+      "route": "Route A"
+    },
+    {
+      "name": "Order of Many Faces",
+      "date": "2027-02-01",
+      "dateLabel": "FEB 1",
+      "time": "7:30 PM",
+      "route": "Route A"
+    },
+    {
+      "name": "Order of LaShe’s",
+      "date": "2027-02-02",
+      "dateLabel": "FEB 2",
+      "time": "6:30 PM",
+      "route": "Route A"
+    },
+    {
+      "name": "Order of Olympia",
+      "date": "2027-02-02",
+      "dateLabel": "FEB 2",
+      "time": "7:00 PM",
+      "route": "Route A"
+    },
+    {
+      "name": "Mystic Stripers Society",
+      "date": "2027-02-04",
+      "dateLabel": "FEB 4",
+      "time": "6:30 PM",
+      "route": "Route A"
+    },
+    {
+      "name": "Crewe of Columbus",
+      "date": "2027-02-05",
+      "dateLabel": "FEB 5",
+      "time": "6:30 PM",
+      "route": "Route A"
+    },
+    {
+      "name": "Floral Parade",
+      "date": "2027-02-06",
+      "dateLabel": "FEB 6",
+      "time": "Noon",
+      "route": "Route I"
+    },
+    {
+      "name": "Knights of Mobile",
+      "date": "2027-02-06",
+      "dateLabel": "FEB 6",
+      "time": "12:30 PM",
+      "route": "Route A"
+    },
+    {
+      "name": "Mobile Mystical Ladies",
+      "date": "2027-02-06",
+      "dateLabel": "FEB 6",
+      "time": "1:00 PM",
+      "route": "Route A"
+    },
+    {
+      "name": "Order of Angels",
+      "date": "2027-02-06",
+      "dateLabel": "FEB 6",
+      "time": "1:30 PM",
+      "route": "Route A"
+    },
+    {
+      "name": "Joy of Life",
+      "date": "2027-02-06",
+      "dateLabel": "FEB 6",
+      "time": "2:00 PM",
+      "route": "Route A"
+    },
+    {
+      "name": "Mystics of Time",
+      "date": "2027-02-06",
+      "dateLabel": "FEB 6",
+      "time": "5:45 PM",
+      "route": "Route H"
+    },
+    {
+      "name": "King Elexis I",
+      "date": "2027-02-07",
+      "dateLabel": "FEB 7",
+      "time": "2:00 PM",
+      "route": "Route E"
+    },
+    {
+      "name": "Joe Cain Marchers",
+      "date": "2027-02-07",
+      "dateLabel": "FEB 7",
+      "time": "2:30 PM",
+      "route": "Route A"
+    },
+    {
+      "name": "Joe Cain Society",
+      "date": "2027-02-07",
+      "dateLabel": "FEB 7",
+      "time": "3:00 PM",
+      "route": "Route A"
+    },
+    {
+      "name": "Krewe de Bienville",
+      "date": "2027-02-07",
+      "dateLabel": "FEB 7",
+      "time": "4:00 PM",
+      "route": "Route A"
+    },
+    {
+      "name": "Krewe de Secondline",
+      "date": "2027-02-07",
+      "dateLabel": "FEB 7",
+      "time": "5:00 PM",
+      "route": "Route A"
+    },
+    {
+      "name": "Order of Kahos",
+      "date": "2027-02-07",
+      "dateLabel": "FEB 7",
+      "time": "6:00 PM",
+      "route": "Route A"
+    },
+    {
+      "name": "King Felix III & Floral Parade",
+      "date": "2027-02-08",
+      "dateLabel": "FEB 8",
+      "time": "11:30 AM",
+      "route": "Route I"
+    },
+    {
+      "name": "MLK Business & Civic Organization Parade",
+      "date": "2027-02-08",
+      "dateLabel": "FEB 8",
+      "time": "2:00 PM",
+      "route": "Route D"
+    },
+    {
+      "name": "Monday Mystics",
+      "date": "2027-02-08",
+      "dateLabel": "FEB 8",
+      "time": "2:30 PM",
+      "route": "Route D"
+    },
+    {
+      "name": "Northside Merchants",
+      "date": "2027-02-08",
+      "dateLabel": "FEB 8",
+      "time": "3:00 PM",
+      "route": "Route D"
+    },
+    {
+      "name": "Infant Mystics",
+      "date": "2027-02-08",
+      "dateLabel": "FEB 8",
+      "time": "6:30 PM",
+      "route": "Route F"
+    },
+    {
+      "name": "Order of Doves",
+      "date": "2027-02-08",
+      "dateLabel": "FEB 8",
+      "time": "7:00 PM",
+      "route": "Route F"
+    },
+    {
+      "name": "Order of Athena",
+      "date": "2027-02-09",
+      "dateLabel": "FEB 9",
+      "time": "10:30 AM",
+      "route": "Route A"
+    },
+    {
+      "name": "Knights of Revelry",
+      "date": "2027-02-09",
+      "dateLabel": "FEB 9",
+      "time": "12:30 PM",
+      "route": "Route A"
+    },
+    {
+      "name": "King Felix III Parade",
+      "date": "2027-02-09",
+      "dateLabel": "FEB 9",
+      "time": "1:00 PM",
+      "route": "Route A"
+    },
+    {
+      "name": "Comic Cowboys",
+      "date": "2027-02-09",
+      "dateLabel": "FEB 9",
+      "time": "1:30 PM",
+      "route": "Route A"
+    },
+    {
+      "name": "MAMGA Mammoth",
+      "date": "2027-02-09",
+      "dateLabel": "FEB 9",
+      "time": "2:00 PM",
+      "route": "Route B"
+    },
+    {
+      "name": "Order of Myths",
+      "date": "2027-02-09",
+      "dateLabel": "FEB 9",
+      "time": "6:00 PM",
+      "route": "Route C"
+    }
+  ]
+}

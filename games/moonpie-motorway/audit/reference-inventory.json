@@ -1,0 +1,209 @@
+[
+  {
+    "package": "Pole Position (1986)",
+    "files": 19,
+    "gameFiles": [
+      {
+        "path": "Pole Position (1986)/START THE GAME.bat",
+        "bytes": 321,
+        "sha256": "78ec4a9b832a4ecf69658152dbad66a62b5bdd23f2062eb17556ffe8172321a6"
+      },
+      {
+        "path": "Pole Position (1986)/games/PolePosi/PANEL.PCX",
+        "bytes": 3616,
+        "sha256": "a59682145a42988fd73828288caca9454ebdfe745081e32995507735d3e82884"
+      },
+      {
+        "path": "Pole Position (1986)/games/PolePosi/CARS.GRF",
+        "bytes": 26952,
+        "sha256": "f86167430422fef540f80ee04d3e85cb2fa866b804482b8ea25c9c2fd9e49622"
+      },
+      {
+        "path": "Pole Position (1986)/games/PolePosi/THUNDER.PCX",
+        "bytes": 7859,
+        "sha256": "7c23d9b19c0400f0b9490f5740bd8666d4fd0ecdc1f20b9c8f54dbdca5d2050a"
+      },
+      {
+        "path": "Pole Position (1986)/games/PolePosi/DRIVE.COM",
+        "bytes": 65024,
+        "sha256": "e446ce13791152fccfd3839eefa4eaa74d0b6160f151add2bd03f6ef87492da5"
+      },
+      {
+        "path": "Pole Position (1986)/games/PolePosi/BLIMP.GRF",
+        "bytes": 2278,
+        "sha256": "862477be4461a621d6df1cd9e751c1e2f54da43d13a3103f56d8831f3c176b15"
+      },
+      {
+        "path": "Pole Position (1986)/games/PolePosi/HILLS.GRF",
+        "bytes": 4864,
+        "sha256": "e1d21f3689a73e971ee5645bbbca6cb0f7db44660e0c5f22e949ba0b80ef1240"
+      },
+      {
+        "path": "Pole Position (1986)/games/PolePosi/CHARSET",
+        "bytes": 4096,
+        "sha256": "fc3bd4ee17d2a63fcb8b0d648a90dfc9627c690ea7243913aa969d046f8f57b4"
+      },
+      {
+        "path": "Pole Position (1986)/games/PolePosi/LOADING.PCX",
+        "bytes": 9280,
+        "sha256": "51a9544fd24234e9e5042561468e530ca491d3e0c444d01c56b6e32a10777def"
+      },
+      {
+        "path": "Pole Position (1986)/games/games/PolePosi/dosbox.conf",
+        "bytes": 1285,
+        "sha256": "b58943420da72b74f0050a87b16646a0519f43d49e6d416fe80beb5673e3f0d0"
+      }
+    ]
+  },
+  {
+    "package": "Pole Position II (1988)",
+    "files": 38,
+    "gameFiles": [
+      {
+        "path": "Pole Position II (1988)/START THE GAME.bat",
+        "bytes": 321,
+        "sha256": "85255389be4bcff589365fb6505a15c6db6b3f02f65be58167130b64c3306f74"
+      },
+      {
+        "path": "Pole Position II (1988)/games/PolePos2/PPEGA.EXE",
+        "bytes": 49367,
+        "sha256": "c0df54e1aa4026532d71fbf8988a49727e4a3406b48181f0a64daeb6a06592b7"
+      },
+      {
+        "path": "Pole Position II (1988)/games/PolePos2/PP2.BAT",
+        "bytes": 707,
+        "sha256": "46cc7ef208fade4bacc5282f91cbd6ef41743b775a3f7b6bdc3808de435b5299"
+      },
+      {
+        "path": "Pole Position II (1988)/games/PolePos2/THUNDER.SCR",
+        "bytes": 9366,
+        "sha256": "81958ff7905ce6528c9aa073c0605bcf3adfb1e381530d14ade77e8c806fe0bb"
+      },
+      {
+        "path": "Pole Position II (1988)/games/PolePos2/DESERT.EGA",
+        "bytes": 7614,
+        "sha256": "6aa1b3bb2e6a813a3481a5ee05469e67734044b9ed05f7c000ddfdceb0f55239"
+      },
+      {
+        "path": "Pole Position II (1988)/games/PolePos2/FAIR.GRF",
+        "bytes": 4864,
+        "sha256": "3c22cd0861aab57e99e0747f2de0ec3ac8b1be873769dd0dc71f91514487062f"
+      },
+      {
+        "path": "Pole Position II (1988)/games/PolePos2/PANEL.PCX",
+        "bytes": 3616,
+        "sha256": "a59682145a42988fd73828288caca9454ebdfe745081e32995507735d3e82884"
+      },
+      {
+        "path": "Pole Position II (1988)/games/PolePos2/HILLS.EGA",
+        "bytes": 6694,
+        "sha256": "9fb865d6c891c8d32f52ab53ea91bf06066855c35f436955d43a4398ae12407f"
+      },
+      {
+        "path": "Pole Position II (1988)/games/PolePos2/CARS.GRF",
+        "bytes": 26952,
+        "sha256": "f86167430422fef540f80ee04d3e85cb2fa866b804482b8ea25c9c2fd9e49622"
+      },
+      {
+        "path": "Pole Position II (1988)/games/PolePos2/PANEL.SCR",
+        "bytes": 6702,
+        "sha256": "5be80cff28aafc6bd780f3295452888b80b5259a4e5c8f0e61f6f6a08bd90363"
+      },
+      {
+        "path": "Pole Position II (1988)/games/PolePos2/FAIR.EGA",
+        "bytes": 8581,
+        "sha256": "6767580aab5733d527ecd34b0505eed87e66fa6c439fee57d4ebc6f42acca01d"
+      },
+      {
+        "path": "Pole Position II (1988)/games/PolePos2/RELEASE.NFO",
+        "bytes": 141,
+        "sha256": "c319bdff7b94ab7b48fbff28957f1a0d2b81ea0e670c7d5d3043dabb03848c6b"
+      },
+      {
+        "path": "Pole Position II (1988)/games/PolePos2/THUNDER.PCX",
+        "bytes": 3660,
+        "sha256": "05508ba618811b09fd3bcede70b55353536053aafcc4d28d8c9fd231d0077381"
+      },
+      {
+        "path": "Pole Position II (1988)/games/PolePos2/BLIMP.GRF",
+        "bytes": 2278,
+        "sha256": "862477be4461a621d6df1cd9e751c1e2f54da43d13a3103f56d8831f3c176b15"
+      },
+      {
+        "path": "Pole Position II (1988)/games/PolePos2/CITY.GRF",
+        "bytes": 4864,
+        "sha256": "40b04d427bbf78ef9906681d89a7e670cf4c762730cc8b6a43fb84c14012f9b5"
+      },
+      {
+        "path": "Pole Position II (1988)/games/PolePos2/CHARSET.EGA",
+        "bytes": 1920,
+        "sha256": "109823a4fabaa3d4f4468709fceac8b43e86d8ce1ae5d9fae653c89e3af94d83"
+      },
+      {
+        "path": "Pole Position II (1988)/games/PolePos2/SELECT.PCX",
+        "bytes": 14756,
+        "sha256": "8f2b64711c2fcd3558acf4c64cb67e80fe6969a90cf72c2cd22ab80fcc3d15ba"
+      },
+      {
+        "path": "Pole Position II (1988)/games/PolePos2/CITY.EGA",
+        "bytes": 7893,
+        "sha256": "1935baecc7153ca85aaf45b47a2f4ce2a1b1ae9a5ea878fa8d4ca99a814b98c6"
+      },
+      {
+        "path": "Pole Position II (1988)/games/PolePos2/HILLS.GRF",
+        "bytes": 4864,
+        "sha256": "e1d21f3689a73e971ee5645bbbca6cb0f7db44660e0c5f22e949ba0b80ef1240"
+      },
+      {
+        "path": "Pole Position II (1988)/games/PolePos2/POLE2.EXE",
+        "bytes": 8048,
+        "sha256": "e8abfd922376780293460636876a651d8f8f259ba845c817d6dd5faf4602fd98"
+      },
+      {
+        "path": "Pole Position II (1988)/games/PolePos2/ROAD.EGA",
+        "bytes": 3664,
+        "sha256": "b35b62380d3e7dcf1f8d159a677ca632ae42b20e9d20d5bf2d93cb1dd3bf81d5"
+      },
+      {
+        "path": "Pole Position II (1988)/games/PolePos2/SELECT.SCR",
+        "bytes": 15881,
+        "sha256": "e70a519204b1b584484b0ffa28827ab2ee722ff9e20e48bd06f9b5d08ced2dfd"
+      },
+      {
+        "path": "Pole Position II (1988)/games/PolePos2/DESERT.GRF",
+        "bytes": 4864,
+        "sha256": "c138dd8566f798232d7fce71e67a117d01ef69e5657a795dbe009de4e96b99af"
+      },
+      {
+        "path": "Pole Position II (1988)/games/PolePos2/CARS.EGA",
+        "bytes": 26162,
+        "sha256": "8c5b4092dfd43342ea0ca4be748a90e5c7a3b4335aee2a9071f379027c72b3a9"
+      },
+      {
+        "path": "Pole Position II (1988)/games/PolePos2/CHARSET",
+        "bytes": 4096,
+        "sha256": "fc3bd4ee17d2a63fcb8b0d648a90dfc9627c690ea7243913aa969d046f8f57b4"
+      },
+      {
+        "path": "Pole Position II (1988)/games/PolePos2/LOADING.PCX",
+        "bytes": 7802,
+        "sha256": "4472ebc3dd94e93172676a73c3a4ca444d31beaf2a87b4fb8994fa8ddeef6a02"
+      },
+      {
+        "path": "Pole Position II (1988)/games/PolePos2/BLIMP.EGA",
+        "bytes": 1775,
+        "sha256": "66c7af44bf2ced5a1101f11cf2c8c2f090ff89f332f522038e36b02bf09e69a6"
+      },
+      {
+        "path": "Pole Position II (1988)/games/PolePos2/LOADING.SCR",
+        "bytes": 16056,
+        "sha256": "9c4019aa84bb7fb6ca0787a030658433dcaa3751f16ed3a613aa64a43e43aa8a"
+      },
+      {
+        "path": "Pole Position II (1988)/games/games/PolePos2/dosbox.conf",
+        "bytes": 1285,
+        "sha256": "2989db832e377908b7ec244c3f425b8f9974d8616f03dff4291a8fce5cadec57"
+      }
+    ]
+  }
+]

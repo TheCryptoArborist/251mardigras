@@ -3,6 +3,7 @@ import { GamePreviewVideo } from "@/components/GamePreviewVideo";
 import type { ArcadeGame } from "@/lib/arcade";
 
 export function ArcadeCabinet({ game }: { game: ArcadeGame }) {
+  const previewUrl = `/play/${game.slug}`;
   return (
     <article className={`arcade-cabinet arcade-cabinet--${game.theme}`} aria-labelledby={`cabinet-${game.slug}`}>
       <div className="cabinet-artwork">
@@ -12,7 +13,7 @@ export function ArcadeCabinet({ game }: { game: ArcadeGame }) {
       <div className="cabinet-details">
         <h3 id={`cabinet-${game.slug}`}>{game.title}</h3>
         <p className="cabinet-description">{game.description}</p>
-        <a className="cabinet-cta" href={game.playUrl || `/play/${game.slug}`} aria-label={`${game.playUrl ? "Play" : "Preview"} ${game.title}`}>
+        <a className="cabinet-cta" href={game.playUrl || previewUrl} aria-label={`${game.playUrl ? "Play" : "Preview"} ${game.title}`}>
           {game.playUrl ? "Play Now" : "Game preview"} <ArrowRight size={17} aria-hidden="true" />
         </a>
       </div>
