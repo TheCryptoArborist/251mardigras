@@ -4,7 +4,7 @@ Original artwork generated with the built-in image-generation tool, then lossles
 
 ## Final game assets
 
-- `dist/assets/race-cars-v2.webp` — six rear-view open-wheel sprites in a 3 × 2 atlas. Purple/gold player car in left, straight, and right steering poses; gold, ivory, and dark-purple rivals.
+- `dist/assets/race-cars-v3.webp` — six rear-view open-wheel sprites in a 3 × 2 atlas. Purple/gold player car in left, straight, and right steering poses; gold, ivory, and dark-purple rivals.
 - `dist/assets/carnival-scenery-v2.webp` — nine transparent roadside sprites in a 3 × 3 atlas: brick building, stucco building, live oak, grandstand, float, tall oak, pit tent, crowd barrier, and ornate streetlamp.
 - `dist/assets/mobile-skyline-v2.webp` — a 3:1 Mobile skyline panorama with textured clouds and Carnival lighting.
 - `dist/art.js` — atlas extraction, consistent tire baselines, backdrop layers, verge details, and checkered gantry artwork.
@@ -16,3 +16,5 @@ Original artwork generated with the built-in image-generation tool, then lossles
 3. Panoramic distant Mobile skyline, lavender afternoon sky with gold/ivory textured clouds, RSA tower crown, stepped Riverview roof, twin cathedral steeples, historical buildings and harbor details, no road, cars, text, UI or foreground props.
 
 The billboard artwork and the 45-record parade data snapshot remain unchanged. Sprite artwork loads before the game becomes playable so placeholder scenery does not flash on screen.
+
+The v3 car atlas corrects the helmet direction in all six frames: solid gold rear shells with purple center stripes replace the camera-facing dark visor bands. Generated as an edit of the original atlas and encoded as lossless WebP; the 1536 × 1024 atlas and existing frame extraction remain compatible.

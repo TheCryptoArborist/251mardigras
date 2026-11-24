@@ -39,7 +39,7 @@ window.MotorwayArt = (() => {
   }
   art.load=async()=>{
     const [cars,props,sky,lemon,pops,nicknacks]=await Promise.all([
-      image('assets/race-cars-v2.webp'),
+      image('assets/race-cars-v3.webp'),
       image('assets/carnival-scenery-v2.webp'),
       image('assets/mobile-skyline-v2.webp'),
       image('assets/lemon-ts-logo.png'),
