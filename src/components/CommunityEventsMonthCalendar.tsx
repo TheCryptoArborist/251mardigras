@@ -73,6 +73,12 @@ export function CommunityEventsMonthCalendar({ events }: { events: CommunityEven
               <p className="mt-2 max-w-3xl text-sm leading-6 text-purple-100">
                 Browse approved Mardi Gras-related events by month. Open an event for details or share it with your friends.
               </p>
+              <p className="mt-2 text-sm leading-6 text-purple-100">
+                Looking for Mardi Gras balls?{" "}
+                <Link href="/balls" className="inline-flex min-h-11 items-center rounded-sm font-bold text-parade-goldBright underline underline-offset-4 hover:text-parade-goldSoft focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-parade-goldBright">
+                  View the ball schedule
+                </Link>
+              </p>
             </div>
           </div>
           <div className="flex w-full items-center justify-between gap-2 rounded-2xl border border-white/20 bg-white/10 p-2 sm:w-auto">
