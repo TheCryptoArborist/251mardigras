@@ -1,6 +1,6 @@
 'use strict';
 (() => {
- const $=id=>document.getElementById(id),BASE='https://mg251.xyz/play/moonpie-motorway';
+ const $=id=>document.getElementById(id),BASE='https://mg251.xyz/play/moonpie-motorway',CARD_VERSION='race-trophies-1';
  let run=null,board=null,saved=null,savedRank=null,period='week',shareSnapshot=null,cardFile=null,cardGeneration=0,boardGeneration=0,shareLogo=null,shareArt=null;
  const rankTitles=["", "Port City Champion", "Silver Contender", "Bronze Contender", "Parade Pace Setter", "MoonPie Maverick", "Bead Bandit", "Royal Street Renegade", "Carnival Charger", "Throw Collector", "Port City Challenger", "MoonPie Pursuer", "Bead Chaser", "Float Follower", "Downtown Dasher", "Royal Street Rider", "Carnival Cruiser", "Parade Pathfinder", "Confetti Comet", "MoonPie Outlaw", "Bienville Blazer", "Mask Runner", "Throw Hunter", "Port City Rookie", "Last-Lap Legend", "Wildcard on Wheels"];
  const rankTitle=rank=>rankTitles[rank]||'';
@@ -70,7 +70,8 @@
   const snap=shareSnapshot,score=snap.score,rank=snap.rank;
   const intro=snap.target==='board'?`The ${snap.period==='week'?'weekly':'season'} MoonPie Motorway leaderboard is calling.`:snap.verified?`${score.nickname} collected ${score.score} throws in Carnival Cup.${rank?` #${rank} on the ${snap.period==='week'?'weekly':'season'} leaderboard at last check.${rankTitle(rank)?` ${rankTitle(rank)}.`:''}`:''}`:`I collected ${score.score} throws in ${score.mode==='cruise'?'Scenic Cruise':'MoonPie Motorway'}. Unranked run, full bragging energy.`;
   const brag={challenge:'Your move. Come chase these throws.',playful:'All throws, no luck. Think you can do better?',friendly:'Your next race has a score to beat. Come take a shot!'}[$('shareTone').value]||'Think you can catch me?';
-  return {title:'MoonPie Motorway · Challenge accepted?',text:intro+' '+brag+' Play free on MG251.',url:snap.target==='board'?BASE+'?board='+snap.period:snap.verified?BASE+'?score='+encodeURIComponent(score.id):BASE};
+  const url=snap.target==='board'?BASE+'?board='+snap.period:snap.verified?BASE+'?score='+encodeURIComponent(score.id):BASE;
+  return {title:'MoonPie Motorway · Challenge accepted?',text:intro+' '+brag+' Play free on MG251.',url:url+(url.includes('?')?'&':'?')+'card='+CARD_VERSION};
  }
  function refreshShare(){
   const info=shareInfo(),caption=info.text+'\n'+info.url;$('shareDescription').textContent=info.text;$('shareLink').value=info.url;

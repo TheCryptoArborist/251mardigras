@@ -34,7 +34,7 @@ test("unknown resources, private files, and traversal are rejected", async () =>
 
 test("social crawlers receive MG251 metadata and a real PNG card", async () => {
  const response=await GET(request,context());const html=await response.text();
- assert(html.includes('property="og:image"'));assert(html.includes('https://mg251.xyz/play/moonpie-motorway/share.png'));
+ assert(html.includes('property="og:url" content="https://mg251.xyz/play/moonpie-motorway?card=race-trophies-1"'));assert(html.includes('share.png?card=race-trophies-1'));assert(html.includes('community.js?v=race-trophies-1'));assert(html.includes('property="og:image"'));assert(html.includes('https://mg251.xyz/play/moonpie-motorway/share.png'));
  const image=await GET(request,context(["share.png"]));assert.equal(image.status,200);assert.equal(image.headers.get("content-type"),"image/png");
  const bytes=new Uint8Array(await image.arrayBuffer());assert.deepEqual([...bytes.slice(0,8)],[137,80,78,71,13,10,26,10]);
 });

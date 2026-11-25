@@ -6,6 +6,8 @@ import { publicScore } from './motorway-api';
 import { rankings } from './motorway-rankings';
 import { getRules } from './motorway-replay';
 const BASE='https://mg251.xyz/play/moonpie-motorway';
+// Bump when artwork changes so social crawlers request a new page and image.
+const CARD_VERSION='race-trophies-1';
 const escape=(s:string)=>s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]!));
 async function content(url:URL){
  const id=url.searchParams.get('score');const period=url.searchParams.get('board')==='season'?'season':'week';
@@ -15,7 +17,8 @@ async function content(url:URL){
 }
 export async function shareMetadata(url:URL){
  let data;try{data=await content(url);}catch{data=await content(new URL(BASE));}
- return `<meta property="og:type" content="website"><meta property="og:title" content="${escape(data.title)}"><meta property="og:description" content="${escape(data.description)}"><meta property="og:url" content="${BASE+escape(data.query)}"><meta property="og:image" content="${BASE}/share.png${escape(data.query)}"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image">`;
+ const query=data.query+(data.query?'&':'?')+'card='+CARD_VERSION;
+ return `<meta property="og:type" content="website"><meta property="og:title" content="${escape(data.title)}"><meta property="og:description" content="${escape(data.description)}"><meta property="og:url" content="${BASE+escape(query)}"><meta property="og:image" content="${BASE}/share.png${escape(query)}"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image">`;
 }
 let trophyData: Promise<string[]> | undefined;
 let sceneData: Promise<string> | undefined;

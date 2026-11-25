@@ -44,3 +44,5 @@ Approved place titles (presentation only; no gameplay or ranking changes):
 23. Port City Rookie
 24. Last-Lap Legend
 25. Wildcard on Wheels
+
+Social cache refresh: share links, og:url, and og:image include `card=race-trophies-1`. Bump the matching CARD_VERSION constants in community.js and motorway-share.ts when artwork changes. Older published posts and already-open composer drafts may retain cached previews; new shares use the versioned URLs.

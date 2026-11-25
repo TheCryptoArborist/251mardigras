@@ -21,7 +21,7 @@ function setup(unavailable=false){
  assert.equal(nodes.saveScoreForm.hidden,true);assert.equal(nodes.shareScoreBtn.hidden,false);assert(nodes.rankStatus.textContent.includes('#2'));
  nodes.shareScoreBtn.listeners.click();await nodes.nativeShare.listeners.click();assert(shared[0].url.startsWith('https://mg251.xyz/play/moonpie-motorway?score='));assert(nodes.facebookShare.href.startsWith('https://www.facebook.com/sharer/'));
  nodes.garageLeaderboard.listeners.click();await new Promise(r=>setImmediate(r));assert.equal(paused(),1);assert.equal(nodes.leaderboardDialog.open,true);assert.equal(nodes.boardPodium.children.length,1);
- nodes.shareBoardBtn.listeners.click();await nodes.copyShare.listeners.click();assert.equal(shared.at(-1),'https://mg251.xyz/play/moonpie-motorway?board=week');
+ nodes.shareBoardBtn.listeners.click();await nodes.copyShare.listeners.click();assert.equal(shared.at(-1),'https://mg251.xyz/play/moonpie-motorway?board=week&card=race-trophies-1');
  nodes.shareSpotBtn.listeners.click();await nodes.copyCaption.listeners.click();assert(shared.at(-1).includes('#2 on the weekly'));assert(shared.at(-1).includes('?score='));assert(nodes.smsShare.href.startsWith('sms:'));assert(nodes.whatsappShare.href.includes('mg251.xyz'));
  nodes.shareTone.value='playful';nodes.shareTone.listeners.change();assert(nodes.shareDescription.textContent.includes('All throws, no luck'));
  const native=box.navigator.share;box.navigator.share=undefined;nodes.shareSpotBtn.listeners.click();assert(nodes.nativeShare.hidden);box.navigator.share=native;
