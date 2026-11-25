@@ -809,5 +809,43 @@
       "height": 1500
     },
     "organizationLogoUrl": "/images/profile-studio/societies/order-of-venus.webp"
+  },
+  {
+    "id": "toomeys-black-friday-2026-friday",
+    "slug": "toomeys-black-friday-2026-friday",
+    "status": "approved",
+    "title": "Toomey’s Black Friday Sale (Friday)",
+    "organization": "Toomey’s Mardi Gras and Party Supplies",
+    "eventType": "Retail Sale",
+    "startDateTime": "2026-11-27T10:00:00-06:00",
+    "endDateTime": "2026-11-27T17:00:00-06:00",
+    "venueName": "Toomey’s Mardi Gras and Party Supplies",
+    "venueAddress": "755-A McRae Ave.",
+    "cityStateZip": "Mobile, AL 36606",
+    "description": "Shop Toomey’s Black Friday deals on Mardi Gras throws. Advertised specials include M6020 random-mix beads for $32.50, mixed candy bags for $19.95, 24-piece dragon throws at two boxes for $10, and glow necklaces at two tubes for $22. Toomey’s is closed on Thanksgiving. Black Friday weekend hours are Friday, November 27, from 10 a.m. to 5 p.m. and Saturday, November 28, from 9 a.m. to 1 p.m. Payment is required to hold items.",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=755-A+McRae+Ave+Mobile+AL+36606",
+    "ticketUrl": "https://toomeysmardigras.com/",
+    "ticketLabel": "Toomey’s website",
+    "eventArtworkUrl": "/images/event-flyers/toomeys-black-friday-2026.webp",
+    "organizationLogoUrl": "/images/food-stops/toomeys-mardi-gras.png"
+  },
+  {
+    "id": "toomeys-black-friday-2026-saturday",
+    "slug": "toomeys-black-friday-2026-saturday",
+    "status": "approved",
+    "title": "Toomey’s Black Friday Sale (Saturday)",
+    "organization": "Toomey’s Mardi Gras and Party Supplies",
+    "eventType": "Retail Sale",
+    "startDateTime": "2026-11-28T09:00:00-06:00",
+    "endDateTime": "2026-11-28T13:00:00-06:00",
+    "venueName": "Toomey’s Mardi Gras and Party Supplies",
+    "venueAddress": "755-A McRae Ave.",
+    "cityStateZip": "Mobile, AL 36606",
+    "description": "Shop Toomey’s Black Friday deals on Mardi Gras throws. Advertised specials include M6020 random-mix beads for $32.50, mixed candy bags for $19.95, 24-piece dragon throws at two boxes for $10, and glow necklaces at two tubes for $22. Toomey’s is closed on Thanksgiving. Black Friday weekend hours are Friday, November 27, from 10 a.m. to 5 p.m. and Saturday, November 28, from 9 a.m. to 1 p.m. Payment is required to hold items.",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=755-A+McRae+Ave+Mobile+AL+36606",
+    "ticketUrl": "https://toomeysmardigras.com/",
+    "ticketLabel": "Toomey’s website",
+    "eventArtworkUrl": "/images/event-flyers/toomeys-black-friday-2026.webp",
+    "organizationLogoUrl": "/images/food-stops/toomeys-mardi-gras.png"
   }
 ]
