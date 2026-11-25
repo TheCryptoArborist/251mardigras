@@ -13,7 +13,7 @@ test("existing MG251 address serves a local playable document with same-origin a
   assert(!html.includes("chatgpt.site"));
 });
 test("all required runtime files and fonts are served with correct types", async () => {
-  for (const [path, type] of [["assets/mg251-logo.png", "image/png"], ["tilt.js", "text/javascript"], ["community.js", "text/javascript"], ["community.css", "text/css"], ["game.js", "text/javascript"], ["art.js", "text/javascript"], ["parades.json", "application/json"], ["fonts.css", "text/css"], ["assets/race-cars-v3.webp", "image/webp"], ["assets/font-7cHpv4kjgoGqM7EPCw.woff", "font/woff"]]) {
+  for (const [path, type] of [["assets/trophy-gold.svg", "image/svg+xml"], ["assets/trophy-silver.svg", "image/svg+xml"], ["assets/trophy-bronze.svg", "image/svg+xml"], ["assets/share-race-square.jpg", "image/jpeg"], ["assets/share-race-wide.jpg", "image/jpeg"], ["assets/mg251-logo.png", "image/png"], ["tilt.js", "text/javascript"], ["community.js", "text/javascript"], ["community.css", "text/css"], ["game.js", "text/javascript"], ["art.js", "text/javascript"], ["parades.json", "application/json"], ["fonts.css", "text/css"], ["assets/race-cars-v3.webp", "image/webp"], ["assets/font-7cHpv4kjgoGqM7EPCw.woff", "font/woff"]]) {
     const response = await GET(request, context(path.split("/")));
     assert.equal(response.status, 200, path);
     assert(response.headers.get("content-type")?.startsWith(type), path);
