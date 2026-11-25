@@ -17,3 +17,30 @@ All exported cards and Open Graph previews include the official Mardi Gras - Mob
 Share backgrounds now use real game-canvas captures: `share-race-square.jpg` (1080 × 1080) and `share-race-wide.jpg` (1200 × 630). Both show stage one near the Order of Polka Dots billboard, captured from the current renderer with the UI excluded. They are illustrative gameplay scenes, not a capture of the player's specific run. Contrast overlays preserve text readability while leaving the car visible below the square card's results.
 
 The three podium places use locally authored metallic trophy SVGs with numbered cups, laurels, and MG251 plaques. Gold has a taller presentation; a lone champion gets a centered full-size trophy. Top-three personal image cards and leaderboard image cards use those same trophies. Social leaderboard previews also embed the trophy artwork. Asset routes explicitly allow the three SVG filenames.
+
+Approved place titles (presentation only; no gameplay or ranking changes):
+1. Port City Champion
+2. Silver Contender
+3. Bronze Contender
+4. Parade Pace Setter
+5. MoonPie Maverick
+6. Bead Bandit
+7. Royal Street Renegade
+8. Carnival Charger
+9. Throw Collector
+10. Port City Challenger
+11. MoonPie Pursuer
+12. Bead Chaser
+13. Float Follower
+14. Downtown Dasher
+15. Royal Street Rider
+16. Carnival Cruiser
+17. Parade Pathfinder
+18. Confetti Comet
+19. MoonPie Outlaw
+20. Bienville Blazer
+21. Mask Runner
+22. Throw Hunter
+23. Port City Rookie
+24. Last-Lap Legend
+25. Wildcard on Wheels

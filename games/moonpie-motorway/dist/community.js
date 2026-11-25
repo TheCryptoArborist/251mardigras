@@ -2,6 +2,8 @@
 (() => {
  const $=id=>document.getElementById(id),BASE='https://mg251.xyz/play/moonpie-motorway';
  let run=null,board=null,saved=null,savedRank=null,period='week',shareSnapshot=null,cardFile=null,cardGeneration=0,boardGeneration=0,shareLogo=null,shareArt=null;
+ const rankTitles=["", "Port City Champion", "Silver Contender", "Bronze Contender", "Parade Pace Setter", "MoonPie Maverick", "Bead Bandit", "Royal Street Renegade", "Carnival Charger", "Throw Collector", "Port City Challenger", "MoonPie Pursuer", "Bead Chaser", "Float Follower", "Downtown Dasher", "Royal Street Rider", "Carnival Cruiser", "Parade Pathfinder", "Confetti Comet", "MoonPie Outlaw", "Bienville Blazer", "Mask Runner", "Throw Hunter", "Port City Rookie", "Last-Lap Legend", "Wildcard on Wheels"];
+ const rankTitle=rank=>rankTitles[rank]||'';
  const status=text=>{$('rankStatus').textContent=text;};
  async function api(path,body){
   const response=await fetch(path,{method:body?'POST':'GET',headers:body?{'content-type':'application/json'}:{},body:body?JSON.stringify(body):undefined,signal:AbortSignal.timeout(12000)});
@@ -42,15 +44,15 @@
     if(row.rank<=3){
      const card=document.createElement('article');card.className='podium-card podium-'+row.rank;
      const trophy=document.createElement('img');trophy.className='podium-trophy';trophy.src='assets/trophy-'+['','gold','silver','bronze'][row.rank]+'.svg';trophy.alt=['','Gold first-place trophy','Silver second-place trophy','Bronze third-place trophy'][row.rank];card.append(trophy);
-     for(const [tag,cls,text] of [['span','podium-medal',['','#1 · PORT CITY CHAMPION','#2 · SILVER CONTENDER','#3 · BRONZE CONTENDER'][row.rank]],['strong','podium-name',row.nickname],['b','podium-score',String(row.score)],['span','podium-detail','THROWS · '+formatTime(row.ticks)]]){const el=document.createElement(tag);el.className=cls;el.textContent=text;card.append(el);}
+     for(const [tag,cls,text] of [['span','podium-medal','#'+row.rank+' · '+rankTitle(row.rank)],['strong','podium-name',row.nickname],['b','podium-score',String(row.score)],['span','podium-detail','THROWS · '+formatTime(row.ticks)]]){const el=document.createElement(tag);el.className=cls;el.textContent=text;card.append(el);}
      $('boardPodium').append(card);
     }else{
      const tr=document.createElement('tr');tr.className=row.rank<=10?'rank-elite':'rank-chaser';
-     for(const value of ['#'+row.rank,row.nickname+(data.personal?.id===row.id?' · YOU':''),row.score,formatTime(row.ticks)]){const td=document.createElement('td');td.textContent=String(value);tr.append(td);}$('boardRows').append(tr);
+     for(const value of ['#'+row.rank,row.nickname+(data.personal?.id===row.id?' · YOU':''),row.score,formatTime(row.ticks)]){const td=document.createElement('td');td.textContent=String(value);if(tr.children.length===1){const title=document.createElement('small');title.className='rank-title';title.textContent=rankTitle(row.rank);td.append(title);}tr.append(td);}$('boardRows').append(tr);
     }
    }
    $('boardTable').hidden=!data.entries.some(row=>row.rank>3);
-   if(data.personal){$('personalStanding').hidden=false;$('personalRank').textContent='#'+data.personal.rank;$('personalSummary').textContent=`${data.personal.nickname} · ${data.personal.score} throws · ${formatTime(data.personal.ticks)}`;$('shareSpotBtn').hidden=false;}
+   if(data.personal){$('personalStanding').hidden=false;$('personalRank').textContent='#'+data.personal.rank;$('personalSummary').textContent=`${data.personal.nickname}${rankTitle(data.personal.rank)?` · ${rankTitle(data.personal.rank)}`:''} · ${data.personal.score} throws · ${formatTime(data.personal.ticks)}`;$('shareSpotBtn').hidden=false;}
    $('shareBoardBtn').disabled=false;
   }catch(error){if(request===boardGeneration)$('boardMessage').textContent=error.message;}
  }
@@ -66,7 +68,7 @@
  }
  function shareInfo(){
   const snap=shareSnapshot,score=snap.score,rank=snap.rank;
-  const intro=snap.target==='board'?`The ${snap.period==='week'?'weekly':'season'} MoonPie Motorway leaderboard is calling.`:snap.verified?`${score.nickname} collected ${score.score} throws in Carnival Cup.${rank?` #${rank} on the ${snap.period==='week'?'weekly':'season'} leaderboard at last check.`:''}`:`I collected ${score.score} throws in ${score.mode==='cruise'?'Scenic Cruise':'MoonPie Motorway'}. Unranked run, full bragging energy.`;
+  const intro=snap.target==='board'?`The ${snap.period==='week'?'weekly':'season'} MoonPie Motorway leaderboard is calling.`:snap.verified?`${score.nickname} collected ${score.score} throws in Carnival Cup.${rank?` #${rank} on the ${snap.period==='week'?'weekly':'season'} leaderboard at last check.${rankTitle(rank)?` ${rankTitle(rank)}.`:''}`:''}`:`I collected ${score.score} throws in ${score.mode==='cruise'?'Scenic Cruise':'MoonPie Motorway'}. Unranked run, full bragging energy.`;
   const brag={challenge:'Your move. Come chase these throws.',playful:'All throws, no luck. Think you can do better?',friendly:'Your next race has a score to beat. Come take a shot!'}[$('shareTone').value]||'Think you can catch me?';
   return {title:'MoonPie Motorway · Challenge accepted?',text:intro+' '+brag+' Play free on MG251.',url:snap.target==='board'?BASE+'?board='+snap.period:snap.verified?BASE+'?score='+encodeURIComponent(score.id):BASE};
  }
@@ -116,7 +118,7 @@
     const score=snap.score;if(snap.rank&&snap.rank<=3)ctx.drawImage(art[snap.rank],790,335,180,225);ctx.fillStyle='#fff2d5';ctx.font='700 48px Barlow,sans-serif';ctx.fillText(score.nickname,540,335,900);
     ctx.fillStyle='#f9cf66';ctx.font='900 160px "Barlow Condensed",sans-serif';ctx.fillText(String(score.score),540,520);ctx.font='700 34px Barlow,sans-serif';ctx.fillText('THROWS · '+(score.mode==='cruise'?'SCENIC CRUISE':'CARNIVAL CUP'),540,585);
     ctx.fillStyle='#fff2d5';ctx.font='800 56px "Barlow Condensed",sans-serif';ctx.fillText(snap.rank?'#'+snap.rank+' · '+(snap.period==='week'?'WEEKLY':'SEASON')+' RANK':snap.verified?'VERIFIED CUP FINISH':'UNRANKED RUN',540,700);
-    ctx.font='500 27px Barlow,sans-serif';ctx.fillText(snap.rank?'Rank at last check · '+formatTime(score.ticks):formatTime(score.ticks),540,750);
+    if(rankTitle(snap.rank)){ctx.font='800 31px Barlow,sans-serif';ctx.fillStyle='#f9cf66';ctx.fillText(rankTitle(snap.rank),540,737,900);}ctx.fillStyle='#fff2d5';ctx.font='500 23px Barlow,sans-serif';ctx.fillText(snap.rank?'Rank at last check · '+formatTime(score.ticks):formatTime(score.ticks),540,775);
    }
    ctx.textAlign='center';ctx.fillStyle='#f9cf66';ctx.font='800 48px "Barlow Condensed",sans-serif';ctx.fillText('BIG TALK? BEAT THIS.',540,955);ctx.fillStyle='#fff2d5';ctx.font='600 26px Barlow,sans-serif';ctx.fillText('PLAY FREE · mg251.xyz/play/moonpie-motorway',540,998);ctx.font='400 16px Barlow,sans-serif';ctx.fillText('Snapshot · '+new Date().toLocaleDateString('en-US'),540,1027);
    canvas.toBlob(blob=>{if(generation!==cardGeneration)return;if(!blob){$('shareMessage').textContent='Image unavailable. Share the play link instead.';return;}cardFile=new File([blob],'moonpie-motorway-challenge.png',{type:'image/png'});$('instagramShare').disabled=false;$('downloadScoreCard').disabled=false;},'image/png');
