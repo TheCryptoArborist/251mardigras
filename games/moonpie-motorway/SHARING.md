@@ -11,3 +11,5 @@ Sharing options:
 - Instagram / share image uses native file sharing when supported, otherwise downloads the image. A browser cannot force Instagram to appear in the share sheet or make it retain caption text. The UI explains copying the caption/link and adding a caption or Story link sticker.
 
 Only user clicks initiate sharing. The site does not enumerate installed apps or post automatically. Native OS share-sheet targets and final social-app behavior require physical-device testing; automated tests simulate those adapters. Browser tests cover image files, downloads, top-25 tiers, personal ranks outside the top 25, unranked results, direct links, and mobile/desktop overflow. The separate full integration test verifies saved scores against a disposable local database.
+
+All exported cards and Open Graph previews include the official Mardi Gras - Mobile, AL logo, packaged unchanged from `public/images/mardi-gras-mobile-logo.png`. The client waits for the local image before enabling image sharing; server previews embed the same asset directly instead of fetching the production site.

@@ -1,7 +1,7 @@
 'use strict';
 (() => {
  const $=id=>document.getElementById(id),BASE='https://mg251.xyz/play/moonpie-motorway';
- let run=null,board=null,saved=null,savedRank=null,period='week',shareSnapshot=null,cardFile=null,cardGeneration=0,boardGeneration=0;
+ let run=null,board=null,saved=null,savedRank=null,period='week',shareSnapshot=null,cardFile=null,cardGeneration=0,boardGeneration=0,shareLogo=null;
  const status=text=>{$('rankStatus').textContent=text;};
  async function api(path,body){
   const response=await fetch(path,{method:body?'POST':'GET',headers:body?{'content-type':'application/json'}:{},body:body?JSON.stringify(body):undefined,signal:AbortSignal.timeout(12000)});
@@ -90,12 +90,17 @@
  async function copy(text){try{await navigator.clipboard.writeText(text);$('shareMessage').textContent='Copied. Paste it into your message, post, or Story link.';}catch{$('shareMessage').textContent='Copy manually: '+text;$('shareLink').focus();$('shareLink').select();}}
  $('copyShare').addEventListener('click',()=>copy(shareInfo().url));
  $('copyCaption').addEventListener('click',()=>{const info=shareInfo();return copy(info.text+'\n'+info.url);});
- function prepareCard(){
+ function loadShareLogo(){
+  if(!shareLogo)shareLogo=new Promise((resolve,reject)=>{const img=new Image();img.onload=()=>resolve(img);img.onerror=()=>{shareLogo=null;reject(Error('Brand image unavailable'));};img.src='assets/mg251-logo.png';});
+  return shareLogo;
+ }
+ async function prepareCard(){
   const generation=++cardGeneration;cardFile=null;$('instagramShare').disabled=true;$('downloadScoreCard').disabled=true;
   try{
+   const logo=await loadShareLogo();if(generation!==cardGeneration)return;
    const canvas=document.createElement('canvas');canvas.width=1080;canvas.height=1080;const ctx=canvas.getContext('2d'),snap=shareSnapshot;
    const bg=ctx.createLinearGradient(0,0,1080,1080);bg.addColorStop(0,'#36144f');bg.addColorStop(1,'#10091d');ctx.fillStyle=bg;ctx.fillRect(0,0,1080,1080);
-   ctx.strokeStyle='#f9cf66';ctx.lineWidth=6;ctx.strokeRect(38,38,1004,1004);ctx.fillStyle='#f9cf66';ctx.textAlign='center';ctx.font='800 78px "Barlow Condensed",sans-serif';ctx.fillText('MOONPIE MOTORWAY',540,155);ctx.font='700 27px Barlow,sans-serif';ctx.fillText('MG251 / PORT CITY BRAGGING RIGHTS',540,215);
+   ctx.strokeStyle='#f9cf66';ctx.lineWidth=6;ctx.strokeRect(38,38,1004,1004);ctx.drawImage(logo,70,65,180,180);ctx.fillStyle='#f9cf66';ctx.textAlign='center';ctx.font='800 64px "Barlow Condensed",sans-serif';ctx.fillText('MOONPIE MOTORWAY',650,145,730);ctx.font='700 23px Barlow,sans-serif';ctx.fillText('MG251 / PORT CITY BRAGGING RIGHTS',650,205,730);
    if(snap.target==='board'){
     ctx.font='800 52px "Barlow Condensed",sans-serif';ctx.fillText(snap.period==='week'?'THIS WEEK’S TOP 25':'SEASON TOP 25',540,300);
     if(!snap.entries.length){ctx.font='700 40px Barlow,sans-serif';ctx.fillText('THE FIRST CROWN IS UP FOR GRABS.',540,540,900);}
