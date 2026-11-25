@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { ChevronDown, Menu, X } from "lucide-react";
 import { useEffect, useRef, type SyntheticEvent } from "react";
 import { SITE_BRAND_NAME, SITE_LOGO_ALT, SITE_LOGO_PATH } from "@/lib/brand";
@@ -37,8 +38,9 @@ const navigationGroups = [
 ];
 
 const panelClasses = "z-50 max-h-[calc(100vh-var(--site-header-height)-1.5rem)] overflow-y-auto overscroll-contain rounded-2xl border border-parade-gold/40 bg-parade-purpleDeep p-2 text-sm font-semibold shadow-2xl supports-[height:100dvh]:max-h-[calc(100dvh-var(--site-header-height)-1.5rem)]";
-const panelLinkClasses = "flex min-h-11 items-center rounded-xl px-3 py-2.5 text-purple-50 transition hover:bg-white/10 hover:text-parade-goldBright focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-parade-gold";
-const desktopLinkClasses = "flex min-h-11 items-center whitespace-nowrap rounded-full px-3 py-2 text-purple-50 transition hover:bg-white/10 hover:text-parade-goldBright focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-parade-gold";
+const activeLinkClasses = "data-[active=true]:bg-parade-goldBright/15 data-[active=true]:text-parade-goldBright data-[active=true]:underline data-[active=true]:decoration-2 data-[active=true]:underline-offset-4";
+const panelLinkClasses = `flex min-h-11 items-center rounded-xl px-3 py-2.5 text-purple-50 transition hover:bg-white/10 hover:text-parade-goldBright focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-parade-gold ${activeLinkClasses}`;
+const desktopLinkClasses = `flex min-h-11 items-center whitespace-nowrap rounded-full px-3 py-2 text-purple-50 transition hover:bg-white/10 hover:text-parade-goldBright focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-parade-gold ${activeLinkClasses}`;
 
 function closeDisclosure(menu: HTMLDetailsElement | null, restoreFocus = false) {
   if (!menu?.open) return;
@@ -47,10 +49,24 @@ function closeDisclosure(menu: HTMLDetailsElement | null, restoreFocus = false) 
 }
 
 export function SiteHeader() {
+  const pathname = usePathname();
   const headerRef = useRef<HTMLElement>(null);
   const homeLinkRef = useRef<HTMLAnchorElement>(null);
   const desktopNavRef = useRef<HTMLElement>(null);
   const menusRef = useRef<Record<string, HTMLDetailsElement | null>>({});
+
+  function isActiveDestination(href: string) {
+    // Fragment shortcuts do not identify a separate current page.
+    if (href.includes("#")) return false;
+    if (href === "/watch" && pathname === "/replays") return true;
+    if (href === "/play" && pathname.startsWith("/arcade/")) return true;
+    return pathname === href || pathname.startsWith(`${href}/`);
+  }
+
+  function currentDestination(href: string): "page" | "true" | undefined {
+    if (!isActiveDestination(href)) return undefined;
+    return pathname === href ? "page" : "true";
+  }
 
   function closeMenus() {
     Object.values(menusRef.current).forEach((menu) => closeDisclosure(menu));
@@ -119,7 +135,7 @@ export function SiteHeader() {
   return (
     <header ref={headerRef} className="sticky top-0 z-30 border-b border-parade-gold/30 bg-gradient-to-r from-parade-purpleDeep via-parade-purpleDark to-parade-purple text-white shadow-lg shadow-purple-950/20 [--site-header-height:4.5rem]">
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-3 sm:px-6 lg:gap-6 lg:px-8">
-        <Link ref={homeLinkRef} href="/" aria-label={`${SITE_BRAND_NAME} home`} onClick={closeMenus} className="group flex min-w-0 items-center gap-3 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-parade-gold">
+        <Link ref={homeLinkRef} href="/" aria-label={`${SITE_BRAND_NAME} home`} aria-current={pathname === "/" ? "page" : undefined} onClick={closeMenus} className="group flex min-w-0 items-center gap-3 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-parade-gold">
           <span className="flex h-10 w-10 shrink-0 items-center justify-center overflow-visible rounded-full ring-1 ring-parade-gold/40 transition group-hover:ring-parade-gold sm:h-12 sm:w-12">
             <Image src={SITE_LOGO_PATH} alt={SITE_LOGO_ALT} width={48} height={48} className="h-full w-full object-contain" priority />
           </span>
@@ -138,7 +154,7 @@ export function SiteHeader() {
           <nav id="mobile-site-navigation" className={`absolute inset-x-4 top-full ml-auto mt-2 max-w-sm ${panelClasses}`} aria-label="Mobile navigation">
             <div className="grid gap-1">
               {primaryItems.map((item) => (
-                <Link key={item.href} href={item.href} onClick={closeMenus} className={panelLinkClasses}>
+                <Link key={item.href} href={item.href} onClick={closeMenus} aria-current={currentDestination(item.href)} data-active={isActiveDestination(item.href)} className={panelLinkClasses}>
                   {item.mobileLabel}
                 </Link>
               ))}
@@ -148,7 +164,7 @@ export function SiteHeader() {
                 <p id={`mobile-${group.id}-heading`} className="px-3 py-2 text-xs font-black uppercase tracking-wider text-parade-gold">{group.label}</p>
                 <div className="grid gap-1">
                   {group.items.map((item) => (
-                    <Link key={item.href} href={item.href} onClick={closeMenus} className={panelLinkClasses}>
+                    <Link key={item.href} href={item.href} onClick={closeMenus} aria-current={currentDestination(item.href)} data-active={isActiveDestination(item.href)} className={panelLinkClasses}>
                       {item.label}
                     </Link>
                   ))}
@@ -160,20 +176,21 @@ export function SiteHeader() {
 
         <nav ref={desktopNavRef} className="hidden shrink-0 items-center gap-1 text-sm font-semibold xl:flex" aria-label="Primary navigation">
           {primaryItems.map((item) => (
-            <Link key={item.href} href={item.href} onClick={closeMenus} className={desktopLinkClasses}>
+            <Link key={item.href} href={item.href} onClick={closeMenus} aria-current={currentDestination(item.href)} data-active={isActiveDestination(item.href)} className={desktopLinkClasses}>
               {item.label}
             </Link>
           ))}
           {navigationGroups.map((group) => (
             <details key={group.id} ref={(node) => { menusRef.current[group.id] = node; }} onToggle={handleToggle} className="group/disclosure relative">
-              <summary aria-controls={`desktop-${group.id}-navigation`} className={`${desktopLinkClasses} cursor-pointer list-none gap-1.5 [&::-webkit-details-marker]:hidden`}>
+              <summary aria-controls={`desktop-${group.id}-navigation`} data-active={group.items.some((item) => isActiveDestination(item.href))} className={`${desktopLinkClasses} cursor-pointer list-none gap-1.5 [&::-webkit-details-marker]:hidden`}>
                 {group.label}
+                {group.items.some((item) => isActiveDestination(item.href)) ? <span className="sr-only"> (current section)</span> : null}
                 <ChevronDown className="h-4 w-4 transition-transform group-open/disclosure:rotate-180" aria-hidden="true" />
               </summary>
               <ul id={`desktop-${group.id}-navigation`} className={`absolute right-0 top-full mt-3 grid w-64 gap-1 ${panelClasses}`}>
                 {group.items.map((item) => (
                   <li key={item.href}>
-                    <Link href={item.href} onClick={closeMenus} className={panelLinkClasses}>
+                    <Link href={item.href} onClick={closeMenus} aria-current={currentDestination(item.href)} data-active={isActiveDestination(item.href)} className={panelLinkClasses}>
                       {item.label}
                     </Link>
                   </li>
