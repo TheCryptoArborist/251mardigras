@@ -18,7 +18,7 @@ import {
 
 const CountdownShareDialog = dynamic(() => import("@/components/CountdownShareDialog").then((module) => module.CountdownShareDialog), { ssr: false });
 
-export function CountdownTimer({ mardiGrasDay }: { mardiGrasDay: string }) {
+export function CountdownTimer({ mardiGrasDay, compact = false }: { mardiGrasDay: string; compact?: boolean }) {
   const targetDate = useMemo(() => new Date(FIRST_DOWNTOWN_PARADE_TARGET), []);
   const progressStartDate = useMemo(() => new Date(COUNTDOWN_PROGRESS_START), []);
   const [timeRemaining, setTimeRemaining] = useState<TimeRemaining | null>(null);
@@ -36,7 +36,7 @@ export function CountdownTimer({ mardiGrasDay }: { mardiGrasDay: string }) {
   const countdownProgress = timeRemaining ? getCountdownProgress(progressStartDate, targetDate, timeRemaining.totalMilliseconds) : 0;
 
   return (
-    <section id="mardi-gras-countdown" className="mt-5 scroll-mt-28 rounded-2xl border border-parade-gold/35 bg-parade-purpleDeep/55 p-4 backdrop-blur sm:mt-6 sm:p-5" aria-label="Countdown to the first downtown Mobile parade">
+    <section id="mardi-gras-countdown" className={`mt-5 scroll-mt-28 rounded-2xl border border-parade-gold/35 bg-parade-purpleDeep/55 backdrop-blur sm:mt-6 ${compact ? "p-3" : "p-4 sm:p-5"}`} aria-label="Countdown to the first downtown Mobile parade">
       <div className="flex items-start justify-between gap-3">
         <div>
           <h2 className="text-sm font-black text-parade-goldBright sm:text-base">First downtown parade</h2>
@@ -50,27 +50,29 @@ export function CountdownTimer({ mardiGrasDay }: { mardiGrasDay: string }) {
       {!countdownExpired ? (
         <>
           <p className="sr-only">Counting down to {TARGET_EVENT_NAME}, {TARGET_FULL_DATE_LABEL}.</p>
-          <div className="mt-3 grid grid-cols-4 gap-2" aria-hidden="true">
-            <CountdownValue label="Days" value={timeRemaining?.days} />
-            <CountdownValue label="Hours" value={timeRemaining?.hours} />
-            <CountdownValue label="Minutes" value={timeRemaining?.minutes} />
-            <CountdownValue label="Seconds" value={timeRemaining?.seconds} />
+          <div className={`grid grid-cols-4 ${compact ? "mt-2 gap-1.5" : "mt-3 gap-2"}`} aria-hidden="true">
+            <CountdownValue label="Days" value={timeRemaining?.days} compact={compact} />
+            <CountdownValue label="Hours" value={timeRemaining?.hours} compact={compact} />
+            <CountdownValue label="Minutes" value={timeRemaining?.minutes} compact={compact} />
+            <CountdownValue label="Seconds" value={timeRemaining?.seconds} compact={compact} />
           </div>
-          <div className="mt-3 h-1 overflow-hidden rounded-full bg-white/15" aria-hidden="true">
-            <span className="block h-full rounded-full bg-parade-goldBright" style={{ width: `${countdownProgress}%` }} />
-          </div>
+          {!compact ? (
+            <div className="mt-3 h-1 overflow-hidden rounded-full bg-white/15" aria-hidden="true">
+              <span className="block h-full rounded-full bg-parade-goldBright" style={{ width: `${countdownProgress}%` }} />
+            </div>
+          ) : null}
         </>
       ) : <p className="mt-4 text-sm font-bold text-white">The first parade date has arrived. <Link className="underline" href="/schedule">Check the current schedule.</Link></p>}
-      <p className="mt-3 text-xs leading-5 text-purple-100"><span className="font-bold text-parade-goldBright">Mardi Gras Day:</span> {mardiGrasDay}</p>
+      <p className={`${compact ? "mt-2" : "mt-3"} text-xs leading-5 text-purple-100`}><span className="font-bold text-parade-goldBright">Mardi Gras Day:</span> {mardiGrasDay}</p>
       {shareSnapshot ? <CountdownShareDialog snapshot={shareSnapshot} onClose={() => setShareSnapshot(null)} /> : null}
     </section>
   );
 }
 
-function CountdownValue({ label, value }: { label: string; value?: number }) {
+function CountdownValue({ label, value, compact = false }: { label: string; value?: number; compact?: boolean }) {
   return (
-    <div className="rounded-xl border border-parade-gold/25 bg-parade-purpleDeep/65 px-1 py-2 text-center">
-      <p className="text-3xl font-black leading-tight tabular-nums tracking-tight text-parade-goldBright sm:text-4xl">{value === undefined ? "–" : String(value).padStart(2, "0")}</p>
+    <div className={`rounded-xl border border-parade-gold/25 bg-parade-purpleDeep/65 px-1 text-center ${compact ? "py-1.5" : "py-2"}`}>
+      <p className={`font-black tabular-nums tracking-tight text-parade-goldBright ${compact ? "text-2xl leading-none" : "text-3xl leading-tight sm:text-4xl"}`}>{value === undefined ? "–" : String(value).padStart(2, "0")}</p>
       <p className="mt-0.5 text-[0.6rem] font-black uppercase tracking-wide text-purple-100">{label}</p>
     </div>
   );
