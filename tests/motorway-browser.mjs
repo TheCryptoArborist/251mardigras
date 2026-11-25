@@ -41,9 +41,9 @@ try {
  await page.locator('#racerNickname').fill('Browser Racer');await page.locator('#saveScoreBtn').click();await page.getByText('Your weekly best: #1',{exact:false}).waitFor({timeout:20000});
  await page.locator('#shareScoreBtn').click();assert((await page.locator('#facebookShare').getAttribute('href')).includes('mg251.xyz'));
  const downloadEvent=page.waitForEvent('download');await page.locator('#downloadScoreCard').click();const download=await downloadEvent;await mkdir('artifacts',{recursive:true});await download.saveAs('artifacts/motorway-browser-score.png');await page.locator('#closeShare').click();
- await page.locator('#resultsLeaderboard').click();await page.locator('#boardRows tr').waitFor();assert.equal(await page.locator('#boardRows td').nth(1).textContent(),'Browser Racer');
+ await page.locator('#resultsLeaderboard').click();await page.locator('#boardPodium .podium-name').waitFor();assert.equal(await page.locator('#boardPodium .podium-name').textContent(),'Browser Racer');
  for(const [name,width,height] of [['desktop',1440,1000],['phone',390,844],['landscape',844,390]]){await page.setViewportSize({width,height});await page.screenshot({path:`artifacts/motorway-leaderboard-${name}.png`,fullPage:true});assert(await page.locator('#leaderboardDialog').evaluate(x=>x.scrollWidth<=x.clientWidth),'dialog has no horizontal overflow: '+name);}
- await page.locator('#boardPeriod').selectOption('season');await page.locator('#boardRows tr').waitFor();await page.locator('#shareBoardBtn').click();assert((await page.locator('#facebookShare').getAttribute('href')).includes('board%3Dseason'));
+ await page.locator('#boardPeriod').selectOption('season');await page.locator('#boardPodium .podium-name').waitFor();await page.locator('#shareBoardBtn').click();assert((await page.locator('#facebookShare').getAttribute('href')).includes('board%3Dseason'));
  await page.locator('#closeShare').click();await page.locator('#closeLeaderboard').click();
  const metadata=await (await context.request.get(url+'?score='+run.id)).text();assert(metadata.includes('Browser Racer'));
  const card=await context.request.get(url+'/share.png?score='+run.id);assert.equal(card.status(),200);assert.equal(card.headers()['content-type'],'image/png');
