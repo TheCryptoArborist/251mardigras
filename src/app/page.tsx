@@ -15,6 +15,7 @@ import {
   Utensils
 } from "lucide-react";
 import { FeaturedVideo } from "@/components/FeaturedVideo";
+import { HomepageHeroMedia } from "@/components/HomepageHeroMedia";
 import { ArcadeShowcase } from "@/components/ArcadeShowcase";
 import { getUpcomingCommunityEvents, type CommunityEvent } from "@/lib/community-events";
 import { CountdownTimer } from "@/components/CountdownTimer";
@@ -81,23 +82,11 @@ export default async function HomePage() {
   return (
     <div className="bg-gradient-to-br from-parade-purpleDeep via-parade-purpleDark to-parade-purple text-white">
       <section className="relative isolate overflow-hidden border-b border-parade-line bg-gradient-to-br from-parade-purpleDeep via-parade-purpleDark to-parade-purple text-white">
-        <video
-          className="absolute inset-0 z-0 h-full w-full object-cover opacity-70 motion-reduce:hidden"
-          autoPlay
-          muted
-          loop
-          playsInline
-          preload="metadata"
-          poster={HOMEPAGE_VIDEO_POSTER}
-          aria-hidden="true"
-        >
-          <source src={HOMEPAGE_VIDEO_SRC} type="video/mp4" />
-        </video>
         <div className="absolute inset-0 z-0 bg-gradient-to-br from-parade-purpleDeep/90 via-parade-purpleDark/78 to-parade-purple/66" aria-hidden="true" />
         <div className="absolute inset-0 z-0 bg-[radial-gradient(circle_at_18%_8%,rgba(255,201,40,0.24),transparent_30%),radial-gradient(circle_at_82%_30%,rgba(255,255,255,0.12),transparent_35%),linear-gradient(180deg,rgba(23,4,47,0.10),rgba(23,4,47,0.46))]" aria-hidden="true" />
         <div className="absolute left-[-6rem] top-[-8rem] z-0 h-72 w-72 rounded-full bg-parade-gold/20 blur-3xl" aria-hidden="true" />
         <div className="absolute bottom-[-10rem] right-[-8rem] z-0 h-96 w-96 rounded-full bg-white/10 blur-3xl" aria-hidden="true" />
-        <div className="relative z-10 mx-auto grid max-w-7xl gap-7 px-4 py-6 sm:px-6 sm:py-9 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:items-start lg:gap-10 lg:px-8 lg:py-12">
+        <div className="relative z-10 mx-auto grid max-w-7xl gap-7 px-4 py-6 sm:px-6 sm:py-9 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:items-start lg:gap-10 lg:px-8 lg:py-12 lg:pb-16">
           <div className="min-w-0">
             <p className="text-xs font-black uppercase tracking-[0.14em] text-parade-goldBright">
               Mobile, Alabama • 2027
@@ -127,6 +116,7 @@ export default async function HomePage() {
           </div>
           <UpcomingCommunityEvents events={upcomingEvents} />
         </div>
+        <HomepageHeroMedia src={HOMEPAGE_VIDEO_SRC} poster={HOMEPAGE_VIDEO_POSTER} />
       </section>
 
       <div className="mx-auto max-w-7xl space-y-8 px-4 py-7 sm:space-y-10 sm:px-6 sm:py-10 lg:px-8">
