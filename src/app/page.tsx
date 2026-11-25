@@ -4,13 +4,11 @@ import type { ReactNode } from "react";
 import {
   Archive,
   ArrowRight,
-  CalendarDays,
   Car,
   CloudSun,
   ExternalLink,
   HeartHandshake,
   Landmark,
-  MapPinned,
   PlayCircle,
   PlusCircle,
   ShoppingBag,
@@ -48,26 +46,6 @@ export default async function HomePage() {
   const upcomingEvents = getUpcomingCommunityEvents().slice(0, 3);
   const visitorLinks: VisitorLink[] = [
     {
-      icon: <CalendarDays className="h-5 w-5" aria-hidden="true" />,
-      title: "Parade Schedule",
-      href: "/schedule"
-    },
-    {
-      icon: <MapPinned className="h-5 w-5" aria-hidden="true" />,
-      title: "Route Maps",
-      href: "/schedule#all-route-maps"
-    },
-    {
-      icon: <PlayCircle className="h-5 w-5" aria-hidden="true" />,
-      title: "Watch Live",
-      href: "/watch"
-    },
-    {
-      icon: <Archive className="h-5 w-5" aria-hidden="true" />,
-      title: "Parade Replays",
-      href: "/replays"
-    },
-    {
       icon: <Utensils className="h-5 w-5" aria-hidden="true" />,
       title: "Food & Drink",
       href: "/food-drink"
@@ -86,6 +64,18 @@ export default async function HomePage() {
       icon: <ShoppingBag className="h-5 w-5" aria-hidden="true" />,
       title: "Mardi Gras Gear",
       href: "/mardi-gras-gear"
+    }
+  ];
+  const watchLinks: VisitorLink[] = [
+    {
+      icon: <PlayCircle className="h-5 w-5" aria-hidden="true" />,
+      title: "Watch Live",
+      href: "/watch"
+    },
+    {
+      icon: <Archive className="h-5 w-5" aria-hidden="true" />,
+      title: "Parade Replays",
+      href: "/replays"
     }
   ];
   return (
@@ -107,7 +97,7 @@ export default async function HomePage() {
         <div className="absolute inset-0 z-0 bg-[radial-gradient(circle_at_18%_8%,rgba(255,201,40,0.24),transparent_30%),radial-gradient(circle_at_82%_30%,rgba(255,255,255,0.12),transparent_35%),linear-gradient(180deg,rgba(23,4,47,0.10),rgba(23,4,47,0.46))]" aria-hidden="true" />
         <div className="absolute left-[-6rem] top-[-8rem] z-0 h-72 w-72 rounded-full bg-parade-gold/20 blur-3xl" aria-hidden="true" />
         <div className="absolute bottom-[-10rem] right-[-8rem] z-0 h-96 w-96 rounded-full bg-white/10 blur-3xl" aria-hidden="true" />
-        <div className="relative z-10 mx-auto grid max-w-7xl gap-7 px-4 py-6 sm:px-6 sm:py-9 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:items-center lg:gap-10 lg:px-8 lg:py-12">
+        <div className="relative z-10 mx-auto grid max-w-7xl gap-7 px-4 py-6 sm:px-6 sm:py-9 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:items-start lg:gap-10 lg:px-8 lg:py-12">
           <div className="min-w-0">
             <p className="text-xs font-black uppercase tracking-[0.14em] text-parade-goldBright">
               Mobile, Alabama • 2027
@@ -133,19 +123,18 @@ export default async function HomePage() {
                 Mardi Gras Balls
               </Link>
             </nav>
-            <SocialLinksStrip />
-            <CountdownTimer mardiGrasDay={homepageSchedule.mardiGrasDay} />
+            <CountdownTimer mardiGrasDay={homepageSchedule.mardiGrasDay} compact />
           </div>
           <UpcomingCommunityEvents events={upcomingEvents} />
         </div>
       </section>
 
       <div className="mx-auto max-w-7xl space-y-8 px-4 py-7 sm:space-y-10 sm:px-6 sm:py-10 lg:px-8">
-        <section aria-labelledby="explore-heading">
-          <h2 id="explore-heading" className="text-xl font-bold leading-tight text-white sm:text-2xl">
-            Explore Mobile Mardi Gras
+        <section aria-labelledby="plan-visit-heading">
+          <h2 id="plan-visit-heading" className="text-xl font-bold leading-tight text-white sm:text-2xl">
+            Plan Your Visit
           </h2>
-          <nav aria-labelledby="explore-heading" className="mt-4 overflow-hidden rounded-2xl border border-parade-gold/25">
+          <nav aria-labelledby="plan-visit-heading" className="mt-4 overflow-hidden rounded-2xl border border-parade-gold/25">
             <ul className="grid grid-cols-2 gap-px bg-parade-gold/20 lg:grid-cols-4">
               {visitorLinks.map((link) => (
                 <li key={link.href} className="min-w-0 bg-parade-purpleDeep">
@@ -158,18 +147,35 @@ export default async function HomePage() {
 
         <ArcadeShowcase />
 
-        <div className="grid gap-5 rounded-[1.5rem] bg-gradient-to-br from-parade-purpleDeep to-parade-purple p-4 text-white shadow-civic sm:p-6 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)] lg:items-center">
-          <HomepageVideoSpotlight />
-          <div className="space-y-4">
-            <div className="rounded-2xl border border-parade-gold/30 bg-white/10 p-4">
-              <h2 className="text-lg font-black">Have a Mardi Gras event to share?</h2>
-              <p className="mt-1 text-sm leading-6 text-purple-100">Send us your ball, fundraiser, social, or watch party for calendar review.</p>
-              <Link href="/submit-event" className="mt-3 inline-flex min-h-11 items-center gap-2 rounded-full bg-parade-goldBright px-5 py-2 text-sm font-black text-parade-purpleDark hover:bg-parade-goldSoft">
-                <PlusCircle className="h-4 w-4" aria-hidden="true" /> Submit an event
-              </Link>
+        <section aria-labelledby="watch-follow-heading" className="rounded-[1.5rem] bg-gradient-to-br from-parade-purpleDeep to-parade-purple p-4 text-white shadow-civic sm:p-6">
+          <h2 id="watch-follow-heading" className="text-xl font-bold leading-tight sm:text-2xl">Watch &amp; Follow</h2>
+          <p className="mt-2 text-sm leading-6 text-purple-100">Live coverage when available, parade replays, and updates throughout the season.</p>
+          <div className="mt-5 grid gap-5 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)] lg:items-start">
+            <HomepageVideoSpotlight />
+            <div className="min-w-0 space-y-5">
+              <nav aria-label="Watch parades" className="overflow-hidden rounded-2xl border border-parade-gold/25">
+                <ul className="grid grid-cols-2 gap-px bg-parade-gold/20">
+                  {watchLinks.map((link) => (
+                    <li key={link.href} className="min-w-0 bg-parade-purpleDeep">
+                      <VisitorQuickLink {...link} />
+                    </li>
+                  ))}
+                </ul>
+              </nav>
+              <SocialLinksStrip />
             </div>
           </div>
-        </div>
+        </section>
+
+        <section aria-labelledby="submit-event-heading" className="flex flex-col gap-4 rounded-2xl border border-parade-gold/30 bg-white/10 p-4 sm:flex-row sm:items-center sm:justify-between sm:p-6">
+          <div>
+            <h2 id="submit-event-heading" className="text-lg font-black">Have a Mardi Gras event to share?</h2>
+            <p className="mt-1 text-sm leading-6 text-purple-100">Send us your ball, fundraiser, social, or watch party for calendar review.</p>
+          </div>
+          <Link href="/submit-event" className="inline-flex min-h-11 w-fit shrink-0 items-center gap-2 rounded-full bg-parade-goldBright px-5 py-2 text-sm font-black text-parade-purpleDark hover:bg-parade-goldSoft focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white">
+            <PlusCircle className="h-4 w-4" aria-hidden="true" /> Submit an event
+          </Link>
+        </section>
         <HomepageHistoryCallout />
         <SupportSection />
 
@@ -181,10 +187,10 @@ export default async function HomePage() {
 
 function SocialLinksStrip() {
   return (
-    <section aria-labelledby="homepage-follow-heading" className="mt-5 sm:mt-6">
-      <h2 id="homepage-follow-heading" className="text-sm font-black text-parade-goldBright sm:text-base">
+    <section aria-labelledby="homepage-follow-heading">
+      <h3 id="homepage-follow-heading" className="text-sm font-black text-parade-goldBright sm:text-base">
         Follow Mobile Mardi Gras
-      </h2>
+      </h3>
       <p className="mt-1 text-xs leading-5 text-purple-100">
         Parade videos, live coverage, and updates on your favorite platform.
       </p>
@@ -230,9 +236,9 @@ function HomepageVideoSpotlight({ className = "" }: { className?: string }) {
     <section className={`overflow-hidden rounded-[1.5rem] border border-parade-gold/45 bg-white/12 p-3 shadow-glow backdrop-blur ${className}`} aria-label="Every Day is Mardi Gras in Mobile, Alabama video">
       <div className="flex items-center gap-3 px-1 pb-3">
         <HomepageBannerIcon kind="jester" size="medium" />
-        <h2 className="text-xl font-black leading-tight text-white sm:text-2xl">
+        <h3 className="text-xl font-black leading-tight text-white sm:text-2xl">
           Every Day is Mardi Gras in Mobile, Alabama
-        </h2>
+        </h3>
       </div>
       <FeaturedVideo videoId="vSwxOuydTjU" title="Every Day is Mardi Gras in Mobile, Alabama" />
     </section>
