@@ -117,17 +117,20 @@ export default async function HomePage() {
               <span className="block">Mobile Mardi Gras</span>
             </h1>
             <p className="mt-3 max-w-xl text-sm font-semibold leading-6 text-purple-100 sm:text-base">
-              Find parade schedules, route maps, local events, and live coverage.
+              Find parade schedules, route maps, community events, and balls.
             </p>
-            <nav aria-label="Start planning" className="mt-5 grid grid-cols-2 gap-2 sm:grid-cols-3">
-              <Link href="/schedule" className="col-span-2 inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-parade-goldBright px-4 py-3 text-sm font-black text-parade-purpleDark shadow-glow transition hover:bg-parade-goldSoft focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white sm:col-span-1">
-                <CalendarDays className="h-4 w-4" aria-hidden="true" /> Parade Schedule
+            <nav aria-label="Start planning" className="mt-5 grid grid-cols-2 gap-2 lg:grid-cols-4">
+              <Link href="/schedule" className="inline-flex min-h-14 min-w-0 items-center justify-center rounded-xl bg-parade-goldBright px-2 py-2 text-center text-sm font-black leading-5 text-parade-purpleDark shadow-glow transition hover:bg-parade-goldSoft focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white">
+                Parade Schedule
               </Link>
-              <Link href="/schedule#all-route-maps" className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-parade-gold/50 bg-white/10 px-3 py-3 text-sm font-black text-white transition hover:bg-white/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-parade-goldBright">
-                <MapPinned className="h-4 w-4" aria-hidden="true" /> Route Maps
+              <Link href="/schedule#all-route-maps" className="inline-flex min-h-14 min-w-0 items-center justify-center rounded-xl border border-parade-gold/50 bg-white/10 px-2 py-2 text-center text-sm font-black leading-5 text-white transition hover:bg-white/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-parade-goldBright">
+                Route Maps
               </Link>
-              <Link href="/watch" className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-white/35 bg-white/10 px-3 py-3 text-sm font-black text-white transition hover:bg-white/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-parade-goldBright">
-                <PlayCircle className="h-4 w-4" aria-hidden="true" /> Watch Live
+              <Link href="/events" className="inline-flex min-h-14 min-w-0 items-center justify-center rounded-xl border border-parade-gold/50 bg-white/10 px-2 py-2 text-center text-sm font-black leading-5 text-white transition hover:bg-white/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-parade-goldBright">
+                Community Events
+              </Link>
+              <Link href="/balls" className="inline-flex min-h-14 min-w-0 items-center justify-center rounded-xl border border-parade-gold/50 bg-white/10 px-2 py-2 text-center text-sm font-black leading-5 text-white transition hover:bg-white/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-parade-goldBright">
+                Mardi Gras Balls
               </Link>
             </nav>
             <SocialLinksStrip />
