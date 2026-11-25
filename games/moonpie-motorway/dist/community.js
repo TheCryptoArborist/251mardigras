@@ -1,7 +1,7 @@
 'use strict';
 (() => {
  const $=id=>document.getElementById(id),BASE='https://mg251.xyz/play/moonpie-motorway';
- let run=null,board=null,saved=null,savedRank=null,period='week',shareTarget='score';
+ let run=null,board=null,saved=null,savedRank=null,period='week',shareSnapshot=null,cardFile=null,cardGeneration=0,boardGeneration=0;
  const status=text=>{$('rankStatus').textContent=text;};
  async function api(path,body){
   const response=await fetch(path,{method:body?'POST':'GET',headers:body?{'content-type':'application/json'}:{},body:body?JSON.stringify(body):undefined,signal:AbortSignal.timeout(12000)});
@@ -15,7 +15,7 @@
   },
   tick(input){if(!run||run.mode!=='cup')return;const row=[input.turn,input.brake?1:0,input.boost?1:0],key=row.join(',');if(key!==run.last){run.controls.push([run.ticks,...row]);run.last=key;}run.ticks++;},
   finish(result){
-   if(!run)return;Object.assign(run,result);$('saveScoreForm').hidden=!(result.mode==='cup'&&result.won);$('shareScoreBtn').hidden=true;
+   if(!run)return;Object.assign(run,result);$('saveScoreForm').hidden=!(result.mode==='cup'&&result.won);$('shareScoreBtn').hidden=false;$('shareScoreBtn').textContent='Challenge a friend';
    status(result.mode==='cruise'?'Scenic Cruise is just for fun. Complete Carnival Cup to join the rankings.':result.won?'Save your completed Cup run to join the leaderboard.':'Complete all three Cup stages to post a ranked score.');
    if(result.won&&result.mode==='cup')try{$('racerNickname').value=localStorage.getItem('motorway-nickname')||'';}catch{}
   }
@@ -34,12 +34,24 @@
   }catch(error){if(run===current)status(error.message);}finally{$('saveScoreBtn').disabled=false;}
  });
  async function loadBoard(){
-  const requested=period;board=null;$('boardRows').replaceChildren();$('boardMessage').textContent='Loading standings…';$('shareBoardBtn').disabled=true;
-  try{const data=await api('api/leaderboard?period='+requested);if(period!==requested)return;board=data;
+  const requested=period,request=++boardGeneration;board=null;$('boardCount').textContent='TOP 25 RACERS';$('boardTable').hidden=true;$('boardPodium').replaceChildren();$('personalStanding').hidden=true;$('shareSpotBtn').hidden=true;$('boardRows').replaceChildren();$('boardMessage').textContent='Loading standings…';$('shareBoardBtn').disabled=true;
+  try{const data=await api('api/leaderboard?period='+requested);if(request!==boardGeneration)return;board=data;
    $('boardMessage').textContent=data.entries.length?(data.personal?`Your best: #${data.personal.rank}, ${data.personal.score} throws.${data.next?` Next to beat: ${data.next.score} throws.`:''}`:'Complete Carnival Cup to join these racers.'):'No finishers yet. Be the first to set a score!';
-   for(const row of data.entries){const tr=document.createElement('tr');for(const value of ['#'+row.rank,row.nickname,row.score,formatTime(row.ticks)]){const td=document.createElement('td');td.textContent=String(value);tr.append(td);}$('boardRows').append(tr);}
+   $('boardCount').textContent=`TOP 25 · ${data.total??data.entries.length} RACERS`;
+   for(const row of data.entries.slice(0,25)){
+    if(row.rank<=3){
+     const card=document.createElement('article');card.className='podium-card podium-'+row.rank;
+     for(const [tag,cls,text] of [['span','podium-medal',['','GOLD · #1','SILVER · #2','BRONZE · #3'][row.rank]],['strong','podium-name',row.nickname],['b','podium-score',String(row.score)],['span','podium-detail','THROWS · '+formatTime(row.ticks)]]){const el=document.createElement(tag);el.className=cls;el.textContent=text;card.append(el);}
+     $('boardPodium').append(card);
+    }else{
+     const tr=document.createElement('tr');tr.className=row.rank<=10?'rank-elite':'rank-chaser';
+     for(const value of ['#'+row.rank,row.nickname+(data.personal?.id===row.id?' · YOU':''),row.score,formatTime(row.ticks)]){const td=document.createElement('td');td.textContent=String(value);tr.append(td);}$('boardRows').append(tr);
+    }
+   }
+   $('boardTable').hidden=!data.entries.some(row=>row.rank>3);
+   if(data.personal){$('personalStanding').hidden=false;$('personalRank').textContent='#'+data.personal.rank;$('personalSummary').textContent=`${data.personal.nickname} · ${data.personal.score} throws · ${formatTime(data.personal.ticks)}`;$('shareSpotBtn').hidden=false;}
    $('shareBoardBtn').disabled=false;
-  }catch(error){if(period===requested)$('boardMessage').textContent=error.message;}
+  }catch(error){if(request===boardGeneration)$('boardMessage').textContent=error.message;}
  }
  function formatTime(ticks){const seconds=Math.floor(ticks/60);return Math.floor(seconds/60)+':'+String(seconds%60).padStart(2,'0');}
  function openBoard(){window.MotorwayGame?.pause();$('leaderboardDialog').showModal();loadBoard();}
@@ -52,29 +64,60 @@
   $(id).addEventListener('cancel',event=>{event.preventDefault();$(id).close();});
  }
  function shareInfo(){
-  if(shareTarget==='board')return {title:`MoonPie Motorway ${period==='week'?'weekly':'season'} leaderboard`,text:'Can you top the MoonPie Motorway leaderboard? Race through Mobile Mardi Gras on MG251.',url:BASE+'?board='+period};
-  return {title:'My MoonPie Motorway score',text:`${saved.nickname} collected ${saved.score} throws in Carnival Cup.${savedRank?` Weekly rank #${savedRank} when saved.`:''} Can you beat it?`,url:BASE+'?score='+encodeURIComponent(saved.id)};
+  const snap=shareSnapshot,score=snap.score,rank=snap.rank;
+  const intro=snap.target==='board'?`The ${snap.period==='week'?'weekly':'season'} MoonPie Motorway leaderboard is calling.`:snap.verified?`${score.nickname} collected ${score.score} throws in Carnival Cup.${rank?` #${rank} on the ${snap.period==='week'?'weekly':'season'} leaderboard at last check.`:''}`:`I collected ${score.score} throws in ${score.mode==='cruise'?'Scenic Cruise':'MoonPie Motorway'}. Unranked run, full bragging energy.`;
+  const brag={challenge:'Your move. Come chase these throws.',playful:'All throws, no luck. Think you can do better?',friendly:'Your next race has a score to beat. Come take a shot!'}[$('shareTone').value]||'Think you can catch me?';
+  return {title:'MoonPie Motorway · Challenge accepted?',text:intro+' '+brag+' Play free on MG251.',url:snap.target==='board'?BASE+'?board='+snap.period:snap.verified?BASE+'?score='+encodeURIComponent(score.id):BASE};
  }
- function openShare(target){shareTarget=target;const info=shareInfo();$('shareDescription').textContent=info.text;$('facebookShare').href='https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(info.url);$('shareMessage').textContent='';$('shareDialog').showModal();}
- $('shareScoreBtn').addEventListener('click',()=>{if(saved)openShare('score');});
+ function refreshShare(){
+  const info=shareInfo(),caption=info.text+'\n'+info.url;$('shareDescription').textContent=info.text;$('shareLink').value=info.url;
+  $('facebookShare').href='https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(info.url);
+  $('whatsappShare').href='https://wa.me/?text='+encodeURIComponent(caption);
+  $('xShare').href='https://twitter.com/intent/tweet?text='+encodeURIComponent(info.text)+'&url='+encodeURIComponent(info.url);
+  $('emailShare').href='mailto:?subject='+encodeURIComponent(info.title)+'&body='+encodeURIComponent(caption);
+  $('smsShare').href='sms:' + (/iPad|iPhone|iPod/.test(navigator.userAgent||'')?'&':'?')+'body='+encodeURIComponent(caption);
+ }
+ function openShare(target){
+  shareSnapshot=target==='board'?{target,period,entries:board.entries.map(row=>({...row}))}:target==='spot'?{target,period,score:{...board.personal},rank:board.personal.rank,verified:true}:{target,period:'week',score:saved?{...saved}:{nickname:'My run',score:run.score||0,ticks:run.ticks,mode:run.mode},rank:savedRank,verified:!!saved};
+  $('shareTone').value='challenge';refreshShare();$('shareMessage').textContent='';$('nativeShare').hidden=!navigator.share;$('shareDialog').showModal();prepareCard();
+ }
+ $('shareScoreBtn').addEventListener('click',()=>{if(run)openShare('score');});
+ $('shareSpotBtn').addEventListener('click',()=>{if(board?.personal)openShare('spot');});
  $('shareBoardBtn').addEventListener('click',()=>{if(board)openShare('board');});
- $('closeShare').addEventListener('click',()=>$('shareDialog').close());
- $('nativeShare').addEventListener('click',async()=>{try{if(!navigator.share){$('shareMessage').textContent='Use Copy link, Facebook, or Download image on this browser.';return;}await navigator.share(shareInfo());}catch(error){if(error.name!=='AbortError')$('shareMessage').textContent='Sharing was unavailable. Try copying the link.';}});
- $('copyShare').addEventListener('click',async()=>{try{await navigator.clipboard.writeText(shareInfo().url);$('shareMessage').textContent='Link copied.';}catch{$('shareMessage').textContent=shareInfo().url;}});
- $('downloadScoreCard').addEventListener('click',async()=>{
-  const canvas=document.createElement('canvas');canvas.width=1080;canvas.height=1080;const ctx=canvas.getContext('2d');
-  ctx.fillStyle='#211033';ctx.fillRect(0,0,1080,1080);ctx.strokeStyle='#f9cf66';ctx.lineWidth=8;ctx.strokeRect(42,42,996,996);
-  ctx.fillStyle='#f9cf66';ctx.textAlign='center';ctx.font='900 82px "Barlow Condensed",sans-serif';ctx.fillText('MOONPIE MOTORWAY',540,180);ctx.font='700 34px Barlow,sans-serif';ctx.fillText('MG251 · MOBILE MARDI GRAS',540,245);
-  ctx.fillStyle='#fff2d5';
-  if(shareTarget==='score'){
-   ctx.font='700 52px Barlow,sans-serif';ctx.fillText(saved.nickname,540,410,900);ctx.fillStyle='#f9cf66';ctx.font='900 160px "Barlow Condensed",sans-serif';ctx.fillText(String(saved.score),540,610);ctx.font='700 40px Barlow,sans-serif';ctx.fillText('THROWS · CARNIVAL CUP',540,680);ctx.fillStyle='#fff2d5';ctx.font='600 32px Barlow,sans-serif';ctx.fillText((savedRank?'Weekly #'+savedRank+' when saved · ':'Verified finish · ')+formatTime(saved.ticks),540,750);
-  }else{
-   ctx.font='700 40px Barlow,sans-serif';ctx.fillText(period==='week'?'THIS WEEK’S LEADERS':'SEASON LEADERS',540,350);
-   board.entries.slice(0,5).forEach((row,i)=>{ctx.textAlign='left';ctx.font='600 36px Barlow,sans-serif';ctx.fillText('#'+row.rank+'  '+row.nickname,100,445+i*65,660);ctx.textAlign='right';ctx.fillStyle='#f9cf66';ctx.fillText(String(row.score),980,445+i*65);ctx.fillStyle='#fff2d5';});
-   ctx.textAlign='center';ctx.font='500 25px Barlow,sans-serif';ctx.fillText('Standings captured '+new Date().toLocaleDateString('en-US'),540,830);
-  }
-  ctx.textAlign='center';ctx.fillStyle='#f9cf66';ctx.font='800 40px Barlow,sans-serif';ctx.fillText('CAN YOU BEAT IT?',540,910);ctx.fillStyle='#fff2d5';ctx.font='500 28px Barlow,sans-serif';ctx.fillText('mg251.xyz/play/moonpie-motorway',540,968);
-  canvas.toBlob(blob=>{if(!blob){$('shareMessage').textContent='Image unavailable. Try copying the link.';return;}const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='mg251-moonpie-motorway.png';a.click();setTimeout(()=>URL.revokeObjectURL(url),30000);$('shareMessage').textContent='Square image ready for Instagram or Facebook. Add the game link to your post.';},'image/png');
+ $('shareTone').addEventListener('change',refreshShare);
+ $('closeShare').addEventListener('click',()=>{$('shareDialog').close();});
+ $('nativeShare').addEventListener('click',async()=>{try{if(!navigator.share)return;await navigator.share(shareInfo());}catch(error){if(error.name!=='AbortError')$('shareMessage').textContent='Sharing was unavailable. Copy your brag + play link or use a platform button.';}});
+ async function copy(text){try{await navigator.clipboard.writeText(text);$('shareMessage').textContent='Copied. Paste it into your message, post, or Story link.';}catch{$('shareMessage').textContent='Copy manually: '+text;$('shareLink').focus();$('shareLink').select();}}
+ $('copyShare').addEventListener('click',()=>copy(shareInfo().url));
+ $('copyCaption').addEventListener('click',()=>{const info=shareInfo();return copy(info.text+'\n'+info.url);});
+ function prepareCard(){
+  const generation=++cardGeneration;cardFile=null;$('instagramShare').disabled=true;$('downloadScoreCard').disabled=true;
+  try{
+   const canvas=document.createElement('canvas');canvas.width=1080;canvas.height=1080;const ctx=canvas.getContext('2d'),snap=shareSnapshot;
+   const bg=ctx.createLinearGradient(0,0,1080,1080);bg.addColorStop(0,'#36144f');bg.addColorStop(1,'#10091d');ctx.fillStyle=bg;ctx.fillRect(0,0,1080,1080);
+   ctx.strokeStyle='#f9cf66';ctx.lineWidth=6;ctx.strokeRect(38,38,1004,1004);ctx.fillStyle='#f9cf66';ctx.textAlign='center';ctx.font='800 78px "Barlow Condensed",sans-serif';ctx.fillText('MOONPIE MOTORWAY',540,155);ctx.font='700 27px Barlow,sans-serif';ctx.fillText('MG251 / PORT CITY BRAGGING RIGHTS',540,215);
+   if(snap.target==='board'){
+    ctx.font='800 52px "Barlow Condensed",sans-serif';ctx.fillText(snap.period==='week'?'THIS WEEK’S TOP 25':'SEASON TOP 25',540,300);
+    if(!snap.entries.length){ctx.font='700 40px Barlow,sans-serif';ctx.fillText('THE FIRST CROWN IS UP FOR GRABS.',540,540,900);}
+    snap.entries.slice(0,25).forEach((row,i)=>{const col=i<13?0:1,n=i<13?i:i-13,x=75+col*480,y=355+n*36;ctx.fillStyle=row.rank<=3?['','#f9cf66','#d8e6f3','#e9b087'][row.rank]:row.rank<=10?'#eee0ff':'#c6b4ce';ctx.font=(row.rank<=10?'700':'500')+' 23px Barlow,sans-serif';ctx.textAlign='left';ctx.fillText('#'+row.rank+' '+row.nickname,x,y,320);ctx.textAlign='right';ctx.fillText(String(row.score),x+440,y);});
+   }else{
+    const score=snap.score;ctx.fillStyle='#fff2d5';ctx.font='700 48px Barlow,sans-serif';ctx.fillText(score.nickname,540,335,900);
+    ctx.fillStyle='#f9cf66';ctx.font='900 160px "Barlow Condensed",sans-serif';ctx.fillText(String(score.score),540,520);ctx.font='700 34px Barlow,sans-serif';ctx.fillText('THROWS · '+(score.mode==='cruise'?'SCENIC CRUISE':'CARNIVAL CUP'),540,585);
+    ctx.fillStyle='#fff2d5';ctx.font='800 56px "Barlow Condensed",sans-serif';ctx.fillText(snap.rank?'#'+snap.rank+' · '+(snap.period==='week'?'WEEKLY':'SEASON')+' RANK':snap.verified?'VERIFIED CUP FINISH':'UNRANKED RUN',540,700);
+    ctx.font='500 27px Barlow,sans-serif';ctx.fillText(snap.rank?'Rank at last check · '+formatTime(score.ticks):formatTime(score.ticks),540,750);
+   }
+   ctx.textAlign='center';ctx.fillStyle='#f9cf66';ctx.font='800 48px "Barlow Condensed",sans-serif';ctx.fillText('BIG TALK? BEAT THIS.',540,895);ctx.fillStyle='#fff2d5';ctx.font='600 29px Barlow,sans-serif';ctx.fillText('PLAY FREE · mg251.xyz/play/moonpie-motorway',540,960);ctx.font='400 20px Barlow,sans-serif';ctx.fillText('Snapshot · '+new Date().toLocaleDateString('en-US'),540,1004);
+   canvas.toBlob(blob=>{if(generation!==cardGeneration)return;if(!blob){$('shareMessage').textContent='Image unavailable. Share the play link instead.';return;}cardFile=new File([blob],'moonpie-motorway-challenge.png',{type:'image/png'});$('instagramShare').disabled=false;$('downloadScoreCard').disabled=false;},'image/png');
+  }catch{$('shareMessage').textContent='Image unavailable. You can still share your brag + play link.';}
+ }
+ function downloadCard(){if(!cardFile)return;const url=URL.createObjectURL(cardFile),a=document.createElement('a');a.href=url;a.download=cardFile.name;a.click();setTimeout(()=>URL.revokeObjectURL(url),30000);$('shareMessage').textContent='Image downloaded. Copy your brag + play link, then add both to your post.';}
+ $('downloadScoreCard').addEventListener('click',downloadCard);
+ $('instagramShare').addEventListener('click',async()=>{
+  if(!cardFile)return;
+  try{
+   if(navigator.share&&navigator.canShare?.({files:[cardFile]})){await navigator.share({...shareInfo(),files:[cardFile]});}
+   else {downloadCard();$('shareMessage').textContent='Image downloaded for Instagram. Copy your brag + play link, upload the image, and paste the link into your caption or Story link sticker.';}
+  }catch(error){if(error.name!=='AbortError')$('shareMessage').textContent='Image sharing was unavailable. Download the image and copy your brag + play link instead.';}
  });
  const query=new URLSearchParams(location.search);
  if(query.has('board')){period=query.get('board')==='season'?'season':'week';$('boardPeriod').value=period;openBoard();}
