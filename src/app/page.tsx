@@ -117,7 +117,7 @@ export default async function HomePage() {
               <span className="block">Mobile Mardi Gras</span>
             </h1>
             <p className="mt-3 max-w-xl text-sm font-semibold leading-6 text-purple-100 sm:text-base">
-              Find parade schedules, route maps, community events, and Mardi Gras balls.
+              Find parade schedules, route maps, community events, and balls.
             </p>
             <nav aria-label="Start planning" className="mt-5 grid grid-cols-2 gap-2 lg:grid-cols-4">
               <Link href="/schedule" className="inline-flex min-h-14 min-w-0 items-center justify-center rounded-xl bg-parade-goldBright px-2 py-2 text-center text-sm font-black leading-5 text-parade-purpleDark shadow-glow transition hover:bg-parade-goldSoft focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white">
