@@ -1,11 +1,20 @@
 "use client";
 
+import Link from "next/link";
 import { ExternalLink, HeartHandshake } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { BUY_ME_COFFEE_URL, MOBILE_CARNIVAL_MUSEUM_URL, PATREON_SUPPORT_URL, YOUTUBE_SUPPORTER_URL } from "@/lib/seed-data";
 
 const FACEBOOK_SUPPORTER_URL =
   "https://www.facebook.com/mardigrasmobileal/support/?surface=page_top_cta_button&entrypoint_surface=page_top_cta_button";
+
+const footerLinks = [
+  { label: "Schedule", href: "/schedule" },
+  { label: "Events", href: "/events" },
+  { label: "Balls", href: "/balls" },
+  { label: "Arcade", href: "/play" },
+  { label: "Profile Studio", href: "/profile-studio" }
+];
 
 const socialLinks = [
   {
@@ -97,6 +106,18 @@ export function SiteFooter() {
           <p className="mt-2 max-w-4xl leading-6">
             Independent parade coverage, community events, and local information for Mobile Mardi Gras.
           </p>
+          <nav className="mt-3 flex flex-wrap gap-1" aria-label="Footer navigation">
+            {footerLinks.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                aria-current={pathname === link.href ? "page" : undefined}
+                className="inline-flex min-h-11 items-center rounded-lg px-3 py-2 font-bold text-parade-purple underline decoration-parade-purple/30 underline-offset-4 hover:bg-parade-purple/10 hover:decoration-parade-purple focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-parade-purple aria-[current=page]:bg-parade-purple/10 aria-[current=page]:decoration-2"
+              >
+                {link.label}
+              </Link>
+            ))}
+          </nav>
           <nav className="mt-4 flex flex-wrap gap-2" aria-label="Mardi Gras - Mobile, Alabama social media links">
             {socialLinks.map((link) => (
               <a
@@ -104,7 +125,7 @@ export function SiteFooter() {
                 href={link.href}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center justify-center gap-1.5 rounded-full border border-parade-purple/15 bg-white/70 px-3 py-2 text-xs font-black text-parade-purple transition hover:-translate-y-0.5 hover:bg-parade-purple hover:text-white"
+                className="inline-flex min-h-11 items-center justify-center gap-1.5 rounded-full border border-parade-purple/15 bg-white/70 px-3 py-2 text-xs font-black text-parade-purple transition hover:-translate-y-0.5 hover:bg-parade-purple hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-parade-purple"
               >
                 {link.label}
                 <ExternalLink className="h-3.5 w-3.5" aria-hidden="true" />
@@ -130,7 +151,7 @@ export function SiteFooter() {
                       href={link.href}
                       target="_blank"
                       rel="noreferrer"
-                      className="inline-flex items-center justify-center gap-1.5 rounded-full border border-white/15 bg-white/10 px-3 py-2 text-xs font-black text-white transition hover:-translate-y-0.5 hover:bg-parade-gold hover:text-parade-purpleDark"
+                      className="inline-flex min-h-11 items-center justify-center gap-1.5 rounded-full border border-white/15 bg-white/10 px-3 py-2 text-xs font-black text-white transition hover:-translate-y-0.5 hover:bg-parade-gold hover:text-parade-purpleDark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-parade-goldBright"
                     >
                       {link.label}
                       <ExternalLink className="h-3.5 w-3.5" aria-hidden="true" />

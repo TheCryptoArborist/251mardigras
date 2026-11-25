@@ -10,11 +10,14 @@ import "./arcade.css";
 
 export const metadata = createPageMetadata({
   title: "Mardi Gras Arcade",
-  description: "Play MoonPie Run, preview MoonPie Motorway, and explore six MG251 arcade cabinets with four more games coming soon.",
+  description: "Play MoonPie Run and MoonPie Motorway in the Mardi Gras Arcade, with four more games coming soon. No account needed.",
   path: "/play",
   image: "/images/arcade/moonpie-motorway-poster.webp",
   imageAlt: "MoonPie Motorway, a Mobile Mardi Gras arcade racing game"
 });
+
+const comingSoonCabinets = ["03", "04", "05", "06"];
+const readyGameCount = ARCADE_GAMES.filter((game) => game.playUrl).length;
 
 export default function ArcadePage() {
   const firstParadeDay = paradeSchedule.days[0];
@@ -33,11 +36,11 @@ export default function ArcadePage() {
         </header>
         <ArcadeCheckIn paradeDay={firstParadeDay.date} paradeName={firstParadeDay.parades[0].name} />
         <section className="arcade-floor" id="cabinets" aria-labelledby="arcade-lineup-heading">
-          <div className="arcade-section-title"><div><p className="arcade-eyebrow">THE GAME LINEUP</p><h2 id="arcade-lineup-heading">Choose your game.</h2></div><p>1 ready to play · 1 preview · 4 coming soon</p></div>
-          <p className="arcade-launch-note">MoonPie Run is ready to play—no account needed. Watch our gameplay previews and explore the next cabinets.</p>
+          <div className="arcade-section-title"><div><p className="arcade-eyebrow">THE GAME LINEUP</p><h2 id="arcade-lineup-heading">Choose your game.</h2></div><p>{readyGameCount} ready to play · {comingSoonCabinets.length} coming soon</p></div>
+          <p className="arcade-launch-note">MoonPie Run and MoonPie Motorway are ready to play. No account needed. Choose a game or watch a gameplay preview.</p>
           <div className="arcade-cabinets">
             {ARCADE_GAMES.map((game) => <ArcadeCabinet key={game.slug} game={game} />)}
-            {["03", "04", "05", "06"].map((number) => <ComingSoonCabinet key={number} number={number} />)}
+            {comingSoonCabinets.map((number) => <ComingSoonCabinet key={number} number={number} />)}
           </div>
         </section>
         <p className="arcade-outro">Save your spot on the sidewalk, too. <Link href="/schedule">Find your next parade <span aria-hidden="true">↗</span></Link></p>
