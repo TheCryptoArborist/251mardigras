@@ -1,7 +1,7 @@
 // Real-browser integration check; database and submissions are disposable/local only.
 import assert from 'node:assert/strict';
 import {spawn} from 'node:child_process';
-import {mkdir} from 'node:fs/promises';
+import {mkdir,writeFile} from 'node:fs/promises';
 import {createRequire} from 'node:module';
 import {NetlifyDB} from '@netlify/database-dev';
 import pg from 'pg';
@@ -46,6 +46,7 @@ try {
  await page.locator('#boardPeriod').selectOption('season');await page.locator('#boardPodium .podium-name').waitFor();await page.locator('#shareBoardBtn').click();assert((await page.locator('#facebookShare').getAttribute('href')).includes('board%3Dseason'));
  await page.locator('#closeShare').click();await page.locator('#closeLeaderboard').click();
  const metadata=await (await context.request.get(url+'?score='+run.id)).text();assert(metadata.includes('Browser Racer'));
+ const boardCard=await context.request.get(url+'/share.png?board=week');assert.equal(boardCard.status(),200);assert.equal(boardCard.headers()['content-type'],'image/png');await writeFile('artifacts/motorway-board-social.png',await boardCard.body());
  const card=await context.request.get(url+'/share.png?score='+run.id);assert.equal(card.status(),200);assert.equal(card.headers()['content-type'],'image/png');
  await page.route('**/api/leaderboard*',route=>route.fulfill({status:503,contentType:'application/json',body:JSON.stringify({error:'Rankings temporarily unavailable'})}));
  await page.locator('#resultsLeaderboard').click();await page.getByText('Rankings temporarily unavailable',{exact:true}).waitFor();assert(await page.locator('#shareBoardBtn').isDisabled());assert.deepEqual(errors,[]);
