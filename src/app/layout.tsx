@@ -48,8 +48,11 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     <html lang="en" data-scroll-behavior="smooth">
       <body>
         <script type="application/ld+json" dangerouslySetInnerHTML={jsonLdScript([websiteJsonLd(), organizationJsonLd()])} />
+        <a href="#main-content" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-3 focus:z-[60] focus:rounded-xl focus:bg-parade-goldBright focus:px-4 focus:py-3 focus:font-bold focus:text-parade-purpleDeep focus:shadow-lg focus:outline focus:outline-2 focus:outline-offset-2 focus:outline-parade-purpleDeep">
+          Skip to content
+        </a>
         <SiteHeader />
-        <main>{children}</main>
+        <main id="main-content" tabIndex={-1} className="scroll-mt-24">{children}</main>
         <SiteFooter />
       </body>
     </html>
